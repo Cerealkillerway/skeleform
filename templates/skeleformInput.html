@@ -1,0 +1,20 @@
+<template name="skeleformInput">
+	<div class="row">
+        <div class="input-field col {{fieldSize schema.size}} {{schema.style}}">
+            {{#if schema.icon}}
+                <i class="material-icons prefix">{{schema.icon}}</i>
+            {{/if}}
+
+            <input type="{{inputType schema.renderAs}}" maxlength="{{schema.max}}" class="skeleValidate gather" id="{{field schema.name}}" autocomplete="off" style="{{fieldStyle schema}}" value="{{fieldValue item schema.name}}">
+            <label for="{{field schema.name}}" class="active">{{label schema.name}}{{required}}</label>
+
+            <p class="skeleformFieldAlert invalid"></p>
+
+            <!-- shadow confirm field -->
+            <!--{{#if schema.shadowConfirm}}
+                <input type="{{inputType schema.renderAs}}" maxlength="{{schema.max}}" class="form-control shortInput hidden shadowField transparent" id="{{field schema.name}}Shadow" placeholder="{{label schema.name}} {{_ "confirm_lbl"}}" autocomplete="off" style="{{fieldStyle schema}}">
+                <p class="skeleformShadowFieldAlert text-danger"></p>
+            {{/if}}-->
+        </div>
+    </div>    
+</template>

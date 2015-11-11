@@ -1,0 +1,134 @@
+<template name="skeleform">
+    <!--{{> skeleformModals}}-->
+    
+    <!-- toolbar -->
+    {{> skeleformToolbar this}}
+
+    <!-- form fields -->
+    <div class="skeleformFields">
+        {{#each fields schema}}
+            {{#with fieldType output this ../item}}
+                {{> Template.dynamic template=this/template data=this/data}}
+            {{/with}}       
+        {{/each}}
+    </div>
+    <div id="skeleformLoading" style="clear:both;"></div>
+</template>
+
+<!-- loads default or custom toolbar on top of skeleform -->
+<template name="skeleformToolbar">
+    {{#if this.schema.__toolbar}}
+        {{> Template.dynamic template=this.schema.__toolbar}}
+    {{else}}
+        {{#if item}}
+            {{> skeleformUpdateButtons this}}
+        {{else}}
+            {{> skeleformCreateButtons this}}
+        {{/if}}
+    {{/if}}
+</template>
+
+<!-- skeleform default toolbars -->
+<template name="skeleformCreateButtons">
+    <div class="staticBar">
+        <div class="skeleformToolbar">
+            <div class="waves-effect waves-light btn thirdColor skeleformCreate">
+                <i class="material-icons small left">add_circle</i>
+                <span>{{_ "create_btn"}}</span>
+            </div>
+            <a href="{{setUndoPath this.undoPath}}" class="waves-effect waves-light btn firstColor">
+                <i class="material-icons small left">undo</i>
+                <span>{{_ "cancel_btn"}}</span>
+            </a>
+
+            {{> skeleformStaticAddons}}
+        </div>
+    </div>
+</template>
+
+<template name ="skeleformUpdateButtons">
+    <div class="staticBar">
+        <div class="skeleformToolbar">
+            <div class="waves-effect waves-light btn secondColor skeleformUpdate">
+                <i class="material-icons small left">beenhere</i>
+                <span>{{_ "update_btn"}}</span>
+            </div>
+            <a href="{{setUndoPath this.undoPath}}" class="waves-effect waves-light btn firstColor">
+                <i class="material-icons small left">undo</i>
+                <span>{{_ "cancel_btn"}}</span>
+            </a>
+
+            {{> skeleformStaticAddons}}
+        </div>
+    </div>
+</template>
+
+<template name="skeleformStaticAddons">
+    <span class="staticAddons right">
+        <i class="material-icons medium secondColorContent firstHoverColor pointer toTop">expand_less</i>
+        <i class="material-icons medium secondColorContent firstHoverColor pointer toBottom">expand_more</i>
+    </span>
+</template>
+
+
+<!-- skeleform modal windows -->
+<template name="skeleformModals">
+    <!-- error modal -->
+    <div class="modal" id="skeleformError">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="skeleformErrorTitle"></h4>
+                </div>
+                <div class="modal-body">
+                    <img src="/images/icons/status/error.png" style="max-height: 100px; margin-right: 10px; float: left;">
+                    <p>{{_ "details_msg"}}</p>
+                    <p id="skeleformErrorContent" style="font-weight: bold;"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{_ "ok_btn"}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- confirmation modal -->
+    <div class="modal" id="skeleformConfirm">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="skeleformConfirmTitle"></h4>
+                </div>
+                <div class="modal-body">
+                    <img src="/images/icons/status/confirm.png" style="max-height: 100px; margin-right: 10px; float: left;">
+                    <p>{{_ "details_msg"}}</p>
+                    <p id="skeleformConfirmContent" style="font-weight: bold;"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="skeleformConfirmOk">{{_ "ok_btn"}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- question modal -->
+    <div class="modal" id="skeleformQuestion">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="skeleformQuestionTitle"></h4>
+                </div>
+                <div class="modal-body">
+                    <img src="/images/icons/status/question.png" style="max-height: 100px; margin-right: 10px; float: left;">
+                    <p>{{_ "details_msg"}}</p>
+                    <p id="skeleformQuestionContent" style="font-weight: bold;"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="skelefomQuestionOk">{{_ "ok_btn"}}</button>
+                    <button type="button" class="btn btn-info" data-dismiss="modal">{{_ "cancel_btn"}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

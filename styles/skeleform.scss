@@ -1,0 +1,88 @@
+// ------- MATERIALIZE -------
+@charset "UTF-8";
+
+// Mixins
+@import "{}/client/styles/materialize/components/prefixer";
+@import "{}/client/styles/materialize/components/mixins";
+@import "{}/client/styles/materialize/components/color";
+
+// Variables;
+@import "{}/client/styles/materialize/components/variables";
+
+// Reset
+@import "{}/client/styles/materialize/components/normalize";
+
+// components
+@import "{}/client/styles/materialize/components/global";
+@import "{}/client/styles/materialize/components/icons-material-design";
+@import "{}/client/styles/materialize/components/grid";
+@import "{}/client/styles/materialize/components/navbar";
+@import "{}/client/styles/materialize/components/roboto";
+@import "{}/client/styles/materialize/components/typography";
+@import "{}/client/styles/materialize/components/cards";
+@import "{}/client/styles/materialize/components/toast";
+@import "{}/client/styles/materialize/components/tabs";
+@import "{}/client/styles/materialize/components/tooltip";
+@import "{}/client/styles/materialize/components/buttons";
+@import "{}/client/styles/materialize/components/dropdown";
+@import "{}/client/styles/materialize/components/waves";
+@import "{}/client/styles/materialize/components/modal";
+@import "{}/client/styles/materialize/components/collapsible";
+@import "{}/client/styles/materialize/components/chips";
+@import "{}/client/styles/materialize/components/materialbox";
+@import "{}/client/styles/materialize/components/form";
+@import "{}/client/styles/materialize/components/table_of_contents";
+@import "{}/client/styles/materialize/components/sideNav";
+@import "{}/client/styles/materialize/components/preloader";
+@import "{}/client/styles/materialize/components/slider";
+@import "{}/client/styles/materialize/components/date_picker/default.scss";
+@import "{}/client/styles/materialize/components/date_picker/default.date.scss";
+@import "{}/client/styles/materialize/components/date_picker/default.time.scss";
+// ------- END MATERIALIZE -------
+
+// app colors
+@import "{}/client/styles/colors";
+
+
+
+.skeleformFieldAlert {
+    /*min-height: 21px;*/
+    margin: 0;
+}
+
+.skeleformWrapper {
+    margin-top: 60px;
+}
+
+.staticBar{
+    .skeleformToolbar {
+        margin-bottom: 30px;
+    }
+
+    .staticAddons {
+        margin-top: -12px;
+        line-height: 1 !important;
+    }
+}
+
+.staticTop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: lighten($firstColor, 10%);
+    z-index: 2001;
+    padding-top: 10px;
+    height: 70px;
+    border-bottom: solid 3px $firstColorBorder;
+    margin-top: 0 !important;
+    margin-left: 0 !important;
+
+    .centralBody{
+        margin-top: 6px;
+    }
+}
+
+.picker--opened .picker__frame {
+    top: 5% !important;
+}

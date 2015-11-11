@@ -1,0 +1,39 @@
+<template name="skeleformDatePicker">
+    <div class="row">
+        <div class="input-field col {{fieldSize schema.size}} {{schema.style}}">
+            {{#if schema.icon}}
+                <i class="material-icons prefix">{{schema.icon}}</i>
+            {{/if}}
+
+            {{fieldDate item schema.name}}
+            <input type="date" id="{{field schema.name}}" class="skeleValidate gather datepicker">
+            <label for="{{field schema.name}}" class="active">{{label schema.name}}{{required}}</label>
+            
+            <p class="skeleformFieldAlert text-danger"></p>
+        </div>
+    </div>
+</template>
+
+
+<!-- PICKADATE RUNTIME OVERRIDE LANGUAGE DEPENDANT LABELS -->
+<!-- picker's month label -->
+<template name="pickAdateMonthLabel">
+    <div>{{getShortMonthName month}}</div>
+</template>
+
+<!-- picker's footer -->
+<template name="pickAdateFooter">
+    <button class="btn-flat picker__today" type="button" data-pick="1435096800000" aria-controls="birthDay">{{buttonLabels 0}}</button>
+    <button class="btn-flat picker__clear" type="button" data-clear="1" aria-controls="birthDay">{{buttonLabels 1}}</button>
+    <button class="btn-flat picker__close" type="button" data-close="true" aria-controls="birthDay">{{buttonLabels 2}}</button>
+</template>
+
+<!-- picker's day of the week label -->
+<template name="pickAdateDayOfWeekLabel">
+    {{dayLabel dayOfWeek}}
+</template>
+
+<!-- picker's month full -->
+<template name="pickAdateMonthFull">
+    {{monthFull monthNumber}}
+</template>
