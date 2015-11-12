@@ -141,12 +141,12 @@ skeleformValidateForm = function(data, schema) {
             }
             //check also shadowField if exists
             if (schema[unNestedField].shadowConfirm) {
-                var id = '#' + schema[unNestedField].name + 'Shadow';
+                var id = '#' + schema[unNestedField].name + 'ShadowConfirm';
                 var shadowValue = Package.sha.SHA256($(id).val());
 
                 if (data[field] !== shadowValue) {
                     valid = false;
-                    skeleformErrorStatus(id, TAPi18n.__("confirm_validation"), undefined, "skeleformShadowFieldAlert");
+                    skeleformErrorStatus(id, TAPi18n.__("confirm_validation"));
                 }
             }
         }
@@ -222,8 +222,6 @@ skeleformSuccessStatus = function(id, special) {
 
     column.alterClass('invalid', 'valid');
     fieldAlert.html("");
-
-    //special parameter, used for special setup...
 };
 
 //set error status
@@ -231,7 +229,7 @@ skeleformErrorStatus = function(id, errorString, special) {
     var element = $(id);
     var column = element.closest('.col');
     var fieldAlert = column.find('.skeleformFieldAlert');
-
+    
     column.alterClass('valid', 'invalid');
     fieldAlert.html(TAPi18n.__("error_validation", errorString));
 };
@@ -325,9 +323,16 @@ Template.skeleform.helpers({
 
 //helpers used by form elements
 skeleformGeneralHelpers = {
-    label: function(name) {
+    label: function(name, options) {
         name = name.substring(name.lastIndexOf('.') + 1, name.length);
-        return TAPi18n.__(name + "_lbl");
+
+        switch(options) {
+            case 'shadowConfirm':
+            return TAPi18n.__(name + "ShadowConfirm_lbl");
+
+            default:
+            return TAPi18n.__(name + "_lbl");
+        }
     },
     field: function(name) {
         return name;
@@ -353,7 +358,16 @@ skeleformGeneralHelpers = {
         var result = data.fetch()[0];
 
         pathShards.forEach(function(shard, index) {
-            result = result[shard];
+            if (shard.indexOf('---') >= 0) {
+                switch (shard) {
+                    case 'user---Email':
+                    result = result.emails[0].address;
+                    break;
+                }
+            }
+            else {
+                result = result[shard];
+            }
         });
         return result;
     }

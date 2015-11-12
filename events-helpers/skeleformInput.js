@@ -33,7 +33,7 @@ Template.skeleformInput.events({
         if (schema.autoRange && value.length === schema.max) $(event.target).select();
 
         //enabled shadowConfirm if required
-        if (schema.shadowConfirm) {
+        /*if (schema.shadowConfirm) {
             var shadowField = $('#' +  schema.name + 'Shadow');
 
             if (value.length > 0) {            
@@ -45,10 +45,10 @@ Template.skeleformInput.events({
                     shadowField.addClass('hidden');
                 });
             }
-        }
+        }*/
 
         //enabled old value confirm if required
-        if (schema.oldValueConfirm) {
+        /*if (schema.oldValueConfirm) {
             var oldField = $('#' +  schema.name + 'OldGroup');
 
             if (value.length > 0) {            
@@ -60,7 +60,7 @@ Template.skeleformInput.events({
                     oldField.addClass('hidden');
                 });
             }
-        }
+        }*/
 
         //restore gather class if the field is not empty
         if (schema.renderAs === 'password') {
@@ -72,16 +72,18 @@ Template.skeleformInput.events({
         }
     },
     "keyup .shadowField": function(event, template) {
-        var value = $(event.target).siblings('input').val();
+        var shadowId = '#' + $(event.target).attr('id');
+        var id = shadowId.substring(0, shadowId.indexOf('ShadowConfirm'));
+
+        var value = $(id).val();
         var shadowValue = $(event.target).val();
-        var id = '#' + $(event.target).attr('id');
 
 
         if (value !== shadowValue) {
-            skeleformErrorStatus(id, TAPi18n.__("confirm_validation"), undefined, "skeleformShadowFieldAlert");
+            skeleformErrorStatus(shadowId, TAPi18n.__("confirm_validation"));
         }
         else {
-            skeleformSuccessStatus(id, undefined, "skeleformShadowFieldAlert");
+            skeleformSuccessStatus(shadowId);
         }
     }
 });
@@ -90,7 +92,8 @@ Template.skeleformInput.rendered = function() {
     var schema = this.data.schema;
     var id = schema.name;
 
-    //remove gather class if renderAs = 'password'
+    // remove gather class if renderAs = 'password'
+    // to avoid sending empty password to the update method
     if (schema.renderAs === 'password') {
         this.$('.gather').removeClass('gather');
     }

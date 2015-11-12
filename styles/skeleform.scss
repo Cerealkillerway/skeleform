@@ -86,3 +86,7 @@
 .picker--opened .picker__frame {
     top: 5% !important;
 }
+
+.select-wrapper + label {
+    top: 2px !important;
+}
