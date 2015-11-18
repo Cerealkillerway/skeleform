@@ -88,7 +88,7 @@ skeleformGetValue = function(element, template, data, item, all, currentLang) {
 
         case 'input':
             tmpValue = $($(element)).val();
-            if (schema.renderAs === 'password') tmpValue = Package.sha.SHA256(tmpValue);
+            //if (schema.renderAs === 'password') tmpValue = Package.sha.SHA256(tmpValue);
             if (all || !item || !areEquals(item[id], tmpValue)) data[id] = tmpValue;
             break;
 

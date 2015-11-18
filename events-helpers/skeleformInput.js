@@ -63,13 +63,13 @@ Template.skeleformInput.events({
         }*/
 
         //restore gather class if the field is not empty
-        if (schema.renderAs === 'password') {
+        /*if (schema.renderAs === 'password') {
             if (value.length > 0) $(event.target).addClass('gather');
             else {
                 $(event.target).removeClass('gather');
                 skeleformResetStatus(schema.name);
             }
-        }
+        }*/
     },
     "keyup .shadowField": function(event, template) {
         var shadowId = '#' + $(event.target).attr('id');

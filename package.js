@@ -16,8 +16,9 @@ Package.onUse(function(api) {
     // packages
     api.use('fourseven:scss@3.2.0', 'client');
     api.use('tap:i18n@1.7.0');
-    api.use('cerealkiller:materialnote@0.0.1', 'client');
+    api.use('cerealkiller:materialnote@1.0.0', 'client');
     api.use('blaze-html-templates', 'client');
+    api.use('materialize:materialize@0.97.3', 'client');
     // if skeletor is in use, load it before
     api.use('cerealkiller:skeletor@0.0.1', {weak: true});
 
