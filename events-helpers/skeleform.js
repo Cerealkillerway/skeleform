@@ -24,7 +24,7 @@ skeleformGatherData = function(template, all, update) {
 
     data[currentLang] = {};
 
-    if (template.data.item) item = template.data.item.fetch()[0];
+    if (template.data.item) item = template.data.item;
 
     $.each($(".gather"), function(index, element) {
         skeleformGetValue(element, template, data, item, all, currentLang);
@@ -42,7 +42,6 @@ skeleformGatherData = function(template, all, update) {
     logger('separator form gathered data:', 'skeleform');
     logger(data, 'skeleform');
 
-    //return false;
     return data;
 };
 
@@ -83,13 +82,26 @@ skeleformGetValue = function(element, template, data, item, all, currentLang) {
 
         case 'datePicker':
             tmpValue = $('#' + id).siblings('input:hidden').first().val();
-            if (all || !item || !areEquals(item[id], tmpValue)) data[id] = tmpValue;
+            if (all || !item || !areEquals(item[id], tmpValue)) {
+                if (schema.i18n === undefined) {
+                    data[currentLang][id] = tmpValue;
+                }
+                else {
+                    data[id] = tmpValue;
+                }
+            }
             break;
 
         case 'input':
             tmpValue = $($(element)).val();
-            //if (schema.renderAs === 'password') tmpValue = Package.sha.SHA256(tmpValue);
-            if (all || !item || !areEquals(item[id], tmpValue)) data[id] = tmpValue;
+            if (all || !item || !areEquals(item[id], tmpValue)) {
+                if (schema.i18n === undefined) {
+                    data[currentLang][id] = tmpValue;
+                }
+                else {
+                    data[id] = tmpValue;
+                }
+            }
             break;
 
             case 'select':
@@ -104,7 +116,14 @@ skeleformGetValue = function(element, template, data, item, all, currentLang) {
                 }
             }
             else tmpValue = $(element).val();
-            if (all || !item || !areEquals(item[id], tmpValue)) data[id] = tmpValue;
+            if (all || !item || !areEquals(item[id], tmpValue)) {
+                if (schema.i18n === undefined) {
+                    data[currentLang][id] = tmpValue;
+                }
+                else {
+                    data[id] = tmpValue;
+                }
+            }
             break;
 
         default:
@@ -167,11 +186,10 @@ skeleformValidateField = function(value, data) {
     var item = data.item;
     var schema = data.schema;
 
-    //if (!item || item.fetch().length === 0) return;   // >>> TMP!!!
     var documentId;
 
     if (item) {
-        documentId = item.fetch()[0]._id;
+        documentId = item._id;
     }
 
     if (!Session.get('formRendered')) return;
@@ -270,7 +288,6 @@ skeleformHandleResult = function(error, result, type, data) {
         var title, content;
         switch (type) {
             case 'update':
-            case 'generateCodes':
             title = TAPi18n.__("updateConfirm_msg");
             content = TAPi18n.__("pageUpdatedOk_msg");
             break;
@@ -278,19 +295,11 @@ skeleformHandleResult = function(error, result, type, data) {
             case 'create':
             title = TAPi18n.__("insertConfirm_msg");
             content = TAPi18n.__("genericInsert_msg");
+            skeleformCleanForm();
             break;
         }
 
         Materialize.toast(content, 3000, 'success');
-
-        switch (type) {
-            case 'update':
-            break;
-
-            case 'create':
-            skeleformCleanForm();
-            break;
-        }
     }
 };
 
@@ -352,30 +361,14 @@ skeleformGeneralHelpers = {
     },
     fieldValue: function(data, attribute) {
         //standard set value on field reactively
-        if (!data || !data.fetch()[0]) return;
+        if (!data) return;
 
         var pathShards = attribute.split('.');
-        var result = data.fetch()[0];
 
         pathShards.forEach(function(shard, index) {
-            if (shard.indexOf('---') >= 0) {
-                switch (shard) {
-                    case 'user---Email':
-                    result = result.emails[0].address;
-                    break;
-                }
-            }
-            else {
-                result = result[shard];
-            }
+            data = data[shard];
         });
-        return result;
-    }
-};
-
-skeleformPathHelpers = {
-    setUndoPath: function(path) {
-        return path + '?lang=' + FlowRouter.getQueryParam('lang');
+        return data;
     }
 };
 
@@ -396,27 +389,6 @@ Template.skeleform.rendered = function() {
             skeleformResetStatus();    // clean validation alerts
         }
     });
-
-    // change url events
-    /*var item = this.data.item.fetch()[0];
-    if (item) {
-        var routeName = Router.current().route.getName();
-        var segment = routeName.substring(routeName.lastIndexOf(':') + 1, routeName.length);
-        var initialValue = item[segment];
-
-        $('#' + segment).change(function() {
-            var data = {};
-            var segmentState = {
-                name: segment
-            };
-
-            skeleformGetValue(this, self, data);
-            if (data[segment] !== initialValue) segmentState.changed = true;
-            else segmentState.changed = false;
-
-            Router.current().state.set('segmentState', segmentState);
-        });
-    }*/
 
     $('input:first').focus();
 
@@ -443,7 +415,6 @@ Template.skeleform.destroyed = function() {
 
 // SKELEFORM DEFAULT TOOLBAR
 // ==========================================================================================
-Template.skeleformCreateButtons.helpers(skeleformPathHelpers);
 Template.skeleformCreateButtons.events({
     "click .skeleformCreate": function(event, template) {
         var data = skeleformGatherData(template);
@@ -468,21 +439,30 @@ Template.skeleformCreateButtons.events({
 });
 
 
-Template.skeleformUpdateButtons.helpers(skeleformPathHelpers);
 Template.skeleformUpdateButtons.events({
     "click .skeleformUpdate": function(event, template) {
 
         var data = skeleformGatherData(template, false, true);
-        var documentId = template.data.item.fetch()[0]._id;
+        var documentId = template.data.item._id;
         var schema = template.data.schema;
         var method;
-            if (!template.data.method) {
-                method = configuration.defaultMethods.update;
-            }
-            else {
-                method = template.data.method.update;
-            }
 
+        if (!template.data.method) {
+            method = configuration.defaultMethods.update;
+        }
+        else {
+            method = template.data.method.update;
+        }
+
+        // get route params to manage if current update should redirect to a new path
+        var currentRoute = FlowRouter.current();
+        var params = currentRoute.params;
+        logger ('url change monitor:', 'skeleform');
+        logger(params, 'skeleform');
+        params = _.keys(params);
+        dataKeys = _.keys(data);
+        var changedParams = _.intersection(params, dataKeys);
+        
         if (skeleformValidateForm(data, schema)) {
             var loading = Blaze.render(Template.panelLoading, $('#skeleformLoading')[0]);
 
@@ -490,6 +470,14 @@ Template.skeleformUpdateButtons.events({
                 Blaze.remove(loading);
                 skeleformHandleResult(error, result, 'update', data);
             });
+            if (changedParams.length > 0) {
+                var newParams = {};
+                changedParams.forEach(function(param, index) {
+                    newParams[param] = data[param];
+                });
+                console.log(newParams);
+                FlowRouter.setParams(newParams);
+            }
         }
     }
 });
