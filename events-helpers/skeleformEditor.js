@@ -45,13 +45,13 @@ editorToolbars = {
 Template.skeleformEditor.helpers(skeleformGeneralHelpers);
 Template.skeleformEditor.helpers({
     fieldEditor: function(data, schema) {
-        if (!data || !data.fetch()[0]) {
+        if (!data) {
             return false;
         }
         if (Session.get('formRendered')) {
             if (schema.i18n === undefined) {
                 var currentLang = FlowRouter.getQueryParam("lang");
-                var langObject = data.fetch()[0][currentLang];
+                var langObject = data[currentLang];
 
                 if (!langObject) {
                     $('#' + schema.name).code('');
@@ -61,7 +61,7 @@ Template.skeleformEditor.helpers({
                 }
             }
             else {
-                $('#' + schema.name).code(data.fetch()[0][schema.name]);
+                $('#' + schema.name).code(data[schema.name]);
             }
         }
     }
@@ -76,7 +76,7 @@ Template.skeleformEditor.rendered = function() {
     if ((toolbar === undefined)|| (editorToolbars[toolbar] === undefined)) toolbar = "default";
 
     $(editor).materialnote({
-        lang: doubleLangCode(FlowRouter.getQueryParam("lang")),
+        lang: ckUtils.globalUtilities.doubleLangCode(FlowRouter.getQueryParam("lang")),
         toolbar: editorToolbars[toolbar],
         height: 400,
         minHeight: 100,

@@ -20,6 +20,7 @@ Package.onUse(function(api) {
     api.use('cerealkiller:materialnote@1.0.0', 'client');
     api.use('blaze-html-templates', 'client');
     api.use('materialize:materialize@0.97.3', 'client');
+    api.use('cerealkiller:utils');
     // if skeletor is in use, load it before
     api.use('cerealkiller:skeletor@0.0.1', {weak: true});
 
@@ -33,6 +34,7 @@ Package.onUse(function(api) {
     api.addFiles('templates/skeleform.html', 'client');
     api.addFiles('templates/skeleformDatePicker.html', 'client');
     api.addFiles('templates/skeleformEditor.html', 'client');
+    api.addFiles('templates/ckMaterialNotePlugins.html', 'client');
     api.addFiles('templates/skeleformImageUpload.html', 'client');
     api.addFiles('templates/skeleformInput.html', 'client');
     api.addFiles('templates/skeleformSelect.html', 'client');

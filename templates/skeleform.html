@@ -12,7 +12,7 @@
             {{/with}}       
         {{/each}}
     </div>
-    <div id="skeleformLoading" style="clear:both;"></div>
+    <div id="skeleformLoading"></div>
 </template>
 
 <!-- loads default or custom toolbar on top of skeleform -->
@@ -36,7 +36,7 @@
                 <i class="material-icons small left">add_circle</i>
                 <span>{{_ "create_btn"}}</span>
             </div>
-            <a href="{{this.undoPath}}" class="waves-effect waves-light btn firstColor">
+            <a href="{{this.undoPath}}?lang={{currentLang}}" class="waves-effect waves-light btn firstColor">
                 <i class="material-icons small left">undo</i>
                 <span>{{_ "cancel_btn"}}</span>
             </a>
@@ -53,7 +53,7 @@
                 <i class="material-icons small left">beenhere</i>
                 <span>{{_ "update_btn"}}</span>
             </div>
-            <a href="{{this.schema.__paths.undoPath}}" class="waves-effect waves-light btn firstColor">
+            <a href="{{this.schema.__paths.undoPath}}?lang={{currentLang}}" class="waves-effect waves-light btn firstColor">
                 <i class="material-icons small left">undo</i>
                 <span>{{_ "cancel_btn"}}</span>
             </a>

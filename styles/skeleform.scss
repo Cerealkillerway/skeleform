@@ -3,20 +3,18 @@
 
 
 
-.skeleformFieldAlert {
-    //min-height: 21px;
-    margin: 0;
-}
-
 .skeleformWrapper {
     margin-top: 60px;
 }
+.shortInput {
+    max-width: 350px;
+}
 
+/* --- toolbars --- */
 .staticBar{
     .skeleformToolbar {
         margin-bottom: 30px;
     }
-
     .staticAddons {
         margin-top: -12px;
         line-height: 1 !important;
@@ -40,6 +38,36 @@
         margin-top: 6px;
     }
 }
+/* --- end toolbars --- */
+
+
+/* --- fields specific --- */
+.skeleformFieldAlert {
+    margin: 0;
+}
+.note-editor + label {
+    top: -0.2rem !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .picker--opened .picker__frame {
     top: 5% !important;
@@ -47,4 +75,189 @@
 
 .select-wrapper + label {
     top: 2px !important;
+}
+
+.fileLoader {
+    position: absolute;
+    height: 43px;
+    z-index: 2;
+    cursor: pointer;
+    opacity: 0;
+    max-width: 111px;
+}
+
+.fileLoaderCover {
+    position: absolute;
+    top: 0;
+}
+
+.fileNameContainer {
+    color: #eee;
+    padding: 10px 10px 6px 10px;
+    position: relative;
+    height: 43px;
+    max-width: 300px;
+    background-color: #333;
+}
+
+.canvasContainer {
+    background-color: #333;
+    margin: 5px 0 15px 0;
+    padding: 10px;
+}
+
+.canvasContainerEmpty {
+    background-image: url('images/assets/image-placeholder.png');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.canvasImage, #imagesReloaded > img {
+    border: solid 12px #999;
+    vertical-align: baseline;
+}
+
+.canvasThumb {
+    margin: 20px 0 0 20px;
+    border: solid 12px #999;
+}
+
+.panelMap {
+    height: 400px;
+    width: 100%;
+    max-width: 100% !important;
+}
+
+.coordinates {
+    min-height: 35px;
+    margin-bottom: 20px;
+    color: #ddd;
+}
+
+.coorField {
+    width: 250px;
+    margin-right: 15px;
+}
+
+.dasboardBtn {
+    margin-bottom: 40px;
+}
+
+#mapPlacemarks {
+    color: #fff;
+}
+
+#mapPlacemarks li {
+    position: relative;
+    list-style: square;
+    height: 43px;
+    line-height: 43px;
+    margin-bottom: 7px;
+}
+
+#mapPlacemarks > li > select {
+    max-width: 200px;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+}
+
+#mapPlacemarks > li > img {
+    position: absolute;
+    right: 210px;
+    max-height: 44px;
+}
+
+.markerDelete {
+    color: #fff;
+    height: 43px;
+    margin-right: 15px;
+    padding: 11px 15px;
+    background-color: #ff9000;
+    border: solid 1px #c56f00;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.markerDelete:hover {
+    background-color: #9954bb;
+    transition: all 1s linear;
+}
+
+
+
+.picker__box {
+    border: none !important;
+}
+
+.canvasContainer {
+    position: relative;
+    float: left;
+    padding: 30px;
+    min-height: 200px;
+    border: solid 5px $secondColor;
+    border-radius: 2px;
+    max-width: 100%;
+
+    canvas {
+        max-width: 100%;
+        margin: 0;
+    }
+}
+
+.canvasContainerEmpty {
+    background: {
+        image: url('images/assets/image-placeholder.png');
+        repeat: no-repeat;
+        position: center;
+    }
+}
+
+.canvasImage {
+    border: solid 12px #999;
+}
+
+.canvasThumb {
+    margin: 20px 0 0 20px;
+    border: solid 12px #999;
+}
+
+.galleryDelete, .imageDelete, .fileDelete {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+
+    i {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+}
+
+.dropdown-content.active {
+    max-height: 400px !important;
+    z-index: 100 !important;
+}
+
+.dropdown-content li > a, .dropdown-content li > span {
+    color: $firstColor !important;
+}
+
+.dropdown-content li:hover, .dropdown-content li.active {
+    background-color: lighten($secondColor, 20%) !important;
+}
+
+.file-field {
+    .btn, .btn-large {
+        position: relative !important;
+    }
+
+    input.file-path {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+}
+
+.select-wrapper > .dropdown-content.active {
+    z-index: 2001 !important;
 }

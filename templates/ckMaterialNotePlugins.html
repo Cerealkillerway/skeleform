@@ -1,0 +1,103 @@
+<template name="ckImageUploader">
+    <div class="modal modal-fixed-footer ckImageUploader">
+        <div class="modal-content">
+            <h4>{{_ "imageUploadTitle_modal"}}</h4>
+            <p>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <div class="file-field input-field">
+                            <div class="col s12 m5">
+                                <div class="waves-effect waves-light btn">
+                                    <span>
+                                        <i class="mdi-image-photo small left"></i>
+                                        {{_ "loadFile_btn"}}
+                                    </span>
+                                    <input class="imageUploader" type="file" />
+                                </div>
+                            </div>
+                            <div class="col s12 m7">
+                                <input class="fileNameContainer" type="text" autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <div class="canvasContainer canvasContainerEmpty">
+                            <canvas class="willContainImage"></canvas>
+                            <canvas class='canvasBlank' style='display:none'></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <textarea id="altText-{{name}}" class="materialize-textarea imageAltText"></textarea>
+                        <label for="altText-{{name}}">{{_ "altText_lbl"}}</label>
+                    </div>
+                </div>
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button class="ckImageUploadConfirm waves-effect waves-light btn">{{_ "ok_btn"}}</button>
+            <button class="waves-effect waves-light btn btnClose">{{_ "close_btn"}}</button>
+        </div>
+    </div>
+</template>
+
+<template name="ckVideoEmbeeder">
+    <div class="modal modal-fixed-footer ckVideoEmbeeder">
+        <div class="modal-content">
+            <h4>{{_ "videoEmbeed_modal"}}</h4>
+            <p>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <img src="/images/icons/social/youtube.png" class="prefix imageIcon" />
+                        <input type="text" class="videoUrl" autocomplete="off">
+                        <label class="active" for="videoEmbeed">{{_ "videoUrl_lbl"}}</label>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div>{{_ "preview_lbl"}}</div>
+                    <div class="previewContainer hidden">
+                        <div id="player"></div>
+                    </div>
+                </div>
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button class="ckVideoEmbeederConfirm waves-effect waves-light btn">{{_ "ok_btn"}}</button>
+            <button class="waves-effect waves-light btn btnClose">{{_ "close_btn"}}</button>
+        </div>
+    </div>
+</template>
+
+<!--<template name="ckVideoEmbeeder">
+    <div class="ckVideoEmbeeder hidden">
+        <div class="ckModal">
+            <div class="ckInnerModal darkModal">
+                <div class="darkRedModalHeader">
+                    <button type="button" class="close">×</button>
+                    <h4 class="darkRedModalTitle">{{_ "videoEmbeed_modal"}}</h4>
+                </div>
+                <div class="modal-body">
+                    <label for="videoEmbeed" class="col-lg-2 control-label" style="margin-top: 25px;">{{_ "videoUrl_lbl"}}</label>
+                    <div class="videoUrlContainer" style="margin: 15px auto;">
+                        <input type="text" class="videoUrl form-control shortInput darkGreyInput redBorder" placeholder="{{_ "videoAddress_lbl"}}" autocomplete="off" style="float: left;">
+                        <img src="/images/icons/social/youtube.png" style="max-height: 80px; margin-left: 25px; margin-top: -20px;">
+                    </div>
+                    <div style="clear: both;"></div>
+                    
+                    <div>{{_ "preview_lbl"}}</div>
+                    <div class="previewContainer hidden">
+                        <div id="player"></div>
+                    </div>
+                </div>
+                <div class="darkRedModalFooter">
+                    <div class="btn btn-success ckVideoEmbeederClose">{{_ "cancel_btn"}}</div>
+                    <div class="btn btn-info ckVideoEmbeederConfirm">{{_ "ok_btn"}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>-->

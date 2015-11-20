@@ -39,8 +39,8 @@ skeleformGatherData = function(template, all, update) {
         _.extend(data, grounded);
     }
 
-    logger('separator form gathered data:', 'skeleform');
-    logger(data, 'skeleform');
+    ckUtils.globalUtilities.logger('separator form gathered data:', 'skeleform');
+    ckUtils.globalUtilities.logger(data, 'skeleform');
 
     return data;
 };
@@ -70,7 +70,7 @@ skeleformGetValue = function(element, template, data, item, all, currentLang) {
         case 'editor':
             tmpValue = $(element).code().trim();
 
-            if (all || !item || !areEquals(currentItem, tmpValue)) {
+            if (all || !item || !ckUtils.globalUtilities.areEquals(currentItem, tmpValue)) {
                 if (schema.i18n === undefined) {
                     data[currentLang][id] = tmpValue;
                 }
@@ -82,7 +82,7 @@ skeleformGetValue = function(element, template, data, item, all, currentLang) {
 
         case 'datePicker':
             tmpValue = $('#' + id).siblings('input:hidden').first().val();
-            if (all || !item || !areEquals(item[id], tmpValue)) {
+            if (all || !item || !ckUtils.globalUtilities.areEquals(item[id], tmpValue)) {
                 if (schema.i18n === undefined) {
                     data[currentLang][id] = tmpValue;
                 }
@@ -94,7 +94,7 @@ skeleformGetValue = function(element, template, data, item, all, currentLang) {
 
         case 'input':
             tmpValue = $($(element)).val();
-            if (all || !item || !areEquals(item[id], tmpValue)) {
+            if (all || !item || !ckUtils.globalUtilities.areEquals(item[id], tmpValue)) {
                 if (schema.i18n === undefined) {
                     data[currentLang][id] = tmpValue;
                 }
@@ -116,7 +116,7 @@ skeleformGetValue = function(element, template, data, item, all, currentLang) {
                 }
             }
             else tmpValue = $(element).val();
-            if (all || !item || !areEquals(item[id], tmpValue)) {
+            if (all || !item || !ckUtils.globalUtilities.areEquals(item[id], tmpValue)) {
                 if (schema.i18n === undefined) {
                     data[currentLang][id] = tmpValue;
                 }
@@ -156,7 +156,7 @@ skeleformValidateForm = function(data, schema) {
         if (schema[unNestedField]) {
             if (!skeleformValidateField(data[field], {schema: schema[unNestedField], item: Template.instance().data.item})) {
                 valid = false;
-                logger('VALIDATION - failed on field: ' + field, debugType);
+                ckUtils.globalUtilities.logger('VALIDATION - failed on field: ' + field, debugType);
             }
             //check also shadowField if exists
             if (schema[unNestedField].shadowConfirm) {
@@ -198,7 +198,7 @@ skeleformValidateField = function(value, data) {
     var result = isValid(value, schema, collection, documentId);
     
     if (!result.valid) {
-        logger('VALIDATION - invalid ' + id, debugType);
+        ckUtils.globalUtilities.logger('VALIDATION - invalid ' + id, debugType);
         var errorString = "";
 
         result.reasons.forEach(function(rValue, rIndex) {
@@ -457,8 +457,8 @@ Template.skeleformUpdateButtons.events({
         // get route params to manage if current update should redirect to a new path
         var currentRoute = FlowRouter.current();
         var params = currentRoute.params;
-        logger ('url change monitor:', 'skeleform');
-        logger(params, 'skeleform');
+        ckUtils.globalUtilities.logger ('url change monitor:', 'skeleform');
+        ckUtils.globalUtilities.logger(params, 'skeleform');
         params = _.keys(params);
         dataKeys = _.keys(data);
         var changedParams = _.intersection(params, dataKeys);
@@ -467,7 +467,7 @@ Template.skeleformUpdateButtons.events({
             var loading = Blaze.render(Template.panelLoading, $('#skeleformLoading')[0]);
 
             Meteor.call(method, documentId, data, template.data.schemaName, function(error, result) {
-                Blaze.remove(loading);
+                //Blaze.remove(loading);
                 skeleformHandleResult(error, result, 'update', data);
             });
             if (changedParams.length > 0) {
@@ -475,7 +475,6 @@ Template.skeleformUpdateButtons.events({
                 changedParams.forEach(function(param, index) {
                     newParams[param] = data[param];
                 });
-                console.log(newParams);
                 FlowRouter.setParams(newParams);
             }
         }
