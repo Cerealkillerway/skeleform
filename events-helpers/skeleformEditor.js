@@ -1,6 +1,6 @@
 // EDITOR
 // a textarea with a wysiwyg editor writing html code
-// it uses summernote.js as editor plugin; see http://summernote.org/#/deep-dive for more informations
+// it uses materialNote.js plugin from cerealkiller:materialnote package
 
 editorToolbars = {
     default: [

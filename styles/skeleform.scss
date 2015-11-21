@@ -6,8 +6,8 @@
 .skeleformWrapper {
     margin-top: 60px;
 }
-.shortInput {
-    max-width: 350px;
+.skeleformFieldAlert {
+    margin: 0;
 }
 
 /* --- toolbars --- */
@@ -42,12 +42,11 @@
 
 
 /* --- fields specific --- */
-.skeleformFieldAlert {
-    margin: 0;
-}
+// skeleform editor
 .note-editor + label {
     top: -0.2rem !important;
 }
+/* --- end fields specific --- */
 
 
 

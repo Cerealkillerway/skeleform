@@ -5,11 +5,11 @@ Template.skeleformSelect.helpers(skeleformGeneralHelpers);
 Template.skeleformSelect.helpers({
     fieldSelect: function(data, attribute) {
         var id = '#' + attribute.replace('.', '\\.');
-        if (!data || !data.fetch()[0]) return;
+        if (!data) return;
         if (Session.get('formRendered')) {
 
             var pathShards = attribute.split('.');
-            var value = data.fetch()[0];
+            var value = data;
 
             pathShards.forEach(function(shard, index) {
                 value = value[shard];

@@ -1,5 +1,5 @@
 <template name="skeleform">
-    <!--{{> skeleformModals}}-->
+    {{> skeleformLoading}}{{log this}}
     
     <!-- toolbar -->
     {{> skeleformToolbar this}}
@@ -72,63 +72,50 @@
 
 
 <!-- skeleform modal windows -->
-<template name="skeleformModals">
-    <!-- error modal -->
-    <div class="modal" id="skeleformError">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title" id="skeleformErrorTitle"></h4>
-                </div>
-                <div class="modal-body">
-                    <img src="/images/icons/status/error.png" style="max-height: 100px; margin-right: 10px; float: left;">
-                    <p>{{_ "details_msg"}}</p>
-                    <p id="skeleformErrorContent" style="font-weight: bold;"></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">{{_ "ok_btn"}}</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- confirmation modal -->
-    <div class="modal" id="skeleformConfirm">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title" id="skeleformConfirmTitle"></h4>
-                </div>
-                <div class="modal-body">
-                    <img src="/images/icons/status/confirm.png" style="max-height: 100px; margin-right: 10px; float: left;">
-                    <p>{{_ "details_msg"}}</p>
-                    <p id="skeleformConfirmContent" style="font-weight: bold;"></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" id="skeleformConfirmOk">{{_ "ok_btn"}}</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- question modal -->
-    <div class="modal" id="skeleformQuestion">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title" id="skeleformQuestionTitle"></h4>
-                </div>
-                <div class="modal-body">
-                    <img src="/images/icons/status/question.png" style="max-height: 100px; margin-right: 10px; float: left;">
-                    <p>{{_ "details_msg"}}</p>
-                    <p id="skeleformQuestionContent" style="font-weight: bold;"></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" id="skelefomQuestionOk">{{_ "ok_btn"}}</button>
-                    <button type="button" class="btn btn-info" data-dismiss="modal">{{_ "cancel_btn"}}</button>
+<template name="skeleformLoading">
+    <div id="panelLoadingModal" class="modal">
+        <div class="modal-content">
+            <img src="/images/logos/miniLogo.png" height="100">
+            <div id="gear" style="height: 210px;">
+                <div class="gearContainer">
+                    <div class="gearbox">
+                        <div class="overlay"></div>
+                        <div class="gear one">
+                            <div class="gear-inner">
+                                <div class="gear-bar"></div>
+                                <div class="gear-bar"></div>
+                                <div class="gear-bar"></div>
+                            </div>
+                        </div>
+                        <div class="gear two">
+                            <div class="gear-inner">
+                                <div class="gear-bar"></div>
+                                <div class="gear-bar"></div>
+                                <div class="gear-bar"></div>
+                            </div>
+                        </div>
+                        <div class="gear three">
+                            <div class="gear-inner">
+                                <div class="gear-bar"></div>
+                                <div class="gear-bar"></div>
+                                <div class="gear-bar"></div>
+                            </div>
+                        </div>
+                        <div class="gear four large">
+                            <div class="gear-inner">
+                                <div class="gear-bar"></div>
+                                <div class="gear-bar"></div>
+                                <div class="gear-bar"></div>
+                                <div class="gear-bar"></div>
+                                <div class="gear-bar"></div>
+                                <div class="gear-bar"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <h3>{{_ "loading_msg"}}</h3>
+            <p>{{conf "name"}}</p>
         </div>
     </div>
 </template>

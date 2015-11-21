@@ -3,6 +3,9 @@
 Schemas = {
   Roles_default: {
         __collection: "Roles",
+        __paths: {
+          undoPath: '/panel/roles'
+        }
         name: {
             type: "text",
             output: "input",
@@ -13,6 +16,9 @@ Schemas = {
     },
 };
 
+
+
+
 /* 
 GUIDE
 ================================
@@ -20,6 +26,22 @@ SCHEMA OPTIONS:
 --------------------------------
 __collection: name of collection that is manipulated by this form [string]
 __toolbar: (optional) name of alternative template to use as a toolbar [string] (default skeleformCreate/UpdateButtons)
+__paths:
+    undoPath -> specify the path to be used for cancel button [string]
+    redirectOnCreate -> specify the path to be used as a redirect after a succesful create [string, Object]
+                        the string is the path definition (can contain ":" params), and the object
+                        is the params dictionary (NOT optional, pass empty object if no params are needed);
+                        the string 'this' used as a value in params object means that the value must be taken
+                        from skeleform gathered data object. 
+                        (default behaviour: clean the form and be ready for a new document)
+    redirectOnUpdate -> specify the path to be used as a redirect after a succesful update [string, Object] 
+                        the string is the path definition (can contain ":" params), and the object
+                        is the params dictionary (NOT optional, pass empty object if no params are 
+                        the string 'this' used as a value in params object means that the value must be taken
+                        from skeleform gathered data object.
+                        (default behaviour: stay on the same page)
+__options:
+    loadingModal -> if true use a loading modal while performing skeleform operations [true/false]
 
 SCHEMA FIELDS OPTIONS
 --------------------------------

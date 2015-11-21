@@ -280,7 +280,7 @@ skeleformCleanForm = function() {
 };
 
 //handle method results and performs error/success operations on the client
-skeleformHandleResult = function(error, result, type, data) {
+skeleformHandleResult = function(error, result, type, data, paths) {
     if (error) {
         Materialize.toast(TAPi18n.__("serverError_error"), 5000, 'error');
     }
@@ -299,7 +299,23 @@ skeleformHandleResult = function(error, result, type, data) {
             break;
         }
 
-        Materialize.toast(content, 3000, 'success');
+        Materialize.toast(content, 3000, 'success', function() {
+            var redirectPath = paths['redirectOn' + type.capitalize()];
+            if (paths['redirectOn' + type.capitalize()]) {
+                var params = {};
+
+                _.keys(redirectPath[1]).forEach(function(param) {
+                    if (redirectPath[1][param] === 'this') {
+                        params[param] = data[param];
+                    }
+                    else {
+                        params[param] = redirectPath[1][param];
+                    }
+                });
+
+                FlowRouter.go(redirectPath[0], params, {lang: FlowRouter.getQueryParam("lang")});
+            }
+        });
     }
 };
 
@@ -420,19 +436,31 @@ Template.skeleformCreateButtons.events({
         var data = skeleformGatherData(template);
         var schema = template.data.schema;
         var method;
-            if (!template.data.method) {
-                method = configuration.defaultMethods.insert;
+        var options = {};
+
+        if (schema.__options) {
+            if (schema.__options.loadingModal) {
+                options.useModal = true;
             }
-            else {
-                method = template.data.method.insert;
-            }
+        }
+
+        if (!template.data.method) {
+            method = configuration.defaultMethods.insert;
+        }
+        else {
+            method = template.data.method.insert;
+        }
 
         if (skeleformValidateForm(data, schema)) {
-            var loading = Blaze.render(Template.panelLoading, $('#skeleformLoading')[0]);
+            if (options.useModal) {
+                $('#panelLoadingModal').openModal();
+            }
 
             Meteor.call(method, data, template.data.schemaName, function(error, result) {
-                Blaze.remove(loading);
-                skeleformHandleResult(error, result, 'create', data);
+                if (options.useModal) {
+                    $('#panelLoadingModal').closeModal();
+                }
+                skeleformHandleResult(error, result, 'create', data, schema.__paths);
             });
         }
     }
@@ -441,11 +469,17 @@ Template.skeleformCreateButtons.events({
 
 Template.skeleformUpdateButtons.events({
     "click .skeleformUpdate": function(event, template) {
-
         var data = skeleformGatherData(template, false, true);
         var documentId = template.data.item._id;
         var schema = template.data.schema;
         var method;
+        var options = {};
+
+        if (schema.__options) {
+            if (schema.__options.loadingModal) {
+                options.useModal = true;
+            }
+        }
 
         if (!template.data.method) {
             method = configuration.defaultMethods.update;
@@ -457,6 +491,7 @@ Template.skeleformUpdateButtons.events({
         // get route params to manage if current update should redirect to a new path
         var currentRoute = FlowRouter.current();
         var params = currentRoute.params;
+
         ckUtils.globalUtilities.logger ('url change monitor:', 'skeleform');
         ckUtils.globalUtilities.logger(params, 'skeleform');
         params = _.keys(params);
@@ -464,11 +499,15 @@ Template.skeleformUpdateButtons.events({
         var changedParams = _.intersection(params, dataKeys);
         
         if (skeleformValidateForm(data, schema)) {
-            var loading = Blaze.render(Template.panelLoading, $('#skeleformLoading')[0]);
+            if (options.useModal) {
+                $('#panelLoadingModal').openModal();
+            }
 
             Meteor.call(method, documentId, data, template.data.schemaName, function(error, result) {
-                //Blaze.remove(loading);
-                skeleformHandleResult(error, result, 'update', data);
+                if (options.useModal) {
+                    $('#panelLoadingModal').closeModal();
+                }
+                skeleformHandleResult(error, result, 'update', data, schema.__paths);
             });
             if (changedParams.length > 0) {
                 var newParams = {};
