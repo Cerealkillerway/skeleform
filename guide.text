@@ -25,7 +25,13 @@ GUIDE
 SCHEMA OPTIONS:
 --------------------------------
 __collection: name of collection that is manipulated by this form [string]
-__toolbar: (optional) name of alternative template to use as a toolbar [string] (default skeleformCreate/UpdateButtons)
+__toolbar: (optional) 
+        template -> name of alternative template to use as a toolbar [string]
+        containerId -> id of DOM element to place the toolbar in [string] (optional/available only if
+                       "template"option is used)
+        extrasCreate -> template for extra buttons to be added to standard create toolbar [string]
+        extrasUpdate -> template for extra buttons to be added to standard update toolbar [string]
+
 __paths:
     undoPath -> specify the path to be used for cancel button [string]
     redirectOnCreate -> specify the path to be used as a redirect after a succesful create [string, Object]
@@ -49,6 +55,8 @@ output: form element [input, editor, select, imageUpload, datePicker, password, 
     
     Field specific options:
     ------------------------------
+    staticTitle: mini -> [boolean] use <h3> tag instead of <h4>
+
     input: icon -> materialize's icon class [string]
            renderAs -> type of input field to render [string] (password, text); default to "text";
                        when using the "password" option, the field is not gathered for submit if left empty;

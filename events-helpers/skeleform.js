@@ -24,9 +24,11 @@ skeleformGatherData = function(template, all, update) {
 
     data[currentLang] = {};
 
-    if (template.data.item) item = template.data.item;
+    if (template.data.item) {
+        item = template.data.item;
+    }
 
-    $.each($(".gather"), function(index, element) {
+    $.each(skeleformInstance.$(".gather"), function(index, element) {
         skeleformGetValue(element, template, data, item, all, currentLang);
     });
 
@@ -394,10 +396,9 @@ skeleformGeneralHelpers = {
 Template.skeleform.created = function() {
     Session.set('formRendered', false);
 };
-Template.skeleform.rendered = function() {
+Template.skeleform.onRendered(function() {
     var self = this;
-
-    skeleformInstance = self;
+        skeleformInstance = self;
 
     Session.set('formRendered', true);
     Tracker.autorun(function() {
@@ -405,6 +406,12 @@ Template.skeleform.rendered = function() {
             skeleformResetStatus();    // clean validation alerts
         }
     });
+
+    // set toolbar in container if needed
+    var toolbar = this.data.schema.__toolbar;
+    if (toolbar && toolbar.containerId) {
+        Blaze.renderWithData(Template[toolbar.template], this.data, $('#' + toolbar.containerId)[0]);
+    }
 
     $('input:first').focus();
 
@@ -422,7 +429,7 @@ Template.skeleform.rendered = function() {
             $('.staticBar').removeClass('staticTop');
         }
     });
-};
+});
 
 Template.skeleform.destroyed = function() {
     $(window).unbind('scroll');

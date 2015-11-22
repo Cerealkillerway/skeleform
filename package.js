@@ -14,6 +14,7 @@ Package.onUse(function(api) {
     api.versionsFrom('1.2.1');
 
     // packages
+    api.use('jquery', 'client');
     api.use('underscore@1.0.0');
     api.use('fourseven:scss@3.2.0', 'client');
     api.use('tap:i18n@1.7.0');
@@ -25,6 +26,7 @@ Package.onUse(function(api) {
     api.use('cerealkiller:skeletor@0.0.1', {weak: true});
 
     // exports
+    api.export('Skeleform');   // package namespace
 
     // styles
     api.addFiles('styles/skeleform.scss', 'client');
@@ -41,12 +43,11 @@ Package.onUse(function(api) {
     api.addFiles('templates/skeleformStaticTitle.html', 'client');
 
     // libraries
-    api.use('jquery', 'client');
+    api.addFiles('namespace.js');
     api.addFiles('lib/jquery.alterClass.js', 'client');
     api.addFiles('lib/validate.js');
     api.addFiles('lib/editEvents.js', 'client');
     api.addFiles('lib/autoNumeric.js', 'client');
-    //api.addFiles('lib/materialNotePlugins.js', 'client');
 
     api.addFiles('events-helpers/skeleform.js', 'client');
     api.addFiles('events-helpers/skeleformDatePicker.js', 'client');
