@@ -1,5 +1,5 @@
 <template name="skeleform">
-    {{> skeleformLoading}}
+    {{> gearLoading}}
     
     <!-- toolbar -->
     {{#unless this.schema.__toolbar.containerId}}
@@ -14,7 +14,6 @@
             {{/with}}       
         {{/each}}
     </div>
-    <div id="skeleformLoading"></div>
 </template>
 
 <!-- loads default or custom toolbar on top of skeleform -->
@@ -76,54 +75,4 @@
         <i class="material-icons medium secondColorContent firstHoverColor pointer toTop">expand_less</i>
         <i class="material-icons medium secondColorContent firstHoverColor pointer toBottom">expand_more</i>
     </span>
-</template>
-
-
-<!-- skeleform modal windows -->
-<template name="skeleformLoading">
-    <div id="panelLoadingModal" class="modal">
-        <div class="modal-content">
-            <img src="/images/logos/miniLogo.png" height="100">
-            <div id="gear" style="height: 210px;">
-                <div class="gearContainer">
-                    <div class="gearbox">
-                        <div class="overlay"></div>
-                        <div class="gear one">
-                            <div class="gear-inner">
-                                <div class="gear-bar"></div>
-                                <div class="gear-bar"></div>
-                                <div class="gear-bar"></div>
-                            </div>
-                        </div>
-                        <div class="gear two">
-                            <div class="gear-inner">
-                                <div class="gear-bar"></div>
-                                <div class="gear-bar"></div>
-                                <div class="gear-bar"></div>
-                            </div>
-                        </div>
-                        <div class="gear three">
-                            <div class="gear-inner">
-                                <div class="gear-bar"></div>
-                                <div class="gear-bar"></div>
-                                <div class="gear-bar"></div>
-                            </div>
-                        </div>
-                        <div class="gear four large">
-                            <div class="gear-inner">
-                                <div class="gear-bar"></div>
-                                <div class="gear-bar"></div>
-                                <div class="gear-bar"></div>
-                                <div class="gear-bar"></div>
-                                <div class="gear-bar"></div>
-                                <div class="gear-bar"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <h3>{{_ "loading_msg"}}</h3>
-            <p>{{conf "name"}}</p>
-        </div>
-    </div>
 </template>

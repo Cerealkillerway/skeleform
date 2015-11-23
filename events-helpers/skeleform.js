@@ -301,7 +301,7 @@ skeleformHandleResult = function(error, result, type, data, paths) {
             break;
         }
 
-        Materialize.toast(content, 3000, 'success', function() {
+        Materialize.toast(content, 1300, 'success', function() {
             var redirectPath = paths['redirectOn' + type.capitalize()];
             if (paths['redirectOn' + type.capitalize()]) {
                 var params = {};
@@ -460,12 +460,12 @@ Template.skeleformCreateButtons.events({
 
         if (skeleformValidateForm(data, schema)) {
             if (options.useModal) {
-                $('#panelLoadingModal').openModal();
+                $('#gearLoadingModal').openModal();
             }
 
             Meteor.call(method, data, template.data.schemaName, function(error, result) {
                 if (options.useModal) {
-                    $('#panelLoadingModal').closeModal();
+                    $('#gearLoadingModal').closeModal();
                 }
                 skeleformHandleResult(error, result, 'create', data, schema.__paths);
             });
@@ -507,12 +507,12 @@ Template.skeleformUpdateButtons.events({
         
         if (skeleformValidateForm(data, schema)) {
             if (options.useModal) {
-                $('#panelLoadingModal').openModal();
+                $('#gearLoadingModal').openModal();
             }
 
             Meteor.call(method, documentId, data, template.data.schemaName, function(error, result) {
                 if (options.useModal) {
-                    $('#panelLoadingModal').closeModal();
+                    $('#gearLoadingModal').closeModal();
                 }
                 skeleformHandleResult(error, result, 'update', data, schema.__paths);
             });

@@ -33,24 +33,37 @@ __toolbar: (optional)
         extrasUpdate -> template for extra buttons to be added to standard update toolbar [string]
 
 __paths:
-    undoPath -> specify the path to be used for cancel button [string]
+    undoPath -> specify the path to be used for cancel button [string] (required)
     redirectOnCreate -> specify the path to be used as a redirect after a succesful create [string, Object]
                         the string is the path definition (can contain ":" params), and the object
                         is the params dictionary (NOT optional, pass empty object if no params are needed);
                         the string 'this' used as a value in params object means that the value must be taken
-                        from skeleform gathered data object. 
+                        from skeleform's gathered data object. 
                         (default behaviour: clean the form and be ready for a new document)
     redirectOnUpdate -> specify the path to be used as a redirect after a succesful update [string, Object] 
                         the string is the path definition (can contain ":" params), and the object
                         is the params dictionary (NOT optional, pass empty object if no params are 
                         the string 'this' used as a value in params object means that the value must be taken
-                        from skeleform gathered data object.
+                        from skeleform's gathered data object.
                         (default behaviour: stay on the same page)
 __options:
     loadingModal -> if true use a loading modal while performing skeleform operations [true/false]
 
+__listView: (optional) skelelist options
+    style -> type of list to create [table]
+    classes -> CSS classes to assign to the listView
+    itemFields -> list of fields to use in the listView [array of strings]
+    itemActions -> list of actions to use for each document in the list [delete]
+    detailLink -> an object that defines the link for detail view
+               -> basePath [string] the path definition for the link
+               -> params [array of strings] the names of params in the path
+
 SCHEMA FIELDS OPTIONS
 --------------------------------
+__listView -> (optional) options for the field in the list view
+           -> stripHTML [boolean] set to true to strip out HTML from the value (default false)
+           -> truncate [integer] number of characters to keep (default all)
+
 output: form element [input, editor, select, imageUpload, datePicker, password, multiSelectLabels]
     
     Field specific options:
