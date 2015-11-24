@@ -3,20 +3,21 @@
 
 Template.skeleformSelect.helpers(skeleformGeneralHelpers);
 Template.skeleformSelect.helpers({
-    fieldSelect: function(data, attribute) {
-        var id = '#' + attribute.replace('.', '\\.');
-        if (!data) return;
-        if (Session.get('formRendered')) {
+    isSelected: function(data, option) {
 
-            var pathShards = attribute.split('.');
-            var value = data;
+        var pathShards = data.schema.name.split('.');
+        var value = data.item;
 
-            pathShards.forEach(function(shard, index) {
-                value = value[shard];
-            });
+        if (!data.item) {
+            return "";
+        }
 
-            $(id).val(value);
-            $(id).material_select();
+        pathShards.forEach(function(shard, index) {
+            value = value[shard];
+        });
+
+        if (option === value) {
+            return 'selected';
         }
     }
 });
@@ -27,10 +28,12 @@ Template.skeleformSelect.events({
     }
 });
 
-Template.skeleformSelect.rendered = function() {
+Template.skeleformSelect.onRendered(function() {
+    var self = this;
+
     Tracker.autorun(function() {
         if (FlowRouter.subsReady()) {
-            this.$('select').material_select();
+            self.$('select').material_select();
         }
     });
-};
+});

@@ -10,14 +10,14 @@
 
             <p class="skeleformFieldAlert invalid"></p>
         </div>
-        <div class="input-field col {{fieldSize schema.size}} {{schema.style}}">
-            <!-- shadow confirm field -->
-            {{#if schema.shadowConfirm}}
+        <!-- shadow confirm field -->
+        {{#if schema.shadowConfirm}}
+            <div class="input-field col {{fieldSize schema.size}} {{schema.style}}">
                 <input type="{{inputType schema.renderAs}}" maxlength="{{schema.max}}" class="shadowField" id="{{field schema.name}}ShadowConfirm" autocomplete="off" style="{{fieldStyle schema}}">
                 <label for="{{field schema.name}}ShadowConfirm" class="active">{{label schema.name "shadowConfirm"}}{{required}}</label>
                 
                 <p class="skeleformFieldAlert invalid"></p>
-            {{/if}}
-        </div>
+            </div>
+        {{/if}}
     </div>    
 </template>

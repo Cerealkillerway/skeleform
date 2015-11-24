@@ -1,10 +1,9 @@
 <template name="skeleformSelect">
     <div class="row">
         <div class="input-field col {{fieldSize schema.size}} {{schema.style}}">
-            {{fieldSelect item schema.name}}
             <select class="skeleValidate gather" id="{{field schema.name}}">
                 {{#each schema.source}}
-                    <option value="{{this.value}}">{{this.name}}</option>
+                    <option {{isSelected .. this.name}} value="{{this.value}}">{{this.name}}</option>
                 {{/each}}
             </select>
             <label class="active">{{label schema.name}}{{required}}</label>

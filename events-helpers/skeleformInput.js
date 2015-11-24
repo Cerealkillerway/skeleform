@@ -94,9 +94,9 @@ Template.skeleformInput.rendered = function() {
 
     // remove gather class if renderAs = 'password'
     // to avoid sending empty password to the update method
-    if (schema.renderAs === 'password') {
+    /*if (schema.renderAs === 'password') {
         this.$('.gather').removeClass('gather');
-    }
+    }*/
 
     switch (schema.formatAs) {
         case 'currency':

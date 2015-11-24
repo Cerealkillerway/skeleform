@@ -163,7 +163,7 @@ skeleformValidateForm = function(data, schema) {
             //check also shadowField if exists
             if (schema[unNestedField].shadowConfirm) {
                 var id = '#' + schema[unNestedField].name + 'ShadowConfirm';
-                var shadowValue = Package.sha.SHA256($(id).val());
+                var shadowValue = $(id).val();
 
                 if (data[field] !== shadowValue) {
                     valid = false;
@@ -345,6 +345,33 @@ Template.skeleform.helpers({
                 item: item
             }
         };
+    },
+    isNeeded: function(fieldSchema, data) {
+        if (!fieldSchema.useOnly) {
+            return true;
+        }
+        else {
+            switch(fieldSchema.useOnly) {
+                case 'create':
+                if (data.item) {
+                    return false;
+                }                
+                else {
+                    return true;
+                }    
+
+                case 'update':
+                if (data.item) {
+                    return true;
+                }                
+                else {
+                    return false;
+                }   
+
+                default:
+                    return true;
+            }
+        }
     }
 });
 
