@@ -64,7 +64,7 @@ __listView -> (optional) options for the field in the list view
            -> stripHTML [boolean] set to true to strip out HTML from the value (default false)
            -> truncate [integer] number of characters to keep (default all)
 
-output: form element [input, editor, select, imageUpload, datePicker, password, multiSelectLabels]
+output: form element [input, editor, select]
     
     Field specific options:
     ------------------------------

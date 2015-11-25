@@ -9,7 +9,7 @@
     <!-- form fields -->
     <div class="skeleformFields">
         {{#each fields schema}}
-            {{#if isNeeded this ..}}
+            {{#if isNeeded this ..}}  <!-- check if the field is needed (showOnly option) -->
                 {{#with fieldType output this ../item}}
                     {{> Template.dynamic template=this/template data=this/data}}
                 {{/with}}
@@ -42,7 +42,7 @@
             {{#if this.schema.__toolbar.extrasCreate}}
                 {{> Template.dynamic template=this.schema.__toolbar.extrasCreate}}
             {{/if}}
-            <a href="{{this.schema.__paths.undoPath}}?lang={{currentLang}}" class="waves-effect waves-light btn firstColor">
+            <a href="{{this.schema.__paths.undoPath}}?lang={{currentLang}}{{isPaginated this.schemaName}}" class="waves-effect waves-light btn firstColor">
                 <i class="material-icons small left">undo</i>
                 <span>{{_ "cancel_btn"}}</span>
             </a>
@@ -62,7 +62,7 @@
             {{#if this.schema.__toolbar.extrasUpdate}}
                 {{> Template.dynamic template=this.schema.__toolbar.extrasUpdate}}
             {{/if}}
-            <a href="{{this.schema.__paths.undoPath}}?lang={{currentLang}}" class="waves-effect waves-light btn firstColor">
+            <a href="{{this.schema.__paths.undoPath}}?lang={{currentLang}}{{isPaginated this.schemaName}}" class="waves-effect waves-light btn firstColor">
                 <i class="material-icons small left">undo</i>
                 <span>{{_ "cancel_btn"}}</span>
             </a>

@@ -96,6 +96,7 @@ skeleformGetValue = function(element, template, data, item, all, currentLang) {
 
         case 'input':
             tmpValue = $($(element)).val();
+
             if (all || !item || !ckUtils.globalUtilities.areEquals(item[id], tmpValue)) {
                 if (schema.i18n === undefined) {
                     data[currentLang][id] = tmpValue;
@@ -106,18 +107,9 @@ skeleformGetValue = function(element, template, data, item, all, currentLang) {
             }
             break;
 
-            case 'select':
-            if ($(element).hasClass('multiWithLabels')){
-                if (value === undefined) {
-                    var labels = $(element).siblings('#' + $(element).prop('id') + '-labels').children();
-                    var values = [];
-                    $.each(labels, function(index, value) {
-                        values.push($(value).data('value'));
-                    });
-                    tmpValue = values;
-                }
-            }
-            else tmpValue = $(element).val();
+        case 'select':
+            tmpValue = $(element).val();
+
             if (all || !item || !ckUtils.globalUtilities.areEquals(item[id], tmpValue)) {
                 if (schema.i18n === undefined) {
                     data[currentLang][id] = tmpValue;
@@ -258,10 +250,11 @@ skeleformErrorStatus = function(id, errorString, special) {
 skeleformCleanForm = function() {
     //empty input fields
     $('input.skeleValidate').val('');
+    $('input.shadowField').val('');
     //empty editors
     $('.editor').code('');
     //select first option on select boxes
-    $('select.form-control').children().first().attr('selected', 'selected');
+    $('select.skeleValidate').val('admin');
 
     $('.fileLoader').value = "";
     $('.fileLoader').siblings('.fleNameContainer').html('');
@@ -443,19 +436,21 @@ Template.skeleform.onRendered(function() {
     $('input:first').focus();
 
     // static bar
-    var barOffset = Math.round($('.skeleformToolbar').offset().top * 1) / 1;
-        barOffset = barOffset - 100;
+    if ($('.skeleformToolbar').length > 0) {
+        var barOffset = Math.round($('.skeleformToolbar').offset().top * 1) / 1;
+            barOffset = barOffset - 100;
 
-    $(window).scroll(function() {
-        if ($(document).scrollTop() >= barOffset) {
-            $('.staticBar').addClass('staticTop');
-            $('.staticTop').children().addClass('centralBody hPadded');
-        }
-        else {
-            $('.staticTop').children().removeClass('centralBody hPadded');
-            $('.staticBar').removeClass('staticTop');
-        }
-    });
+        $(window).scroll(function() {
+            if ($(document).scrollTop() >= barOffset) {
+                $('.staticBar').addClass('staticTop');
+                $('.staticTop').children().addClass('centralBody hPadded');
+            }
+            else {
+                $('.staticTop').children().removeClass('centralBody hPadded');
+                $('.staticBar').removeClass('staticTop');
+            }
+        });
+    }
 });
 
 Template.skeleform.destroyed = function() {
