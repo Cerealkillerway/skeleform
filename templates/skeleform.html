@@ -11,7 +11,7 @@
         {{#each fields schema}}
             {{#if isNeeded this ..}}  <!-- check if the field is needed (showOnly option) -->
                 {{#with fieldType output this ../item}}
-                    {{> Template.dynamic template=this/template data=this/data}}
+                    {{> Template.dynamic template=this.template data=this.data}}
                 {{/with}}
             {{/if}}   
         {{/each}}
@@ -66,9 +66,21 @@
                 <i class="material-icons small left">undo</i>
                 <span>{{_ "cancel_btn"}}</span>
             </a>
-
+            
             {{> skeleformStaticAddons}}
+            {{> skeleformLangBar}}
         </div>
+    </div>
+</template>
+
+<!-- content lang bar -->
+<template name="skeleformLangBar">
+    <div class="skeleformLangs right">
+        {{#each langs}}
+            <div class="langFlag" data-lang="{{this}}">
+                <img src="/images/icons/lang/{{this}}.jpg">
+            </div>
+        {{/each}}
     </div>
 </template>
 

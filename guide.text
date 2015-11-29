@@ -42,7 +42,7 @@ __paths:
                         (default behaviour: clean the form and be ready for a new document)
     redirectOnUpdate -> specify the path to be used as a redirect after a succesful update [string, Object] 
                         the string is the path definition (can contain ":" params), and the object
-                        is the params dictionary (NOT optional, pass empty object if no params are 
+                        is the params dictionary (NOT optional, pass empty object if no params are needed);
                         the string 'this' used as a value in params object means that the value must be taken
                         from skeleform's gathered data object.
                         (default behaviour: stay on the same page)

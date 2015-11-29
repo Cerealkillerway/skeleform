@@ -15,9 +15,28 @@
     .skeleformToolbar {
         margin-bottom: 30px;
     }
+
+    .skeleformLangs {
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 25px;
+
+        .langFlag {
+            float: left;
+            margin: 3px 4px;
+            
+            img {
+                max-height: 30px;
+                border: solid 3px darken($thirdColorBorder, 10%);
+                cursor: pointer !important;
+            }
+        }
+    }
+
     .staticAddons {
         margin-top: -12px;
         line-height: 1 !important;
+        vertical-align: middle;
     }
 }
 

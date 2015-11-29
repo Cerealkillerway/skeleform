@@ -50,7 +50,7 @@ Template.skeleformEditor.helpers({
         }
         if (Session.get('formRendered')) {
             if (schema.i18n === undefined) {
-                var currentLang = FlowRouter.getQueryParam("lang");
+                var currentLang = FlowRouter.getParam("itemLang");
                 var langObject = data[currentLang];
 
                 if (!langObject) {
@@ -76,7 +76,7 @@ Template.skeleformEditor.rendered = function() {
     if ((toolbar === undefined)|| (editorToolbars[toolbar] === undefined)) toolbar = "default";
 
     $(editor).materialnote({
-        lang: ckUtils.globalUtilities.doubleLangCode(FlowRouter.getQueryParam("lang")),
+        lang: ckUtils.globalUtilities.doubleLangCode(FlowRouter.getParam("itemLang")),
         toolbar: editorToolbars[toolbar],
         height: 400,
         minHeight: 100,
