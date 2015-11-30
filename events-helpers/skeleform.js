@@ -427,9 +427,9 @@ skeleformGeneralHelpers = {
 
 // SKELEFORM HOOKS
 // ==========================================================================================
-Template.skeleform.created = function() {
+Template.skeleform.onCreated(function() {
     Session.set('formRendered', false);
-};
+});
 Template.skeleform.onRendered(function() {
     var self = this;
         skeleformInstance = self;
@@ -452,7 +452,7 @@ Template.skeleform.onRendered(function() {
     // static bar
     if ($('.skeleformToolbar').length > 0) {
         var barOffset = Math.round($('.skeleformToolbar').offset().top * 1) / 1;
-            barOffset = barOffset - 100;
+            barOffset = barOffset;// - 100;
 
         $(window).scroll(function() {
             if ($(document).scrollTop() >= barOffset) {

@@ -257,14 +257,6 @@
     z-index: 100 !important;
 }
 
-.dropdown-content li > a, .dropdown-content li > span {
-    color: $firstColor !important;
-}
-
-.dropdown-content li:hover, .dropdown-content li.active {
-    background-color: lighten($secondColor, 20%) !important;
-}
-
 .file-field {
     .btn, .btn-large {
         position: relative !important;

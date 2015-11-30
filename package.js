@@ -56,6 +56,10 @@ Package.onUse(function(api) {
     api.addFiles('events-helpers/skeleformInput.js', 'client');
     api.addFiles('events-helpers/skeleformSelect.js', 'client');
     api.addFiles('events-helpers/skeleformStaticTitle.js', 'client');
+
+    // assets
+    api.addAssets('public/icons/ok.png', 'client');
+    api.addAssets('public/icons/cancel.png', 'client');
 });
 
 Package.onTest(function(api) {

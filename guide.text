@@ -48,6 +48,7 @@ __paths:
                         (default behaviour: stay on the same page)
 __options:
     loadingModal -> if true use a loading modal while performing skeleform operations [true/false]
+    tracked -> if true save to each document data about user and timestamp of creation and last update
 
 __listView: (optional) skelelist options
     style -> type of list to create [table]
@@ -86,7 +87,8 @@ output: form element [input, editor, select]
                     -> width [integer]
                     -> height [integer]
 
-    select: source -> data source for options; must be an array of objects with name and value fields [array]
+    select: source -> data source for options; must be an array of objects with name and value fields (and optionally icon) [array]
+            icons -> used to assign "icons" class for icons on options dropdown [boolean]
 
     imageUpload: can have options (image, thumb) that decides what will be created and uploaded [object]; both are objects with these properties:
                         -> quality [float 0 ~ 1] the quality of jpeg created
