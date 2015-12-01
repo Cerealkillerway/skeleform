@@ -8,5 +8,7 @@
     "yearSelect_label": "Select a year",
     "pickadateNav_prev": "Previous month",
     "pickadateNav_next": "Next month",
-    "pickadateButtons_labels": "Today Clear Close"
+    "pickadateButtons_labels": "Today Clear Close",
+
+    "none_lbl": "(none)"
 }

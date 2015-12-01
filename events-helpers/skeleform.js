@@ -8,7 +8,8 @@ var skeleformInstance;
 // get configuration from skeletor or from the app
 if (Package['cerealkiller:skeletor']) {
     var configuration = Package['cerealkiller:skeletor'].Skeletor.configuration;
-    //console.log(Package['cerealkiller:skeletor'].Skeletor.configuration);
+    ckUtils.globalUtilities.logger ('loaded configuration:', 'skeleform');
+    ckUtils.globalUtilities.logger (Package['cerealkiller:skeletor'].Skeletor.configuration, 'skeleform');
 }
 
 
@@ -313,12 +314,18 @@ skeleformHandleResult = function(error, result, type, data, paths) {
 
                 _.keys(redirectPath[1]).forEach(function(param) {
                     if (redirectPath[1][param] === 'this') {
-                        params[param] = data[param];
+                        if (params[param]) {
+                            params[param] = data[param];
+                        }
+                        else {
+                            params[param] = data[FlowRouter.getParam('itemLang')][param];
+                        }
                     }
                     else {
                         params[param] = redirectPath[1][param];
                     }
                 });
+                Session.set('currentItem', undefined);    // reset skelelist's setted currentItem
 
                 FlowRouter.go(redirectPath[0], params, {lang: FlowRouter.getQueryParam("lang")});
             }
@@ -434,6 +441,8 @@ Template.skeleform.onRendered(function() {
     var self = this;
         skeleformInstance = self;
 
+    $('body').scrollTop(0);
+
     Session.set('formRendered', true);
     Tracker.autorun(function() {
         if (FlowRouter.subsReady()) {
@@ -447,30 +456,35 @@ Template.skeleform.onRendered(function() {
         Blaze.renderWithData(Template[toolbar.template], this.data, $('#' + toolbar.containerId)[0]);
     }
 
-    $('input:first').focus();
+    $('input:first').focusWithoutScrolling();
 
-    // static bar
-    if ($('.skeleformToolbar').length > 0) {
-        var barOffset = Math.round($('.skeleformToolbar').offset().top * 1) / 1;
-            barOffset = barOffset;// - 100;
+    Tracker.autorun(function() {
+        if (Session.equals('appRendered', true)) {
+            // static bar
+            var $bar = $('.skeleformToolbar');
 
-        $(window).scroll(function() {
-            if ($(document).scrollTop() >= barOffset) {
-                $('.staticBar').addClass('staticTop');
-                $('.staticTop').children().addClass('centralBody hPadded');
+            if ($bar.length > 0) {
+                var barOffset = Math.round($bar.offset().top * 1) / 1;
+                ckUtils.globalUtilities.logger ('static bar calculated offset: ' + barOffset, 'skeleform');
+
+                $(window).on('scroll', function() {
+                    if ($(document).scrollTop() >= barOffset) {
+                        $('.staticBar').addClass('staticTop');
+                        $('.staticTop').children().addClass('centralBody hPadded');
+                    }
+                    else {
+                        $('.staticTop').children().removeClass('centralBody hPadded');
+                        $('.staticBar').removeClass('staticTop');
+                    }
+                });
             }
-            else {
-                $('.staticTop').children().removeClass('centralBody hPadded');
-                $('.staticBar').removeClass('staticTop');
-            }
-        });
-    }
+        }
+    });
 });
 
 Template.skeleform.destroyed = function() {
     $(window).unbind('scroll');
 };
-
 
 // SKELEFORM DEFAULT TOOLBAR
 // ==========================================================================================

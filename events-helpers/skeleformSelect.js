@@ -7,15 +7,51 @@ Template.skeleformSelect.helpers({
         if (schema.sourceValue) {
             var result = [];
 
+            if (schema.allowBlank) {
+                result.push({
+                    name: TAPi18n.__("none_lbl"),
+                    value: 'undefined'
+                });
+            }
+
             schema.source.forEach(function(item, index) {
-                var option = {
-                    name: item[schema.sourceName],
-                    value: item[schema.sourceValue]
+                var option;
+                var lang = FlowRouter.getParam('itemLang');
+                var sourceName = schema.sourceName;
+                var sourceValue = schema.sourceValue;
+                var nameAttr = item;
+                var valueAttr = item;
+
+                schema.sourceName.split('.').forEach(function(nameShard, index) {
+                    switch (nameShard) {
+                        case ':itemLang':
+                        nameAttr = nameAttr[lang];
+                        break;
+
+                        default:
+                        nameAttr = nameAttr[nameShard];
+                    }
+                });
+
+                schema.sourceValue.split('.').forEach(function(valueShard, index) {
+                    switch (valueShard) {
+                        case ':itemLang':
+                        valueAttr = valueAttr[lang];
+                        break;
+
+                        default:
+                        valueAttr = valueAttr[valueShard];
+                    }
+                });
+
+                option = {
+                    name: nameAttr,
+                    value: valueAttr
                 };
 
                 result.push(option);
             });
-
+    
             return result;
         }
         return schema.source;

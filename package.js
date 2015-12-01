@@ -13,6 +13,9 @@ Package.describe({
 Package.onUse(function(api) {
     api.versionsFrom('1.2.1');
 
+    // namespace
+    api.addFiles('namespace.js');
+
     // packages
     api.use('jquery', 'client');
     api.use('underscore@1.0.0');
@@ -42,8 +45,13 @@ Package.onUse(function(api) {
     api.addFiles('templates/skeleformSelect.html', 'client');
     api.addFiles('templates/skeleformStaticTitle.html', 'client');
 
+
+    // i18n
+    api.addFiles('i18n/it.i18n.json');
+    api.addFiles('i18n/en.i18n.json');
+
+
     // libraries
-    api.addFiles('namespace.js');
     api.addFiles('lib/jquery.alterClass.js', 'client');
     api.addFiles('lib/validate.js');
     api.addFiles('lib/editEvents.js', 'client');

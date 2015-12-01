@@ -8,6 +8,7 @@
     "yearSelect_label": "Seleziona un anno",
     "pickadateNav_prev": "Mese precedente",
     "pickadateNav_next": "Mese successivo",
-    "pickadateButtons_labels": "Oggi Annulla Chiudi"
+    "pickadateButtons_labels": "Oggi Annulla Chiudi",
 
+    "none_lbl": "(nessuno/a)"
 }

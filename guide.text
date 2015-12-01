@@ -1,24 +1,3 @@
-// Schemas examples and guide
-// schemas are defined using a standard javascript object
-Schemas = {
-  Roles_default: {
-        __collection: "Roles",
-        __paths: {
-          undoPath: '/panel/roles'
-        }
-        name: {
-            type: "text",
-            output: "input",
-            min: 3,
-            max: 50,
-            unique: true
-        }
-    },
-};
-
-
-
-
 /* 
 GUIDE
 ================================
@@ -58,6 +37,10 @@ __listView: (optional) skelelist options
     detailLink -> an object that defines the link for detail view
                -> basePath [string] the path definition for the link
                -> params [array of strings] the names of params in the path
+    sourceFields -> a dictionary of fields used in list view that are in truth external link to other documents;
+                    each element is an object with these properties:
+                    -> mapTo [string] name of the attribute in the external document to use instead of current value
+                    -> collection [string] name of collection where to find the external document
 
 SCHEMA FIELDS OPTIONS
 --------------------------------
@@ -89,6 +72,7 @@ output: form element [input, editor, select]
 
     select: source -> data source for options; must be an array of objects with name and value fields (and optionally icon) [array]
             icons -> used to assign "icons" class for icons on options dropdown [boolean]
+            allowBlank -> allow select none (default undefined option is created automatically) [boolean]
 
     imageUpload: can have options (image, thumb) that decides what will be created and uploaded [object]; both are objects with these properties:
                         -> quality [float 0 ~ 1] the quality of jpeg created
