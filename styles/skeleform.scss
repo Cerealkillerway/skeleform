@@ -30,6 +30,12 @@
                 border: solid 3px darken($thirdColorBorder, 10%);
                 cursor: pointer !important;
             }
+
+            &.active {
+                img {
+                    border-color: $firstHoverColor;
+                }
+            }
         }
     }
 

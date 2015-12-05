@@ -77,7 +77,7 @@
 <template name="skeleformLangBar">
     <div class="skeleformLangs right">
         {{#each langs}}
-            <div class="langFlag" data-lang="{{this}}">
+            <div class="langFlag {{isActive this}}" data-lang="{{this}}">
                 <img src="/images/icons/lang/{{this}}.jpg">
             </div>
         {{/each}}

@@ -17,44 +17,57 @@ Template.skeleformSelect.helpers({
             schema.source.forEach(function(item, index) {
                 var option;
                 var lang = FlowRouter.getParam('itemLang');
+                var defaultLang = Skeletor.configuration.lang.default;
                 var sourceName = schema.sourceName;
                 var sourceValue = schema.sourceValue;
                 var nameAttr = item;
                 var valueAttr = item;
+                var missingTranslation = false;
 
-                try {
-                    schema.sourceName.split('.').forEach(function(nameShard, index) {
-                        switch (nameShard) {
-                            case ':itemLang':
+                schema.sourceName.split('.').forEach(function(nameShard, index) {
+                    switch (nameShard) {
+                        case ':itemLang':
+                        if (nameAttr[lang]) {
                             nameAttr = nameAttr[lang];
-                            break;
-
-                            default:
-                            nameAttr = nameAttr[nameShard];
                         }
-                        if (nameAttr === undefined) throw 'nodataError';
-                    });
+                        else {
+                            nameAttr = nameAttr[defaultLang];
+                            missingTranslation = true;
+                        }
+                        break;
 
-                    schema.sourceValue.split('.').forEach(function(valueShard, index) {
-                        switch (valueShard) {
-                            case ':itemLang':
+                        default:
+                        nameAttr = nameAttr[nameShard];
+                    }
+                });
+
+                schema.sourceValue.split('.').forEach(function(valueShard, index) {
+                    switch (valueShard) {
+                        case ':itemLang':
+                        if (valueAttr[lang]) {
                             valueAttr = valueAttr[lang];
-                            break;
-
-                            default:
-                            valueAttr = valueAttr[valueShard];
                         }
-                        if (!valueAttr) throw 'nodataError';
-                    });
-                }
-                catch (error) {
-                    return;
-                }
+                        else {
+                            valueAttr = valueAttr[defaultLang];
+                            missingTranslation = true;
+                        }
+                        break;
+
+                        default:
+                        valueAttr = valueAttr[valueShard];
+                    }
+                });
 
                 option = {
-                    name: nameAttr,
                     value: valueAttr
                 };
+
+                if (missingTranslation) {
+                    option.name = '#(' + nameAttr + ')';
+                }
+                else {
+                    option.name = nameAttr;
+                }
 
                 result.push(option);
             });

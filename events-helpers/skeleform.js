@@ -179,9 +179,7 @@ skeleformValidateForm = function(data, schema) {
     }
     //scroll to meet the first error
     if (!valid) {
-        $('html, body').animate({
-            scrollTop: ($('.invalid').first().offset().top - 80)
-        }, 300);
+        ckUtils.globalUtilities.scrollTo($('.invalid').first().offset().top - 80, Skeletor.configuration.animations.scrollError);
     }
 
     return valid;
@@ -442,7 +440,7 @@ Template.skeleform.onRendered(function() {
     var self = this;
         skeleformInstance = self;
 
-    $('body').scrollTop(0);
+    ckUtils.globalUtilities.scrollTo(0, Skeletor.configuration.animations.onRendered);
 
     Session.set('formRendered', true);
     Tracker.autorun(function() {
@@ -604,6 +602,11 @@ Template.skeleformLangBar.helpers({
 
             return result;
         }
+    },
+    isActive: function(buttonLang) {
+        if (FlowRouter.getParam('itemLang') === buttonLang) {
+            return 'active';
+        }
     }
 });
 Template.skeleformLangBar.events({
@@ -617,13 +620,9 @@ Template.skeleformLangBar.events({
 
 Template.skeleformStaticAddons.events({
     "click .toTop": function(event, template) {
-        $('html, body').animate({
-            scrollTop: 0
-        }, 500);
+        ckUtils.globalUtilities.scrollTo(0, Skeletor.configuration.animations.scrollTop);
     },
     "click .toBottom": function(event, template) {
-        $('html, body').animate({
-            scrollTop: $('body').height()
-        }, 500);
+        ckUtils.globalUtilities.scrollTo($('body').height(), Skeletor.configuration.animations.scrollBottom);
     }
 });
