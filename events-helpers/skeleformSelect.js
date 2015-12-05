@@ -22,27 +22,34 @@ Template.skeleformSelect.helpers({
                 var nameAttr = item;
                 var valueAttr = item;
 
-                schema.sourceName.split('.').forEach(function(nameShard, index) {
-                    switch (nameShard) {
-                        case ':itemLang':
-                        nameAttr = nameAttr[lang];
-                        break;
+                try {
+                    schema.sourceName.split('.').forEach(function(nameShard, index) {
+                        switch (nameShard) {
+                            case ':itemLang':
+                            nameAttr = nameAttr[lang];
+                            break;
 
-                        default:
-                        nameAttr = nameAttr[nameShard];
-                    }
-                });
+                            default:
+                            nameAttr = nameAttr[nameShard];
+                        }
+                        if (nameAttr === undefined) throw 'nodataError';
+                    });
 
-                schema.sourceValue.split('.').forEach(function(valueShard, index) {
-                    switch (valueShard) {
-                        case ':itemLang':
-                        valueAttr = valueAttr[lang];
-                        break;
+                    schema.sourceValue.split('.').forEach(function(valueShard, index) {
+                        switch (valueShard) {
+                            case ':itemLang':
+                            valueAttr = valueAttr[lang];
+                            break;
 
-                        default:
-                        valueAttr = valueAttr[valueShard];
-                    }
-                });
+                            default:
+                            valueAttr = valueAttr[valueShard];
+                        }
+                        if (!valueAttr) throw 'nodataError';
+                    });
+                }
+                catch (error) {
+                    return;
+                }
 
                 option = {
                     name: nameAttr,
@@ -69,9 +76,16 @@ Template.skeleformSelect.helpers({
             value = value[FlowRouter.getParam('itemLang')];
         }
 
-        pathShards.forEach(function(shard, index) {
-            value = value[shard];
-        });
+        try {
+            pathShards.forEach(function(shard, index) {
+                value = value[shard];
+
+                if (!value) throw 'nodataError';
+            });
+        }
+        catch (error) {
+            return;
+        }
 
         if (option.toString() === value) {
             return 'selected';

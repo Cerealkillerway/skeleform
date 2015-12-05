@@ -414,11 +414,12 @@ skeleformGeneralHelpers = {
     },
     fieldValue: function(data, schema) {
         var name = schema.name;
-        //standard set value on field reactively
+
         if (!data) return;
 
         if (schema.i18n === undefined) {
             data = data[FlowRouter.getParam('itemLang')];
+            if (!data) return;
         }
 
         var pathShards = name.split('.');
@@ -605,6 +606,14 @@ Template.skeleformLangBar.helpers({
         }
     }
 });
+Template.skeleformLangBar.events({
+    "click .langFlag": function(event, template) {
+        var newLang = $(event.target).closest('.langFlag').data('lang');
+
+        FlowRouter.setParams({'itemLang': newLang});
+    }
+});
+
 
 Template.skeleformStaticAddons.events({
     "click .toTop": function(event, template) {
