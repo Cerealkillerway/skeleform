@@ -485,6 +485,15 @@ Template.skeleform.destroyed = function() {
     $(window).unbind('scroll');
 };
 
+Template.skeleformUpdateButtons.helpers({
+    isTranslatable: function() {
+        if (FlowRouter.getParam('itemLang')) {
+            return true;
+        }
+        return false;
+    }
+});
+
 // SKELEFORM DEFAULT TOOLBAR
 // ==========================================================================================
 Template.skeleformCreateButtons.events({

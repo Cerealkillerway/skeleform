@@ -68,7 +68,9 @@
             </a>
             
             {{> skeleformStaticAddons}}
-            {{> skeleformLangBar}}
+            {{#if isTranslatable}}
+                {{> skeleformLangBar}}
+            {{/if}}
         </div>
     </div>
 </template>
