@@ -62,7 +62,7 @@
             {{#if this.schema.__toolbar.extrasUpdate}}
                 {{> Template.dynamic template=this.schema.__toolbar.extrasUpdate}}
             {{/if}}
-            <a href="{{this.schema.__paths.undoPath}}?lang={{currentLang}}{{isPaginated this.schemaName}}" class="waves-effect waves-light btn firstColor">
+            <a href="{{makeUndoPath this.schema.__paths.undoPath}}{{isPaginated this.schemaName}}" class="waves-effect waves-light btn firstColor">
                 <i class="material-icons small left">undo</i>
                 <span>{{_ "cancel_btn"}}</span>
             </a>

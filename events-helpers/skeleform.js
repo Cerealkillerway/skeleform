@@ -312,7 +312,7 @@ skeleformHandleResult = function(error, result, type, data, paths) {
 
                 _.keys(redirectPath[1]).forEach(function(param) {
                     if (redirectPath[1][param] === 'this') {
-                        if (params[param]) {
+                        if (data[param]) {
                             params[param] = data[param];
                         }
                         else {
@@ -496,6 +496,42 @@ Template.skeleformUpdateButtons.helpers({
 
 // SKELEFORM DEFAULT TOOLBAR
 // ==========================================================================================
+
+function createPath(path, data) {
+    var params = {};
+
+    _.keys(path[1]).forEach(function(param) {
+        switch (param) {
+            case 'itemLang':
+            params[param] = FlowRouter.getParam('itemLang');
+            break;
+
+            default:
+            if (path[1][param] === 'this') {
+                if (data[param]) {
+                    params[param] = data[param];
+                }
+                else {
+                    params[param] = data[FlowRouter.getParam('itemLang')][param];
+                }
+            }
+            else {
+                params[param] = path[1][param];
+            }
+        }
+    });
+
+    return params;
+}
+
+undoPathHelpers = {
+    makeUndoPath: function(path) {
+        var params = createPath(path);
+
+        return FlowRouter.path(path[0], params, {lang: FlowRouter.getQueryParam("lang")});
+    }
+};
+
 Template.skeleformCreateButtons.events({
     "click .skeleformCreate": function(event, template) {
         var data = skeleformGatherData(template);
@@ -596,6 +632,9 @@ Template.skeleformUpdateButtons.events({
         }
     }
 });
+
+Template.skeleformCreateButtons.helpers(undoPathHelpers);
+Template.skeleformUpdateButtons.helpers(undoPathHelpers);
 
 // SkeleformLangBar
 Template.skeleformLangBar.helpers({
