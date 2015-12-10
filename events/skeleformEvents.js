@@ -1,142 +1,15 @@
-// ==========================================================================================
-// SKELEFORM MANAGEMENT
-// ==========================================================================================
-
 var debugType = "skeleform";
 var skeleformInstance;
 
 // get configuration from skeletor or from the app
 if (Package['cerealkiller:skeletor']) {
-    var configuration = Package['cerealkiller:skeletor'].Skeletor.configuration;
-    ckUtils.globalUtilities.logger ('loaded configuration:', 'skeleform');
-    ckUtils.globalUtilities.logger (Package['cerealkiller:skeletor'].Skeletor.configuration, 'skeleform');
+    configuration = Package['cerealkiller:skeletor'].Skeletor.configuration;
+    ckUtils.globalUtilities.logger('loaded configuration:', 'skeleform');
+    ckUtils.globalUtilities.logger(configuration, 'skeleform');
 }
-
-
-// GATHERING
-// ==========================================================================================
-// gather data from form's fields
-// the "all" parameter forces to gather everything (see skeleformGetValue function)
-skeleformGatherData = function(template, all, update) {
-    var data = {};
-    var id;
-    var item;
-    var currentLang = FlowRouter.getParam('itemLang');
-
-    data[currentLang] = {};
-
-    if (template.data.item) {
-        item = template.data.item;
-    }
-
-    $.each(skeleformInstance.$(".gather"), function(index, element) {
-        skeleformGetValue(element, template, data, item, all, currentLang);
-    });
-
-    if (update) {
-        // put everything on first level
-        var grounded =  _.object(_.map(data[currentLang], function (value, key) {
-            return [currentLang + '.' + key, value];
-        }));
-        delete data[currentLang];
-        _.extend(data, grounded);
-    }
-
-    ckUtils.globalUtilities.logger('separator form gathered data:', 'skeleform');
-    ckUtils.globalUtilities.logger(data, 'skeleform');
-
-    return data;
-};
-
-// Gets the value(s) of a field
-// the default behaviour is to gather only data that is changed from current document (if one); this is
-// done in order to be efficient during data transfer to server;
-// is possible to override passing true as "all" parameter (in this case will always gather everything)
-skeleformGetValue = function(element, template, data, item, all, currentLang) {
-    var tagName = $(element).prop('tagName').toLowerCase();
-    var id = $(element).attr('id');
-    var schema;
-    var schemaElement;
-    var tmpValue;
-    var field;
-    var currentItem;
-
-    schema = template.data.schema[id];
-    if (schema) {
-        schemaElement = schema.output;
-        if (item) {
-            currentItem = item;
-
-            if (schema.i18n === undefined) {
-                if (item[currentLang] !== undefined) {
-                    currentItem = currentItem[currentLang];
-                }
-            }
-            
-            var pathShards = id.split('.');
-
-            pathShards.forEach(function(shard, index) {
-                currentItem = currentItem[shard];
-            });
-        }
-    }
-
-    switch (schemaElement) {
-        case 'editor':
-            tmpValue = $(element).code().trim();
-
-            if (all || !item || !ckUtils.globalUtilities.areEquals(currentItem, tmpValue)) {
-                if (schema.i18n === undefined) {
-                    data[currentLang][id] = tmpValue;
-                }
-                else {
-                    data[id] = tmpValue;
-                }
-            }
-            break;
-
-        case 'datePicker':
-            tmpValue = $('#' + id).siblings('input:hidden').first().val();
-            if (all || !item || !ckUtils.globalUtilities.areEquals(currentItem, tmpValue)) {
-                if (schema.i18n === undefined) {
-                    data[currentLang][id] = tmpValue;
-                }
-                else {
-                    data[id] = tmpValue;
-                }
-            }
-            break;
-
-        case 'input':
-            tmpValue = $($(element)).val();
-
-            if (all || !item || !ckUtils.globalUtilities.areEquals(currentItem, tmpValue)) {
-                if (schema.i18n === undefined) {
-                    data[currentLang][id] = tmpValue;
-                }
-                else {
-                    data[id] = tmpValue;
-                }
-            }
-            break;
-
-        case 'select':
-            tmpValue = $(element).val();
-
-            if (all || !item || !ckUtils.globalUtilities.areEquals(currentItem, tmpValue)) {
-                if (schema.i18n === undefined) {
-                    data[currentLang][id] = tmpValue;
-                }
-                else {
-                    data[id] = tmpValue;
-                }
-            }
-            break;
-
-        default:
-            return undefined;
-    }
-};
+else {
+    ckUtils.globalUtilities.logger('Can\'t load configuration from Skeletor', 'skeleError', true);
+}
 
 
 // VALIDATION
@@ -179,7 +52,7 @@ skeleformValidateForm = function(data, schema) {
     }
     //scroll to meet the first error
     if (!valid) {
-        ckUtils.globalUtilities.scrollTo($('.invalid').first().offset().top - 80, Skeletor.configuration.animations.scrollError);
+        ckUtils.globalUtilities.scrollTo($('.invalid').first().offset().top - 80, configuration.animations.scrollError);
     }
 
     return valid;
@@ -224,8 +97,7 @@ skeleformValidateField = function(value, data) {
 
 //reset success and error status on the form
 skeleformResetStatus = function(id) {
-    var element = $('#' + id);
-    var column = element.closest('.col');
+    var column = $('#' + id).closest('.col');
 
     if (id) {
         column.alterClass('valid', '');
@@ -239,8 +111,7 @@ skeleformResetStatus = function(id) {
 
 //set success status
 skeleformSuccessStatus = function(id, special) {
-    var element = $(id);
-    var column = element.closest('.col');
+    var column = $(id).closest('.col');
     var fieldAlert = column.find('.skeleformFieldAlert');
 
     column.alterClass('invalid', 'valid');
@@ -249,8 +120,7 @@ skeleformSuccessStatus = function(id, special) {
 
 //set error status
 skeleformErrorStatus = function(id, errorString, special) {
-    var element = $(id);
-    var column = element.closest('.col');
+    var column = $(id).closest('.col');
     var fieldAlert = column.find('.skeleformFieldAlert');
     
     column.alterClass('valid', 'invalid');
@@ -307,6 +177,7 @@ skeleformHandleResult = function(error, result, type, data, paths) {
 
         Materialize.toast(content, 1300, 'success', function() {
             var redirectPath = paths['redirectOn' + type.capitalize()];
+            
             if (paths['redirectOn' + type.capitalize()]) {
                 var params = {};
 
@@ -332,107 +203,44 @@ skeleformHandleResult = function(error, result, type, data, paths) {
 };
 
 
-// HELPERS
-// ==========================================================================================
-Template.skeleform.helpers({
-    fields: function(schema) {
-        var fields = [];
+// GATHERING
+// gather data from form's fields
+skeleformGatherData = function(formContext) {
+    var formItem = formContext.item;
+    var lang = FlowRouter.getParam('itemLang');
+    var data = {};
 
-        for (var key in schema) {
-            if ((schema.hasOwnProperty(key)) && (key.indexOf('__') !== 0)) {
-                var field = schema[key];
-                field.name = key;
-                fields.push(field);
+    formContext.schema.fields.forEach(function(fieldSchema) {
+        var fieldValue = Skeleform.methods['skeleform' + fieldSchema.output.capitalize()].getValue(fieldSchema);
+
+        if (fieldSchema.i18n === undefined) {
+            if (!formItem || fieldValue !== formItem[lang][fieldSchema.name]) {
+                if (!formItem) {
+                    if (!data[lang]) {
+                        data[lang] = {};
+                    }
+                    data[lang][fieldSchema.name] = fieldValue;
+                }
+                else {
+                    data[lang + '.' + fieldSchema.name] = fieldValue;
+                }
             }
-        }
-        return fields;
-    },
-    fieldType: function(output, schema, item) {
-        return {
-            template: "skeleform" + output.capitalize(),
-            data: {
-                schema: schema,
-                item: item
-            }
-        };
-    },
-    isNeeded: function(fieldSchema, data) {
-        if (!fieldSchema.useOnly) {
-            return true;
         }
         else {
-            switch(fieldSchema.useOnly) {
-                case 'create':
-                if (data.item) {
-                    return false;
-                }                
-                return true;
-
-                case 'update':
-                if (data.item) {
-                    return true;
-                }                
-                return false;
-
-                default:
-                return true;
+            if (!formItem || fieldValue !== formItem[fieldSchema.name]) {
+                data[fieldSchema.name] = fieldValue;
             }
         }
-    }
-});
+    });
 
-//helpers used by form elements
-skeleformGeneralHelpers = {
-    label: function(name, options) {
-        name = name.substring(name.lastIndexOf('.') + 1, name.length);
+    ckUtils.globalUtilities.logger('<separator>form gathered data:', 'skeleform');
+    ckUtils.globalUtilities.logger(data, 'skeleform');
 
-        switch(options) {
-            case 'shadowConfirm':
-            return TAPi18n.__(name + "ShadowConfirm_lbl");
-
-            default:
-            return TAPi18n.__(name + "_lbl");
-        }
-    },
-    field: function(name) {
-        return name;
-    },
-    required: function() {
-        if (this.schema.min !== undefined) return " *";
-        return "";
-    },
-    fieldStyle: function(context) {
-        if (context.icon || context.unit) return 'float: left;';
-
-        return "";
-    },
-    fieldSize: function(size) {
-        if (!size) return "s12 m6";
-        return size;
-    },
-    fieldValue: function(data, schema) {
-        var name = schema.name;
-
-        if (!data) return;
-
-        if (schema.i18n === undefined) {
-            data = data[FlowRouter.getParam('itemLang')];
-            if (!data) return;
-        }
-
-        var pathShards = name.split('.');
-
-        pathShards.forEach(function(shard, index) {
-            data = data[shard];
-        });
-
-        return data;
-    }
+    return data;
 };
 
 
-// SKELEFORM HOOKS
-// ==========================================================================================
+// Skeleform
 Template.skeleform.onCreated(function() {
     Session.set('formRendered', false);
 });
@@ -440,7 +248,7 @@ Template.skeleform.onRendered(function() {
     var self = this;
         skeleformInstance = self;
 
-    ckUtils.globalUtilities.scrollTo(0, Skeletor.configuration.animations.onRendered);
+    ckUtils.globalUtilities.scrollTo(0, configuration.animations.onRendered);
 
     Session.set('formRendered', true);
     Tracker.autorun(function() {
@@ -480,61 +288,15 @@ Template.skeleform.onRendered(function() {
         }
     });
 });
-
 Template.skeleform.destroyed = function() {
     $(window).unbind('scroll');
 };
 
-Template.skeleformUpdateButtons.helpers({
-    isTranslatable: function() {
-        if (FlowRouter.getParam('itemLang')) {
-            return true;
-        }
-        return false;
-    }
-});
 
-// SKELEFORM DEFAULT TOOLBAR
-// ==========================================================================================
-
-function createPath(path, data) {
-    var params = {};
-
-    _.keys(path[1]).forEach(function(param) {
-        switch (param) {
-            case 'itemLang':
-            params[param] = FlowRouter.getParam('itemLang');
-            break;
-
-            default:
-            if (path[1][param] === 'this') {
-                if (data[param]) {
-                    params[param] = data[param];
-                }
-                else {
-                    params[param] = data[FlowRouter.getParam('itemLang')][param];
-                }
-            }
-            else {
-                params[param] = path[1][param];
-            }
-        }
-    });
-
-    return params;
-}
-
-undoPathHelpers = {
-    makeUndoPath: function(path) {
-        var params = createPath(path);
-
-        return FlowRouter.path(path[0], params, {lang: FlowRouter.getQueryParam("lang")});
-    }
-};
-
+// create buttons (toolbar)
 Template.skeleformCreateButtons.events({
     "click .skeleformCreate": function(event, template) {
-        var data = skeleformGatherData(template);
+        var data = skeleformGatherData(template.data);
         var schema = template.data.schema;
         var method;
         var options = {};
@@ -567,10 +329,10 @@ Template.skeleformCreateButtons.events({
     }
 });
 
-
+// update buttons (toolbar)
 Template.skeleformUpdateButtons.events({
     "click .skeleformUpdate": function(event, template) {
-        var data = skeleformGatherData(template, false, true);
+        var data = skeleformGatherData(template.data);
         var documentId = template.data.item._id;
         var schema = template.data.schema;
         var method;
@@ -592,14 +354,14 @@ Template.skeleformUpdateButtons.events({
         // get route params to manage if current update should redirect to a new path
         var currentRoute = FlowRouter.current();
         var params = currentRoute.params;
+        var unNestedDataKeys = [];
+        var relationships = {};
 
         ckUtils.globalUtilities.logger ('url change monitor:', 'skeleform');
         ckUtils.globalUtilities.logger(params, 'skeleform');
         params = _.keys(params);
         dataKeys = _.keys(data);
-        var unNestedDataKeys = [];
-        var relationships = {};
-
+        
         dataKeys.forEach(function(dataKey, index) {
             var unNested = dataKey.split('.');
                 unNested = unNested[unNested.length - 1];
@@ -633,30 +395,8 @@ Template.skeleformUpdateButtons.events({
     }
 });
 
-Template.skeleformCreateButtons.helpers(undoPathHelpers);
-Template.skeleformUpdateButtons.helpers(undoPathHelpers);
 
-// SkeleformLangBar
-Template.skeleformLangBar.helpers({
-    langs: function() {
-        var result = [];
-
-        if (Skeletor.GlobalConf) {
-            _.each(Skeletor.GlobalConf.langEnable, function(value, key) {
-                if (value) {
-                    result.push(key);
-                }
-            });
-
-            return result;
-        }
-    },
-    isActive: function(buttonLang) {
-        if (FlowRouter.getParam('itemLang') === buttonLang) {
-            return 'active';
-        }
-    }
-});
+// skeleform language bar
 Template.skeleformLangBar.events({
     "click .langFlag": function(event, template) {
         var newLang = $(event.target).closest('.langFlag').data('lang');
@@ -665,12 +405,12 @@ Template.skeleformLangBar.events({
     }
 });
 
-
+// skeletor static addons
 Template.skeleformStaticAddons.events({
     "click .toTop": function(event, template) {
-        ckUtils.globalUtilities.scrollTo(0, Skeletor.configuration.animations.scrollTop);
+        ckUtils.globalUtilities.scrollTo(0, configuration.animations.scrollTop);
     },
     "click .toBottom": function(event, template) {
-        ckUtils.globalUtilities.scrollTo($('body').height(), Skeletor.configuration.animations.scrollBottom);
+        ckUtils.globalUtilities.scrollTo($('body').height(), configuration.animations.scrollBottom);
     }
 });

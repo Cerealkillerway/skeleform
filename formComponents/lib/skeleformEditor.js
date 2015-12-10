@@ -2,6 +2,15 @@
 // a textarea with a wysiwyg editor writing html code
 // it uses materialNote.js plugin from cerealkiller:materialnote package
 
+// Methods
+Skeleform.methods.skeleformEditor = {
+    getValue: function(fieldSchema) {
+        return $('#' + fieldSchema.name).code().trim();
+    }
+};
+
+
+// Settings
 editorToolbars = {
     default: [
         ['style', ['bold', 'italic', 'underline', 'clear']],
@@ -42,6 +51,8 @@ editorToolbars = {
     ]
 };
 
+
+// Helpers
 Template.skeleformEditor.helpers(skeleformGeneralHelpers);
 Template.skeleformEditor.helpers({
     fieldEditor: function(data, schema) {
@@ -67,6 +78,8 @@ Template.skeleformEditor.helpers({
     }
 });
 
+
+// Events
 Template.skeleformEditor.rendered = function() {
     var self = this;
     var editor = this.$('.editor');

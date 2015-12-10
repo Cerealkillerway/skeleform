@@ -37,13 +37,13 @@ Package.onUse(function(api) {
 
     // templates
     api.addFiles('templates/skeleform.html', 'client');
-    api.addFiles('templates/skeleformDatePicker.html', 'client');
-    api.addFiles('templates/skeleformEditor.html', 'client');
-    api.addFiles('templates/ckMaterialNotePlugins.html', 'client');
-    api.addFiles('templates/skeleformImageUpload.html', 'client');
-    api.addFiles('templates/skeleformInput.html', 'client');
-    api.addFiles('templates/skeleformSelect.html', 'client');
-    api.addFiles('templates/skeleformStaticTitle.html', 'client');
+    api.addFiles('formComponents/templates/skeleformDatePicker.html', 'client');
+    api.addFiles('formComponents/templates/skeleformEditor.html', 'client');
+    api.addFiles('formComponents/templates/ckMaterialNotePlugins.html', 'client');
+    api.addFiles('formComponents/templates/skeleformImageUpload.html', 'client');
+    api.addFiles('formComponents/templates/skeleformInput.html', 'client');
+    api.addFiles('formComponents/templates/skeleformSelect.html', 'client');
+    api.addFiles('formComponents/templates/skeleformStaticTitle.html', 'client');
 
 
     // i18n
@@ -57,13 +57,17 @@ Package.onUse(function(api) {
     api.addFiles('lib/editEvents.js', 'client');
     api.addFiles('lib/autoNumeric.js', 'client');
 
-    api.addFiles('events-helpers/skeleform.js', 'client');
-    api.addFiles('events-helpers/skeleformDatePicker.js', 'client');
-    api.addFiles('events-helpers/skeleformEditor.js', 'client');
-    api.addFiles('events-helpers/skeleformImageUpload.js', 'client');
-    api.addFiles('events-helpers/skeleformInput.js', 'client');
-    api.addFiles('events-helpers/skeleformSelect.js', 'client');
-    api.addFiles('events-helpers/skeleformStaticTitle.js', 'client');
+    api.addFiles('helpers/commonHelpers.js', 'client');
+    api.addFiles('helpers/skeleformHelpers.js', 'client');
+
+    api.addFiles('events/skeleformEvents.js', 'client');
+
+    api.addFiles('formComponents/lib/skeleformDatePicker.js', 'client');
+    api.addFiles('formComponents/lib/skeleformEditor.js', 'client');
+    api.addFiles('formComponents/lib/skeleformImageUpload.js', 'client');
+    api.addFiles('formComponents/lib/skeleformInput.js', 'client');
+    api.addFiles('formComponents/lib/skeleformSelect.js', 'client');
+    api.addFiles('formComponents/lib/skeleformStaticTitle.js', 'client');
 
     // assets
     api.addAssets('public/icons/ok.png', 'client');

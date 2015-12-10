@@ -3,6 +3,15 @@
 // it integrates autonumeric.js plugin to manage "formatAs" options
 // see http://www.decorplanit.com/plugin/ for more details
 
+// Methods
+Skeleform.methods.skeleformInput = {
+    getValue: function(fieldSchema) {
+        return $('#' + fieldSchema.name).val();
+    }
+};
+
+
+// Helpers
 Template.skeleformInput.helpers(skeleformGeneralHelpers);
 Template.skeleformInput.helpers({
     inputType: function(renderAs) {
@@ -10,6 +19,44 @@ Template.skeleformInput.helpers({
         return renderAs.toLowerCase();
     }
 });
+
+
+// Events
+Template.skeleformInput.rendered = function() {
+    var schema = this.data.schema;
+    var id = schema.name;
+
+    switch (schema.formatAs) {
+        case 'currency':
+            $('#' + id).autoNumeric('init', {
+                aSep: ' ',
+                aDec: ',',
+                altDec: '.',
+                aSign: '€',
+                pSign: 's',
+                vMax: '999.99',
+                wEmpty: 'zero'
+            });
+
+            $('#' + id).click(function() {
+                $(this).select();
+            });
+            break;
+
+        case 'float':
+            $('#' + id).autoNumeric('init', {
+                aSep: ' ',
+                aDec: ',',
+                altDec: '.',
+                vMax: '999.99',
+                wEmpty: 'zero'
+            });
+            break;
+
+        default:
+            break;
+    }
+};
 
 Template.skeleformInput.events({
     "keyup .skeleValidate": function(event, template) {
@@ -50,39 +97,3 @@ Template.skeleformInput.events({
         }
     }
 });
-
-Template.skeleformInput.rendered = function() {
-    var schema = this.data.schema;
-    var id = schema.name;
-
-    switch (schema.formatAs) {
-        case 'currency':
-            $('#' + id).autoNumeric('init', {
-                aSep: ' ',
-                aDec: ',',
-                altDec: '.',
-                aSign: '€',
-                pSign: 's',
-                vMax: '999.99',
-                wEmpty: 'zero'
-            });
-
-            $('#' + id).click(function() {
-                $(this).select();
-            });
-            break;
-
-        case 'float':
-            $('#' + id).autoNumeric('init', {
-                aSep: ' ',
-                aDec: ',',
-                altDec: '.',
-                vMax: '999.99',
-                wEmpty: 'zero'
-            });
-            break;
-
-        default:
-            break;
-    }
-};

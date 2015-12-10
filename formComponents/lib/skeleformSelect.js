@@ -1,6 +1,15 @@
 // SELECT
 // select box field
 
+// Methods
+Skeleform.methods.skeleformSelect = {
+    getValue: function(fieldSchema) {
+        return $('#' + fieldSchema.name).val();
+    }
+};
+
+
+// Helpers
 Template.skeleformSelect.helpers(skeleformGeneralHelpers);
 Template.skeleformSelect.helpers({
     options: function(schema) {
@@ -112,6 +121,8 @@ Template.skeleformSelect.helpers({
     }
 });
 
+
+// Events
 Template.skeleformSelect.events({
     "blur select": function(event, template) {
         skeleformSuccessStatus('#' + template.data.schema.name);

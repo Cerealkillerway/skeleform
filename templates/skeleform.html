@@ -1,27 +1,29 @@
 <template name="skeleform">
-    {{> gearLoading}}
+    <!-- form loading modal -->
+    {{#if schema.__options.loadingModal}}
+        {{> gearLoading}}
+    {{/if}}
     
     <!-- toolbar -->
-    {{#unless this.schema.__toolbar.containerId}}
+    {{#unless schema.__toolbar.containerId}}
         {{> skeleformToolbar this}}
     {{/unless}}
 
     <!-- form fields -->
     <div class="skeleformFields">
-        {{#each fields schema}}
-            {{#if isNeeded this ..}}  <!-- check if the field is needed (showOnly option) -->
-                {{#with fieldType output this ../item}}
-                    {{> Template.dynamic template=this.template data=this.data}}
-                {{/with}}
-            {{/if}}   
+        {{#each schema.fields}}
+            {{#with isFieldInCurrentForm this}}
+                {{> Template.dynamic template=template data=data}}
+            {{/with}}   
         {{/each}}
     </div>
 </template>
 
+
 <!-- loads default or custom toolbar on top of skeleform -->
 <template name="skeleformToolbar">
-    {{#if this.schema.__toolbar.template}}
-        {{> Template.dynamic template=this.schema.__toolbar.template}}
+    {{#if schema.__toolbar.template}}
+        {{> Template.dynamic template=schema.__toolbar.template}}
     {{else}}
         {{#if item}}
             {{> skeleformUpdateButtons this}}
@@ -31,7 +33,9 @@
     {{/if}}
 </template>
 
+
 <!-- skeleform default toolbars -->
+<!-- create toolbar -->
 <template name="skeleformCreateButtons">
     <div class="staticBar">
         <div class="skeleformToolbar">
@@ -39,10 +43,10 @@
                 <i class="material-icons small left">add_circle</i>
                 <span>{{_ "create_btn"}}</span>
             </div>
-            {{#if this.schema.__toolbar.extrasCreate}}
-                {{> Template.dynamic template=this.schema.__toolbar.extrasCreate}}
+            {{#if schema.__toolbar.extrasCreate}}
+                {{> Template.dynamic template=schema.__toolbar.extrasCreate}}
             {{/if}}
-            <a href="{{this.schema.__paths.undoPath}}?lang={{currentLang}}{{isPaginated this.schemaName}}" class="waves-effect waves-light btn firstColor">
+            <a href="{{schema.__paths.undoPath}}?lang={{currentLang}}{{isPaginated schemaName}}" class="waves-effect waves-light btn firstColor">
                 <i class="material-icons small left">undo</i>
                 <span>{{_ "cancel_btn"}}</span>
             </a>
@@ -52,6 +56,8 @@
     </div>
 </template>
 
+
+<!-- update toolbar -->
 <template name ="skeleformUpdateButtons">
     <div class="staticBar">
         <div class="skeleformToolbar">
@@ -59,10 +65,10 @@
                 <i class="material-icons small left">beenhere</i>
                 <span>{{_ "update_btn"}}</span>
             </div>
-            {{#if this.schema.__toolbar.extrasUpdate}}
-                {{> Template.dynamic template=this.schema.__toolbar.extrasUpdate}}
+            {{#if schema.__toolbar.extrasUpdate}}
+                {{> Template.dynamic template=schema.__toolbar.extrasUpdate}}
             {{/if}}
-            <a href="{{makeUndoPath this.schema.__paths.undoPath}}{{isPaginated this.schemaName}}" class="waves-effect waves-light btn firstColor">
+            <a href="{{makeUndoPath schema.__paths.undoPath}}{{isPaginated schemaName}}" class="waves-effect waves-light btn firstColor">
                 <i class="material-icons small left">undo</i>
                 <span>{{_ "cancel_btn"}}</span>
             </a>
@@ -74,6 +80,7 @@
         </div>
     </div>
 </template>
+
 
 <!-- content lang bar -->
 <template name="skeleformLangBar">

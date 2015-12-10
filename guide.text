@@ -1,4 +1,3 @@
-/* 
 GUIDE
 ================================
 SCHEMA OPTIONS:
@@ -42,12 +41,16 @@ __listView: (optional) skelelist options
                     -> mapTo [string] name of the attribute in the external document to use instead of current value
                     -> collection [string] name of collection where to find the external document
 
+
+fields: [Array of Objects] each object in this array represents a field that can have the following properties:
+
 SCHEMA FIELDS OPTIONS
 --------------------------------
 __listView -> (optional) options for the field in the list view
            -> stripHTML [boolean] set to true to strip out HTML from the value (default false)
            -> truncate [integer] number of characters to keep (default all)
 
+name: [String] the name of the field (must be an unique identifier)
 output: form element [input, editor, select]
     
     Field specific options:
@@ -98,4 +101,3 @@ min: optional minimun length [number]; if the value returned by the field is an 
 max: optional maximum length [number]; if the value returned by the field is an object, this parameter is referred to the number of its properties
 unique: specifies that field's value should be unique [true]
 style: wrapper css class for custom styling of the field [string]
-*/
