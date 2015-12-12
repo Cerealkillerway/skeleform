@@ -6,7 +6,9 @@
     
     <!-- toolbar -->
     {{#unless schema.__toolbar.containerId}}
-        {{> skeleformToolbar this}}
+        {{#with toolbarContext}}
+            {{> skeleformToolbar this}}
+        {{/with}}
     {{/unless}}
 
     <!-- form fields -->
@@ -25,7 +27,7 @@
     {{#if schema.__toolbar.template}}
         {{> Template.dynamic template=schema.__toolbar.template}}
     {{else}}
-        {{#if item}}
+        {{#if formContext.item}}
             {{> skeleformUpdateButtons this}}
         {{else}}
             {{> skeleformCreateButtons this}}
@@ -43,10 +45,10 @@
                 <i class="material-icons small left">add_circle</i>
                 <span>{{_ "create_btn"}}</span>
             </div>
-            {{#if schema.__toolbar.extrasCreate}}
-                {{> Template.dynamic template=schema.__toolbar.extrasCreate}}
+            {{#if formContext.schema.__toolbar.extrasCreate}}
+                {{> Template.dynamic template=formContext.schema.__toolbar.extrasCreate}}
             {{/if}}
-            <a href="{{schema.__paths.undoPath}}?lang={{currentLang}}{{isPaginated schemaName}}" class="waves-effect waves-light btn firstColor">
+            <a href="{{makeUndoPath formContext.schema.__paths.undoPath}}?lang={{currentLang}}{{isPaginated formContext.schemaName}}" class="waves-effect waves-light btn firstColor">
                 <i class="material-icons small left">undo</i>
                 <span>{{_ "cancel_btn"}}</span>
             </a>
@@ -65,10 +67,10 @@
                 <i class="material-icons small left">beenhere</i>
                 <span>{{_ "update_btn"}}</span>
             </div>
-            {{#if schema.__toolbar.extrasUpdate}}
-                {{> Template.dynamic template=schema.__toolbar.extrasUpdate}}
+            {{#if formContext.schema.__toolbar.extrasUpdate}}
+                {{> Template.dynamic template=formContext.schema.__toolbar.extrasUpdate}}
             {{/if}}
-            <a href="{{makeUndoPath schema.__paths.undoPath}}{{isPaginated schemaName}}" class="waves-effect waves-light btn firstColor">
+            <a href="{{makeUndoPath formContext.schema.__paths.undoPath}}{{isPaginated formContext.schemaName}}" class="waves-effect waves-light btn firstColor">
                 <i class="material-icons small left">undo</i>
                 <span>{{_ "cancel_btn"}}</span>
             </a>

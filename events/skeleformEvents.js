@@ -22,34 +22,21 @@ function translateErrorDetail(detail) {
 }
 
 //validation loop for entire form against fields' values
-skeleformValidateForm = function(data, schema) {
+skeleformValidateForm = function(data, Fields) {
     var valid = true;
     var currentLang = FlowRouter.getParam('itemLang');
 
-    for (var field in data) {
-        var unNestedField = field;
-
-        if (currentLang && field.indexOf(currentLang + '.') === 0) {
-            unNestedField = field.replace(currentLang + '.', '');
-        }
-
-        if (schema[unNestedField]) {
-            if (!skeleformValidateField(data[field], {schema: schema[unNestedField], item: Template.instance().data.item})) {
-                valid = false;
-                ckUtils.globalUtilities.logger('VALIDATION - failed on field: ' + field, debugType);
+    try {
+        Fields.forEach(function(field) {
+            if (!field.isValid()) {
+                throw 'invalidField';
             }
-            //check also shadowField if exists
-            if (schema[unNestedField].shadowConfirm) {
-                var id = '#' + schema[unNestedField].name + 'ShadowConfirm';
-                var shadowValue = $(id).val();
-
-                if (data[field] !== shadowValue) {
-                    valid = false;
-                    skeleformErrorStatus(id, TAPi18n.__("confirm_validation"));
-                }
-            }
-        }
+        });
     }
+    catch(error) {
+        valid = false;
+    }
+
     //scroll to meet the first error
     if (!valid) {
         ckUtils.globalUtilities.scrollTo($('.invalid').first().offset().top - 80, configuration.animations.scrollError);
@@ -60,7 +47,8 @@ skeleformValidateForm = function(data, schema) {
 
 //validation for single field
 //called directly for inline validation
-skeleformValidateField = function(value, data) {
+skeleformValidateField = function(fieldInstance) {
+    var data = fieldInstance.data;
     var item = data.item;
     var schema = data.schema;
 
@@ -71,9 +59,8 @@ skeleformValidateField = function(value, data) {
     }
 
     if (!Session.get('formRendered')) return;
-    var collection = skeleformInstance.data.schema.__collection;
     var id = "#" + schema.name.replace('.', '\\.');
-    var result = isValid(value, schema, collection, documentId);
+    var result = fieldInstance.isValid();
     
     if (!result.valid) {
         ckUtils.globalUtilities.logger('VALIDATION - invalid ' + id, debugType);
@@ -83,7 +70,7 @@ skeleformValidateField = function(value, data) {
             if (rIndex > 0) errorString = errorString +' - ';
 
             var errorDetail;
-            if (schema !== undefined) errorDetail = translateErrorDetail(schema[rValue]);
+            if (schema.validation !== undefined) errorDetail = translateErrorDetail(schema.validation[rValue]);
             errorString = errorString + TAPi18n.__(rValue + "_validation", errorDetail);
         });
 
@@ -205,13 +192,14 @@ skeleformHandleResult = function(error, result, type, data, paths) {
 
 // GATHERING
 // gather data from form's fields
-skeleformGatherData = function(formContext) {
+skeleformGatherData = function(formContext, Fields) {
     var formItem = formContext.item;
     var lang = FlowRouter.getParam('itemLang');
     var data = {};
 
-    formContext.schema.fields.forEach(function(fieldSchema) {
-        var fieldValue = Skeleform.methods['skeleform' + fieldSchema.output.capitalize()].getValue(fieldSchema);
+    Fields.forEach(function(field) {
+        var fieldSchema = field.data.schema;
+        var fieldValue = field.getValue();
 
         if (fieldSchema.i18n === undefined) {
             if (!formItem || fieldValue !== formItem[lang][fieldSchema.name]) {
@@ -243,6 +231,8 @@ skeleformGatherData = function(formContext) {
 // Skeleform
 Template.skeleform.onCreated(function() {
     Session.set('formRendered', false);
+
+    this.Fields = [];
 });
 Template.skeleform.onRendered(function() {
     var self = this;
@@ -296,8 +286,9 @@ Template.skeleform.destroyed = function() {
 // create buttons (toolbar)
 Template.skeleformCreateButtons.events({
     "click .skeleformCreate": function(event, template) {
-        var data = skeleformGatherData(template.data);
-        var schema = template.data.schema;
+        var formContext = template.data.formContext;
+        var data = skeleformGatherData(formContext, template.data.Fields);
+        var schema = formContext.schema;
         var method;
         var options = {};
 
@@ -307,11 +298,11 @@ Template.skeleformCreateButtons.events({
             }
         }
 
-        if (!template.data.method) {
+        if (!formContext.method) {
             method = configuration.defaultMethods.insert;
         }
         else {
-            method = template.data.method.insert;
+            method = formContext.method.insert;
         }
 
         if (skeleformValidateForm(data, schema)) {
@@ -319,7 +310,7 @@ Template.skeleformCreateButtons.events({
                 $('#gearLoadingModal').openModal();
             }
 
-            Meteor.call(method, data, template.data.schemaName, function(error, result) {
+            Meteor.call(method, data, formContext.schemaName, function(error, result) {
                 if (options.useModal) {
                     $('#gearLoadingModal').closeModal();
                 }
@@ -332,9 +323,11 @@ Template.skeleformCreateButtons.events({
 // update buttons (toolbar)
 Template.skeleformUpdateButtons.events({
     "click .skeleformUpdate": function(event, template) {
-        var data = skeleformGatherData(template.data);
-        var documentId = template.data.item._id;
-        var schema = template.data.schema;
+        var formContext = template.data.formContext;
+        var Fields = template.data.Fields;
+        var data = skeleformGatherData(formContext, Fields);
+        var documentId = formContext.item._id;
+        var schema = formContext.schema;
         var method;
         var options = {};
 
@@ -344,11 +337,11 @@ Template.skeleformUpdateButtons.events({
             }
         }
 
-        if (!template.data.method) {
+        if (!formContext.method) {
             method = configuration.defaultMethods.update;
         }
         else {
-            method = template.data.method.update;
+            method = formContext.method.update;
         }
 
         // get route params to manage if current update should redirect to a new path
@@ -372,12 +365,12 @@ Template.skeleformUpdateButtons.events({
 
         var changedParams = _.intersection(params, unNestedDataKeys);
         
-        if (skeleformValidateForm(data, schema)) {
+        if (skeleformValidateForm(data, Fields)) {
             if (options.useModal) {
                 $('#gearLoadingModal').openModal();
             }
 
-            Meteor.call(method, documentId, data, template.data.schemaName, function(error, result) {
+            Meteor.call(method, documentId, data, formContext.schemaName, function(error, result) {
                 if (options.useModal) {
                     $('#gearLoadingModal').closeModal();
                 }

@@ -3,14 +3,6 @@
 // it integrates autonumeric.js plugin to manage "formatAs" options
 // see http://www.decorplanit.com/plugin/ for more details
 
-// Methods
-Skeleform.methods.skeleformInput = {
-    getValue: function(fieldSchema) {
-        return $('#' + fieldSchema.name).val();
-    }
-};
-
-
 // Helpers
 Template.skeleformInput.helpers(skeleformGeneralHelpers);
 Template.skeleformInput.helpers({
@@ -22,7 +14,23 @@ Template.skeleformInput.helpers({
 
 
 // Events
-Template.skeleformInput.rendered = function() {
+Template.skeleformInput.onCreated(function() {
+    var self = this;
+    var dataContext = self.data;
+
+    //register self on form' store
+    dataContext.formInstance.Fields.push(self);
+
+    self.getValue = function() {
+        return $('#' + dataContext.schema.name.replace('.', '\\.')).val();
+    };
+    self.isValid = function() {
+        var formInstance = self.data.formInstance;
+
+        return Skeleform.validate.checkOptions(self.getValue(), self.data.schema, formInstance.data.schema, formInstance.data.item);
+    };
+});
+Template.skeleformInput.onRendered(function() {
     var schema = this.data.schema;
     var id = schema.name;
 
@@ -56,7 +64,7 @@ Template.skeleformInput.rendered = function() {
         default:
             break;
     }
-};
+});
 
 Template.skeleformInput.events({
     "keyup .skeleValidate": function(event, template) {
@@ -74,7 +82,7 @@ Template.skeleformInput.events({
                 break;
         }
 
-        skeleformValidateField(value, template.data);
+        skeleformValidateField(template);
 
         //autoRange option
         if (schema.autoRange && value.length === schema.max) {

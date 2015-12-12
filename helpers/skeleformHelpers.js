@@ -20,9 +20,16 @@ Template.skeleform.helpers({
         return {
             template: "skeleform" + fieldSchema.output.capitalize(),
             data: {
+                formInstance: Template.instance(),
                 schema: fieldSchema,
-                item: formData
+                item: formData,
             }
+        };
+    },
+    toolbarContext: function() {
+        return {
+            Fields: Template.instance().Fields,
+            formContext: Template.instance().data
         };
     }
 });

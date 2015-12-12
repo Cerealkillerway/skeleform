@@ -1,14 +1,6 @@
 // SELECT
 // select box field
 
-// Methods
-Skeleform.methods.skeleformSelect = {
-    getValue: function(fieldSchema) {
-        return $('#' + fieldSchema.name).val();
-    }
-};
-
-
 // Helpers
 Template.skeleformSelect.helpers(skeleformGeneralHelpers);
 Template.skeleformSelect.helpers({
@@ -123,6 +115,21 @@ Template.skeleformSelect.helpers({
 
 
 // Events
+Template.skeleformSelect.onCreated(function() {
+    var self = this;
+    var dataContext = self.data;
+
+    //register self on form' store
+    dataContext.formInstance.Fields.push(self);
+
+    self.getValue = function() {
+        return $('#' + dataContext.schema.name).val();
+    };
+    self.isValid = function() {
+        console.log('select is valid');
+        return true;
+    };
+});
 Template.skeleformSelect.events({
     "blur select": function(event, template) {
         skeleformSuccessStatus('#' + template.data.schema.name);
