@@ -83,8 +83,9 @@ Template.skeleformEditor.onCreated(function() {
         return $('#' + dataContext.schema.name).code().trim();
     };
     self.isValid = function() {
-        console.log('editor is valid');
-        return true;
+        var formInstance = self.data.formInstance;
+
+        return Skeleform.validate.checkOptions(self.getValue(), self.data.schema, formInstance.data.schema, formInstance.data.item);
     };
 });
 Template.skeleformEditor.onRendered(function() {
@@ -106,9 +107,9 @@ Template.skeleformEditor.onRendered(function() {
             self.$('.note-editor').addClass('validate');
         },
         onKeyup: function(event) {
-            skeleformValidateField($(editor).code().trim(), self.data);
-        },
-        /*onImageUpload: function(files) {
+            skeleformValidateField(self);
+        }/*,
+        onImageUpload: function(files) {
             var filesArray = [];
             //transform object provided by materialnote into array of files
             filesArray = objectToArray(files);

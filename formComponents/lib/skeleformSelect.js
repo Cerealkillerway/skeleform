@@ -126,16 +126,11 @@ Template.skeleformSelect.onCreated(function() {
         return $('#' + dataContext.schema.name).val();
     };
     self.isValid = function() {
-        console.log('select is valid');
-        return true;
+        var formInstance = self.data.formInstance;
+
+        return Skeleform.validate.checkOptions(self.getValue(), self.data.schema, formInstance.data.schema, formInstance.data.item);
     };
 });
-Template.skeleformSelect.events({
-    "blur select": function(event, template) {
-        skeleformSuccessStatus('#' + template.data.schema.name);
-    }
-});
-
 Template.skeleformSelect.onRendered(function() {
     var self = this;
 
@@ -146,4 +141,9 @@ Template.skeleformSelect.onRendered(function() {
             self.$('select').material_select();
         }
     });
+});
+Template.skeleformSelect.events({
+    "blur select": function(event, template) {
+        skeleformSuccessStatus('#' + template.data.schema.name);
+    }
 });

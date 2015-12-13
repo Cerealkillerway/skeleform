@@ -22,7 +22,15 @@ Template.skeleformInput.onCreated(function() {
     dataContext.formInstance.Fields.push(self);
 
     self.getValue = function() {
-        return $('#' + dataContext.schema.name.replace('.', '\\.')).val();
+        var value = $('#' + dataContext.schema.name.replace('.', '\\.')).val();
+
+        switch (self.data.schema.validation.type) {
+            case 'url':
+                value = value.dasherize();
+                break;
+        }
+
+        return value;
     };
     self.isValid = function() {
         var formInstance = self.data.formInstance;
@@ -68,24 +76,10 @@ Template.skeleformInput.onRendered(function() {
 
 Template.skeleformInput.events({
     "keyup .skeleValidate": function(event, template) {
-        var schema = template.data.schema;
-        var value = $(event.target).val();
-
-        switch (schema.type) {
-
-            case 'url':
-                value = value.dasherize();
-                $(event.target).val(value);
-                break;
-
-            default:
-                break;
-        }
-
         skeleformValidateField(template);
 
         //autoRange option
-        if (schema.autoRange && value.length === schema.max) {
+        if (template.data.schema.autoRange && value.length === schema.max) {
             $(event.target).select();
         }
     },
