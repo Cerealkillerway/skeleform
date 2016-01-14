@@ -71,7 +71,7 @@ Template.skeleformDatePicker.rendered = function() {
         // picker' select option labels
         $.each(self.$('.picker__header').children('.picker__select--month').children('option'), function(index, option) {
             $(option).html(Blaze.renderWithData(Template.pickAdateMonthFull, {monthNumber: index}, option));
-        })
+        });
 
         /*var monthsLabels = TAPi18n.__("monthsFull_labels").split(" ");
         var daysOfWeekSingles = TAPi18n.__("weekDaysSingle_labels").split(" ");

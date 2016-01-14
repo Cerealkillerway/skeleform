@@ -2,9 +2,9 @@
     <div class="row">
         <div class="input-field col {{fieldSize schema.size}} {{schema.style}}">
             {{#if schema.mini}}
-                <h4 style="margin: 0 0 16px 28px">{{label schema.name}}</h4>
+                <h4 style="margin: 0 0 16px 28px">{{label schema.name 'title'}}</h4>
             {{else}}
-                <h3 style="margin: 0 0 16px 28px">{{label schema.name}}</h3>
+                <h3 style="margin: 0 0 16px 28px">{{label schema.name 'title'}}</h3>
             {{/if}}
         </div>
     </div>

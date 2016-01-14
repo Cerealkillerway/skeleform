@@ -31,26 +31,29 @@ skeleformGeneralHelpers = {
 
         switch(options) {
             case 'shadowConfirm':
-            return TAPi18n.__(name + "ShadowConfirm_lbl");
+            return TAPi18n.__(name + 'ShadowConfirm_lbl');
+
+            case 'title':
+            return TAPi18n.__(name + '_title');
 
             default:
-            return TAPi18n.__(name + "_lbl");
+            return TAPi18n.__(name + '_lbl');
         }
     },
     field: function(name) {
         return name;
     },
     required: function() {
-        if (this.schema.min !== undefined) return " *";
-        return "";
+        if (this.schema.min !== undefined) return ' *';
+        return '';
     },
     fieldStyle: function(context) {
         if (context.icon || context.unit) return 'float: left;';
 
-        return "";
+        return '';
     },
     fieldSize: function(size) {
-        if (!size) return "s12 m6";
+        if (!size) return 's12 m6';
         return size;
     },
     fieldValue: function(data, schema) {
