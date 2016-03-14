@@ -61,7 +61,7 @@ skeleformValidateField = function(fieldInstance) {
     if (!Session.get('formRendered')) return;
     var id = "#" + schema.name.replace('.', '\\.');
     var result = fieldInstance.isValid();
-    
+
     if (!result.valid) {
         ckUtils.globalUtilities.logger('VALIDATION - invalid ' + id, debugType);
         var errorString = "";
@@ -109,7 +109,7 @@ skeleformSuccessStatus = function(id, special) {
 skeleformErrorStatus = function(id, errorString, special) {
     var column = $(id).closest('.col');
     var fieldAlert = column.find('.skeleformFieldAlert');
-    
+
     column.alterClass('valid', 'invalid');
     fieldAlert.html(TAPi18n.__("error_validation", errorString));
 };
@@ -164,7 +164,7 @@ skeleformHandleResult = function(error, result, type, data, paths) {
 
         Materialize.toast(content, 1300, 'success', function() {
             var redirectPath = paths['redirectOn' + type.capitalize()];
-            
+
             if (paths['redirectOn' + type.capitalize()]) {
                 var params = {};
 
@@ -287,7 +287,8 @@ Template.skeleform.destroyed = function() {
 Template.skeleformCreateButtons.events({
     "click .skeleformCreate": function(event, template) {
         var formContext = template.data.formContext;
-        var data = skeleformGatherData(formContext, template.data.Fields);
+        var Fields = template.data.Fields;
+        var data = skeleformGatherData(formContext, Fields);
         var schema = formContext.schema;
         var method;
         var options = {};
@@ -305,7 +306,7 @@ Template.skeleformCreateButtons.events({
             method = formContext.method.insert;
         }
 
-        if (skeleformValidateForm(data, schema)) {
+        if (skeleformValidateForm(data, Fields)) {
             if (options.useModal) {
                 $('#gearLoadingModal').openModal();
             }
@@ -354,7 +355,7 @@ Template.skeleformUpdateButtons.events({
         ckUtils.globalUtilities.logger(params, 'skeleform');
         params = _.keys(params);
         dataKeys = _.keys(data);
-        
+
         dataKeys.forEach(function(dataKey, index) {
             var unNested = dataKey.split('.');
                 unNested = unNested[unNested.length - 1];
@@ -364,7 +365,7 @@ Template.skeleformUpdateButtons.events({
         });
 
         var changedParams = _.intersection(params, unNestedDataKeys);
-        
+
         if (skeleformValidateForm(data, Fields)) {
             if (options.useModal) {
                 $('#gearLoadingModal').openModal();
