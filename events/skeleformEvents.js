@@ -202,14 +202,21 @@ skeleformGatherData = function(formContext, Fields) {
         var fieldValue = field.getValue();
 
         if (fieldSchema.i18n === undefined) {
-            if (!formItem || fieldValue !== formItem[lang][fieldSchema.name]) {
+            // gather field only if creating, current lang does not exists already, or value is different from the stored one
+            if (!formItem ||  !formItem[lang] || (formItem[lang] && fieldValue !== formItem[lang][fieldSchema.name])) {
+                // if creating
                 if (!formItem) {
+                    // create the data object for current lang
                     if (!data[lang]) {
                         data[lang] = {};
                     }
+
+                    // set value of the field
                     data[lang][fieldSchema.name] = fieldValue;
                 }
+                // if updating
                 else {
+                    // set value of the field with "dot notation" for mongo update
                     data[lang + '.' + fieldSchema.name] = fieldValue;
                 }
             }
