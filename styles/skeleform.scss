@@ -24,7 +24,7 @@
         .langFlag {
             float: left;
             margin: 3px 4px;
-            
+
             img {
                 max-height: 30px;
                 border: solid 3px darken($thirdColorBorder, 10%);
@@ -61,6 +61,13 @@
 
     .centralBody{
         margin-top: 6px;
+    }
+
+    i.firstHoverColor {
+        color: $firstHoverColor !important;
+    }
+    i.firstHoverColor:hover {
+        color: $firstColorLinkHover !important;
     }
 }
 /* --- end toolbars --- */

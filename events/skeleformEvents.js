@@ -59,7 +59,6 @@ skeleformValidateForm = function(data, Fields) {
         setInvalid(id, schema, error.result);
 
         if ($('.staticTop').length === 0) {
-            console.log('scroll before staticTop');
             offsetCorrection = offsetCorrection + 66;
         }
         ckUtils.globalUtilities.scrollTo($('.invalid').first().offset().top - offsetCorrection, configuration.animations.scrollError);
@@ -425,6 +424,19 @@ Template.skeleformStaticAddons.events({
         ckUtils.globalUtilities.scrollTo(0, configuration.animations.scrollTop);
     },
     "click .toBottom": function(event, template) {
-        ckUtils.globalUtilities.scrollTo($('body').height(), configuration.animations.scrollBottom);
+        // if there are no errors in the form -> scroll to page's bottom
+        if ($('.invalid').length === 0) {
+            ckUtils.globalUtilities.scrollTo($('body').height(), configuration.animations.scrollBottom);
+        }
+        // otherwise scroll to first error
+        else {
+            var offsetCorrection = 80;
+
+            if ($('.staticTop').length === 0) {
+                offsetCorrection = offsetCorrection + 66;
+            }
+
+            ckUtils.globalUtilities.scrollTo($('.invalid').first().offset().top - offsetCorrection, configuration.animations.scrollBottom);
+        }
     }
 });
