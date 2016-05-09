@@ -72,7 +72,7 @@ Template.skeleformSelect.helpers({
 
                 result.push(option);
             });
-    
+
             return result;
         }
         return schema.source;
@@ -123,7 +123,7 @@ Template.skeleformSelect.onCreated(function() {
     dataContext.formInstance.Fields.push(self);
 
     self.getValue = function() {
-        return $('#' + dataContext.schema.name).val();
+        return $('#' + dataContext.schema.name.replace('.', '\\.')).val();
     };
     self.isValid = function() {
         var formInstance = self.data.formInstance;

@@ -21,6 +21,21 @@ function translateErrorDetail(detail) {
     return detail;
 }
 
+function setInvalid(id, schema, result) {
+    ckUtils.globalUtilities.logger('VALIDATION - invalid ' + id, debugType);
+    var errorString = "";
+
+    result.reasons.forEach(function(rValue, rIndex) {
+        if (rIndex > 0) errorString = errorString +' - ';
+
+        var errorDetail;
+        if (schema.validation !== undefined) errorDetail = translateErrorDetail(schema.validation[rValue]);
+        errorString = errorString + TAPi18n.__(rValue + "_validation", errorDetail);
+    });
+
+    skeleformErrorStatus(id, errorString, schema.output);
+}
+
 //validation loop for entire form against fields' values
 skeleformValidateForm = function(data, Fields) {
     var valid = true;
@@ -28,18 +43,26 @@ skeleformValidateForm = function(data, Fields) {
 
     try {
         Fields.forEach(function(field) {
-            if (!field.isValid()) {
-                throw 'invalidField';
+            var result = field.isValid();
+
+            if (!result.valid) {
+                throw {field: field, result: result};
             }
         });
     }
     catch(error) {
         valid = false;
-    }
+        var schema = error.field.data.schema;
+        var id = "#" + schema.name.replace('.', '\\.');
+        var offsetCorrection = 80;
 
-    //scroll to meet the first error
-    if (!valid) {
-        ckUtils.globalUtilities.scrollTo($('.invalid').first().offset().top - 80, configuration.animations.scrollError);
+        setInvalid(id, schema, error.result);
+
+        if ($('.staticTop').length === 0) {
+            console.log('scroll before staticTop');
+            offsetCorrection = offsetCorrection + 66;
+        }
+        ckUtils.globalUtilities.scrollTo($('.invalid').first().offset().top - offsetCorrection, configuration.animations.scrollError);
     }
 
     return valid;
@@ -63,18 +86,7 @@ skeleformValidateField = function(fieldInstance) {
     var result = fieldInstance.isValid();
 
     if (!result.valid) {
-        ckUtils.globalUtilities.logger('VALIDATION - invalid ' + id, debugType);
-        var errorString = "";
-
-        result.reasons.forEach(function(rValue, rIndex) {
-            if (rIndex > 0) errorString = errorString +' - ';
-
-            var errorDetail;
-            if (schema.validation !== undefined) errorDetail = translateErrorDetail(schema.validation[rValue]);
-            errorString = errorString + TAPi18n.__(rValue + "_validation", errorDetail);
-        });
-
-        skeleformErrorStatus(id, errorString, schema.output);
+        setInvalid(id, schema, result);
     }
     else {
         skeleformSuccessStatus(id, schema.output);
@@ -203,7 +215,7 @@ skeleformGatherData = function(formContext, Fields) {
 
         if (fieldSchema.i18n === undefined) {
             // gather field only if creating, current lang does not exists already, or value is different from the stored one
-            if (!formItem ||  !formItem[lang] || (formItem[lang] && fieldValue !== formItem[lang][fieldSchema.name])) {
+            if (!formItem || !formItem[lang] || (formItem[lang] && fieldValue !== formItem[lang][fieldSchema.name])) {
                 // if creating
                 if (!formItem) {
                     // create the data object for current lang
@@ -266,6 +278,7 @@ Template.skeleform.onRendered(function() {
         if (Session.equals('appRendered', true)) {
             // static bar
             var $bar = $('.skeleformToolbar');
+
 
             if ($bar.length > 0) {
                 var barOffset = Math.round($bar.offset().top * 1) / 1;

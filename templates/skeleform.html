@@ -3,7 +3,7 @@
     {{#if schema.__options.loadingModal}}
         {{> gearLoading}}
     {{/if}}
-    
+
     <!-- toolbar -->
     {{#unless schema.__toolbar.containerId}}
         {{#with toolbarContext}}
@@ -16,7 +16,7 @@
         {{#each schema.fields}}
             {{#with isFieldInCurrentForm this}}
                 {{> Template.dynamic template=template data=data}}
-            {{/with}}   
+            {{/with}}
         {{/each}}
     </div>
 </template>
@@ -74,7 +74,7 @@
                 <i class="material-icons small left">undo</i>
                 <span>{{_ "cancel_btn"}}</span>
             </a>
-            
+
             {{> skeleformStaticAddons}}
             {{#if isTranslatable}}
                 {{> skeleformLangBar}}
@@ -97,7 +97,7 @@
 
 <template name="skeleformStaticAddons">
     <span class="staticAddons right">
-        <i class="material-icons medium secondColorContent firstHoverColor pointer toTop">expand_less</i>
-        <i class="material-icons medium secondColorContent firstHoverColor pointer toBottom">expand_more</i>
+        <i class="material-icons medium firstHoverColor pointer toTop">expand_less</i>
+        <i class="material-icons medium firstHoverColor pointer toBottom">expand_more</i>
     </span>
 </template>
