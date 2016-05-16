@@ -1,27 +1,52 @@
 createPath = function(path, data) {
-    var params = {};
+    var result = {
+        params: {},
+        queryParams: {}
+    };
+    var value;
 
-    _.keys(path[1]).forEach(function(param) {
+    function handleParam(param, type, value) {
         switch (param) {
             case 'itemLang':
-            params[param] = FlowRouter.getParam('itemLang');
+            case 'sLang':
+            if (value === 'auto') {
+                result[type][param] = FlowRouter.getParam('itemLang');
+            }
+            else  {
+                result[type][param] = value;
+            }
             break;
 
             default:
-            if (path[1][param] === 'this') {
+            if (value === 'this') {
                 if (data[param]) {
-                    params[param] = data[param];
+                    result[type][param] = data[param];
                 }
                 else {
-                    params[param] = data[FlowRouter.getParam('itemLang')][param];
+                    result[type][param] = data[FlowRouter.getParam('itemLang')][param];
                 }
             }
             else {
-                params[param] = path[1][param];
+                result[type][param] = value;
             }
         }
+    }
+
+    _.keys(path[1]).forEach(function(param) {
+        value = path[1][param];
+
+        handleParam(param, 'params', value);
     });
-    return params;
+
+    if (path[2]) {
+        _.keys(path[2]).forEach(function(queryParam) {
+            value = path[2][queryParam];
+
+            handleParam(queryParam, 'queryParams', value);
+        });
+    }
+
+    return result;
 };
 
 //helpers used by form elements
@@ -81,6 +106,6 @@ toolbarsHelpers = {
     makeUndoPath: function(path) {
         var params = createPath(path);
 
-        return FlowRouter.path(path[0], params, {lang: FlowRouter.getQueryParam("lang")});
+        return FlowRouter.path(path[0], params.params, {lang: FlowRouter.getQueryParam("lang")});
     }
 };

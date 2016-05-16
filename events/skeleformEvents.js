@@ -177,24 +177,14 @@ skeleformHandleResult = function(error, result, type, data, paths) {
             var redirectPath = paths['redirectOn' + type.capitalize()];
 
             if (paths['redirectOn' + type.capitalize()]) {
-                var params = {};
+                var params = createPath(redirectPath, data);
 
-                _.keys(redirectPath[1]).forEach(function(param) {
-                    if (redirectPath[1][param] === 'this') {
-                        if (data[param]) {
-                            params[param] = data[param];
-                        }
-                        else {
-                            params[param] = data[FlowRouter.getParam('itemLang')][param];
-                        }
-                    }
-                    else {
-                        params[param] = redirectPath[1][param];
-                    }
-                });
+                params.queryParams.lang = FlowRouter.getQueryParam("lang");
+                console.log(params);
+
                 Session.set('currentItem', undefined);    // reset skelelist's setted currentItem
 
-                FlowRouter.go(redirectPath[0], params, {lang: FlowRouter.getQueryParam("lang")});
+                FlowRouter.go(redirectPath[0], params.params, params.queryParams);
             }
         });
     }

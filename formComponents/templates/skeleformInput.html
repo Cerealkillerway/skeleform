@@ -5,7 +5,7 @@
                 <i class="material-icons prefix">{{schema.icon}}</i>
             {{/if}}
 
-            <input type="{{inputType schema.renderAs}}" maxlength="{{schema.max}}" class="skeleValidate gather" id="{{field schema.name}}" autocomplete="off" style="{{fieldStyle schema}}" value="{{fieldValue item schema}}">
+            <input type="{{inputType schema.renderAs}}" maxlength="{{schema.validation.max}}" class="skeleValidate gather" id="{{field schema.name}}" autocomplete="off" style="{{fieldStyle schema}}" value="{{fieldValue item schema}}">
             <label for="{{field schema.name}}" class="active">{{label schema.name}}{{required}}</label>
 
             <p class="skeleformFieldAlert"></p>
@@ -13,7 +13,7 @@
         <!-- shadow confirm field -->
         {{#if schema.shadowConfirm}}
             <div class="input-field col {{fieldSize schema.size}} {{schema.style}}">
-                <input type="{{inputType schema.renderAs}}" maxlength="{{schema.max}}" class="shadowField" id="{{field schema.name}}ShadowConfirm" autocomplete="off" style="{{fieldStyle schema}}">
+                <input type="{{inputType schema.renderAs}}" maxlength="{{schema.validation.max}}" class="shadowField" id="{{field schema.name}}ShadowConfirm" autocomplete="off" style="{{fieldStyle schema}}">
                 <label for="{{field schema.name}}ShadowConfirm" class="active">{{label schema.name "shadowConfirm"}}{{required}}</label>
 
                 <p class="skeleformFieldAlert"></p>

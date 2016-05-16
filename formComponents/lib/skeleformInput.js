@@ -76,10 +76,13 @@ Template.skeleformInput.onRendered(function() {
 
 Template.skeleformInput.events({
     "keyup .skeleValidate": function(event, template) {
+        var value = $(event.target).val();
+        var schema = template.data.schema;
+
         skeleformValidateField(template);
 
         //autoRange option
-        if (template.data.schema.autoRange && value.length === schema.max) {
+        if (schema.autoRange && value.length === schema.validation.max) {
             $(event.target).select();
         }
     },

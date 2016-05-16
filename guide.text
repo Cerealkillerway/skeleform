@@ -3,7 +3,7 @@ GUIDE
 SCHEMA OPTIONS:
 --------------------------------
 __collection: name of collection that is manipulated by this form [string]
-__toolbar: (optional) 
+__toolbar: (optional)
         template -> name of alternative template to use as a toolbar [string]
         containerId -> id of DOM element to place the toolbar in [string] (optional/available only if
                        "template"option is used)
@@ -12,17 +12,24 @@ __toolbar: (optional)
 
 __paths:
     undoPath -> specify the path to be used for cancel button [string] (required)
+                the string is the path definition (can contain ":" params), and the object
+                is the params dictionary (NOT optional, pass empty object if no params are needed);
+                the string 'this' used as a value in params object means that the value must be taken
+                from skeleform's gathered data object.
+                For itemLang param, the value 'auto' means that it is taken from the current route's URL;
     redirectOnCreate -> specify the path to be used as a redirect after a succesful create [string, Object]
                         the string is the path definition (can contain ":" params), and the object
                         is the params dictionary (NOT optional, pass empty object if no params are needed);
                         the string 'this' used as a value in params object means that the value must be taken
-                        from skeleform's gathered data object. 
+                        from skeleform's gathered data object.
+                        For itemLang param, the value 'auto' means that it is taken from the current route's URL;
                         (default behaviour: clean the form and be ready for a new document)
-    redirectOnUpdate -> specify the path to be used as a redirect after a succesful update [string, Object] 
+    redirectOnUpdate -> specify the path to be used as a redirect after a succesful update [string, Object]
                         the string is the path definition (can contain ":" params), and the object
                         is the params dictionary (NOT optional, pass empty object if no params are needed);
                         the string 'this' used as a value in params object means that the value must be taken
                         from skeleform's gathered data object.
+                        For itemLang param, the value 'auto' means that it is taken from the current route's URL;
                         (default behaviour: stay on the same page)
 __options:
     loadingModal -> if true use a loading modal while performing skeleform operations [true/false]
@@ -52,17 +59,18 @@ __listView -> (optional) options for the field in the list view
 
 name: [String] the name of the field (must be an unique identifier)
 output: form element [input, editor, select]
-    
+
     Field specific options:
     ------------------------------
     staticTitle: mini -> [boolean] use <h3> tag instead of <h4>
 
-    input: icon -> materialize's icon class [string]
-           renderAs -> type of input field to render [string] (password, text); default to "text";
-                       when using the "password" option, the field is not gathered for submit if left empty;
-                       IMPORTANT: when using "password" option don't set max length, since the value is hashed with sha256 (becomes longer);
-           shadowConfirm -> [boolean] activates a re-type input field that invalidates if its value is not equal (ex.: to be used with renderAs: "password");
-           formatAs -> specific format to use for the field's data [string] (currency, float, undefined); default to undefined
+    input: icon          : materialize's icon class [string]
+           renderAs      : type of input field to render [string] (password, text); default to "text";
+                           when using the "password" option, the field is not gathered for submit if left empty;
+                           IMPORTANT: when using "password" option don't set max length, since the value is hashed with sha256 (becomes longer);
+           shadowConfirm : [boolean] activates a re-type input field that invalidates if its value is not equal (ex.: to be used with renderAs:            "password");
+           formatAs      : specific format to use for the field's data [string] (currency, float, undefined); default to undefined
+           autoRange     : [boolean] autoselect inner text when reached the max length defined for this field (default false);
 
     editor: toolbar -> specifies the toolbar to use (minimal, default, full) [string]
             image -> an object that defines parameters to be used while inserting images [object]:
@@ -84,7 +92,7 @@ output: form element [input, editor, select]
 
     datePicker: icon -> materialize's icon class [string]
                 startDate -> [object] is an object that define the initial date used by the popup calendar; can have these properties: (optional)
-                                    -> year [integer] 
+                                    -> year [integer]
                                     -> month [integer] (optional), default to 1
                                     -> day [integer] (optional), default to 1
 
@@ -96,8 +104,12 @@ Common options:
 -------------------------------
 i18n: specify that the field will be nested under "currentLang" object; (default true)
 size: materialize's grid system classes [string]; default to "s12 m6"
-type: validation match (string, number, email, url, date) [string]
-min: optional minimun length [number]; if the value returned by the field is an object, this parameter is referred to the number of its properties
-max: optional maximum length [number]; if the value returned by the field is an object, this parameter is referred to the number of its properties
-unique: specifies that field's value should be unique [true]
+
+validation: [object] set the validation rules:
+    - type: validation match (string, number, email, url, date) [string]
+    - min: optional minimun length [number]; if the value returned by the field is an object, this parameter is referred to the number of its properties
+    - max: optional maximum length [number]; if the value returned by the field is an object, this parameter is referred to the number of its properties
+           on input fields this will automatically set the maxLength property on the html <input> tag
+    - unique: specifies that field's value should be unique [true]
+
 style: wrapper css class for custom styling of the field [string]
