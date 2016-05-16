@@ -176,15 +176,19 @@ skeleformHandleResult = function(error, result, type, data, paths) {
         Materialize.toast(content, 1300, 'success', function() {
             var redirectPath = paths['redirectOn' + type.capitalize()];
 
-            if (paths['redirectOn' + type.capitalize()]) {
+            // if the form is setted up for a redirect after the current action -> redirect
+            if (redirectPath) {
                 var params = createPath(redirectPath, data);
 
                 params.queryParams.lang = FlowRouter.getQueryParam("lang");
-                console.log(params);
 
                 Session.set('currentItem', undefined);    // reset skelelist's setted currentItem
 
                 FlowRouter.go(redirectPath[0], params.params, params.queryParams);
+            }
+            // otherwise scroll to top
+            else {
+                ckUtils.globalUtilities.scrollTo(0, configuration.animations.scrollTop);
             }
         });
     }

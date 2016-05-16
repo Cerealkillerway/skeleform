@@ -3,7 +3,7 @@
         <div class="input-field col {{#if schema.icons}}icons{{/if}} {{fieldSize schema.size}} {{schema.style}}">
             <select class="skeleValidate gather" id="{{field schema.name}}">
                 {{#each options schema}}
-                    <option data-icon="{{icon this}}" value="{{this.value}}" {{isSelected .. this.value}}>{{this.name}}</option>
+                    <option data-icon="{{icon this}}" value="{{this.value}}" {{isSelected .. this.value}}>{{_ this.name}}</option>
                 {{/each}}
             </select>
             <label class="active">{{label schema.name}}{{required}}</label>

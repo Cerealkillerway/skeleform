@@ -41,7 +41,7 @@ Template.skeleformInput.onCreated(function() {
 Template.skeleformInput.onRendered(function() {
     var schema = this.data.schema;
     var id = schema.name;
-
+    
     switch (schema.formatAs) {
         case 'currency':
             $('#' + id).autoNumeric('init', {

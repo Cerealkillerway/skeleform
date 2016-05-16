@@ -137,8 +137,16 @@ Template.skeleformSelect.onRendered(function() {
     Tracker.autorun(function() {
         if (FlowRouter.subsReady()) {
             var data = self.data;
+            var schema = data.schema;
 
-            self.$('select').material_select();
+            if (schema.sourceLabelsI18n) {
+                TAPi18n.setLanguage(FlowRouter.getQueryParam('lang')).done(function() {
+                    self.$('select').material_select();
+                });
+            }
+            else {
+                self.$('select').material_select();
+            }
         }
     });
 });

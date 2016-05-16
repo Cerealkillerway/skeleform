@@ -1,6 +1,6 @@
 Package.describe({
     name: 'cerealkiller:skeleform',
-    version: '0.9.5',
+    version: '0.9.6',
     // Brief, one-line summary of the package.
     summary: 'form from schema creator',
     // URL to the Git repository containing the source code for this package.
@@ -11,8 +11,6 @@ Package.describe({
 });
 
 Package.onUse(function(api) {
-    api.versionsFrom('1.2.1');
-
     // namespace
     api.addFiles('namespace.js');
 
