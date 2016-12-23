@@ -34,7 +34,7 @@ skeleformImageWithThumbEvents = {
             var tempImg = new Image();
             tempImg.src = reader.result;
             tempImg.onload = function() {
-         
+
                 var tempW = tempImg.width;
                 var tempH = tempImg.height;
 
@@ -120,7 +120,7 @@ skeleformImageWithThumbEvents = {
         //add class for image placeholder in canvas container
         canvasContainer.addClass('canvasContainerEmpty');
         //set selected file's name to fileNameContainer
-        canvasContainer.prev('.inputContainer').children('.fileNameContainer').val(""); 
+        canvasContainer.prev('.inputContainer').children('.fileNameContainer').val("");
         //hide itself
         deleteBtn.hide(0);
 

@@ -26,18 +26,18 @@ Template.skeleformSelect.helpers({
                 var missingTranslation = false;
 
                 schema.sourceName.split('.').forEach(function(nameShard, index) {
-                    switch (nameShard) {
-                        case ':itemLang':
-                        if (nameAttr[lang]) {
-                            nameAttr = nameAttr[lang];
+                    if (nameShard.indexOf(':itemLang---') === 0) {
+                        var nameOnly = nameShard.substring(12, nameShard.length);
+
+                        if (nameAttr[lang + '---' + nameOnly]) {
+                            nameAttr = nameAttr[lang + '---' + nameOnly];
                         }
                         else {
-                            nameAttr = nameAttr[defaultLang];
+                            nameAttr = nameAttr[defaultLang + '---' + nameOnly];
                             missingTranslation = true;
                         }
-                        break;
-
-                        default:
+                    }
+                    else {
                         nameAttr = nameAttr[nameShard];
                     }
                 });

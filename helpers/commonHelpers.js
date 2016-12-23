@@ -23,7 +23,7 @@ createPath = function(path, data) {
                     result[type][param] = data[param];
                 }
                 else {
-                    result[type][param] = data[FlowRouter.getParam('itemLang')][param];
+                    result[type][param] = data[FlowRouter.getParam('itemLang') + '---' + param];
                 }
             }
             else {
@@ -81,22 +81,26 @@ skeleformGeneralHelpers = {
         if (!size) return 's12 m6';
         return size;
     },
+    // sets the value on the field, used by most field types
     fieldValue: function(data, schema) {
         var name = schema.name;
 
         if (!data) return;
 
         if (schema.i18n === undefined) {
-            data = data[FlowRouter.getParam('itemLang')];
+            data = data[FlowRouter.getParam('itemLang') + '---' + name];
             if (!data) return;
         }
+        else {
+            name.split('.').forEach(function(nameShard, index) {
+                data = data[nameShard];
+            });
+        }
 
-        var pathShards = name.split('.');
-
-        pathShards.forEach(function(shard, index) {
-            data = data[shard];
-        });
-
+        // set active class on label to avoid overlapping
+        if (schema.output === 'input') {
+            $('#' + schema.name).next('label').addClass('active');
+        }
         return data;
     }
 };

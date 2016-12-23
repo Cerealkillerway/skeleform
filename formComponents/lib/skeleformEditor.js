@@ -54,13 +54,13 @@ Template.skeleformEditor.helpers({
         if (Session.get('formRendered')) {
             if (schema.i18n === undefined) {
                 var currentLang = FlowRouter.getParam("itemLang");
-                var langObject = data[currentLang];
+                var langField = data[currentLang + '---' + schema.name];
 
-                if (!langObject) {
+                if (!langField) {
                     $('#' + schema.name).code('');
                 }
                 else {
-                    $('#' + schema.name).code(langObject[schema.name]);
+                    $('#' + schema.name).code(langField);
                 }
             }
             else {
@@ -124,7 +124,7 @@ Template.skeleformEditor.onRendered(function() {
 
                     tempImg.src = reader.result;
                     tempImg.onload = function() {
-                 
+
                         var MAX_WIDTH = imageParams.width;
                         var MAX_HEIGHT = imageParams.height;
                         var tempW = tempImg.width;
@@ -135,7 +135,7 @@ Template.skeleformEditor.onRendered(function() {
                                tempH *= MAX_WIDTH / tempW;
                                tempW = MAX_WIDTH;
                             }
-                        } 
+                        }
                         else {
                             if (tempH > MAX_HEIGHT) {
                                tempW *= MAX_HEIGHT / tempH;

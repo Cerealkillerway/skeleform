@@ -71,4 +71,3 @@ Template.skeleformLangBar.helpers({
         }
     }
 });
-

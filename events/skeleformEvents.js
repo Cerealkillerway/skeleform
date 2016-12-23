@@ -207,7 +207,6 @@ skeleformGatherData = function(formContext, Fields) {
         var fieldValue = field.getValue();
 
         if (fieldSchema.i18n === undefined) {
-            // gather field only if creating, current lang does not exists already, or value is different from the stored one
             var currentValue = formItem ? formItem[lang + '---' + fieldSchema.name] : null;
 
             if (!currentValue || (currentValue && fieldValue !== currentValue)) {
