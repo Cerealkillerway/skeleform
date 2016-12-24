@@ -18,7 +18,7 @@ Template.skeleform.helpers({
         }
 
         return {
-            template: "skeleform" + fieldSchema.output.capitalize(),
+            template: 'skeleform' + fieldSchema.output.capitalize(),
             data: {
                 formInstance: Template.instance(),
                 schema: fieldSchema,

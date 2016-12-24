@@ -43,6 +43,7 @@ Package.onUse(function(api) {
     api.addFiles('formComponents/templates/skeleformInput.html', 'client');
     api.addFiles('formComponents/templates/skeleformSelect.html', 'client');
     api.addFiles('formComponents/templates/skeleformStaticTitle.html', 'client');
+    api.addFiles('formComponents/templates/skeleformCheckBox.html', 'client');
 
 
     // i18n
@@ -61,12 +62,14 @@ Package.onUse(function(api) {
 
     api.addFiles('events/skeleformEvents.js', 'client');
 
+    // form components
     api.addFiles('formComponents/lib/skeleformDatePicker.js', 'client');
     api.addFiles('formComponents/lib/skeleformEditor.js', 'client');
     api.addFiles('formComponents/lib/skeleformImageUpload.js', 'client');
     api.addFiles('formComponents/lib/skeleformInput.js', 'client');
     api.addFiles('formComponents/lib/skeleformSelect.js', 'client');
     api.addFiles('formComponents/lib/skeleformStaticTitle.js', 'client');
+    api.addFiles('formComponents/lib/skeleformCheckBox.js', 'client');
 
     // assets
     api.addAssets('public/icons/ok.png', 'client');

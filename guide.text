@@ -41,8 +41,8 @@ __paths:
                         For itemLang param, the value 'auto' means that it is taken from the current route's URL;
                         (default behaviour: stay on the same page)
 __options:
-    loadingModal -> if true use a loading modal while performing skeleform operations [true/false]
-    tracked -> if true save to each document data about user and timestamp of creation and last update
+    loadingModal -> if true use a loading modal while performing skeleform operations [boolean]
+    tracked -> if true save to each document data about user and timestamp of creation and last update [boolean]
 
 __listView: (optional) skelelist options
     style -> type of list to create [table]

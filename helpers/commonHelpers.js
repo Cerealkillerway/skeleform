@@ -1,3 +1,25 @@
+SkeleformStandardFieldValue = function(data, schema) {
+    var name = schema.name;
+
+    if (!data) return;
+
+    if (schema.i18n === undefined) {
+        data = data[FlowRouter.getParam('itemLang') + '---' + name];
+        if (!data) return;
+    }
+    else {
+        name.split('.').forEach(function(nameShard, index) {
+            data = data[nameShard];
+        });
+    }
+
+    // set active class on label to avoid overlapping
+    if (schema.output === 'input') {
+        $('#' + schema.name).next('label').addClass('active');
+    }
+    return data;
+};
+
 createPath = function(path, data) {
     var result = {
         params: {},
@@ -83,25 +105,7 @@ skeleformGeneralHelpers = {
     },
     // sets the value on the field, used by most field types
     fieldValue: function(data, schema) {
-        var name = schema.name;
-
-        if (!data) return;
-
-        if (schema.i18n === undefined) {
-            data = data[FlowRouter.getParam('itemLang') + '---' + name];
-            if (!data) return;
-        }
-        else {
-            name.split('.').forEach(function(nameShard, index) {
-                data = data[nameShard];
-            });
-        }
-
-        // set active class on label to avoid overlapping
-        if (schema.output === 'input') {
-            $('#' + schema.name).next('label').addClass('active');
-        }
-        return data;
+        return SkeleformStandardFieldValue(data, schema);
     }
 };
 
