@@ -8,6 +8,23 @@
 }
 .skeleformFieldAlert {
     margin: 0;
+
+    &.skeleformCheckBoxAlert {
+        margin-top: 15px;
+
+        .switch + & {
+            margin-top: 45px;
+        }
+    }
+}
+
+.switchLabel {
+    margin-bottom: 15px;
+}
+.switch {
+    label {
+        margin-top: 15px;
+    }
 }
 
 /* --- toolbars --- */

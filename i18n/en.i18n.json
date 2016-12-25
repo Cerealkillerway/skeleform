@@ -10,5 +10,7 @@
     "pickadateNav_next": "Next month",
     "pickadateButtons_labels": "Today Clear Close",
 
-    "none_lbl": "(none)"
+    "none_lbl": "(none)",
+    "yes_lbl": "Yes",
+    "no_lbl": "No"
 }

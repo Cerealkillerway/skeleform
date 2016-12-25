@@ -73,13 +73,18 @@ output: form element [input, editor, select]
     ------------------------------
     staticTitle: mini -> [boolean] use <h3> tag instead of <h4>
 
-    input: icon          : materialize's icon class [string]
+    input: icon          : materialize's icon class [string];
            renderAs      : type of input field to render [string] (password, text); default to "text";
                            when using the "password" option, the field is not gathered for submit if left empty;
                            IMPORTANT: when using "password" option don't set max length, since the value is hashed with sha256 (becomes longer);
            shadowConfirm : [boolean] activates a re-type input field that invalidates if its value is not equal (ex.: to be used with renderAs:            "password");
            formatAs      : specific format to use for the field's data [string] (currency, float, undefined); default to undefined
            autoRange     : [boolean] autoselect inner text when reached the max length defined for this field (default false);
+
+    checkBox: renderAs   : type of boolean selector to display [string] (checkbox, switch); default to "checkbox";
+              labels     : [object] (optional) can contain 2 (optionals) keys (on, off) containing the two strings to be used as i18n strings for the respectives      switch states; if it's not provided, the default "yes_lbl" and "no_lbl" are used;
+              callbacks  : [object] (optional) dictionary of callbacks;
+                    -> onChange(value)  : [function] (optional) a callback to be performed when the value of the field changes; it receives the field's value as parameter;
 
     editor: toolbar -> specifies the toolbar to use (minimal, default, full) [string]
             image -> an object that defines parameters to be used while inserting images [object]:
@@ -117,8 +122,20 @@ size: materialize's grid system classes [string]; default to "s12 m6"
 validation: [object] set the validation rules:
     - type: validation match (string, number, email, url, date) [string]
     - min: optional minimun length [number]; if the value returned by the field is an object, this parameter is referred to the number of its properties
+           setting min to 1 on a boolean field (ex. checkbox) is interpreted as "field required"; any other value is ignored for those kind of fields.
     - max: optional maximum length [number]; if the value returned by the field is an object, this parameter is referred to the number of its properties
            on input fields this will automatically set the maxLength property on the html <input> tag
     - unique: specifies that field's value should be unique [true]
 
 style: wrapper css class for custom styling of the field [string]
+
+
+validation
+----------------------------
+Every field should implement the methods "getValue()" and "isValid()";
+The method isValid should perform the field's validation when required and return a "result" object with this form:
+    result {
+        valid: [boolean] if the field's current value is valid or not
+        reasons: [array of strings] a set of strings describing the validity checks failed (should match the name of validation types)
+    }
+If it's necessary to use a custom error message it is possible to add the field "invalidMessages" to the "result" object; "invalidMessages" [object] should be a dictionary of custom i18n strings to use for each validation type.

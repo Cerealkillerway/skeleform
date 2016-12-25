@@ -91,7 +91,7 @@ skeleformGeneralHelpers = {
         return name;
     },
     required: function() {
-        if (this.schema.min !== undefined) return ' *';
+        if (this.schema.validation && this.schema.validation.min !== undefined) return ' *';
         return '';
     },
     fieldStyle: function(context) {

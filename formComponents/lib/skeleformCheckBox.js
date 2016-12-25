@@ -13,6 +13,30 @@ Template.skeleformCheckBox.helpers({
             return 'checked';
         }
         return 'unchecked';
+    },
+    isCheckBox: function() {
+        var schema = Template.instance().data.schema;
+
+        if (!schema.renderAs || schema.renderAs === 'checkbox') {
+            return true;
+        }
+        return false;
+    },
+    switchLabel: function(type) {
+        var schema = Template.instance().data.schema;
+
+        if (type === 'off') {
+            if (schema.labels && schema.labels.off) {
+                return TAPi18n.__(schema.labels.off + '_lbl');
+            }
+            return TAPi18n.__('no_lbl');
+        }
+        else {
+            if (schema.labels && schema.labels.on) {
+                return TAPi18n.__(schema.labels.on + '_lbl');
+            }
+            return TAPi18n.__('yes_lbl');
+        }
     }
 });
 
@@ -31,17 +55,36 @@ Template.skeleformCheckBox.onCreated(function() {
         return value;
     };
     self.isValid = function() {
-        var formInstance = self.data.formInstance;
+        var validationOptions = self.data.schema.validation;
+        var result = {
+            valid: true,
+            reasons: [],
+            invalidMessages: {
+                min: 'required'
+            }
+        };
 
-        return Skeleform.validate.checkOptions(self.getValue(), self.data.schema, formInstance.data.schema, formInstance.data.item);
+        if (validationOptions && validationOptions.min === 1) {
+            if (!self.getValue()) {
+                result.valid = false;
+                result.reasons.push('min');
+            }
+        }
+
+        return result;
     };
 });
 
 Template.skeleformCheckBox.events({
     "change .skeleValidate": function(event, template) {
-        var value = $(event.target).val();
+        var value = $(event.target).prop('checked');
         var schema = template.data.schema;
 
-        //skeleformValidateField(template);
+        skeleformValidateField(template);
+
+        // if defined, perform the callback
+        if (schema.callbacks && schema.callbacks.onChange) {
+            schema.callbacks.onChange(value);
+        }
     },
 });

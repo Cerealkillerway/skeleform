@@ -1,14 +1,22 @@
 <template name="skeleformCheckBox">
 	<div class="row">
         <div class="input-field col {{fieldSize schema.size}} {{schema.style}}">
-            {{#if schema.icon}}
-                <i class="material-icons prefix">{{schema.icon}}</i>
-            {{/if}}
+			{{#if isCheckBox}}
+	            <input {{fieldValue item schema}} type="checkbox" class="skeleValidate gather" id="{{field schema.name}}" style="{{fieldStyle schema}}">
+	            <label for="{{field schema.name}}">{{label schema.name}}{{required}}</label>
+			{{else}}
+				<div class="switchLabel" for="{{field schema.name}}">{{label schema.name}}{{required}}</div>
+				<div class="switch">
+					<label>
+					  	{{switchLabel 'off'}}
+					  	<input {{fieldValue item schema}} type="checkbox" class="skeleValidate gather" id="{{field schema.name}}" style="{{fieldStyle schema}}">
+					  	<span class="lever"></span>
+					  	{{switchLabel "on"}}
+					</label>
+				</div>
+			{{/if}}
 
-            <input {{fieldValue item schema}} type="checkbox" class="skeleValidate gather" id="{{field schema.name}}" style="{{fieldStyle schema}}">
-            <label for="{{field schema.name}}">{{label schema.name}}{{required}}</label>
-
-            <p class="skeleformFieldAlert"></p>
+            <p class="skeleformFieldAlert skeleformCheckBoxAlert"></p>
         </div>
     </div>
 </template>

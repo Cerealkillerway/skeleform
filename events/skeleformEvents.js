@@ -17,20 +17,30 @@ else {
 //looks up for translated string if argument is not a number
 function translateErrorDetail(detail) {
     var regex = /^([0-9]|[ #\-\+\(\)])+$/;
-    if (regex.test(detail) === false) return TAPi18n.__(detail + "_validationDetail");
+    if (regex.test(detail) === false) return TAPi18n.__(detail + '_validationDetail');
     return detail;
 }
 
 function setInvalid(id, schema, result) {
     ckUtils.globalUtilities.logger('VALIDATION - invalid ' + id, debugType);
-    var errorString = "";
+    var errorString = '';
 
     result.reasons.forEach(function(rValue, rIndex) {
         if (rIndex > 0) errorString = errorString +' - ';
 
         var errorDetail;
-        if (schema.validation !== undefined) errorDetail = translateErrorDetail(schema.validation[rValue]);
-        errorString = errorString + TAPi18n.__(rValue + "_validation", errorDetail);
+
+        if (schema.validation !== undefined) {
+            // if there is an overridden value for the invalid message for the current reason, use that one; otherwise
+            // build the standard message for that reason
+            if (result.invalidMessages && result.invalidMessages[rValue]) {
+                errorString = errorString + TAPi18n.__(result.invalidMessages[rValue] + '_validation');
+            }
+            else {
+                errorDetail = translateErrorDetail(schema.validation[rValue]);
+                errorString = errorString + TAPi18n.__(rValue + '_validation', errorDetail);
+            }
+        }
     });
 
     skeleformErrorStatus(id, errorString, schema.output);

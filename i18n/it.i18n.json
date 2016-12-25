@@ -10,5 +10,7 @@
     "pickadateNav_next": "Mese successivo",
     "pickadateButtons_labels": "Oggi Annulla Chiudi",
 
-    "none_lbl": "(nessuno/a)"
+    "none_lbl": "(nessuno/a)",
+    "yes_lbl": "Sì",
+    "no_lbl": "No"
 }
