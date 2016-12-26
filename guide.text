@@ -2,7 +2,7 @@ GUIDE
 ================================
 
 *********************************************
-**    VERY IMPORTANT                       **
+***            VERY IMPORTANT             ***
 *********************************************
 *************************************************************************************************
 ** In this version i18n fields MUST be on the top level (i18n nested fields are NOT supported) **
@@ -81,7 +81,7 @@ output: form element [input, editor, select]
            formatAs      : specific format to use for the field's data [string] (currency, float, undefined); default to undefined
            autoRange     : [boolean] autoselect inner text when reached the max length defined for this field (default false);
 
-    checkBox: renderAs   : type of boolean selector to display [string] (checkbox, switch); default to "checkbox";
+    checkBox: renderAs   : type of boolean selector to display [string] ("checkbox", "switch"); default to "checkbox";
               labels     : [object] (optional) can contain 2 (optionals) keys (on, off) containing the two strings to be used as i18n strings for the respectives      switch states; if it's not provided, the default "yes_lbl" and "no_lbl" are used;
               callbacks  : [object] (optional) dictionary of callbacks;
                     -> onChange(value)  : [function] (optional) a callback to be performed when the value of the field changes; it receives the field's value as parameter;
@@ -105,22 +105,17 @@ output: form element [input, editor, select]
                         -> height [integer]
 
     datePicker: icon -> materialize's icon class [string]
-                startDate -> [object] is an object that define the initial date used by the popup calendar; can have these properties: (optional)
-                                    -> year [integer]
-                                    -> month [integer] (optional), default to 1
-                                    -> day [integer] (optional), default to 1
+                pickerOptions -> (optional) dictionary of init options to override when starting the pickadate plugin (more info at http://amsul.ca/pickadate.js/date/)
 
-    multiSelectLabels -> source is the data origin for options (must be an array of objects with at least the properties used as sourceValue and sourceName)
-                      -> sourceValue is the attribute name of source to use as value
-                      -> sourceName is the attribte name of source to use as text
 
-Common options:
--------------------------------
+COMMON OPTIONS FOR ALL KIND OF FIELDS:
+--------------------------------------
 i18n: specify that the field will be nested under "currentLang" object; (default true)
 size: materialize's grid system classes [string]; default to "s12 m6"
 
 validation: [object] set the validation rules:
     - type: validation match (string, number, email, url, date) [string]
+            --> setting the validation type to "date" implies that the field is required
     - min: optional minimun length [number]; if the value returned by the field is an object, this parameter is referred to the number of its properties
            setting min to 1 on a boolean field (ex. checkbox) is interpreted as "field required"; any other value is ignored for those kind of fields.
     - max: optional maximum length [number]; if the value returned by the field is an object, this parameter is referred to the number of its properties
@@ -138,4 +133,5 @@ The method isValid should perform the field's validation when required and retur
         valid: [boolean] if the field's current value is valid or not
         reasons: [array of strings] a set of strings describing the validity checks failed (should match the name of validation types)
     }
-If it's necessary to use a custom error message it is possible to add the field "invalidMessages" to the "result" object; "invalidMessages" [object] should be a dictionary of custom i18n strings to use for each validation type.
+CUSTOM INVALID MESSAGE
+If it's necessary to use a custom invalid message it is possible to add the field "invalidMessages" to the "result" object; "invalidMessages" [object] should be a dictionary of custom i18n strings to use for each validation type.

@@ -5,10 +5,10 @@
                 <i class="material-icons prefix">{{schema.icon}}</i>
             {{/if}}
 
-            {{fieldDate item schema.name}}
+            {{fieldDate item schema}}
             <input type="date" id="{{field schema.name}}" class="skeleValidate gather datepicker">
             <label for="{{field schema.name}}" class="active">{{label schema.name}}{{required}}</label>
-            
+
             <p class="skeleformFieldAlert text-danger"></p>
         </div>
     </div>

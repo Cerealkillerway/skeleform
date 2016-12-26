@@ -14,9 +14,11 @@ else {
 
 // VALIDATION
 // ==========================================================================================
-//looks up for translated string if argument is not a number
+
 function translateErrorDetail(detail) {
     var regex = /^([0-9]|[ #\-\+\(\)])+$/;
+
+    //looks up for translated string if argument is not a number
     if (regex.test(detail) === false) return TAPi18n.__(detail + '_validationDetail');
     return detail;
 }

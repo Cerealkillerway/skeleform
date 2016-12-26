@@ -1,3 +1,6 @@
+// standard function to get a field's value; it is defined here as a global function so that
+// special field types can override "fieldValue" helper but still call this function if needed
+// and then perform any special handling that is required
 SkeleformStandardFieldValue = function(data, schema) {
     var name = schema.name;
 
@@ -19,6 +22,7 @@ SkeleformStandardFieldValue = function(data, schema) {
     }
     return data;
 };
+
 
 createPath = function(path, data) {
     var result = {
@@ -91,7 +95,7 @@ skeleformGeneralHelpers = {
         return name;
     },
     required: function() {
-        if (this.schema.validation && this.schema.validation.min !== undefined) return ' *';
+        if ((this.schema.validation && this.schema.validation.min !== undefined) || this.schema.validation && this.schema.validation.type === 'date') return ' *';
         return '';
     },
     fieldStyle: function(context) {

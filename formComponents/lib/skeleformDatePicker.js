@@ -1,186 +1,155 @@
 // DATE PICKER
 // an input field with calendar plugin
 // it uses materialize's version of pickaday plugin for more informations: http://materializecss.com/forms.html
-// pickaday parameters documentantion: http://amsul.ca/pickadate.js/date/ù
+// pickaday parameters documentantion: http://amsul.ca/pickadate.js/date/
 // pickaday api documentation: http://amsul.ca/pickadate.js/api/
 // implemented run-time override for reactivity in meteor.js (no hack in materialize' source files)
 
 Template.skeleformDatePicker.helpers(skeleformGeneralHelpers);
 Template.skeleformDatePicker.helpers({
-    fieldDate: function(data, attribute) {
-        if (!data || !data.fetch()[0]) return;
-        var template = Template.instance();
-        var lang = Session.get('currentLang'); //register language dependency
+    fieldDate: function(data, schema) {
+        var pickerInstance = Template.instance().pickerInstance;
 
-        if (Session.get('formRendered') && template.pickerStarted.get()) {
-            var item = data.fetch()[0];
-            console.log('setting reloaded value');
-            console.log(moment.locale());
-            var loadedDate = moment(item[attribute], "DD/MM/YYYY").format("D MMMM YYYY");
-            var picker = template.$('.datepicker').pickadate('picker');
-
-            if (picker) template.$('#' + attribute).val(loadedDate);
+        // reactively set the value on the datepicker
+        if (pickerInstance) {
+            pickerInstance.set('select', SkeleformStandardFieldValue(data, schema), {format: Template.instance().initOptions.formatSubmit});
         }
     }
 });
 
-Template.skeleformDatePicker.rendered = function() {
-    var schema = this.data.schema;
+Template.skeleformDatePicker.onCreated(function() {
     var self = this;
-    this.pickerStarted = new ReactiveVar(false);
+    var dataContext = self.data;
 
-    //datepicker starter
-    var data = self.data.item;
-    FlowRouter.subsReady(function() {
-        startDatePicker(self, data ? data.fetch()[0] : undefined);
+    self.initOptions = {};
+
+    //register self on form' store
+    dataContext.formInstance.Fields.push(self);
+
+    Tracker.autorun(function() {
+        var todayLbl = TAPi18n.__("pickadateButtons_labels").split(" ")[0]; //register language dependency
+
+        if (self.pickerInstance) {
+            self.pickerInstance.component.settings.monthsFull = TAPi18n.__('monthsFull_labels').split(' ');
+            self.pickerInstance.component.settings.monthsShort = TAPi18n.__('monthsShort_labels').split(' ');
+            self.pickerInstance.component.settings.weekdaysFull = TAPi18n.__('weekDaysFull_labels').split(' ');
+            self.pickerInstance.component.settings.weekdaysShort = TAPi18n.__('weekDaysShort_labels').split(' ');
+            self.pickerInstance.component.settings.weekdaysLetter = TAPi18n.__('weekDaysSingle_labels').split(' ');
+            self.pickerInstance.component.settings.today = TAPi18n.__('pickadateButtons_labels').split(' ')[0];
+            self.pickerInstance.component.settings.clear = TAPi18n.__('pickadateButtons_labels').split(' ')[1];
+            self.pickerInstance.component.settings.close = TAPi18n.__('pickadateButtons_labels').split(' ')[2];
+            self.pickerInstance.component.settings.labelMonthNext = TAPi18n.__('pickadateNav_next');
+            self.pickerInstance.component.settings.labelMonthPrev = TAPi18n.__('pickadateNav_prev');
+            self.pickerInstance.component.settings.labelMonthSelect = TAPi18n.__('monthSelect_label');
+            self.pickerInstance.component.settings.labelYearSelect = TAPi18n.__('yearSelect_label');
+
+            self.pickerInstance.render();
+            // set again the value to translate also in the input box
+            self.pickerInstance.set('select', SkeleformStandardFieldValue(self.data.item, self.data.schema), {format: self.initOptions.formatSubmit});
+        }
     });
 
-    //change lang strings
-    function changeSelects(pickerInstance, pickerElement) {
-        console.log('override picker lang');
-        var selected = pickerInstance.get('select', 'dd/mm/yyyy');
-        var dayOfWeek = moment(selected, 'DD/MM/YYYY').format('d');
-        
-        //console.log('set: ' + selected);
-        if (self.data) skeleformValidateField(selected, self.data);
-        
-        // OVERRIDE PICKADATE LANGUAGE DEPENDANT'S LABELS WITH REACTIVE TEMPLATES
-        var currentDate = {
-            day: parseInt(moment().format('D')),
-            month: parseInt(moment().format('M')),
-            year: parseInt(moment().format('YYYY'))
-        };
+    self.getValue = function() {
+        var value = self.pickerInstance.get('select', self.initOptions.formatSubmit);
 
-        if (selected !== "") {
-            currentDate.day = parseInt(selected.substr(0, 2));
-            currentDate.month = parseInt(selected.substr(3, 2));
-            currentDate.year = parseInt(selected.substr(6, 4));
-        }
+        return value;
+    };
+    self.isValid = function() {
+        var formInstance = self.data.formInstance;
 
-        //console.log(picker);
-        // picker's month label
-        self.$('.picker__month-display').empty();
-        Blaze.renderWithData(Template.pickAdateMonthLabel, {month: currentDate.month}, self.$('.picker__month-display')[0]);
-        // picker's footer
-        self.$('.picker__footer').empty();
-        Blaze.render(Template.pickAdateFooter, self.$('.picker__footer')[0]);
-        // picker's day of the week label
-        self.$('.picker__weekday-display').empty();
-        Blaze.renderWithData(Template.pickAdateDayOfWeekLabel, {dayOfWeek: dayOfWeek}, self.$('.picker__weekday-display')[0]);
+        return Skeleform.validate.checkOptions(self.getValue(), self.data.schema, formInstance.data.schema, formInstance.data.item);
+    };
+});
 
-        // picker' select option labels
-        $.each(self.$('.picker__header').children('.picker__select--month').children('option'), function(index, option) {
-            $(option).html(Blaze.renderWithData(Template.pickAdateMonthFull, {monthNumber: index}, option));
-        });
+Template.skeleformDatePicker.onRendered(function() {
+    var self = this;
+    var data = self.data.item;
+    var schema = this.data.schema;
 
-        /*var monthsLabels = TAPi18n.__("monthsFull_labels").split(" ");
-        var daysOfWeekSingles = TAPi18n.__("weekDaysSingle_labels").split(" ");
-            daysOfWeekSingles.move(0, 6);
+    // activates validation on set
+    self.initOptions = {
+        monthsFull: TAPi18n.__("monthsFull_labels").split(' '),
+        monthsShort: TAPi18n.__('monthsShort_labels').split(' '),
+        weekdaysFull: TAPi18n.__('weekDaysFull_labels').split(' '),
+        weekdaysShort: TAPi18n.__('weekDaysShort_labels').split(' '),
+        weekdaysLetter: TAPi18n.__('weekDaysSingle_labels').split(' '),
+        today: TAPi18n.__('pickadateButtons_labels').split(' ')[0],
+        clear: TAPi18n.__('pickadateButtons_labels').split(' ')[1],
+        close: TAPi18n.__('pickadateButtons_labels').split(' ')[2],
+        labelMonthNext: TAPi18n.__('pickadateNav_next'),
+        labelMonthPrev: TAPi18n.__('pickadateNav_prev'),
+        labelMonthSelect: TAPi18n.__('monthSelect_label'),
+        labelYearSelect: TAPi18n.__('yearSelect_label'),
 
-        //months select
-        self.$('.picker__select--month').attr('title', TAPi18n.__("monthSelect_label"));
-        self.$('.picker__select--month').children('option').each(function(index, option) {
-            $(option).html(monthsLabels[index]);
-        });
+        onSet: function() {
+            var selected = self.pickerInstance.get('select', self.initOptions.formatSubmit);
 
-        //years select
-        self.$('.picker__select--year').attr('title', TAPi18n.__("yearSelect_label"));
-
-        //navigation
-        self.$('.picker__nav--prev').attr('title', TAPi18n.__("pickadateNav_prev"));
-        self.$('.picker__nav--next').attr('title', TAPi18n.__("pickadateNav_next"));
-
-        //days of the week table header
-        self.$('.picker__weekday').each(function(index, cell) {
-            $(cell).html(daysOfWeekSingles[index]);
-        });*/
-            
-    }
-    
-    function startDatePicker(self, item) {
-        var init = {
-            format: 'd mmmm yyyy',
-            formatSubmit: 'dd/mm/yyyy',
-            hiddenName: true,
-            firstDay: 1,
-            selectMonths: true,
-            selectYears: 10,
-            monthsFull: TAPi18n.__("monthsFull_labels").split(" "),
-            weekdaysShort: TAPi18n.__("weekDaysShort_labels").split(" "),
-            today: TAPi18n.__("pickadateButtons_labels").split(" ")[0],
-            clear: TAPi18n.__("pickadateButtons_labels").split(" ")[1],
-
-            onStart: function() {
-                self.pickerStarted.set(true);
-                setStartDate(schema, item, this);
-            },
-            onSet: function() {
-                var tmp = this;
-                changeSelects(tmp, self.$('.datepicker'));
+            if (self.data) {
+                skeleformValidateField(self);
             }
-        };
+        }
+    };
 
-        var $datepicker = self.$('.datepicker').pickadate(init);
-    }
+    var options = schema.pickerOptions;
 
-    function setStartDate(schema, item, picker) {
-        var startDate;
+    if (schema.pickerOptions) {
+        // format used to display
+        if (options.format) {
+            self.initOptions.format = options.format;
+        }
 
-        if (item && item[schema.name]) {
-            startDate = item[schema.name];
-            var currentDate = {};
+        // format used to submit
+        if (options.formatSubmit) {
+            self.initOptions.formatSubmit = options.formatSubmit;
+        }
 
-            currentDate.day = parseInt(startDate.substr(0, 2));
-            currentDate.month = parseInt(startDate.substr(3, 2));
-            currentDate.year = parseInt(startDate.substr(6, 4));
+        // years and months dropdowns
+        if (options.selectYears) {
+            self.initOptions.selectYears = options.selectYears;
+        }
+        if (options.selectMonths) {
+            self.initOptions.selectMonths = options.selectMonths;
+        }
 
-            picker.set('select', [currentDate.year, currentDate.month - 1, currentDate.day]);
-        }     
-        else if (schema.startDate && schema.startDate.year) {
-            startDate = schema.startDate;
+        // editable input box
+        if (options.editable) {
+            self.initOptions.editable = options.editable;
+        }
 
-            if (!startDate.day) startDate.day = 1;
-            if (!startDate.month) startDate.month = 1;
+        // first day of the week
+        if (options.firstDay) {
+            self.initOptions.firstDay = options.firstDay;
+        }
 
-            picker.set('select', [startDate.year, startDate.month - 1, startDate.day]);
+        // date limits
+        if (options.min) {
+            self.initOptions.min = options.min;
+        }
+        if (options.max) {
+            self.initOptions.max = options.max;
+        }
+
+        // disable dates
+        if (options.disable) {
+            self.initOptions.disable = options.disable;
         }
     }
-};
+    else {
+        // defaults
+        // format used to display
+        self.initOptions.format = 'd mmmm yyyy';
 
-
-// PICKADATE RUNTIME OVERRIDE LANGUAGE DEPENDANT LABELS
-// picker's month label
-Template.pickAdateMonthLabel.helpers({
-    getShortMonthName: function(number) {
-        var months = TAPi18n.__("monthsShort_labels").split(" ");
-
-        return months[number - 1];
+        // format used to submit
+        self.initOptions.formatSubmit = 'yyyymmdd';
     }
-});
 
-// picker's footer
-Template.pickAdateFooter.helpers({
-    buttonLabels: function(number) {
-        var labels = TAPi18n.__("pickadateButtons_labels").split(" ");
+    self.$('.datepicker').pickadate(self.initOptions);
+    self.pickerInstance = self.$('.datepicker').pickadate('picker');
 
-        return labels[number];
-    }
-});
+    var value = SkeleformStandardFieldValue(data, schema);
 
-// picker's day of the week label
-Template.pickAdateDayOfWeekLabel.helpers({
-    dayLabel: function(number) {
-        var days = TAPi18n.__("weekDaysFull_labels").split(" ");
-
-        return days[number];
-    }
-});
-
-// picker's month full labels
-Template.pickAdateMonthFull.helpers({
-    monthFull: function(number) {
-        var months = TAPi18n.__('monthsFull_labels').split(" ");
-
-        return months[number];
+    // if the value is already fetched, set it on the picker after plugin's initialization
+    if (value) {
+        self.pickerInstance.set('select', SkeleformStandardFieldValue(data, schema), {format: self.initOptions.formatSubmit});
     }
 });
