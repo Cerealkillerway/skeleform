@@ -85,6 +85,11 @@ Template.skeleformInput.events({
         if (schema.autoRange && value.length === schema.validation.max) {
             $(event.target).select();
         }
+
+        // if defined, perform the callback
+        if (schema.callbacks && schema.callbacks.onChange) {
+            schema.callbacks.onChange(value);
+        }
     },
     "keyup .shadowField": function(event, template) {
         var shadowId = '#' + $(event.target).attr('id');

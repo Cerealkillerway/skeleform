@@ -90,9 +90,10 @@ Template.skeleformEditor.onCreated(function() {
 });
 Template.skeleformEditor.onRendered(function() {
     var self = this;
-    var editor = this.$('.editor');
-    var toolbar = this.data.schema.toolbar;
-    var imageParams = this.data.schema.image;
+    var editor = self.$('.editor');
+    var schema = self.data.schema;
+    var toolbar = schema.toolbar;
+    var imageParams = self.data.schema.image;
 
     if ((toolbar === undefined)|| (editorToolbars[toolbar] === undefined)) toolbar = "default";
 
@@ -107,7 +108,14 @@ Template.skeleformEditor.onRendered(function() {
             self.$('.note-editor').addClass('validate');
         },
         onKeyup: function(event) {
+            var value = self.getValue();
+
             skeleformValidateField(self);
+
+            // if defined, perform the callback
+            if (schema.callbacks && schema.callbacks.onChange) {
+                schema.callbacks.onChange(value);
+            }
         }/*,
         onImageUpload: function(files) {
             var filesArray = [];

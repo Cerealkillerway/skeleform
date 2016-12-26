@@ -151,7 +151,16 @@ Template.skeleformSelect.onRendered(function() {
     });
 });
 Template.skeleformSelect.events({
-    "blur select": function(event, template) {
+    'blur select': function(event, template) {
         skeleformSuccessStatus('#' + template.data.schema.name);
+    },
+    'change select': function(event, template) {
+        var schema = template.data.schema;
+        var value = template.getValue();
+
+        // if defined, perform the callback
+        if (schema.callbacks && schema.callbacks.onChange) {
+            schema.callbacks.onChange(value);
+        }
     }
 });

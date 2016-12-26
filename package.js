@@ -22,7 +22,7 @@ Package.onUse(function(api) {
     api.use('tap:i18n@1.7.0');
     api.use('cerealkiller:materialnote@1.0.0', 'client');
     api.use('blaze-html-templates', 'client');
-    api.use('materialize:materialize@=0.97.7', 'client');
+    api.use('materialize:materialize@=0.97.7', 'client');  // force 0.97.7 since 0.97.8 is buggy
     api.use('cerealkiller:utils@1.0.0');
     // if skeletor is in use, load it before
     api.use('cerealkiller:skeletor@0.0.3', {weak: true});
@@ -44,6 +44,7 @@ Package.onUse(function(api) {
     api.addFiles('formComponents/templates/skeleformSelect.html', 'client');
     api.addFiles('formComponents/templates/skeleformStaticTitle.html', 'client');
     api.addFiles('formComponents/templates/skeleformCheckBox.html', 'client');
+    api.addFiles('formComponents/templates/skeleformTimePicker.html', 'client');
 
 
     // i18n
@@ -56,6 +57,7 @@ Package.onUse(function(api) {
     api.addFiles('lib/validate.js');
     api.addFiles('lib/editEvents.js', 'client');
     api.addFiles('lib/autoNumeric.js', 'client');
+    api.addFiles('lib/picker.time.js', 'client');
 
     api.addFiles('helpers/commonHelpers.js', 'client');
     api.addFiles('helpers/skeleformHelpers.js', 'client');
@@ -70,6 +72,7 @@ Package.onUse(function(api) {
     api.addFiles('formComponents/lib/skeleformSelect.js', 'client');
     api.addFiles('formComponents/lib/skeleformStaticTitle.js', 'client');
     api.addFiles('formComponents/lib/skeleformCheckBox.js', 'client');
+    api.addFiles('formComponents/lib/skeleformTimePicker.js', 'client');
 
     // assets
     api.addAssets('public/icons/ok.png', 'client');

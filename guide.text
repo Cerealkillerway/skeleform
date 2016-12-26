@@ -83,8 +83,6 @@ output: form element [input, editor, select]
 
     checkBox: renderAs   : type of boolean selector to display [string] ("checkbox", "switch"); default to "checkbox";
               labels     : [object] (optional) can contain 2 (optionals) keys (on, off) containing the two strings to be used as i18n strings for the respectives      switch states; if it's not provided, the default "yes_lbl" and "no_lbl" are used;
-              callbacks  : [object] (optional) dictionary of callbacks;
-                    -> onChange(value)  : [function] (optional) a callback to be performed when the value of the field changes; it receives the field's value as parameter;
 
     editor: toolbar -> specifies the toolbar to use (minimal, default, full) [string]
             image -> an object that defines parameters to be used while inserting images [object]:
@@ -110,8 +108,10 @@ output: form element [input, editor, select]
 
 COMMON OPTIONS FOR ALL KIND OF FIELDS:
 --------------------------------------
-i18n: specify that the field will be nested under "currentLang" object; (default true)
-size: materialize's grid system classes [string]; default to "s12 m6"
+i18n:        [boolean] (optional) specify that the field will be nested under "currentLang" object; (default true)
+size:        [string] (optional) materialize's grid system classes; default to "s12 m6"
+callbacks  : [object] (optional) dictionary of callbacks;
+      -> onChange(value)  : [function] (optional) a callback to be performed when the value of the field changes; it receives the field's value as parameter;
 
 validation: [object] set the validation rules:
     - type: validation match (string, number, email, url, date) [string]

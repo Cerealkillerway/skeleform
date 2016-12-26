@@ -5,19 +5,19 @@
 // pickaday api documentation: http://amsul.ca/pickadate.js/api/
 // implemented run-time override for reactivity in meteor.js (no hack in materialize' source files)
 
-Template.skeleformDatePicker.helpers(skeleformGeneralHelpers);
-Template.skeleformDatePicker.helpers({
+Template.skeleformTimePicker.helpers(skeleformGeneralHelpers);
+Template.skeleformTimePicker.helpers({
     fieldDate: function(data, schema) {
         var pickerInstance = Template.instance().pickerInstance;
 
-        // reactively set the value on the datepicker
+        // reactively set the value on the timepicker
         if (pickerInstance) {
             pickerInstance.set('select', SkeleformStandardFieldValue(data, schema), {format: Template.instance().initOptions.formatSubmit});
         }
     }
 });
 
-Template.skeleformDatePicker.onCreated(function() {
+Template.skeleformTimePicker.onCreated(function() {
     var self = this;
     var dataContext = self.data;
 
@@ -61,25 +61,13 @@ Template.skeleformDatePicker.onCreated(function() {
     };
 });
 
-Template.skeleformDatePicker.onRendered(function() {
+Template.skeleformTimePicker.onRendered(function() {
     var self = this;
     var data = self.data.item;
     var schema = this.data.schema;
 
     // activates validation on set
     self.initOptions = {
-        monthsFull: TAPi18n.__("monthsFull_labels").split(' '),
-        monthsShort: TAPi18n.__('monthsShort_labels').split(' '),
-        weekdaysFull: TAPi18n.__('weekDaysFull_labels').split(' '),
-        weekdaysShort: TAPi18n.__('weekDaysShort_labels').split(' '),
-        weekdaysLetter: TAPi18n.__('weekDaysSingle_labels').split(' '),
-        today: TAPi18n.__('pickadateButtons_labels').split(' ')[0],
-        clear: TAPi18n.__('pickadateButtons_labels').split(' ')[1],
-        close: TAPi18n.__('pickadateButtons_labels').split(' ')[2],
-        labelMonthNext: TAPi18n.__('pickadateNav_next'),
-        labelMonthPrev: TAPi18n.__('pickadateNav_prev'),
-        labelMonthSelect: TAPi18n.__('monthSelect_label'),
-        labelYearSelect: TAPi18n.__('yearSelect_label'),
 
         onSet: function() {
             var value = self.pickerInstance.get('select', self.initOptions.formatSubmit);
@@ -98,58 +86,14 @@ Template.skeleformDatePicker.onRendered(function() {
     var options = schema.pickerOptions;
 
     if (schema.pickerOptions) {
-        // format used to display
-        if (options.format) {
-            self.initOptions.format = options.format;
-        }
 
-        // format used to submit
-        if (options.formatSubmit) {
-            self.initOptions.formatSubmit = options.formatSubmit;
-        }
-
-        // years and months dropdowns
-        if (options.selectYears) {
-            self.initOptions.selectYears = options.selectYears;
-        }
-        if (options.selectMonths) {
-            self.initOptions.selectMonths = options.selectMonths;
-        }
-
-        // editable input box
-        if (options.editable) {
-            self.initOptions.editable = options.editable;
-        }
-
-        // first day of the week
-        if (options.firstDay) {
-            self.initOptions.firstDay = options.firstDay;
-        }
-
-        // date limits
-        if (options.min) {
-            self.initOptions.min = options.min;
-        }
-        if (options.max) {
-            self.initOptions.max = options.max;
-        }
-
-        // disable dates
-        if (options.disable) {
-            self.initOptions.disable = options.disable;
-        }
     }
     else {
-        // defaults
-        // format used to display
-        self.initOptions.format = 'd mmmm yyyy';
 
-        // format used to submit
-        self.initOptions.formatSubmit = 'yyyymmdd';
     }
 
-    self.$('.datepicker').pickadate(self.initOptions);
-    self.pickerInstance = self.$('.datepicker').pickadate('picker');
+    self.$('.timepicker').pickatime(self.initOptions);
+    self.pickerInstance = self.$('.timepicker').pickatime('picker');
 
     var value = SkeleformStandardFieldValue(data, schema);
 
