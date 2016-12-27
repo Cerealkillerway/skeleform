@@ -5,9 +5,9 @@
                 <i class="material-icons prefix timeIcon">{{schema.icon}}</i>
             {{/if}}
 
-            {{fieldDate item schema}}
+            {{fieldTime item schema}}
             <input type="date" id="{{field schema.name}}" class="skeleValidate gather timepicker">
-            <label for="{{field schema.name}}" class="active">{{label schema.name}}{{required}}</label>
+            <label for="{{field schema.name}}" class="skeleformAlwaysActiveLabel">{{label schema.name}}{{required}}</label>
 
             <p class="skeleformFieldAlert text-danger"></p>
         </div>

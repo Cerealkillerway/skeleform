@@ -23,6 +23,7 @@
     "email_validationDetail": "e-mail address",
     "url_validationDetail": "url (a-z, 0-9, -, _)",
     "date_validationDetail": "date",
+    "time_validationDetail": "time",
     "required_validationDetail": "required field",
     "float_validationDetail": "float number",
 

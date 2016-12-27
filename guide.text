@@ -1,45 +1,58 @@
-GUIDE
-================================
+ __                __         __                __         __                __         __                __         __                __
+|  \______________/  |       |  \______________/  |       |  \______________/  |       |  \______________/  |       |  \______________/  |
+ >  ______________  <         >  ______________  <         >  ______________  <         >  ______________  <         >  ______________  <
+|__/              \__|       |__/              \__|       |__/              \__|       |__/              \__|       |__/              \__|
 
-*********************************************
-***            VERY IMPORTANT             ***
-*********************************************
-*************************************************************************************************
-** In this version i18n fields MUST be on the top level (i18n nested fields are NOT supported) **
-*************************************************************************************************
+===================================================================
+===================================================================
+|||                                                             |||
+|||                      SKELEFORM GUIDE                        |||
+|||                                                             |||
+===================================================================
+===================================================================
+Skeleform is an advanced form creation tool that enables you to instantly create complex forms with different input types and validation.
+It is built on top of Skeletor and MaterializeCSS.
+If you have any problem using it, please have a look to the "troubleshooting" section at the bottom.
+
+===================================================================
+|||                     IMPORTANT NOTES                         |||
+===================================================================
+Please remember the followings:
+
+** In this version i18n fields MUST be on the top level (i18n nested fields are NOT supported);
 
 
-SCHEMA OPTIONS:
---------------------------------
-__collection: name of collection that is manipulated by this form [string]
-__toolbar: (optional)
-        template -> name of alternative template to use as a toolbar [string]
-        containerId -> id of DOM element to place the toolbar in [string] (optional/available only if
-                       "template"option is used)
-        extrasCreate -> template for extra buttons to be added to standard create toolbar [string]
-        extrasUpdate -> template for extra buttons to be added to standard update toolbar [string]
+===================================================================
+|||                      SCHEMA OPTIONS                         |||
+===================================================================
+__collection   -> [string] (required) name of collection that is manipulated by this form;
+__toolbar      -> [object] (optional)
+                    template      -> [string] (optional) name of alternative template to use as a toolbar;
+                    containerId   -> [string] (optional/available only if "template"option is used) id of DOM element to place the toolbar in;
+                    extrasCreate  -> [string] (optional) template for extra buttons to be added to standard create toolbar;
+                    extrasUpdate  -> [string] (optional) template for extra buttons to be added to standard update toolbar;
 
-__paths:
-    undoPath -> specify the path to be used for cancel button [string] (required)
-                the string is the path definition (can contain ":" params), and the object
-                is the params dictionary (NOT optional, pass empty object if no params are needed);
-                the string 'this' used as a value in params object means that the value must be taken
-                from skeleform's gathered data object.
-                For itemLang param, the value 'auto' means that it is taken from the current route's URL;
-    redirectOnCreate -> specify the path to be used as a redirect after a succesful create [string, Object]
-                        the string is the path definition (can contain ":" params), and the object
-                        is the params dictionary (NOT optional, pass empty object if no params are needed);
-                        the string 'this' used as a value in params object means that the value must be taken
-                        from skeleform's gathered data object.
-                        For itemLang param, the value 'auto' means that it is taken from the current route's URL;
-                        (default behaviour: clean the form and be ready for a new document)
-    redirectOnUpdate -> specify the path to be used as a redirect after a succesful update [string, Object]
-                        the string is the path definition (can contain ":" params), and the object
-                        is the params dictionary (NOT optional, pass empty object if no params are needed);
-                        the string 'this' used as a value in params object means that the value must be taken
-                        from skeleform's gathered data object.
-                        For itemLang param, the value 'auto' means that it is taken from the current route's URL;
-                        (default behaviour: stay on the same page)
+__paths        -> [object] (optional) dictionary of paths to be used in different situations:
+                    undoPath          -> [string, object] (required) specify the path to be used for cancel button;
+                                         the string is the path definition (can contain ":" params), and the object
+                                         is the params dictionary (NOT optional, pass empty object if no params are needed);
+                                         the string 'this' used as a value in params object means that the value must be taken
+                                         from skeleform's gathered data object.
+                                         For itemLang param, the value 'auto' means that it is taken from the current route's URL;
+                    redirectOnCreate  -> [string, object] (optional) specify the path to be used as a redirect after a succesful create;
+                                         the string is the path definition (can contain ":" params), and the object
+                                         is the params dictionary (NOT optional, pass empty object if no params are needed);
+                                         the string 'this' used as a value in params object means that the value must be taken
+                                         from skeleform's gathered data object.
+                                         For itemLang param, the value 'auto' means that it is taken from the current route's URL;
+                                         (default behaviour: clean the form and be ready for a new document)
+                    redirectOnUpdate  -> [string, Object] (optional) specify the path to be used as a redirect after a succesful update;
+                                         the string is the path definition (can contain ":" params), and the object
+                                         is the params dictionary (NOT optional, pass empty object if no params are needed);
+                                         the string 'this' used as a value in params object means that the value must be taken
+                                         from skeleform's gathered data object.
+                                         For itemLang param, the value 'auto' means that it is taken from the current route's URL;
+                                         (default behaviour: stay on the same page)
 __options:
     loadingModal -> if true use a loading modal while performing skeleform operations [boolean]
     tracked -> if true save to each document data about user and timestamp of creation and last update [boolean]
@@ -60,73 +73,100 @@ __listView: (optional) skelelist options
 
 fields: [Array of Objects] each object in this array represents a field that can have the following properties:
 
-SCHEMA FIELDS OPTIONS
---------------------------------
+
+===================================================================
+|||                  SCHEMA FIELDS OPTIONS                      |||
+===================================================================
 __listView -> (optional) options for the field in the list view
            -> stripHTML [boolean] set to true to strip out HTML from the value (default false)
            -> truncate [integer] number of characters to keep (default all)
 
-name: [String] the name of the field (must be an unique identifier)
-output: form element [input, editor, select]
+Required fields:
+----------------
+name    -> [String] (required) the name of the field (MUST be an UNIQUE identifier)
+output  -> [String] (required) form element ["input", "editor", "select"]
 
     Field specific options:
     ------------------------------
     staticTitle: mini -> [boolean] use <h3> tag instead of <h4>
 
-    input: icon          : materialize's icon class [string];
-           renderAs      : type of input field to render [string] (password, text); default to "text";
-                           when using the "password" option, the field is not gathered for submit if left empty;
-                           IMPORTANT: when using "password" option don't set max length, since the value is hashed with sha256 (becomes longer);
-           shadowConfirm : [boolean] activates a re-type input field that invalidates if its value is not equal (ex.: to be used with renderAs:            "password");
-           formatAs      : specific format to use for the field's data [string] (currency, float, undefined); default to undefined
-           autoRange     : [boolean] autoselect inner text when reached the max length defined for this field (default false);
 
-    checkBox: renderAs   : type of boolean selector to display [string] ("checkbox", "switch"); default to "checkbox";
-              labels     : [object] (optional) can contain 2 (optionals) keys (on, off) containing the two strings to be used as i18n strings for the respectives      switch states; if it's not provided, the default "yes_lbl" and "no_lbl" are used;
+    input: icon          -> [string] (optional) materialize's icon class;
+           renderAs      -> [string] (optional) type of input field to render (password, text); default to "text";
+                            when using the "password" option, the field is not gathered for submit if left empty;
+                            IMPORTANT: when using "password" option don't set max length, since the value is hashed with sha256 (becomes longer);
+           shadowConfirm -> [boolean] (optional) activates a re-type input field that invalidates if its value is not equal;
+                            (ex.: to be used with renderAs: "password"); default to false;
+           formatAs      -> [string] (optional) specific format to use for the field's data (currency, float, undefined); default to undefined;
+           autoRange     -> [boolean] (optional) autoselect inner text when reached the max length defined for this field (default false);
+           charCounter   -> [number] (optional) enables the materializeCSS's character counter plugin;
+                            Important: the character counter does not set the "maxlength" property on the input (this is done by using validation -> max);
 
-    editor: toolbar -> specifies the toolbar to use (minimal, default, full) [string]
-            image -> an object that defines parameters to be used while inserting images [object]:
-                    -> quality [float 0 ~ 1] the quality of jpeg created
-                    -> width [integer]
-                    -> height [integer]
-            video -> an object that defines parameters to be used while embeeding videos [object]:
-                    -> width [integer]
-                    -> height [integer]
 
-    select: source -> data source for options; must be an array of objects with name and value fields (and optionally icon) [array]
-            icons -> used to assign "icons" class for icons on options dropdown [boolean]
-            allowBlank -> allow select none (default undefined option is created automatically) [boolean]
+    checkBox: renderAs   -> [string] (optional) type of boolean selector to display ("checkbox", "switch"); default to "checkbox";
+              labels     -> [object] (optional) can contain 2 (optionals) keys (on, off) containing the two strings to be used as i18n strings
+                            for the respectives switch states; if it's not provided, the default "yes_lbl" and "no_lbl" are used;
+
+
+    editor: toolbar  -> [string] (optional) specifies the toolbar to use ("minimal", "default", "full");
+            image    -> [object] (optional) an object that defines parameters to be used while inserting images:
+                            quality -> [float 0 ~ 1] the quality of jpeg created;
+                            width   -> [integer];
+                            height  -> [integer];
+            video    -> [object] (optional) an object that defines parameters to be used while embeeding videos:
+                            width   -> [integer];
+                            height  -> [integer];
+
+
+    select: source      -> [array] (required) data source for options; must be an array of objects with name and value fields (and optionally icon);
+            icons       -> [boolean] (optional) used to assign "icons" class for icons on options dropdown;
+            allowBlank  -> [boolean] (optional) allow select none (default undefined option is created automatically);
+
 
     imageUpload: can have options (image, thumb) that decides what will be created and uploaded [object]; both are objects with these properties:
-                        -> quality [float 0 ~ 1] the quality of jpeg created
+                        -> [float 0 ~ 1] the quality of jpeg created
                         -> width [integer]
                         -> height [integer]
 
-    datePicker: icon -> materialize's icon class [string]
-                pickerOptions -> (optional) dictionary of init options to override when starting the pickadate plugin (more info at http://amsul.ca/pickadate.js/date/)
+
+    datePicker: icon           -> [string] (optional) materialize's icon class;
+                pickerOptions  -> [object] (optional) dictionary of init options to override when starting the pickadate plugin
+                                  (more info at http://amsul.ca/pickadate.js/date/);
+
+
+    timePicker: icon           -> [string] (optional) materialize's icon class;
+                pickerOptions  -> [object] (optional) dictionary of init options to override when starting the pickatime plugin;
+                                  (more info at http://amsul.ca/pickadate.js/time);
+
 
 
 COMMON OPTIONS FOR ALL KIND OF FIELDS:
 --------------------------------------
-i18n:        [boolean] (optional) specify that the field will be nested under "currentLang" object; (default true)
-size:        [string] (optional) materialize's grid system classes; default to "s12 m6"
-callbacks  : [object] (optional) dictionary of callbacks;
-      -> onChange(value)  : [function] (optional) a callback to be performed when the value of the field changes; it receives the field's value as parameter;
+i18n        -> [boolean] (optional) specify that the field will be nested under "currentLang" object; (default true);
+size        -> [string] (optional) materialize's grid system classes; default to "s12 m6";
+callbacks   -> [object] (optional) dictionary of callbacks;
+                -> onChange(value)  : [function] (optional) a callback to be performed when the value of the field changes;
+                   it receives the field's value as parameter;
 
-validation: [object] set the validation rules:
-    - type: validation match (string, number, email, url, date) [string]
-            --> setting the validation type to "date" implies that the field is required
-    - min: optional minimun length [number]; if the value returned by the field is an object, this parameter is referred to the number of its properties
-           setting min to 1 on a boolean field (ex. checkbox) is interpreted as "field required"; any other value is ignored for those kind of fields.
-    - max: optional maximum length [number]; if the value returned by the field is an object, this parameter is referred to the number of its properties
-           on input fields this will automatically set the maxLength property on the html <input> tag
-    - unique: specifies that field's value should be unique [true]
+validation  -> [object] set the validation rules:
+                -> type: [string] (optional) validation match ("string", "number", "email", "url", "date", "time");
+                   Important: "date" and "time" are validated against the plugin's "formatSubmit";
+                -> min: [number] (optional) minimun length; if the value returned by the field is an object, this parameter is referred to
+                   the number of its properties;
+                   setting min to 1 on a boolean field (ex. checkbox) is interpreted as "field required";
+                   any other value is ignored for those kind of fields;
+                -> max: [number] (optional) maximum length; if the value returned by the field is an object, this parameter is referred to
+                   the number of its properties;
+                   on input fields this will automatically set the "maxLength" property on the html <input> tag;
+                -> unique: [boolean] (optional) specifies that field's value should be unique;
 
-style: wrapper css class for custom styling of the field [string]
+style  -> [string] (optional) wrapper css class for custom styling of the field;
 
 
-validation
-----------------------------
+
+===================================================================
+|||                     ABOUT VALIDATION                        |||
+===================================================================
 Every field should implement the methods "getValue()" and "isValid()";
 The method isValid should perform the field's validation when required and return a "result" object with this form:
     result {
@@ -135,3 +175,23 @@ The method isValid should perform the field's validation when required and retur
     }
 CUSTOM INVALID MESSAGE
 If it's necessary to use a custom invalid message it is possible to add the field "invalidMessages" to the "result" object; "invalidMessages" [object] should be a dictionary of custom i18n strings to use for each validation type.
+
+
+
+
+
+
+
+===================================================================
+|||                      TROUBLESHOOTING                        |||
+===================================================================
+Experimenting errors in your form? Try the followings:
+
+- double check that every field has a different "name" property; different fields with the same name can lead to errors and anyway your data will be incomplete in this case.
+
+- contact the project's master ;)
+
+ __                __         __                __         __                __         __                __         __                __
+|  \______________/  |       |  \______________/  |       |  \______________/  |       |  \______________/  |       |  \______________/  |
+ >  ______________  <         >  ______________  <         >  ______________  <         >  ______________  <         >  ______________  <
+|__/              \__|       |__/              \__|       |__/              \__|       |__/              \__|       |__/              \__|

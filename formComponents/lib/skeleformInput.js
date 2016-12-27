@@ -39,12 +39,14 @@ Template.skeleformInput.onCreated(function() {
     };
 });
 Template.skeleformInput.onRendered(function() {
-    var schema = this.data.schema;
+    var self = this;
+    var schema = self.data.schema;
     var id = schema.name;
 
+    // handle formats
     switch (schema.formatAs) {
         case 'currency':
-            $('#' + id).autoNumeric('init', {
+            self.$('#' + id).autoNumeric('init', {
                 aSep: ' ',
                 aDec: ',',
                 altDec: '.',
@@ -60,7 +62,7 @@ Template.skeleformInput.onRendered(function() {
             break;
 
         case 'float':
-            $('#' + id).autoNumeric('init', {
+            self.$('#' + id).autoNumeric('init', {
                 aSep: ' ',
                 aDec: ',',
                 altDec: '.',
@@ -71,6 +73,11 @@ Template.skeleformInput.onRendered(function() {
 
         default:
             break;
+    }
+
+    // if necessary enable character counter
+    if (schema.charCounter) {
+        self.$('#' + id).characterCounter();
     }
 });
 

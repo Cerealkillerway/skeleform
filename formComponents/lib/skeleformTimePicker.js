@@ -7,13 +7,16 @@
 
 Template.skeleformTimePicker.helpers(skeleformGeneralHelpers);
 Template.skeleformTimePicker.helpers({
-    fieldDate: function(data, schema) {
+    fieldTime: function(data, schema) {
         var pickerInstance = Template.instance().pickerInstance;
+        var value = SkeleformStandardFieldValue(data, schema);
 
         // reactively set the value on the timepicker
         if (pickerInstance) {
-            pickerInstance.set('select', SkeleformStandardFieldValue(data, schema), {format: Template.instance().initOptions.formatSubmit});
+            pickerInstance.set('select', value, {format: Template.instance().initOptions.formatSubmit});
         }
+
+        InvokeCallback(value, schema, 'onChange');
     }
 });
 
@@ -30,18 +33,7 @@ Template.skeleformTimePicker.onCreated(function() {
         var todayLbl = TAPi18n.__("pickadateButtons_labels").split(" ")[0]; //register language dependency
 
         if (self.pickerInstance) {
-            self.pickerInstance.component.settings.monthsFull = TAPi18n.__('monthsFull_labels').split(' ');
-            self.pickerInstance.component.settings.monthsShort = TAPi18n.__('monthsShort_labels').split(' ');
-            self.pickerInstance.component.settings.weekdaysFull = TAPi18n.__('weekDaysFull_labels').split(' ');
-            self.pickerInstance.component.settings.weekdaysShort = TAPi18n.__('weekDaysShort_labels').split(' ');
-            self.pickerInstance.component.settings.weekdaysLetter = TAPi18n.__('weekDaysSingle_labels').split(' ');
-            self.pickerInstance.component.settings.today = TAPi18n.__('pickadateButtons_labels').split(' ')[0];
             self.pickerInstance.component.settings.clear = TAPi18n.__('pickadateButtons_labels').split(' ')[1];
-            self.pickerInstance.component.settings.close = TAPi18n.__('pickadateButtons_labels').split(' ')[2];
-            self.pickerInstance.component.settings.labelMonthNext = TAPi18n.__('pickadateNav_next');
-            self.pickerInstance.component.settings.labelMonthPrev = TAPi18n.__('pickadateNav_prev');
-            self.pickerInstance.component.settings.labelMonthSelect = TAPi18n.__('monthSelect_label');
-            self.pickerInstance.component.settings.labelYearSelect = TAPi18n.__('yearSelect_label');
 
             self.pickerInstance.render();
             // set again the value to translate also in the input box
@@ -69,36 +61,89 @@ Template.skeleformTimePicker.onRendered(function() {
     // activates validation on set
     self.initOptions = {
 
-        onSet: function() {
-            var value = self.pickerInstance.get('select', self.initOptions.formatSubmit);
+        onSet: function(context) {
+            var value = self.getValue();
 
             if (self.data) {
                 skeleformValidateField(self);
             }
 
-            // if defined, perform the callback
-            if (schema.callbacks && schema.callbacks.onChange) {
-                schema.callbacks.onChange(value);
+            InvokeCallback(value, schema, 'onChange');
+
+            // workaround for "closeOnSelect" option ignored by materializeCSS
+            if (self.initOptions.closeOnSelect === undefined || self.initOptions.closeOnSelect === true) {
+                //prevent closing on selecting month/year
+                this.close();
             }
         }
     };
 
     var options = schema.pickerOptions;
 
-    if (schema.pickerOptions) {
-
+    // format used to display
+    if (options && options.format) {
+        self.initOptions.format = options.format;
     }
     else {
+        self.initOptions.format = 'H:i';
+    }
 
+    // format used for the labels in the picker
+    if (options && options.formatLabel) {
+        self.initOptions.formatLabel = options.formatLabel;
+    }
+    else {
+        self.initOptions.formatLabel = ' <b>H</b> : i';
+    }
+
+    // format used for the value to be submitted
+    if (options && options.formatSubmit) {
+        self.initOptions.formatSubmit = options.formatSubmit;
+    }
+    else {
+        self.initOptions.formatSubmit = 'HHi';
+    }
+
+    if (options) {
+        // editable input box
+        if (options.editable !== undefined) {
+            self.initOptions.editable = options.editable;
+        }
+
+        // minutes between each value in the list
+        if (options.interval !== undefined) {
+            self.initOptions.interval = options.interval;
+        }
+
+        // time limits
+        if (options.min !== undefined) {
+            self.initOptions.min = options.min;
+        }
+        if (options.max !== undefined) {
+            self.initOptions.max = options.max;
+        }
+
+        // disable times
+        if (options.disable !== undefined) {
+            self.initOptions.disable = options.disable;
+        }
+
+        // close on user actions
+        if (options.closeOnSelect !== undefined) {
+            // actually ignored (materializeCSS customization to match google datepicker behavior)
+            self.initOptions.closeOnSelect = options.closeOnSelect;
+        }
+        if (options.closeOnClear !== undefined) {
+            self.initOptions.closeOnClear = options.closeOnClear;
+        }
     }
 
     self.$('.timepicker').pickatime(self.initOptions);
     self.pickerInstance = self.$('.timepicker').pickatime('picker');
 
-    var value = SkeleformStandardFieldValue(data, schema);
+    FlowRouter.subsReady(function() {
+        var value = self.getValue();
 
-    // if the value is already fetched, set it on the picker after plugin's initialization
-    if (value) {
-        self.pickerInstance.set('select', SkeleformStandardFieldValue(data, schema), {format: self.initOptions.formatSubmit});
-    }
+        InvokeCallback(value, schema, 'onChange');
+    });
 });

@@ -4,11 +4,11 @@
 SkeleformStandardFieldValue = function(data, schema) {
     var name = schema.name;
 
-    if (!data) return;
+    if (data === undefined) return;
 
     if (schema.i18n === undefined) {
         data = data[FlowRouter.getParam('itemLang') + '---' + name];
-        if (!data) return;
+        if (data === undefined) return;
     }
     else {
         name.split('.').forEach(function(nameShard, index) {
@@ -21,6 +21,16 @@ SkeleformStandardFieldValue = function(data, schema) {
         $('#' + schema.name).next('label').addClass('active');
     }
     return data;
+};
+
+InvokeCallback = function(value, schema, type) {
+    switch (type) {
+        case 'onChange':
+        // if defined, perform the callback
+        if (schema.callbacks && schema.callbacks.onChange) {
+            schema.callbacks.onChange(value);
+        }
+    }
 };
 
 

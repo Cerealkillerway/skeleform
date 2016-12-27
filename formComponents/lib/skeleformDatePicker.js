@@ -9,11 +9,14 @@ Template.skeleformDatePicker.helpers(skeleformGeneralHelpers);
 Template.skeleformDatePicker.helpers({
     fieldDate: function(data, schema) {
         var pickerInstance = Template.instance().pickerInstance;
+        var value = SkeleformStandardFieldValue(data, schema);
 
         // reactively set the value on the datepicker
         if (pickerInstance) {
-            pickerInstance.set('select', SkeleformStandardFieldValue(data, schema), {format: Template.instance().initOptions.formatSubmit});
+            pickerInstance.set('select', value, {format: Template.instance().initOptions.formatSubmit});
         }
+
+        InvokeCallback(value, schema, 'onChange');
     }
 });
 
@@ -81,80 +84,91 @@ Template.skeleformDatePicker.onRendered(function() {
         labelMonthSelect: TAPi18n.__('monthSelect_label'),
         labelYearSelect: TAPi18n.__('yearSelect_label'),
 
-        onSet: function() {
-            var value = self.pickerInstance.get('select', self.initOptions.formatSubmit);
+        onSet: function(context) {
+            var value = self.getValue();
 
             if (self.data) {
                 skeleformValidateField(self);
             }
 
-            // if defined, perform the callback
-            if (schema.callbacks && schema.callbacks.onChange) {
-                schema.callbacks.onChange(value);
+            InvokeCallback(value, schema, 'onChange');
+
+            // workaround for "closeOnSelect" option ignored by materializeCSS
+            if (self.initOptions.closeOnSelect === undefined || self.initOptions.closeOnSelect === true) {
+                //prevent closing on selecting month/year
+                if ('select' in context) {
+                    this.close();
+                }
             }
         }
     };
 
     var options = schema.pickerOptions;
 
-    if (schema.pickerOptions) {
-        // format used to display
-        if (options.format) {
-            self.initOptions.format = options.format;
-        }
+    // format used to display
+    if (options && options.format) {
+        self.initOptions.format = options.format;
+    }
+    else {
+        self.initOptions.format = 'd mmmm yyyy';
+    }
 
-        // format used to submit
-        if (options.formatSubmit) {
-            self.initOptions.formatSubmit = options.formatSubmit;
-        }
+    // format used to submit
+    if (options && options.formatSubmit) {
+        self.initOptions.formatSubmit = options.formatSubmit;
+    }
+    else {
+        self.initOptions.formatSubmit = 'yyyymmdd';
+    }
 
+    if (options) {
         // years and months dropdowns
-        if (options.selectYears) {
+        if (options.selectYears !== undefined) {
             self.initOptions.selectYears = options.selectYears;
         }
-        if (options.selectMonths) {
+        if (options.selectMonths !== undefined) {
             self.initOptions.selectMonths = options.selectMonths;
         }
 
         // editable input box
-        if (options.editable) {
+        if (options.editable !== undefined) {
             self.initOptions.editable = options.editable;
         }
 
         // first day of the week
-        if (options.firstDay) {
+        if (options.firstDay !== undefined) {
             self.initOptions.firstDay = options.firstDay;
         }
 
         // date limits
-        if (options.min) {
+        if (options.min !== undefined) {
             self.initOptions.min = options.min;
         }
-        if (options.max) {
+        if (options.max !== undefined) {
             self.initOptions.max = options.max;
         }
 
         // disable dates
-        if (options.disable) {
+        if (options.disable !== undefined) {
             self.initOptions.disable = options.disable;
         }
-    }
-    else {
-        // defaults
-        // format used to display
-        self.initOptions.format = 'd mmmm yyyy';
 
-        // format used to submit
-        self.initOptions.formatSubmit = 'yyyymmdd';
+        // close on user actions
+        if (options.closeOnSelect !== undefined) {
+            // actually ignored (materializeCSS customization to match google datepicker behavior
+            self.initOptions.closeOnSelect = options.closeOnSelect;
+        }
+        if (options.closeOnClear !== undefined) {
+            self.initOptions.closeOnClear = options.closeOnClear;
+        }
     }
 
     self.$('.datepicker').pickadate(self.initOptions);
     self.pickerInstance = self.$('.datepicker').pickadate('picker');
 
-    var value = SkeleformStandardFieldValue(data, schema);
+    FlowRouter.subsReady(function() {
+        var value = self.getValue();
 
-    // if the value is already fetched, set it on the picker after plugin's initialization
-    if (value) {
-        self.pickerInstance.set('select', SkeleformStandardFieldValue(data, schema), {format: self.initOptions.formatSubmit});
-    }
+        InvokeCallback(value, schema, 'onChange');
+    });
 });

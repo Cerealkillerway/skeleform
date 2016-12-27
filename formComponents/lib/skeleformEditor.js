@@ -48,24 +48,14 @@ editorToolbars = {
 Template.skeleformEditor.helpers(skeleformGeneralHelpers);
 Template.skeleformEditor.helpers({
     fieldEditor: function(data, schema) {
-        if (!data) {
-            return false;
-        }
-        if (Session.get('formRendered')) {
-            if (schema.i18n === undefined) {
-                var currentLang = FlowRouter.getParam("itemLang");
-                var langField = data[currentLang + '---' + schema.name];
+        var value = SkeleformStandardFieldValue(data, schema);
 
-                if (!langField) {
-                    $('#' + schema.name).code('');
-                }
-                else {
-                    $('#' + schema.name).code(langField);
-                }
+        if (Session.get('formRendered')) {
+            if (value !== undefined) {
+                $('#' + schema.name).code(value);
             }
-            else {
-                $('#' + schema.name).code(data[schema.name]);
-            }
+
+            InvokeCallback(value, schema, 'onChange');
         }
     }
 });
@@ -112,10 +102,7 @@ Template.skeleformEditor.onRendered(function() {
 
             skeleformValidateField(self);
 
-            // if defined, perform the callback
-            if (schema.callbacks && schema.callbacks.onChange) {
-                schema.callbacks.onChange(value);
-            }
+            InvokeCallback(value, schema, 'onChange');
         }/*,
         onImageUpload: function(files) {
             var filesArray = [];
@@ -167,5 +154,11 @@ Template.skeleformEditor.onRendered(function() {
                 reader.readAsDataURL(file);
             });
         }*/
+    });
+
+    var value = self.getValue();
+    
+    FlowRouter.subsReady(function() {
+        InvokeCallback(value, schema, 'onChange');
     });
 });

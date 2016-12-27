@@ -9,6 +9,8 @@ Template.skeleformCheckBox.helpers({
     fieldValue: function(data, schema) {
         var value = SkeleformStandardFieldValue(data, schema);
 
+        InvokeCallback(value, schema, 'onChange');
+
         if (value) {
             return 'checked';
         }
@@ -75,16 +77,23 @@ Template.skeleformCheckBox.onCreated(function() {
     };
 });
 
+Template.skeleformCheckBox.onRendered(function() {
+    var self = this;
+    var value = self.getValue();
+    var schema = self.data.schema;
+
+    FlowRouter.subsReady(function() {
+        InvokeCallback(value, schema, 'onChange');
+    });
+});
+
 Template.skeleformCheckBox.events({
     "change .skeleValidate": function(event, template) {
-        var value = $(event.target).prop('checked');
+        var value = template.getValue();
         var schema = template.data.schema;
 
         skeleformValidateField(template);
 
-        // if defined, perform the callback
-        if (schema.callbacks && schema.callbacks.onChange) {
-            schema.callbacks.onChange(value);
-        }
+        InvokeCallback(value, schema, 'onChange');
     },
 });
