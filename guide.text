@@ -138,6 +138,10 @@ output  -> [String] (required) form element ["input", "editor", "select"]
                 pickerOptions  -> [object] (optional) dictionary of init options to override when starting the pickatime plugin;
                                   (more info at http://amsul.ca/pickadate.js/time);
 
+    clockPicker: icon           -> [string] (optional) materialize's icon class;
+                 pickerOptions  -> [object] (optional) dictionary of init options to override when starting the clockpicker plugin;
+                                   (more info at https://github.com/weareoutman/clockpicker and https://github.com/chingyawhao/materialize-clockpicker);
+
 
 
 COMMON OPTIONS FOR ALL KIND OF FIELDS:
@@ -173,6 +177,7 @@ The method isValid should perform the field's validation when required and retur
         valid: [boolean] if the field's current value is valid or not
         reasons: [array of strings] a set of strings describing the validity checks failed (should match the name of validation types)
     }
+    
 CUSTOM INVALID MESSAGE
 If it's necessary to use a custom invalid message it is possible to add the field "invalidMessages" to the "result" object; "invalidMessages" [object] should be a dictionary of custom i18n strings to use for each validation type.
 

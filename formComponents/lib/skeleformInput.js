@@ -82,7 +82,7 @@ Template.skeleformInput.onRendered(function() {
 });
 
 Template.skeleformInput.events({
-    "keyup .skeleValidate": function(event, template) {
+    'keyup .skeleValidate': function(event, template) {
         var value = $(event.target).val();
         var schema = template.data.schema;
 
@@ -98,7 +98,7 @@ Template.skeleformInput.events({
             schema.callbacks.onChange(value);
         }
     },
-    "keyup .shadowField": function(event, template) {
+    'keyup .shadowField': function(event, template) {
         var shadowId = '#' + $(event.target).attr('id');
         var id = shadowId.substring(0, shadowId.indexOf('ShadowConfirm'));
 

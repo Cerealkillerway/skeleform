@@ -1,0 +1,15 @@
+<template name="skeleformClockPicker">
+    <div class="row">
+        <div class="input-field col {{fieldSize schema.size}} {{schema.style}}">
+            {{#if schema.icon}}
+                <i class="material-icons prefix timeIcon">{{schema.icon}}</i>
+            {{/if}}
+
+            {{fieldClock item schema}}
+            <input type="time" id="{{field schema.name}}" class="skeleValidate gather clockpicker" >
+            <label for="{{field schema.name}}" class="skeleformAlwaysActiveLabel">{{label schema.name}}{{required}}</label>
+
+            <p class="skeleformFieldAlert text-danger"></p>
+        </div>
+    </div>
+</template>

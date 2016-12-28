@@ -1,15 +1,15 @@
-// DATE PICKER
-// an input field with calendar plugin
-// it uses materialize's version of pickaday plugin for more informations: http://materializecss.com/forms.html
-// pickaday parameters documentantion: http://amsul.ca/pickadate.js/date/
-// pickaday api documentation: http://amsul.ca/pickadate.js/api/
-// implemented run-time override for reactivity in meteor.js (no hack in materialize' source files)
+// TIME PICKER
+// an input field with time plugin
+// pickatime parameters documentantion: http://amsul.ca/pickadate.js/time/
+// pickatime api documentation: http://amsul.ca/pickadate.js/api/
 
 Template.skeleformTimePicker.helpers(skeleformGeneralHelpers);
 Template.skeleformTimePicker.helpers({
     fieldTime: function(data, schema) {
         var pickerInstance = Template.instance().pickerInstance;
         var value = SkeleformStandardFieldValue(data, schema);
+
+        if (!value) return;
 
         // reactively set the value on the timepicker
         if (pickerInstance) {
@@ -30,14 +30,18 @@ Template.skeleformTimePicker.onCreated(function() {
     dataContext.formInstance.Fields.push(self);
 
     Tracker.autorun(function() {
-        var todayLbl = TAPi18n.__("pickadateButtons_labels").split(" ")[0]; //register language dependency
+        // register language dependency
+        var todayLbl = TAPi18n.__("pickadateButtons_labels").split(" ")[0];
+        var value = SkeleformStandardFieldValue(self.data.item, self.data.schema);
+
+        if (!value) return;
 
         if (self.pickerInstance) {
             self.pickerInstance.component.settings.clear = TAPi18n.__('pickadateButtons_labels').split(' ')[1];
 
             self.pickerInstance.render();
             // set again the value to translate also in the input box
-            self.pickerInstance.set('select', SkeleformStandardFieldValue(self.data.item, self.data.schema), {format: self.initOptions.formatSubmit});
+            self.pickerInstance.set('select', value, {format: self.initOptions.formatSubmit});
         }
     });
 

@@ -32,6 +32,7 @@ Package.onUse(function(api) {
 
     // styles
     api.addFiles('styles/skeleform.scss', 'client');
+    api.addFiles('styles/_clockpicker.primary.scss', 'client');
 
 
     // templates
@@ -45,6 +46,7 @@ Package.onUse(function(api) {
     api.addFiles('formComponents/templates/skeleformStaticTitle.html', 'client');
     api.addFiles('formComponents/templates/skeleformCheckBox.html', 'client');
     api.addFiles('formComponents/templates/skeleformTimePicker.html', 'client');
+    api.addFiles('formComponents/templates/skeleformClockPicker.html', 'client');
 
 
     // i18n
@@ -57,6 +59,8 @@ Package.onUse(function(api) {
     api.addFiles('lib/validate.js');
     api.addFiles('lib/editEvents.js', 'client');
     api.addFiles('lib/autoNumeric.js', 'client');
+    api.addFiles('lib/materialize.clockpicker.js', 'client');
+    api.addFiles('lib/timepickersConflictResolver.js', 'client');
     api.addFiles('lib/picker.time.js', 'client');
 
     api.addFiles('helpers/commonHelpers.js', 'client');
@@ -73,6 +77,7 @@ Package.onUse(function(api) {
     api.addFiles('formComponents/lib/skeleformStaticTitle.js', 'client');
     api.addFiles('formComponents/lib/skeleformCheckBox.js', 'client');
     api.addFiles('formComponents/lib/skeleformTimePicker.js', 'client');
+    api.addFiles('formComponents/lib/skeleformClockPicker.js', 'client');
 
     // assets
     api.addAssets('public/icons/ok.png', 'client');

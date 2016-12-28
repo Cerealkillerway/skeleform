@@ -3,7 +3,6 @@
 // it uses materialize's version of pickaday plugin for more informations: http://materializecss.com/forms.html
 // pickaday parameters documentantion: http://amsul.ca/pickadate.js/date/
 // pickaday api documentation: http://amsul.ca/pickadate.js/api/
-// implemented run-time override for reactivity in meteor.js (no hack in materialize' source files)
 
 Template.skeleformDatePicker.helpers(skeleformGeneralHelpers);
 Template.skeleformDatePicker.helpers({
