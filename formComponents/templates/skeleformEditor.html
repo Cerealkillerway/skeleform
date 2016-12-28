@@ -1,17 +1,15 @@
 <template name="skeleformEditor">
-	<div class="row">
-        <div class="input-field col {{fieldSize schema.size}} {{schema.style}}">
+    <div class="input-field col {{fieldSize schema.size}} {{schema.style}}">
 
-            <div class="editorDialogs">
-            	{{> ckImageUploader schema}}
-            	{{> ckVideoEmbeeder schema}}
-            </div>
-
-            {{fieldEditor item schema}}
-            <div class="editor skeleValidate gather" id="{{field schema.name}}"></div>
-            <label for="{{field schema.name}}" class="active">{{label schema.name}}{{required}}</label>
-
-            <p class="skeleformFieldAlert"></p>
+        <div class="editorDialogs">
+        	{{> ckImageUploader schema}}
+        	{{> ckVideoEmbeeder schema}}
         </div>
+
+        {{fieldEditor item schema}}
+        <div class="editor skeleValidate gather" id="{{field schema.name}}"></div>
+        <label for="{{field schema.name}}" class="active">{{label schema.name}}{{required}}</label>
+
+        <p class="skeleformFieldAlert"></p>
     </div>
 </template>

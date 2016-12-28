@@ -15,7 +15,19 @@
     <div class="skeleformFields">
         {{#each schema.fields}}
             {{#with isFieldInCurrentForm this}}
-                {{> Template.dynamic template=template data=data}}
+                {{#if data.schema.skeleformGroup}}
+                    <div class="row">
+                        {{#each data.schema.fields}}
+                            {{#with isFieldInCurrentForm this}}
+                                {{> Template.dynamic template=template data=data}}
+                            {{/with}}
+                        {{/each}}
+                    </div>
+                {{else}}
+                    <div class="row">
+                        {{> Template.dynamic template=template data=data}}
+                    </div>
+                {{/if}}
             {{/with}}
         {{/each}}
     </div>

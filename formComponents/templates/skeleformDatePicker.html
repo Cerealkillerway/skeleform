@@ -1,15 +1,13 @@
 <template name="skeleformDatePicker">
-    <div class="row">
-        <div class="input-field col {{fieldSize schema.size}} {{schema.style}}">
-            {{#if schema.icon}}
-                <i class="material-icons prefix dateIcon">{{schema.icon}}</i>
-            {{/if}}
+    <div class="input-field col {{fieldSize schema.size}} {{schema.style}}">
+        {{#if schema.icon}}
+            <i class="material-icons prefix dateIcon">{{schema.icon}}</i>
+        {{/if}}
 
-            {{fieldDate item schema}}
-            <input type="date" id="{{field schema.name}}" class="skeleValidate gather datepicker">
-            <label for="{{field schema.name}}" class="skeleformAlwaysActiveLabel">{{label schema.name}}{{required}}</label>
+        {{fieldDate item schema}}
+        <input type="date" id="{{field schema.name}}" class="skeleValidate gather datepicker">
+        <label for="{{field schema.name}}" class="skeleformAlwaysActiveLabel">{{label schema.name}}{{required}}</label>
 
-            <p class="skeleformFieldAlert text-danger"></p>
-        </div>
+        <p class="skeleformFieldAlert text-danger"></p>
     </div>
 </template>

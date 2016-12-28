@@ -1,37 +1,35 @@
 <template name="skeleformImageUpload">
-    <div class="row">
-        <div class="input-field col {{fieldSize schema.size}} {{schema.style}}">
-            <div class="file-field input-field">
-                <div class="col s12 m6">
-                    <div class="waves-effect waves-light btn colorValidation secondColor">
-                        <span>
-                            <i class="mdi-image-photo small left"></i>
-                            {{_ "loadFile_btn"}}
-                        </span>
-                        <input class="imageUploader" type="file" name="{{field schema.name}}Loader"/>
-                    </div>
-                </div>
-                <div class="col s12 m6">
-                    <input class="file-path skeleValidate" type="text"/>
+    <div class="input-field col {{fieldSize schema.size}} {{schema.style}}">
+        <div class="file-field input-field">
+            <div class="col s12 m6">
+                <div class="waves-effect waves-light btn colorValidation secondColor">
+                    <span>
+                        <i class="mdi-image-photo small left"></i>
+                        {{_ "loadFile_btn"}}
+                    </span>
+                    <input class="imageUploader" type="file" name="{{field schema.name}}Loader"/>
                 </div>
             </div>
-
-            <div id="{{field schema.name}}" class="gather firstColor z-depth-1 canvasContainer canvasContainerEmpty" data-validate="imageUpload">
-                <div class="btn-floating btn-large waves-effect waves-light secondColor imageDelete">
-                    <i class="mdi-action-delete medium"></i>
-                </div>
-
-                {{fieldImage item schema.name}}
-                {{#if schema.image}}
-                    <canvas class="willContainImage" id="{{field schema.name}}-mainImage"></canvas>
-                {{/if}}
-                {{#if schema.thumb}}
-                    <canvas class="willContainThumb" id="{{field schema.name}}-mainImageThumb"></canvas>
-                {{/if}}
-                <canvas class='canvasBlank' style='display:none'></canvas>
+            <div class="col s12 m6">
+                <input class="file-path skeleValidate" type="text"/>
             </div>
-            <div style="clear:both;"></div>
-            <p class="skeleformFieldAlert text-danger"></p>
         </div>
+
+        <div id="{{field schema.name}}" class="gather firstColor z-depth-1 canvasContainer canvasContainerEmpty" data-validate="imageUpload">
+            <div class="btn-floating btn-large waves-effect waves-light secondColor imageDelete">
+                <i class="mdi-action-delete medium"></i>
+            </div>
+
+            {{fieldImage item schema.name}}
+            {{#if schema.image}}
+                <canvas class="willContainImage" id="{{field schema.name}}-mainImage"></canvas>
+            {{/if}}
+            {{#if schema.thumb}}
+                <canvas class="willContainThumb" id="{{field schema.name}}-mainImageThumb"></canvas>
+            {{/if}}
+            <canvas class='canvasBlank' style='display:none'></canvas>
+        </div>
+        <div style="clear:both;"></div>
+        <p class="skeleformFieldAlert text-danger"></p>
     </div>
 </template>

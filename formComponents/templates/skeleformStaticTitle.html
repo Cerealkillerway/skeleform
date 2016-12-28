@@ -1,11 +1,9 @@
 <template name="skeleformStaticTitle">
-    <div class="row">
-        <div class="input-field col {{fieldSize schema.size}} {{schema.style}}">
-            {{#if schema.mini}}
-                <h4 style="margin: 0 0 16px 28px">{{label schema.name 'title'}}</h4>
-            {{else}}
-                <h3 style="margin: 0 0 16px 28px">{{label schema.name 'title'}}</h3>
-            {{/if}}
-        </div>
+    <div class="input-field col {{fieldSize schema.size}} {{schema.style}}">
+        {{#if schema.mini}}
+            <h4 style="margin: 0 0 16px 28px">{{label schema.name 'title'}}</h4>
+        {{else}}
+            <h3 style="margin: 0 0 16px 28px">{{label schema.name 'title'}}</h3>
+        {{/if}}
     </div>
 </template>

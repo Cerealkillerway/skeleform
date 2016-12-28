@@ -168,6 +168,14 @@ style  -> [string] (optional) wrapper css class for custom styling of the field;
 
 
 
+DISPLAYING INLINE:
+------------------
+It is possible to display fields in the same "row" div by wrapping them into an object in the schema; that object must have this schema:
+
+skeleformGroup   -> [boolean] (mandatory) indicates that the object represents a group of inline fields (true is the only value possible);
+fields           -> [array] (optional) the normal schema of the fields to be injected in the same "row" div;
+
+
 ===================================================================
 |||                     ABOUT VALIDATION                        |||
 ===================================================================
@@ -177,7 +185,7 @@ The method isValid should perform the field's validation when required and retur
         valid: [boolean] if the field's current value is valid or not
         reasons: [array of strings] a set of strings describing the validity checks failed (should match the name of validation types)
     }
-    
+
 CUSTOM INVALID MESSAGE
 If it's necessary to use a custom invalid message it is possible to add the field "invalidMessages" to the "result" object; "invalidMessages" [object] should be a dictionary of custom i18n strings to use for each validation type.
 
