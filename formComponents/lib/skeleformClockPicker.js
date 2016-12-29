@@ -7,17 +7,28 @@ Template.skeleformClockPicker.helpers(skeleformGeneralHelpers);
 Template.skeleformClockPicker.helpers({
     fieldClock: function(data, schema) {
         var template = Template.instance();
-        var value = SkeleformStandardFieldValue(data, schema);
+        console.log('exec0');
 
-        if (value === undefined || self.initOptions === undefined) return;
-
-        value = moment(value, template.initOptions.formatSubmit).format(template.initOptions.format);
-
-        // reactively set the value on the clockpicker
+        // avoid setting the value if the view is not fully rendered yet
         if (template.view.isRendered) {
-            template.$('#' + schema.name.replace('.', '\\.')).val(value);
+            var value = SkeleformStandardFieldValue(data, schema);
+            console.log('exec');
+            console.log(value);
 
-            InvokeCallback(value, schema, 'onChange');
+            if (value !== template.getValue()) {
+                // avoid empty strings since in that case moment will use current datetime as input;
+                if (value === undefined || value.length === 0) return;
+
+                console.log('view rendered');
+                console.log(value);
+                console.log($getField(template, schema).val());
+                console.log('------------');
+
+                value = moment(value, template.initOptions.formatSubmit).format(template.initOptions.format);
+                $getField(template, schema).val(value);
+
+                InvokeCallback(value, schema, 'onChange');
+            }
         }
     }
 });
@@ -31,12 +42,13 @@ Template.skeleformClockPicker.onCreated(function() {
     //register self on form' store
     dataContext.formInstance.Fields.push(self);
 
+    // handle runtime translations and reset of the value
     Tracker.autorun(function() {
         // register language dependency
         var todayLbl = TAPi18n.__("pickadateButtons_labels").split(" ")[0];
         var schema = self.data.schema;
 
-        if (self.pickerInstance) {
+        /*if (self.pickerInstance) {
             self.initOptions.donetext = TAPi18n.__('pickadateButtons_labels').split(' ')[2];
 
             self.$('.clockpicker').clockpicker('remove');
@@ -48,8 +60,8 @@ Template.skeleformClockPicker.onCreated(function() {
             if (!value) return;
 
             value = moment(value, self.initOptions.formatSubmit).format(self.initOptions.format);
-            self.$('#' + schema.name.replace('.', '\\.')).val(value);
-        }
+            $getField(self, schema).val(value);
+        }*/
     });
 
     self.getValue = function() {
@@ -70,17 +82,7 @@ Template.skeleformClockPicker.onRendered(function() {
     var schema = this.data.schema;
 
     // activates validation on set
-    self.initOptions = {
-        afterDone: function() {
-            var value = self.getValue();
-
-            if (self.data) {
-                skeleformValidateField(self);
-            }
-
-            InvokeCallback(value, schema, 'onChange');
-        }
-    };
+    self.initOptions = {};
 
     var options = schema.pickerOptions;
 
@@ -156,12 +158,19 @@ Template.skeleformClockPicker.onRendered(function() {
     FlowRouter.subsReady(function() {
         var value = SkeleformStandardFieldValue(self.data.item, schema);
 
-        if (value === undefined) return;
+        if (value !== self.getValue()) {
+            // avoid empty strings since in that case moment will use current datetime as input;
+            if (value === undefined || value.length === 0) return;
 
-        if (!value) return;
-        value = moment(value, self.initOptions.formatSubmit).format(self.initOptions.format);
-        self.$('#' + schema.name.replace('.', '\\.')).val(value);
+            console.log('subs ready');
+            console.log(value);
+            console.log($getField(self, schema).val());
+            console.log('------------');
 
-        InvokeCallback(value, schema, 'onChange');
+            value = moment(value, self.initOptions.formatSubmit).format(self.initOptions.format);
+            $getField(self, schema).val(value);
+
+            InvokeCallback(value, schema, 'onChange');
+        }
     });
 });

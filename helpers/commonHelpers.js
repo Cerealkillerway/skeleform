@@ -23,6 +23,7 @@ SkeleformStandardFieldValue = function(data, schema) {
     return data;
 };
 
+// invoke a specific callback for a field
 InvokeCallback = function(value, schema, type) {
     switch (type) {
         case 'onChange':
@@ -31,6 +32,11 @@ InvokeCallback = function(value, schema, type) {
             schema.callbacks.onChange(value);
         }
     }
+};
+
+// get the field's object
+$getField = function(template, schema) {
+    return template.$('#' + schema.name.replace('.', '\\.'));
 };
 
 

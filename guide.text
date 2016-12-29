@@ -201,6 +201,7 @@ If it's necessary to use a custom invalid message it is possible to add the fiel
 Experimenting errors in your form? Try the followings:
 
 - double check that every field has a different "name" property; different fields with the same name can lead to errors and anyway your data will be incomplete in this case.
+- double check your schema structure and that you have included all required keys for every form and field objects.
 
 - contact the project's master ;)
 
