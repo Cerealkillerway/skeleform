@@ -23,7 +23,7 @@ Package.onUse(function(api) {
     api.use('cerealkiller:materialnote@1.0.0', 'client');
     api.use('blaze-html-templates', 'client');
     api.use('materialize:materialize@=0.97.7', 'client');  // force 0.97.7 since 0.97.8 is buggy
-    api.use('cerealkiller:utils@1.0.0');
+    api.use('cerealkiller:skeleutils@1.0.0');
     // if skeletor is in use, load it before
     api.use('cerealkiller:skeletor@0.0.3', {weak: true});
 
