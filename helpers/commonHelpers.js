@@ -23,23 +23,82 @@ SkeleformStandardFieldValue = function(data, schema) {
     return data;
 };
 
+
 // invoke a specific callback for a field
-InvokeCallback = function(value, schema, type) {
-    switch (type) {
-        case 'onChange':
-        // if defined, perform the callback
-        if (schema.callbacks && schema.callbacks.onChange) {
-            schema.callbacks.onChange(value);
-        }
-    }
+InvokeCallback = function(template, value, schema, type) {
+    //template.view.autorun(function() {
+        //if (Session.get('formRendered') === true) {
+            switch (type) {
+                case 'onChange':
+                // if defined, perform the callback
+                if (schema.callbacks && schema.callbacks.onChange) {
+                    schema.callbacks.onChange(value);
+                }
+            }
+        //}
+    //});
 };
 
 // get the field's object
-$getField = function(template, schema) {
+$getFieldId = function(template, schema) {
     return template.$('#' + schema.name.replace('.', '\\.'));
 };
 
+// standard function to set the value on a field;
+// it waits for any custom initialization on the field, and reactively watch lang changes
+// and fires appropriate i18n method on the field is special handling for i18n is required
+setFieldValue = function(template, data, schema) {
+    template.view.autorun(function() {
+        var value = SkeleformStandardFieldValue(data, schema);
+        // register dependency from current language; used to fire custom i18n callback
+        // for fields that requires special i18n treatment...
+        var currentLang = TAPi18n.getLanguage();
+        var formRendered = template.data.formInstance.formRendered.get();
 
+        // object used to ensure each callback is executed only once per computation
+        if (!template.callbacksCalled) {
+            template.callbacksCalled = {
+                onChange: false
+            };
+        }
+
+        // avoid setting the value if the view is not fully rendered yet
+        var isActivated = template.isActivated;
+
+        if (isActivated.get() === true) {
+            FlowRouter.subsReady(function() {
+
+                // call custom i18n if necessary
+                if (template.i18n) {
+                    template.i18n(currentLang);
+                }
+
+                //console.log(value);
+                //console.log(template.getValue());
+                if (value !== template.getValue()) {
+                    // avoid empty strings since in that case moment will use current datetime as input;
+                    if (value === undefined || value.length === 0) return;
+
+                    template.setValue(value);
+
+                    if (formRendered === true) {
+                        template.callbacksCalled.onChange = true;
+                        InvokeCallback(template, value, schema, 'onChange');
+                    }
+                }
+                else {
+                    if (template.callbacksCalled.onChange === false) {
+                        template.callbacksCalled.onChange = true;
+                        InvokeCallback(template, value, schema, 'onChange');
+                    }
+                }
+            });
+        }
+    });
+};
+
+
+// create paths for redirect after form actions
 createPath = function(path, data) {
     var result = {
         params: {},

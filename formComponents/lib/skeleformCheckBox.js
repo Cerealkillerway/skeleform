@@ -7,14 +7,9 @@
 Template.skeleformCheckBox.helpers(skeleformGeneralHelpers);
 Template.skeleformCheckBox.helpers({
     fieldValue: function(data, schema) {
-        var value = SkeleformStandardFieldValue(data, schema);
+        var template = Template.instance();
 
-        InvokeCallback(value, schema, 'onChange');
-
-        if (value) {
-            return 'checked';
-        }
-        return 'unchecked';
+        setFieldValue(template, data, schema);
     },
     isCheckBox: function() {
         var schema = Template.instance().data.schema;
@@ -46,13 +41,13 @@ Template.skeleformCheckBox.helpers({
 // Events
 Template.skeleformCheckBox.onCreated(function() {
     var self = this;
-    var dataContext = self.data;
+    self.isActivated = new ReactiveVar(false);
 
     // register self on form' store
-    dataContext.formInstance.Fields.push(self);
+    self.data.formInstance.Fields.push(self);
 
     self.getValue = function() {
-        var value = $('#' + dataContext.schema.name.replace('.', '\\.')).prop('checked');
+        var value = $getFieldId(self, self.data.schema).prop('checked');
 
         return value;
     };
@@ -75,25 +70,23 @@ Template.skeleformCheckBox.onCreated(function() {
 
         return result;
     };
+    self.setValue = function(value) {
+        $getFieldId(self, self.data.schema).prop('checked', value);
+    };
 });
 
 Template.skeleformCheckBox.onRendered(function() {
-    var self = this;
-    var value = self.getValue();
-    var schema = self.data.schema;
-
-    FlowRouter.subsReady(function() {
-        InvokeCallback(value, schema, 'onChange');
-    });
+    this.isActivated.set(true);
 });
 
+
 Template.skeleformCheckBox.events({
-    "change .skeleValidate": function(event, template) {
+    /*"change .skeleValidate": function(event, template) {
         var value = template.getValue();
         var schema = template.data.schema;
 
         skeleformValidateField(template);
 
         InvokeCallback(value, schema, 'onChange');
-    },
+    },*/
 });

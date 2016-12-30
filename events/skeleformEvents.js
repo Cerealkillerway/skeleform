@@ -14,11 +14,9 @@ else {
 
 // VALIDATION
 // ==========================================================================================
-
+//looks up for translated string if argument is not a number
 function translateErrorDetail(detail) {
     var regex = /^([0-9]|[ #\-\+\(\)])+$/;
-
-    //looks up for translated string if argument is not a number
     if (regex.test(detail) === false) return TAPi18n.__(detail + '_validationDetail');
     return detail;
 }
@@ -92,7 +90,7 @@ skeleformValidateField = function(fieldInstance) {
         documentId = item._id;
     }
 
-    if (!Session.get('formRendered')) return;
+    if (!data.formInstance.formRendered.get()) return;
     var id = "#" + schema.name.replace('.', '\\.');
     var result = fieldInstance.isValid();
 
@@ -241,7 +239,8 @@ skeleformGatherData = function(formContext, Fields) {
 
 // Skeleform
 Template.skeleform.onCreated(function() {
-    Session.set('formRendered', false);
+    //Session.set('formRendered', false);
+    this.formRendered = new ReactiveVar(false);
 
     this.Fields = [];
 });
@@ -249,9 +248,11 @@ Template.skeleform.onRendered(function() {
     var self = this;
         skeleformInstance = self;
 
+    //Session.set('formRendered', true);
+    self.formRendered.set(true);
+
     ckUtils.globalUtilities.scrollTo(0, configuration.animations.onRendered);
 
-    Session.set('formRendered', true);
     Tracker.autorun(function() {
         if (FlowRouter.subsReady()) {
             skeleformResetStatus();    // clean validation alerts

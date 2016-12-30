@@ -18,6 +18,7 @@ Package.onUse(function(api) {
     api.use('jquery', 'client');
     api.use('underscore@1.0.0');
     api.use('check');
+    api.use('session', 'client');
     api.use('fourseven:scss@3.2.0', 'client');
     api.use('tap:i18n@1.7.0');
     api.use('cerealkiller:materialnote@1.0.0', 'client');

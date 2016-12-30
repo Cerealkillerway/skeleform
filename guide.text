@@ -1,7 +1,9 @@
- __                __         __                __         __                __         __                __         __                __
-|  \______________/  |       |  \______________/  |       |  \______________/  |       |  \______________/  |       |  \______________/  |
- >  ______________  <         >  ______________  <         >  ______________  <         >  ______________  <         >  ______________  <
-|__/              \__|       |__/              \__|       |__/              \__|       |__/              \__|       |__/              \__|
+   ___________          .__          _____
+  /   _____/  | __ ____ |  |   _____/ ____\___________  _____
+  \_____  \|  |/ // __ \|  | _/ __ \   __\/  _ \_  __ \/     \
+  /        \    <\  ___/|  |_\  ___/|  | (  <_> )  | \/  Y Y  \
+ /_______  /__|_ \\___  >____/\___  >__|  \____/|__|  |__|_|  /
+         \/     \/    \/          \/                        \/
 
 ===================================================================
 ===================================================================
@@ -179,12 +181,28 @@ fields           -> [array] (optional) the normal schema of the fields to be inj
 ===================================================================
 |||                     ABOUT VALIDATION                        |||
 ===================================================================
-Every field should implement the methods "getValue()" and "isValid()";
+Every field should implement this methods:
+- i18n(currentLang)   -> [function] (optional) special handling required for i18n on the field; it receives the "currentLang" as a parameter;
+- getValue()          -> [function] (mandatory) must return the value of the field (formatted and ready to be saved in the db);
+                         normally this is done by calling "Skeleform.validate.checkOptions()" form this method;
+- isValid()           -> [function] (mandatory) must perform validation on the field's value; it is called by skeleform before gathering values to be
+                         saved in the db;
+- setValue(value)     -> [function] (mandatory) receives the current unformatted field value and must format it to be displayed (if required) and set
+                         it on the proper DOM element of the field;
+
+Inside these methods (and everywhere in the field's code) calling "$getFieldId(templateInstance, schema)" is the preferred way to get the jQuery object
+wrapping the DOM of the main field's input element.
+
+
+===================================================================
+|||                     ABOUT VALIDATION                        |||
+===================================================================
 The method isValid should perform the field's validation when required and return a "result" object with this form:
     result {
         valid: [boolean] if the field's current value is valid or not
         reasons: [array of strings] a set of strings describing the validity checks failed (should match the name of validation types)
     }
+The "Skeleform.validate.checkOptions()" global function is the standard way to perform validity check; it implements all needed type, length and unicity checks;
 
 CUSTOM INVALID MESSAGE
 If it's necessary to use a custom invalid message it is possible to add the field "invalidMessages" to the "result" object; "invalidMessages" [object] should be a dictionary of custom i18n strings to use for each validation type.
@@ -204,6 +222,7 @@ Experimenting errors in your form? Try the followings:
 - double check your schema structure and that you have included all required keys for every form and field objects.
 
 - contact the project's master ;)
+
 
  __                __         __                __         __                __         __                __         __                __
 |  \______________/  |       |  \______________/  |       |  \______________/  |       |  \______________/  |       |  \______________/  |
