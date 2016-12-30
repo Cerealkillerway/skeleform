@@ -22,9 +22,11 @@ Template.skeleformClockPicker.onCreated(function() {
     self.data.formInstance.Fields.push(self);
 
     self.i18n = function(currentLang) {
+        var $element = $getFieldId(self, self.data.schema);
+
         self.initOptions.donetext = TAPi18n.__('pickadateButtons_labels').split(' ')[2];
-        self.$('.clockpicker').clockpicker('remove');
-        self.$('.clockpicker').clockpicker(self.initOptions);
+        $element.clockpicker('remove');
+        $element.clockpicker(self.initOptions);
     };
 
     self.getValue = function() {

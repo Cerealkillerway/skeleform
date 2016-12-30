@@ -7,50 +7,42 @@
 Template.skeleformDatePicker.helpers(skeleformGeneralHelpers);
 Template.skeleformDatePicker.helpers({
     fieldDate: function(data, schema) {
-        var pickerInstance = Template.instance().pickerInstance;
-        var value = SkeleformStandardFieldValue(data, schema);
+        var template = Template.instance();
 
-        // reactively set the value on the datepicker
-        if (pickerInstance) {
-            pickerInstance.set('select', value, {format: Template.instance().initOptions.formatSubmit});
-        }
-
-        InvokeCallback(value, schema, 'onChange');
+        setFieldValue(template, data, schema);
     }
 });
 
 Template.skeleformDatePicker.onCreated(function() {
     var self = this;
-    var dataContext = self.data;
+    self.isActivated = new ReactiveVar(false);
 
     self.initOptions = {};
 
     //register self on form' store
-    dataContext.formInstance.Fields.push(self);
+    self.data.formInstance.Fields.push(self);
 
-    Tracker.autorun(function() {
-        var todayLbl = TAPi18n.__("pickadateButtons_labels").split(" ")[0]; //register language dependency
+    self.i18n = function() {
+        var pickerInstance = self.pickerInstance;
 
-        if (self.pickerInstance) {
-            self.pickerInstance.component.settings.monthsFull = TAPi18n.__('monthsFull_labels').split(' ');
-            self.pickerInstance.component.settings.monthsShort = TAPi18n.__('monthsShort_labels').split(' ');
-            self.pickerInstance.component.settings.weekdaysFull = TAPi18n.__('weekDaysFull_labels').split(' ');
-            self.pickerInstance.component.settings.weekdaysShort = TAPi18n.__('weekDaysShort_labels').split(' ');
-            self.pickerInstance.component.settings.weekdaysLetter = TAPi18n.__('weekDaysSingle_labels').split(' ');
-            self.pickerInstance.component.settings.today = TAPi18n.__('pickadateButtons_labels').split(' ')[0];
-            self.pickerInstance.component.settings.clear = TAPi18n.__('pickadateButtons_labels').split(' ')[1];
-            self.pickerInstance.component.settings.close = TAPi18n.__('pickadateButtons_labels').split(' ')[2];
-            self.pickerInstance.component.settings.labelMonthNext = TAPi18n.__('pickadateNav_next');
-            self.pickerInstance.component.settings.labelMonthPrev = TAPi18n.__('pickadateNav_prev');
-            self.pickerInstance.component.settings.labelMonthSelect = TAPi18n.__('monthSelect_label');
-            self.pickerInstance.component.settings.labelYearSelect = TAPi18n.__('yearSelect_label');
+        pickerInstance.component.settings.monthsFull = TAPi18n.__('monthsFull_labels').split(' ');
+        pickerInstance.component.settings.monthsShort = TAPi18n.__('monthsShort_labels').split(' ');
+        pickerInstance.component.settings.weekdaysFull = TAPi18n.__('weekDaysFull_labels').split(' ');
+        pickerInstance.component.settings.weekdaysShort = TAPi18n.__('weekDaysShort_labels').split(' ');
+        pickerInstance.component.settings.weekdaysLetter = TAPi18n.__('weekDaysSingle_labels').split(' ');
+        pickerInstance.component.settings.today = TAPi18n.__('pickadateButtons_labels').split(' ')[0];
+        pickerInstance.component.settings.clear = TAPi18n.__('pickadateButtons_labels').split(' ')[1];
+        pickerInstance.component.settings.close = TAPi18n.__('pickadateButtons_labels').split(' ')[2];
+        pickerInstance.component.settings.labelMonthNext = TAPi18n.__('pickadateNav_next');
+        pickerInstance.component.settings.labelMonthPrev = TAPi18n.__('pickadateNav_prev');
+        pickerInstance.component.settings.labelMonthSelect = TAPi18n.__('monthSelect_label');
+        pickerInstance.component.settings.labelYearSelect = TAPi18n.__('yearSelect_label');
 
-            self.pickerInstance.render();
-            // set again the value to translate also in the input box
-            self.pickerInstance.set('select', SkeleformStandardFieldValue(self.data.item, self.data.schema), {format: self.initOptions.formatSubmit});
-        }
-    });
-
+        pickerInstance.render();
+        // set again the value to translate also in the input box
+        //pickerInstance.set('select', SkeleformStandardFieldValue(self.data.item, self.data.schema), {format: self.initOptions.formatSubmit});
+        self.setValue(SkeleformStandardFieldValue(self.data.item, self.data.schema));
+    };
     self.getValue = function() {
         var value = self.pickerInstance.get('select', self.initOptions.formatSubmit);
 
@@ -61,12 +53,16 @@ Template.skeleformDatePicker.onCreated(function() {
 
         return Skeleform.validate.checkOptions(self.getValue(), self.data.schema, formInstance.data.schema, formInstance.data.item);
     };
+    self.setValue = function(value) {
+        self.pickerInstance.set('select', value, {format: Template.instance().initOptions.formatSubmit});
+    };
 });
 
 Template.skeleformDatePicker.onRendered(function() {
     var self = this;
     var data = self.data.item;
     var schema = this.data.schema;
+    var $element = $getFieldId(self, schema);
 
     // activates validation on set
     self.initOptions = {
@@ -84,14 +80,6 @@ Template.skeleformDatePicker.onRendered(function() {
         labelYearSelect: TAPi18n.__('yearSelect_label'),
 
         onSet: function(context) {
-            var value = self.getValue();
-
-            if (self.data) {
-                skeleformValidateField(self);
-            }
-
-            InvokeCallback(value, schema, 'onChange');
-
             // workaround for "closeOnSelect" option ignored by materializeCSS
             if (self.initOptions.closeOnSelect === undefined || self.initOptions.closeOnSelect === true) {
                 //prevent closing on selecting month/year
@@ -162,12 +150,7 @@ Template.skeleformDatePicker.onRendered(function() {
         }
     }
 
-    self.$('.datepicker').pickadate(self.initOptions);
-    self.pickerInstance = self.$('.datepicker').pickadate('picker');
-
-    FlowRouter.subsReady(function() {
-        var value = self.getValue();
-
-        InvokeCallback(value, schema, 'onChange');
-    });
+    $element.pickadate(self.initOptions);
+    self.pickerInstance = $element.pickadate('picker');
+    self.isActivated.set(true);
 });

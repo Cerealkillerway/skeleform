@@ -1,6 +1,6 @@
-// standard function to get a field's value; it is defined here as a global function so that
-// special field types can override "fieldValue" helper but still call this function if needed
-// and then perform any special handling that is required
+// standard function to get a field's value form the current data object;
+// it is defined here as a global function so that special field types can override "fieldValue" helper
+// but still call this function if needed and then perform any special handling that is required
 SkeleformStandardFieldValue = function(data, schema) {
     var name = schema.name;
 
@@ -26,17 +26,13 @@ SkeleformStandardFieldValue = function(data, schema) {
 
 // invoke a specific callback for a field
 InvokeCallback = function(template, value, schema, type) {
-    //template.view.autorun(function() {
-        //if (Session.get('formRendered') === true) {
-            switch (type) {
-                case 'onChange':
-                // if defined, perform the callback
-                if (schema.callbacks && schema.callbacks.onChange) {
-                    schema.callbacks.onChange(value);
-                }
-            }
-        //}
-    //});
+    switch (type) {
+        case 'onChange':
+        // if defined, perform the callback
+        if (schema.callbacks && schema.callbacks.onChange) {
+            schema.callbacks.onChange(value);
+        }
+    }
 };
 
 // get the field's object
@@ -67,14 +63,9 @@ setFieldValue = function(template, data, schema) {
 
         if (isActivated.get() === true) {
             FlowRouter.subsReady(function() {
-
-                // call custom i18n if necessary
-                if (template.i18n) {
-                    template.i18n(currentLang);
-                }
-
                 //console.log(value);
                 //console.log(template.getValue());
+                //console.log('------------------');
                 if (value !== template.getValue()) {
                     // avoid empty strings since in that case moment will use current datetime as input;
                     if (value === undefined || value.length === 0) return;
@@ -87,10 +78,21 @@ setFieldValue = function(template, data, schema) {
                     }
                 }
                 else {
+                    // if the callback has not fired yet, fire it now!
                     if (template.callbacksCalled.onChange === false) {
                         template.callbacksCalled.onChange = true;
+
+                        if (template.pluginSetHappened !== undefined) {
+                            template.pluginSetHappened = false;
+                        }
+
                         InvokeCallback(template, value, schema, 'onChange');
                     }
+                }
+
+                // call custom i18n if necessary
+                if (template.i18n) {
+                    template.i18n(currentLang);
                 }
             });
         }
