@@ -88,7 +88,7 @@ Template.skeleformEditor.onRendered(function() {
     if ((toolbar === undefined)|| (editorToolbars[toolbar] === undefined)) toolbar = "default";
 
     $(editor).materialnote({
-        lang: ckUtils.globalUtilities.doubleLangCode(FlowRouter.getParam("itemLang")),
+        lang: skeleUtils.globalUtilities.doubleLangCode(FlowRouter.getParam("itemLang")),
         toolbar: editorToolbars[toolbar],
         height: 400,
         minHeight: 100,
