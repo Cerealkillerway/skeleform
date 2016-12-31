@@ -51,7 +51,15 @@ Template.skeleformClockPicker.onRendered(function() {
     var schema = this.data.schema;
 
     // activates validation on set
-    self.initOptions = {};
+    self.initOptions = {
+        afterDone: function() {
+            // perform validation and callback invocation on change
+            var value = self.getValue();
+
+            self.isValid();
+            InvokeCallback(self, value, schema, 'onChange');
+        }
+    };
 
     var options = schema.pickerOptions;
 

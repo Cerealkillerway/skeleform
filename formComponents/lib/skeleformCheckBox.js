@@ -52,6 +52,7 @@ Template.skeleformCheckBox.onCreated(function() {
         return value;
     };
     self.isValid = function() {
+        skeleUtils.globalUtilities.logger('checkbox validation', 'skeleformFieldValidation');
         var validationOptions = self.data.schema.validation;
         var result = {
             valid: true,
@@ -81,12 +82,13 @@ Template.skeleformCheckBox.onRendered(function() {
 
 
 Template.skeleformCheckBox.events({
-    /*"change .skeleValidate": function(event, template) {
+    'change .skeleValidate': function(event, template) {
+        // perform validation and callback invocation on change
         var value = template.getValue();
         var schema = template.data.schema;
 
-        skeleformValidateField(template);
+        template.isValid();
 
-        InvokeCallback(value, schema, 'onChange');
-    },*/
+        InvokeCallback(template, value, schema, 'onChange');
+    },
 });

@@ -80,6 +80,12 @@ Template.skeleformDatePicker.onRendered(function() {
         labelYearSelect: TAPi18n.__('yearSelect_label'),
 
         onSet: function(context) {
+            // perform validation and callback invocation on change
+            var value = self.getValue();
+
+            self.isValid();
+            InvokeCallback(self, value, schema, 'onChange');
+
             // workaround for "closeOnSelect" option ignored by materializeCSS
             if (self.initOptions.closeOnSelect === undefined || self.initOptions.closeOnSelect === true) {
                 //prevent closing on selecting month/year

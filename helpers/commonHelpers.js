@@ -51,11 +51,15 @@ setFieldValue = function(template, data, schema) {
         var currentLang = TAPi18n.getLanguage();
         var formRendered = template.data.formInstance.formRendered.get();
 
-        // object used to ensure each callback is executed only once per computation
+        // object used to ensure that each callback is executed only once per computation
         if (!template.callbacksCalled) {
             template.callbacksCalled = {
-                onChange: false
+                onChange: false,
             };
+        }
+        // variable used to ensure that validation is executed only once per computation
+        if (template.isValidated === undefined) {
+            template.isValidated = false;
         }
 
         // avoid setting the value if the view is not fully rendered yet
@@ -63,14 +67,15 @@ setFieldValue = function(template, data, schema) {
 
         if (isActivated.get() === true) {
             FlowRouter.subsReady(function() {
-                //console.log(value);
-                //console.log(template.getValue());
-                //console.log('------------------');
+                //skeleUtils.globalUtilities.logger(schema.name + '-value: ' + value, 'skeleformCommon');
+                //skeleUtils.globalUtilities.logger(schema.name + '-getValue(): ' + template.getValue(), 'skeleformCommon');
+                //skeleUtils.globalUtilities.logger('------------------', 'skeleformCommon');
                 if (value !== template.getValue()) {
                     // avoid empty strings since in that case moment will use current datetime as input;
                     if (value === undefined || value.length === 0) return;
 
                     template.setValue(value);
+                    template.isValid();
 
                     if (formRendered === true) {
                         template.callbacksCalled.onChange = true;
@@ -87,6 +92,12 @@ setFieldValue = function(template, data, schema) {
                         }
 
                         InvokeCallback(template, value, schema, 'onChange');
+                    }
+
+                    // if the field has not been validated, validate it now!
+                    if (!template.isValidated) {
+                        template.isValidated = true;
+                        template.isValid();
                     }
                 }
 
