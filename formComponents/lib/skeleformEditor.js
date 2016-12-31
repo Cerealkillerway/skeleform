@@ -48,15 +48,9 @@ editorToolbars = {
 Template.skeleformEditor.helpers(skeleformGeneralHelpers);
 Template.skeleformEditor.helpers({
     fieldEditor: function(data, schema) {
-        var value = SkeleformStandardFieldValue(data, schema);
+        var template = Template.instance();
 
-        if (Session.get('formRendered')) {
-            if (value !== undefined) {
-                $('#' + schema.name).code(value);
-            }
-
-            InvokeCallback(value, schema, 'onChange');
-        }
+        setFieldValue(template, data, schema);
     }
 });
 
@@ -64,18 +58,25 @@ Template.skeleformEditor.helpers({
 // Events
 Template.skeleformEditor.onCreated(function() {
     var self = this;
-    var dataContext = self.data;
+    self.isActivated = new ReactiveVar(false);
 
     //register self on form' store
-    dataContext.formInstance.Fields.push(self);
+    self.data.formInstance.Fields.push(self);
 
     self.getValue = function() {
-        return $('#' + dataContext.schema.name).code().trim();
+        return $getFieldId(self, self.data.schema).code().trim();
     };
     self.isValid = function() {
+        //skeleUtils.globalUtilities.logger('editor validation', 'skeleformFieldValidation');
         var formInstance = self.data.formInstance;
 
         return Skeleform.validate.checkOptions(self.getValue(), self.data.schema, formInstance.data.schema, formInstance.data.item);
+    };
+    self.setValue = function(value) {
+        if (value === undefined) {
+            value = '';
+        }
+        $getFieldId(self, self.data.schema).code(value);
     };
 });
 Template.skeleformEditor.onRendered(function() {
@@ -98,11 +99,12 @@ Template.skeleformEditor.onRendered(function() {
             self.$('.note-editor').addClass('validate');
         },
         onKeyup: function(event) {
+            console.log('keyup');
+            // perform validation and callback invocation on change
             var value = self.getValue();
 
-            skeleformValidateField(self);
-
-            InvokeCallback(value, schema, 'onChange');
+            self.isValid();
+            InvokeCallback(self, value, schema, 'onChange');
         }/*,
         onImageUpload: function(files) {
             var filesArray = [];
@@ -156,9 +158,5 @@ Template.skeleformEditor.onRendered(function() {
         }*/
     });
 
-    var value = self.getValue();
-    
-    FlowRouter.subsReady(function() {
-        InvokeCallback(value, schema, 'onChange');
-    });
+    self.isActivated.set(true);
 });

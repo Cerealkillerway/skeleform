@@ -52,7 +52,7 @@ Template.skeleformCheckBox.onCreated(function() {
         return value;
     };
     self.isValid = function() {
-        skeleUtils.globalUtilities.logger('checkbox validation', 'skeleformFieldValidation');
+        //skeleUtils.globalUtilities.logger('checkbox validation', 'skeleformFieldValidation');
         var validationOptions = self.data.schema.validation;
         var result = {
             valid: true,

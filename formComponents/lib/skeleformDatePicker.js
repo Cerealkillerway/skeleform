@@ -49,6 +49,7 @@ Template.skeleformDatePicker.onCreated(function() {
         return value;
     };
     self.isValid = function() {
+        //skeleUtils.globalUtilities.logger('datepicker validation', 'skeleformFieldValidation');
         var formInstance = self.data.formInstance;
 
         return Skeleform.validate.checkOptions(self.getValue(), self.data.schema, formInstance.data.schema, formInstance.data.item);
@@ -83,8 +84,12 @@ Template.skeleformDatePicker.onRendered(function() {
             // perform validation and callback invocation on change
             var value = self.getValue();
 
-            self.isValid();
-            InvokeCallback(self, value, schema, 'onChange');
+            // workaround to avoid multiple callback invocation on startup
+            // if context.select is numeric -> setted by user, otherwise -> setted from db
+            if (typeof(context.select) === 'number') {
+                self.isValid();
+                InvokeCallback(self, value, schema, 'onChange');
+            }
 
             // workaround for "closeOnSelect" option ignored by materializeCSS
             if (self.initOptions.closeOnSelect === undefined || self.initOptions.closeOnSelect === true) {

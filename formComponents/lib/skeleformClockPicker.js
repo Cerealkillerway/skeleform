@@ -33,12 +33,16 @@ Template.skeleformClockPicker.onCreated(function() {
         return moment($getFieldId(self, self.data.schema).val(), self.initOptions.format).format(self.initOptions.formatSubmit);
     };
     self.isValid = function() {
+        //skeleUtils.globalUtilities.logger('clockpicker validation', 'skeleformFieldValidation');
         var formInstance = self.data.formInstance;
 
         return Skeleform.validate.checkOptions(self.getValue(), self.data.schema, formInstance.data.schema, formInstance.data.item);
     };
     self.setValue = function(value) {
         var initOptions = self.initOptions;
+
+        // avoid empty strings since in that case moment will use current datetime as input;
+        if (value === undefined || value.length === 0) return;
 
         value = moment(value, initOptions.formatSubmit).format(initOptions.format);
         $getFieldId(self, self.data.schema).val(value);

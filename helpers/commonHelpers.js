@@ -70,10 +70,11 @@ setFieldValue = function(template, data, schema) {
                 //skeleUtils.globalUtilities.logger(schema.name + '-value: ' + value, 'skeleformCommon');
                 //skeleUtils.globalUtilities.logger(schema.name + '-getValue(): ' + template.getValue(), 'skeleformCommon');
                 //skeleUtils.globalUtilities.logger('------------------', 'skeleformCommon');
-                if (value !== template.getValue()) {
-                    // avoid empty strings since in that case moment will use current datetime as input;
-                    if (value === undefined || value.length === 0) return;
 
+                if (value === undefined) {
+                    value = '';
+                }
+                if (value !== template.getValue()) {
                     template.setValue(value);
                     template.isValid();
 
