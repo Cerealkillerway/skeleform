@@ -55,7 +55,7 @@ Template.skeleformDatePicker.onCreated(function() {
         return Skeleform.validate.checkOptions(self.getValue(), self.data.schema, formInstance.data.schema, formInstance.data.item);
     };
     self.setValue = function(value) {
-        self.pickerInstance.set('select', value, {format: Template.instance().initOptions.formatSubmit});
+        self.pickerInstance.set('select', value, {format: self.initOptions.formatSubmit});
     };
 });
 

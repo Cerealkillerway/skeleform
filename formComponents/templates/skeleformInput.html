@@ -4,7 +4,8 @@
             <i class="material-icons prefix">{{schema.icon}}</i>
         {{/if}}
 
-        <input type="{{inputType schema.renderAs}}" maxlength="{{schema.validation.max}}" class="skeleValidate gather" id="{{field schema.name}}" autocomplete="off" style="{{fieldStyle schema}}" value="{{fieldValue item schema}}" length={{schema.charCounter}}>
+        {{fieldValue templateInstance}}
+        <input type="{{inputType schema.renderAs}}" maxlength="{{schema.validation.max}}" class="skeleValidate gather" id="{{field schema.name}}" autocomplete="off" style="{{fieldStyle schema}}" length={{schema.charCounter}}>
         <label for="{{field schema.name}}" class="active">{{label schema.name}}{{required}}</label>
 
         <p class="skeleformFieldAlert"></p>

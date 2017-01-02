@@ -197,8 +197,10 @@ skeleformGeneralHelpers = {
         return size;
     },
     // sets the value on the field, used by most field types
-    fieldValue: function(data, schema) {
-        return SkeleformStandardFieldValue(data, schema);
+    fieldValue: function(template) {
+        var data = template.data;
+
+        setFieldValue(template, data.item, data.schema);
     }
 };
 

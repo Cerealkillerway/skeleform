@@ -9,6 +9,9 @@ Template.skeleformInput.helpers({
     inputType: function(renderAs) {
         if (!renderAs) return 'text';
         return renderAs.toLowerCase();
+    },
+    templateInstance: function() {
+        return Template.instance();
     }
 });
 
@@ -16,15 +19,16 @@ Template.skeleformInput.helpers({
 // Events
 Template.skeleformInput.onCreated(function() {
     var self = this;
-    var dataContext = self.data;
+    self.isActivated = new ReactiveVar(false);
+    var schema = self.data.schema;
 
     //register self on form' store
-    dataContext.formInstance.Fields.push(self);
+    self.data.formInstance.Fields.push(self);
 
     self.getValue = function() {
-        var value = $('#' + dataContext.schema.name.replace('.', '\\.')).val();
+        var value = $getFieldId(self, schema).val();
 
-        switch (self.data.schema.validation.type) {
+        switch (schema.validation.type) {
             case 'url':
                 value = value.dasherize();
                 break;
@@ -37,6 +41,9 @@ Template.skeleformInput.onCreated(function() {
 
         return Skeleform.validate.checkOptions(self.getValue(), self.data.schema, formInstance.data.schema, formInstance.data.item);
     };
+    self.setValue = function(value) {
+        $getFieldId(self, schema).val(value);
+    };
 });
 Template.skeleformInput.onRendered(function() {
     var self = this;
@@ -46,7 +53,7 @@ Template.skeleformInput.onRendered(function() {
     // handle formats
     switch (schema.formatAs) {
         case 'currency':
-            self.$('#' + id).autoNumeric('init', {
+            $getFieldId(self, schema).autoNumeric('init', {
                 aSep: ' ',
                 aDec: ',',
                 altDec: '.',
@@ -56,13 +63,13 @@ Template.skeleformInput.onRendered(function() {
                 wEmpty: 'zero'
             });
 
-            $('#' + id).click(function() {
+            $getFieldId(self, schema).click(function() {
                 $(this).select();
             });
             break;
 
         case 'float':
-            self.$('#' + id).autoNumeric('init', {
+            $getFieldId(self, schema).autoNumeric('init', {
                 aSep: ' ',
                 aDec: ',',
                 altDec: '.',
@@ -77,13 +84,15 @@ Template.skeleformInput.onRendered(function() {
 
     // if necessary enable character counter
     if (schema.charCounter) {
-        self.$('#' + id).characterCounter();
+        $getFieldId(self, schema).characterCounter();
     }
+
+    self.isActivated.set(true);
 });
 
 Template.skeleformInput.events({
     'keyup .skeleValidate': function(event, template) {
-        var value = $(event.target).val();
+        var value = template.getValue();
         var schema = template.data.schema;
 
         skeleformValidateField(template);
@@ -102,10 +111,11 @@ Template.skeleformInput.events({
         var shadowId = '#' + $(event.target).attr('id');
         var id = shadowId.substring(0, shadowId.indexOf('ShadowConfirm'));
 
-        var value = $(id).val();
-        var shadowValue = $(event.target).val();
+        var value = template.getValue();
+        var shadowValue = $(shadowId).val();
 
-
+        skeleUtils.globalUtilities.logger('value: ' + value, 'skeleformFieldValidation');
+        skeleUtils.globalUtilities.logger('shadowValue: ' + shadowValue, 'skeleformFieldValidation');
         if (value !== shadowValue) {
             skeleformErrorStatus(shadowId, TAPi18n.__("confirm_validation"));
         }
