@@ -107,6 +107,14 @@ Template.skeleformSelect.helpers({
             return 'selected';
         }
     },
+    isMultiple: function() {
+        var schema = Template.instance().data.schema;
+
+        if (schema.multi) {
+            return 'multiple';
+        }
+        return '';
+    },
     icon: function(option) {
         if (option.icon) {
             return option.icon;

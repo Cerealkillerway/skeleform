@@ -1,6 +1,6 @@
 <template name="skeleformSelect">
     <div class="input-field col {{#if schema.icons}}icons{{/if}} {{fieldSize schema.size}} {{schema.style}}">
-        <select class="skeleValidate gather" id="{{field schema.name}}">
+        <select {{isMultiple}} class="skeleValidate gather" id="{{field schema.name}}">
             {{fieldValue templateInstance}}
             {{#each options schema}}
                 <option data-icon="{{icon this}}" value="{{this.value}}" {{isSelected .. this.value}}>{{_ this.name}}</option>
