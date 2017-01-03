@@ -4,7 +4,10 @@
 // Helpers
 Template.skeleformSelect.helpers(skeleformGeneralHelpers);
 Template.skeleformSelect.helpers({
+    // create sources list for selct's options
     options: function(schema) {
+        // if source field is a query result, then build the option objects using
+        // defined "sourceName" and "sourceValue" fields
         if (schema.sourceValue) {
             var result = [];
 
@@ -25,6 +28,7 @@ Template.skeleformSelect.helpers({
                 var valueAttr = item;
                 var missingTranslation = false;
 
+                // get the displaying name for the option
                 schema.sourceName.split('.').forEach(function(nameShard, index) {
                     if (nameShard.indexOf(':itemLang---') === 0) {
                         var nameOnly = nameShard.substring(12, nameShard.length);
@@ -42,19 +46,20 @@ Template.skeleformSelect.helpers({
                     }
                 });
 
+                // get the value for the option
                 schema.sourceValue.split('.').forEach(function(valueShard, index) {
-                    switch (valueShard) {
-                        case ':itemLang':
-                        if (valueAttr[lang]) {
-                            valueAttr = valueAttr[lang];
+                    if (valueShard.indexOf(':itemLang---') === 0) {
+                        var valueNameOnly = valueShard.substring(12, valueShard.length);
+
+                        if (valueAttr[lang + '---' + valueNameOnly]) {
+                            valueAttr = valueAttr[lang + '---' + valueNameOnly];
                         }
                         else {
-                            valueAttr = valueAttr[defaultLang];
+                            valueAttr = valueAttr[defaultLang + '---' + valueNameOnly];
                             missingTranslation = true;
                         }
-                        break;
-
-                        default:
+                    }
+                    else {
                         valueAttr = valueAttr[valueShard];
                     }
                 });
@@ -78,28 +83,25 @@ Template.skeleformSelect.helpers({
         return schema.source;
     },
     isSelected: function(data, option) {
-
         var pathShards = data.schema.name.split('.');
         var value = data.item;
+        var name;
 
         if (!data.item) {
             return "";
         }
 
         if (data.schema.i18n === undefined) {
-            value = value[FlowRouter.getParam('itemLang')];
+            name = FlowRouter.getParam('itemLang') + '---' + data.schema.name;
+            value = value[name];
         }
-
-        try {
+        else {
             pathShards.forEach(function(shard, index) {
                 value = value[shard];
-
-                if (!value) throw 'nodataError';
             });
         }
-        catch (error) {
-            return;
-        }
+
+        if (!value) return;
 
         if (option.toString() === value) {
             return 'selected';
@@ -117,50 +119,46 @@ Template.skeleformSelect.helpers({
 // Events
 Template.skeleformSelect.onCreated(function() {
     var self = this;
-    var dataContext = self.data;
+    self.isActivated = new ReactiveVar(false);
 
     //register self on form' store
-    dataContext.formInstance.Fields.push(self);
+    self.data.formInstance.Fields.push(self);
 
+    self.i18n = function() {
+        $getFieldId(self, self.data.schema).material_select();
+    };
     self.getValue = function() {
-        return $('#' + dataContext.schema.name.replace('.', '\\.')).val();
+        //skeleUtils.globalUtilities.logger('select validation', 'skeleformFieldValidation');
+        return $getFieldId(self, self.data.schema).val();
     };
     self.isValid = function() {
         var formInstance = self.data.formInstance;
 
         return Skeleform.validate.checkOptions(self.getValue(), self.data.schema, formInstance.data.schema, formInstance.data.item);
     };
+    self.setValue = function(value) {
+        // in this field value is not setted by "setValue()" since it's determinated by "isSelected helper";
+        // anyway the standard "fieldValue" helper is also included in the template since it handles i18n for the field;
+    };
 });
 Template.skeleformSelect.onRendered(function() {
     var self = this;
 
-    Tracker.autorun(function() {
-        if (FlowRouter.subsReady()) {
-            var data = self.data;
-            var schema = data.schema;
+    $getFieldId(self, self.data.schema).material_select();
 
-            if (schema.sourceLabelsI18n) {
-                TAPi18n.setLanguage(FlowRouter.getQueryParam('lang')).done(function() {
-                    self.$('select').material_select();
-                });
-            }
-            else {
-                self.$('select').material_select();
-            }
-        }
-    });
+    self.isActivated.set(true);
 });
 Template.skeleformSelect.events({
     'blur select': function(event, template) {
         skeleformSuccessStatus('#' + template.data.schema.name);
     },
     'change select': function(event, template) {
-        var schema = template.data.schema;
+        // perform validation and callback invocation on change
         var value = template.getValue();
+        var schema = template.data.schema;
 
-        // if defined, perform the callback
-        if (schema.callbacks && schema.callbacks.onChange) {
-            schema.callbacks.onChange(value);
-        }
+        template.isValid();
+
+        InvokeCallback(template, value, schema, 'onChange');
     }
 });

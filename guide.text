@@ -120,9 +120,21 @@ output  -> [String] (required) form element ["input", "editor", "select"]
                             height  -> [integer];
 
 
-    select: source      -> [array] (required) data source for options; must be an array of objects with name and value fields (and optionally icon);
-            icons       -> [boolean] (optional) used to assign "icons" class for icons on options dropdown;
-            allowBlank  -> [boolean] (optional) allow select none (default undefined option is created automatically);
+    select: source       -> [array] (required) data source for options; must be an array of objects used to create the options of the field;
+                            each element of the array can be:
+                            1 - an object with these fields:
+                                name    -> [string] (required) the i18n string to be used when displaying the option;
+                                value   -> [string/numeric/boolean] (required) the value to be used for the option;
+                                icon    -> [string] (optional) path to the icon to be used;
+                            2 - a document from a query result on a mongo collection;
+            sourceValue  -> [string] (required if "source" is of type 2) the name of the documents' field to be used as value in the option;
+                            it is possible to use the segment ":itemLang---" that will be translated into the current language prefix;
+            sourceName   -> [string] (required if "source" is of type 2) the name of the documents' field to be used as display name in the option;
+                            it is possible to use the segment ":itemLang---" that will be translated into the current language prefix;
+            icons        -> [boolean] (optional) used to assign "icons" class for icons on options dropdown;
+            allowBlank   -> [boolean] (optional) allow select none (default undefined option is created automatically);
+                            this options is meant to be used only if "source" is of type 2; otherwise is ignored, since with type 1 you can
+                            manually define the "blank option" in the array used as "source";
 
 
     imageUpload: can have options (image, thumb) that decides what will be created and uploaded [object]; both are objects with these properties:

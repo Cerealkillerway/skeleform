@@ -9,9 +9,6 @@ Template.skeleformInput.helpers({
     inputType: function(renderAs) {
         if (!renderAs) return 'text';
         return renderAs.toLowerCase();
-    },
-    templateInstance: function() {
-        return Template.instance();
     }
 });
 

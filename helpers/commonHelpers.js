@@ -166,6 +166,9 @@ createPath = function(path, data) {
 
 //helpers used by form elements
 skeleformGeneralHelpers = {
+    templateInstance: function() {
+        return Template.instance();
+    },
     label: function(name, options) {
         name = name.substring(name.lastIndexOf('.') + 1, name.length);
 
