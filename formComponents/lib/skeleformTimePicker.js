@@ -6,45 +6,24 @@
 Template.skeleformTimePicker.helpers(skeleformGeneralHelpers);
 Template.skeleformTimePicker.helpers({
     fieldTime: function(data, schema) {
-        var pickerInstance = Template.instance().pickerInstance;
-        var value = SkeleformStandardFieldValue(data, schema);
+        var template = Template.instance();
 
-        if (!value) return;
-
-        // reactively set the value on the timepicker
-        if (pickerInstance) {
-            pickerInstance.set('select', value, {format: Template.instance().initOptions.formatSubmit});
-        }
-
-        InvokeCallback(value, schema, 'onChange');
+        setFieldValue(template, data, schema);
     }
 });
 
 Template.skeleformTimePicker.onCreated(function() {
     var self = this;
-    var dataContext = self.data;
-
+    self.isActivated = new ReactiveVar(false);
     self.initOptions = {};
 
     //register self on form' store
-    dataContext.formInstance.Fields.push(self);
+    self.data.formInstance.Fields.push(self);
 
-    Tracker.autorun(function() {
-        // register language dependency
-        var todayLbl = TAPi18n.__("pickadateButtons_labels").split(" ")[0];
-        var value = SkeleformStandardFieldValue(self.data.item, self.data.schema);
-
-        if (!value) return;
-
-        if (self.pickerInstance) {
-            self.pickerInstance.component.settings.clear = TAPi18n.__('pickadateButtons_labels').split(' ')[1];
-
-            self.pickerInstance.render();
-            // set again the value to translate also in the input box
-            self.pickerInstance.set('select', value, {format: self.initOptions.formatSubmit});
-        }
-    });
-
+    self.i18n = function(currentLang) {
+        self.pickerInstance.component.settings.clear = TAPi18n.__('pickadateButtons_labels').split(' ')[1];
+        self.pickerInstance.render();
+    };
     self.getValue = function() {
         var value = self.pickerInstance.get('select', self.initOptions.formatSubmit);
 
@@ -54,6 +33,17 @@ Template.skeleformTimePicker.onCreated(function() {
         var formInstance = self.data.formInstance;
 
         return Skeleform.validate.checkOptions(self.getValue(), self.data.schema, formInstance.data.schema, formInstance.data.item);
+    };
+    self.setValue = function(value) {
+        var pickerInstance = Template.instance().pickerInstance;
+
+        if (!value) return;
+
+        // reactively set the value on the timepicker
+        if (pickerInstance) {
+            pickerInstance.set('select', value, {format: Template.instance().initOptions.formatSubmit});
+        }
+
     };
 });
 
@@ -68,11 +58,8 @@ Template.skeleformTimePicker.onRendered(function() {
         onSet: function(context) {
             var value = self.getValue();
 
-            if (self.data) {
-                skeleformValidateField(self);
-            }
-
-            InvokeCallback(value, schema, 'onChange');
+            self.isValid();
+            InvokeCallback(self, value, schema, 'onChange');
 
             // workaround for "closeOnSelect" option ignored by materializeCSS
             if (self.initOptions.closeOnSelect === undefined || self.initOptions.closeOnSelect === true) {
@@ -142,12 +129,9 @@ Template.skeleformTimePicker.onRendered(function() {
         }
     }
 
-    self.$('.timepicker').pickatime(self.initOptions);
-    self.pickerInstance = self.$('.timepicker').pickatime('picker');
+    var $field = $getFieldId(self, self.data.schema);
 
-    FlowRouter.subsReady(function() {
-        var value = self.getValue();
-
-        InvokeCallback(value, schema, 'onChange');
-    });
+    $field.pickatime(self.initOptions);
+    self.pickerInstance = $field.pickatime('picker');
+    self.isActivated.set(true);
 });

@@ -15,7 +15,6 @@ Template.skeleformClockPicker.helpers({
 Template.skeleformClockPicker.onCreated(function() {
     var self = this;
     self.isActivated = new ReactiveVar(false);
-
     self.initOptions = {};
 
     //register self on form' store
@@ -28,7 +27,6 @@ Template.skeleformClockPicker.onCreated(function() {
         $element.clockpicker('remove');
         $element.clockpicker(self.initOptions);
     };
-
     self.getValue = function() {
         return moment($getFieldId(self, self.data.schema).val(), self.initOptions.format).format(self.initOptions.formatSubmit);
     };

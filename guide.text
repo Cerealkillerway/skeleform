@@ -79,28 +79,28 @@ fields: [Array of Objects] each object in this array represents a field that can
 ===================================================================
 |||                  SCHEMA FIELDS OPTIONS                      |||
 ===================================================================
-__listView -> (optional) options for the field in the list view
-           -> stripHTML [boolean] set to true to strip out HTML from the value (default false)
-           -> truncate [integer] number of characters to keep (default all)
+__listView -> [object] (optional) options for the field in the list view:
+              stripHTML   -> [boolean] set to true to strip out HTML from the value (default false);
+              truncate    -> [integer] number of characters to keep (default all);
 
 Required fields:
 ----------------
-name    -> [String] (required) the name of the field (MUST be an UNIQUE identifier)
-output  -> [String] (required) form element ["input", "editor", "select"]
+name    -> [String] (required) the name of the field (MUST be an UNIQUE identifier);
+output  -> [String] (required) form element ["staticTitle", "input", "checkBox", "editor", "select", "datePicker", "timePicker", "clockPicker"];
 
     Field specific options:
     ------------------------------
-    staticTitle: mini -> [boolean] use <h3> tag instead of <h4>
+    staticTitle: mini -> [boolean] use <h3> tag instead of <h4>;
 
 
     input: icon          -> [string] (optional) materialize's icon class;
            renderAs      -> [string] (optional) type of input field to render (password, text); default to "text";
                             when using the "password" option, the field is not gathered for submit if left empty;
-                            IMPORTANT: when using "password" option don't set max length, since the value is hashed with sha256 (becomes longer);
+                            IMPORTANT: when using "password" option don't set "max" length, since the value is hashed with sha256 (becomes longer);
            shadowConfirm -> [boolean] (optional) activates a re-type input field that invalidates if its value is not equal;
-                            (ex.: to be used with renderAs: "password"); default to false;
-           formatAs      -> [string] (optional) specific format to use for the field's data (currency, float, undefined); default to undefined;
-           autoRange     -> [boolean] (optional) autoselect inner text when reached the max length defined for this field (default false);
+                            (ex.: to be used with renderAs: "password"); default to "false";
+           formatAs      -> [string] (optional) specific format to use for the field's data ("currency", "float", "undefined"); default to "undefined";
+           autoRange     -> [boolean] (optional) autoselect inner text when reached the max length defined for this field (default "false");
            charCounter   -> [number] (optional) enables the materializeCSS's character counter plugin;
                             Important: the character counter does not set the "maxlength" property on the input (this is done by using validation -> max);
 
@@ -132,16 +132,10 @@ output  -> [String] (required) form element ["input", "editor", "select"]
             sourceName   -> [string] (required if "source" is of type 2) the name of the documents' field to be used as display name in the option;
                             it is possible to use the segment ":itemLang---" that will be translated into the current language prefix;
             icons        -> [boolean] (optional) used to assign "icons" class for icons on options dropdown;
+                            it is required to be "true" if source is of type 1 and "icon" is setted on its elements;
             allowBlank   -> [boolean] (optional) allow select none (default undefined option is created automatically);
                             this options is meant to be used only if "source" is of type 2; otherwise is ignored, since with type 1 you can
                             manually define the "blank option" in the array used as "source";
-
-
-    imageUpload: can have options (image, thumb) that decides what will be created and uploaded [object]; both are objects with these properties:
-                        -> [float 0 ~ 1] the quality of jpeg created
-                        -> width [integer]
-                        -> height [integer]
-
 
     datePicker: icon           -> [string] (optional) materialize's icon class;
                 pickerOptions  -> [object] (optional) dictionary of init options to override when starting the pickadate plugin
@@ -155,6 +149,12 @@ output  -> [String] (required) form element ["input", "editor", "select"]
     clockPicker: icon           -> [string] (optional) materialize's icon class;
                  pickerOptions  -> [object] (optional) dictionary of init options to override when starting the clockpicker plugin;
                                    (more info at https://github.com/weareoutman/clockpicker and https://github.com/chingyawhao/materialize-clockpicker);
+
+    (WORK IN PROGRESS...)
+    imageUpload: can have options (image, thumb) that decides what will be created and uploaded [object]; both are objects with these properties:
+                       -> [float 0 ~ 1] the quality of jpeg created
+                       -> width [integer]
+                       -> height [integer]
 
 
 
