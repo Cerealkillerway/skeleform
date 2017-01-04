@@ -136,6 +136,7 @@ output  -> [String] (required) form element ["staticTitle", "input", "checkBox",
             allowBlank   -> [boolean] (optional) allow select none (default undefined option is created automatically);
                             this options is meant to be used only if "source" is of type 2; otherwise is ignored, since with type 1 you can
                             manually define the "blank option" in the array used as "source";
+            multi        -> [boolean] (optional) defines the select as a "multiple select"; default to "false";
 
     datePicker: icon           -> [string] (optional) materialize's icon class;
                 pickerOptions  -> [object] (optional) dictionary of init options to override when starting the pickadate plugin
