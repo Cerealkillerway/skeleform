@@ -83,7 +83,8 @@ Template.skeleformSelect.helpers({
         return schema.source;
     },
     isSelected: function(data, option) {
-        var pathShards = data.schema.name.split('.');
+        var schema = data.schema;
+        var pathShards = schema.name.split('.');
         var value = data.item;
         var name;
 
@@ -103,9 +104,20 @@ Template.skeleformSelect.helpers({
 
         if (!value) return;
 
-        if (option.toString() === value) {
-            return 'selected';
+        // if the select is multi, the value is an array
+        if (schema.multi) {
+            if (value.indexOf(option.toString()) >= 0) {
+                return 'selected';
+            }
         }
+        // otherwise the value is a string
+        else {
+            if (option.toString() === value) {
+                return 'selected';
+            }
+        }
+
+        return '';
     },
     isMultiple: function() {
         var schema = Template.instance().data.schema;
