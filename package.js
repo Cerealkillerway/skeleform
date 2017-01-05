@@ -1,6 +1,6 @@
 Package.describe({
     name: 'cerealkiller:skeleform',
-    version: '0.9.6',
+    version: '0.51.1',
     // Brief, one-line summary of the package.
     summary: 'form from schema creator',
     // URL to the Git repository containing the source code for this package.
@@ -23,7 +23,6 @@ Package.onUse(function(api) {
     api.use('tap:i18n@1.7.0');
     api.use('cerealkiller:materialnote@1.0.0', 'client');
     api.use('blaze-html-templates', 'client');
-    api.use('materialize:materialize@=0.97.7', 'client');  // force 0.97.7 since 0.97.8 is buggy
     api.use('cerealkiller:skeleutils@1.0.0');
     // if skeletor is in use, load it before
     api.use('cerealkiller:skeletor@0.0.3', {weak: true});
