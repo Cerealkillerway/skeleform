@@ -30,6 +30,7 @@ Please remember the followings:
 __collection   -> [string] (required) name of collection that is manipulated by this form;
 __toolbar      -> [object] (optional)
                     template      -> [string] (optional) name of alternative template to use as a toolbar;
+                                     it receives the skeleform's data context as data context;
                     containerId   -> [string] (optional/available only if "template"option is used) id of DOM element to place the toolbar in;
                     extrasCreate  -> [string] (optional) template for extra buttons to be added to standard create toolbar;
                     extrasUpdate  -> [string] (optional) template for extra buttons to be added to standard update toolbar;
@@ -197,9 +198,12 @@ fields           -> [array] (optional) the normal schema of the fields to be inj
 Every field should implement this methods:
 - i18n(currentLang)   -> [function] (optional) special handling required for i18n on the field; it receives the "currentLang" as a parameter;
 - getValue()          -> [function] (mandatory) must return the value of the field (formatted and ready to be saved in the db);
+                         if the field has "shadowConfirm" set to true, must return an object with two keys:
+                         standard   -> the normal field's value;
+                         shadow     -> the shadow field's value;
+- isValid()           -> [function] (mandatory) must perform validation on the field's value;
+                         it is called by skeleform before gathering values to be saved in the db;
                          normally this is done by calling "Skeleform.validate.checkOptions()" form this method;
-- isValid()           -> [function] (mandatory) must perform validation on the field's value; it is called by skeleform before gathering values to be
-                         saved in the db;
 - setValue(value)     -> [function] (mandatory) receives the current unformatted field value and must format it to be displayed (if required) and set
                          it on the proper DOM element of the field;
 

@@ -1,4 +1,5 @@
 Skeleform = {
     validate: {},
-    methods: {}
+    methods: {},
+    utils: {}
 };

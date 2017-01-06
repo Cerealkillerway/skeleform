@@ -17,6 +17,7 @@
     "unique_validation": "valore non disponibile (già usato)",
     "confirm_validation": "(non corrisponde)",
     "required_validation": "Obbligatorio",
+    "shadowValue_validation": "Conferma errata",
 
     "string_validationDetail": "testo",
     "number_validationDetail": "numero",

@@ -39,6 +39,10 @@ InvokeCallback = function(template, value, schema, type) {
 $getFieldId = function(template, schema) {
     return template.$('#' + schema.name.replace('.', '\\.'));
 };
+// get the field' shadow object
+$getShadowFieldId = function(template, schema) {
+    return template.$('#' + schema.name.replace('.', '\\.') + 'ShadowConfirm');
+};
 
 // standard function to set the value on a field;
 // it waits for any custom initialization on the field, and reactively watch lang changes

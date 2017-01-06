@@ -12,6 +12,22 @@ Template.skeleformInput.helpers({
     }
 });
 
+handleGettedValue = function(value, schema) {
+    switch (schema.validation.type) {
+        case 'url':
+            if (schema.shadowConfirm) {
+                value.standard = value.standard.dasherize();
+                value.shadow = value.shadow.dasherize();
+            }
+            else {
+                value = value.dasherize();
+            }
+            break;
+    }
+
+    return value;
+};
+
 
 // Events
 Template.skeleformInput.onCreated(function() {
@@ -23,20 +39,24 @@ Template.skeleformInput.onCreated(function() {
     self.data.formInstance.Fields.push(self);
 
     self.getValue = function() {
-        var value = $getFieldId(self, schema).val();
+        var value;
 
-        switch (schema.validation.type) {
-            case 'url':
-                value = value.dasherize();
-                break;
+        if (schema.shadowConfirm) {
+            value = {
+                standard: $getFieldId(self, schema).val(),
+                shadow: $getShadowFieldId(self, schema).val()
+            };
+        }
+        else {
+            value = $getFieldId(self, schema).val();
         }
 
-        return value;
+        return handleGettedValue(value, schema);
     };
     self.isValid = function() {
         var formInstance = self.data.formInstance;
 
-        return Skeleform.validate.checkOptions(self.getValue(), self.data.schema, formInstance.data.schema, formInstance.data.item);
+        return Skeleform.validate.checkOptions(self.getValue(), self.data.schema, formInstance.data.schema, formInstance.data.item, self);
     };
     self.setValue = function(value) {
         $getFieldId(self, schema).val(value);
@@ -88,36 +108,25 @@ Template.skeleformInput.onRendered(function() {
 });
 
 Template.skeleformInput.events({
-    'keyup .skeleValidate': function(event, template) {
+    'keyup .skeleValidate, keyup .shadowField': function(event, template) {
+        // perform validation and callback invocation on change
         var value = template.getValue();
         var schema = template.data.schema;
+        var result = template.isValid();
+        var id = $(event.target).attr('id');
 
-        skeleformValidateField(template);
+        if (!result.valid) {
+            setInvalid(id, schema, result);
+        }
+        else {
+            skeleformSuccessStatus(id, schema);
+        }
 
         //autoRange option
         if (schema.autoRange && value.length === schema.validation.max) {
             $(event.target).select();
         }
 
-        // if defined, perform the callback
-        if (schema.callbacks && schema.callbacks.onChange) {
-            schema.callbacks.onChange(value);
-        }
-    },
-    'keyup .shadowField': function(event, template) {
-        var shadowId = '#' + $(event.target).attr('id');
-        var id = shadowId.substring(0, shadowId.indexOf('ShadowConfirm'));
-
-        var value = template.getValue();
-        var shadowValue = $(shadowId).val();
-
-        skeleUtils.globalUtilities.logger('value: ' + value, 'skeleformFieldValidation');
-        skeleUtils.globalUtilities.logger('shadowValue: ' + shadowValue, 'skeleformFieldValidation');
-        if (value !== shadowValue) {
-            skeleformErrorStatus(shadowId, TAPi18n.__("confirm_validation"));
-        }
-        else {
-            skeleformSuccessStatus(shadowId);
-        }
+        InvokeCallback(template, value, schema, 'onChange');
     }
 });

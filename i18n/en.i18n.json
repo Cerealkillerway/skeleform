@@ -17,6 +17,7 @@
     "unique_validation": "value not avaliable (already taken)",
     "confirm_validation": "(It does not match)",
     "required_validation": "Required",
+    "shadowValue_validation": "Wrong confirm",
 
     "string_validationDetail": "text",
     "number_validationDetail": "number",

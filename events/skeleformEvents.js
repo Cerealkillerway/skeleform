@@ -1,11 +1,11 @@
-var debugType = "skeleform";
+var debugType = 'skeleform';
 var skeleformInstance;
 
 // get configuration from skeletor or from the app
 if (Package['cerealkiller:skeletor']) {
     configuration = Package['cerealkiller:skeletor'].Skeletor.configuration;
-    skeleUtils.globalUtilities.logger('loaded configuration:', 'skeleform');
-    skeleUtils.globalUtilities.logger(configuration, 'skeleform');
+    skeleUtils.globalUtilities.logger('loaded configuration:', debugType);
+    skeleUtils.globalUtilities.logger(configuration, debugType);
 }
 else {
     skeleUtils.globalUtilities.logger('Can\'t load configuration from Skeletor', 'skeleError', true);
@@ -14,21 +14,41 @@ else {
 
 // VALIDATION
 // ==========================================================================================
-//looks up for translated string if argument is not a number
+// looks up for translated string if argument is not a number
 function translateErrorDetail(detail) {
     var regex = /^([0-9]|[ #\-\+\(\)])+$/;
     if (regex.test(detail) === false) return TAPi18n.__(detail + '_validationDetail');
     return detail;
 }
 
-function setInvalid(id, schema, result) {
+
+setInvalid = function(id, schema, result) {
     skeleUtils.globalUtilities.logger('VALIDATION - invalid ' + id, debugType);
     var errorString = '';
+    var reasons = result.reasons;
+    var isShadowField = false;
 
-    result.reasons.forEach(function(rValue, rIndex) {
-        if (rIndex > 0) errorString = errorString +' - ';
+    if (id.indexOf('ShadowConfirm') >= 0) {
+        isShadowField = true;
+    }
+
+    if (reasons.length === 1 && reasons[0] === 'shadowValue' && !isShadowField) {
+        skeleformSuccessStatus(id);
+
+        id = id + 'ShadowConfirm';
+        isShadowField = true;
+    }
+
+    for (i = 0; i < reasons.length; i++) {
+        if (i > 0) errorString = errorString +' - ';
 
         var errorDetail;
+        var rValue = reasons[i];
+
+        // ignore "shadowValue" validation error on the main field (this type of error should be displayed only on the shadow field)
+        if (rValue === 'shadowValue' && !isShadowField) {
+            continue;
+        }
 
         if (schema.validation !== undefined) {
             // if there is an overridden value for the invalid message for the current reason, use that one; otherwise
@@ -41,12 +61,13 @@ function setInvalid(id, schema, result) {
                 errorString = errorString + TAPi18n.__(rValue + '_validation', errorDetail);
             }
         }
-    });
+    }
 
-    skeleformErrorStatus(id, errorString, schema.output);
-}
+    skeleformErrorStatus(id, errorString);
+};
 
-//validation loop for entire form against fields' values
+
+// validation loop for entire form against fields' values
 skeleformValidateForm = function(data, Fields) {
     var valid = true;
     var currentLang = FlowRouter.getParam('itemLang');
@@ -63,7 +84,7 @@ skeleformValidateForm = function(data, Fields) {
     catch(error) {
         valid = false;
         var schema = error.field.data.schema;
-        var id = "#" + schema.name.replace('.', '\\.');
+        var id = '#' + schema.name.replace('.', '\\.');
         var offsetCorrection = 80;
 
         setInvalid(id, schema, error.result);
@@ -76,32 +97,8 @@ skeleformValidateForm = function(data, Fields) {
 
     return valid;
 };
+Skeleform.utils.skeleformValidateForm = skeleformValidateForm;
 
-//validation for single field
-//called directly for inline validation
-skeleformValidateField = function(fieldInstance) {
-    var data = fieldInstance.data;
-    var item = data.item;
-    var schema = data.schema;
-
-    var documentId;
-
-    if (item) {
-        documentId = item._id;
-    }
-
-    if (!data.formInstance.formRendered.get()) return;
-    var id = "#" + schema.name.replace('.', '\\.');
-    var result = fieldInstance.isValid();
-
-    if (!result.valid) {
-        setInvalid(id, schema, result);
-    }
-    else {
-        skeleformSuccessStatus(id, schema.output);
-    }
-    return result.valid;
-};
 
 //reset success and error status on the form
 skeleformResetStatus = function(id) {
@@ -109,31 +106,40 @@ skeleformResetStatus = function(id) {
 
     if (id) {
         column.alterClass('valid', '');
-        column.find('.skeleformFieldAlert').html("");
+        column.find('.skeleformFieldAlert').html('');
     }
     else {
         $('.col').alterClass('valid', '');
-        $('.skeleformFieldAlert').html("");
+        $('.skeleformFieldAlert').html('');
     }
 };
 
+
 //set success status
-skeleformSuccessStatus = function(id, special) {
-    var column = $(id).closest('.col');
+skeleformSuccessStatus = function(id, schema) {
+    var selector = '#' + id;
+    var column = $(selector).closest('.col');
     var fieldAlert = column.find('.skeleformFieldAlert');
 
     column.alterClass('invalid', 'valid');
-    fieldAlert.html("");
+    fieldAlert.html('');
+
+    if (schema && schema.shadowConfirm) {
+        skeleformSuccessStatus(id + 'ShadowConfirm');
+    }
 };
 
+
 //set error status
-skeleformErrorStatus = function(id, errorString, special) {
-    var column = $(id).closest('.col');
+skeleformErrorStatus = function(id, errorString) {
+    var selector = '#' + id;
+    var column = $(selector).closest('.col');
     var fieldAlert = column.find('.skeleformFieldAlert');
 
     column.alterClass('valid', 'invalid');
-    fieldAlert.html(TAPi18n.__("error_validation", errorString));
+    fieldAlert.html(TAPi18n.__('error_validation', errorString));
 };
+
 
 //clean up the form
 skeleformCleanForm = function() {
@@ -145,7 +151,7 @@ skeleformCleanForm = function() {
     //select first option on select boxes
     $('select.skeleValidate').val('admin');
 
-    $('.fileLoader').value = "";
+    $('.fileLoader').value = '';
     $('.fileLoader').siblings('.fleNameContainer').html('');
 
     $.each($('canvas'), function(index, canvas) {
@@ -163,22 +169,23 @@ skeleformCleanForm = function() {
     skeleformResetStatus();
 };
 
+
 //handle method results and performs error/success operations on the client
 skeleformHandleResult = function(error, result, type, data, paths) {
     if (error) {
-        Materialize.toast(TAPi18n.__("serverError_error"), 5000, 'error');
+        Materialize.toast(TAPi18n.__('serverError_error'), 5000, 'error');
     }
     else {
         var title, content;
         switch (type) {
             case 'update':
-            title = TAPi18n.__("updateConfirm_msg");
-            content = TAPi18n.__("pageUpdatedOk_msg");
+            title = TAPi18n.__('updateConfirm_msg');
+            content = TAPi18n.__('pageUpdatedOk_msg');
             break;
 
             case 'create':
-            title = TAPi18n.__("insertConfirm_msg");
-            content = TAPi18n.__("genericInsert_msg");
+            title = TAPi18n.__('insertConfirm_msg');
+            content = TAPi18n.__('genericInsert_msg');
             skeleformCleanForm();
             break;
         }
@@ -190,7 +197,7 @@ skeleformHandleResult = function(error, result, type, data, paths) {
             if (redirectPath) {
                 var params = createPath(redirectPath, data);
 
-                params.queryParams.lang = FlowRouter.getQueryParam("lang");
+                params.queryParams.lang = FlowRouter.getQueryParam('lang');
 
                 Session.set('currentItem', undefined);    // reset skelelist's setted currentItem
 
@@ -230,11 +237,12 @@ skeleformGatherData = function(formContext, Fields) {
         }
     });
 
-    skeleUtils.globalUtilities.logger('<separator>form gathered data:', 'skeleform');
-    skeleUtils.globalUtilities.logger(data, 'skeleform');
+    skeleUtils.globalUtilities.logger('<separator>form gathered data:', debugType);
+    skeleUtils.globalUtilities.logger(data, debugType);
 
     return data;
 };
+Skeleform.utils.skeleformGatherData = skeleformGatherData;
 
 
 // Skeleform
@@ -262,6 +270,9 @@ Template.skeleform.onRendered(function() {
     // set toolbar in container if needed
     var toolbar = this.data.schema.__toolbar;
     if (toolbar && toolbar.containerId) {
+        if (self.data.Fields === undefined) {
+            self.data.Fields = self.Fields;
+        }
         Blaze.renderWithData(Template[toolbar.template], this.data, $('#' + toolbar.containerId)[0]);
     }
 
@@ -275,7 +286,7 @@ Template.skeleform.onRendered(function() {
 
             if ($bar.length > 0) {
                 var barOffset = Math.round($bar.offset().top * 1) / 1;
-                skeleUtils.globalUtilities.logger ('static bar calculated offset: ' + barOffset, 'skeleform');
+                skeleUtils.globalUtilities.logger ('static bar calculated offset: ' + barOffset, debugType);
 
                 $(window).on('scroll', function() {
                     if ($(document).scrollTop() >= barOffset) {
@@ -298,7 +309,7 @@ Template.skeleform.destroyed = function() {
 
 // create buttons (toolbar)
 Template.skeleformCreateButtons.events({
-    "click .skeleformCreate": function(event, template) {
+    'click .skeleformCreate': function(event, template) {
         var formContext = template.data.formContext;
         var Fields = template.data.Fields;
         var data = skeleformGatherData(formContext, Fields);
@@ -334,9 +345,10 @@ Template.skeleformCreateButtons.events({
     }
 });
 
+
 // update buttons (toolbar)
 Template.skeleformUpdateButtons.events({
-    "click .skeleformUpdate": function(event, template) {
+    'click .skeleformUpdate': function(event, template) {
         var formContext = template.data.formContext;
         var Fields = template.data.Fields;
         var data = skeleformGatherData(formContext, Fields);
@@ -364,8 +376,8 @@ Template.skeleformUpdateButtons.events({
         var unNestedDataKeys = [];
         var relationships = {};
 
-        skeleUtils.globalUtilities.logger ('url change monitor:', 'skeleform');
-        skeleUtils.globalUtilities.logger(params, 'skeleform');
+        skeleUtils.globalUtilities.logger ('url change monitor:', debugType);
+        skeleUtils.globalUtilities.logger(params, debugType);
         params = _.keys(params);
         dataKeys = _.keys(data);
 
@@ -405,19 +417,20 @@ Template.skeleformUpdateButtons.events({
 
 // skeleform language bar
 Template.skeleformLangBar.events({
-    "click .langFlag": function(event, template) {
+    'click .langFlag': function(event, template) {
         var newLang = $(event.target).closest('.langFlag').data('lang');
 
         FlowRouter.setParams({'itemLang': newLang});
     }
 });
 
+
 // skeletor static addons
 Template.skeleformStaticAddons.events({
-    "click .toTop": function(event, template) {
+    'click .toTop': function(event, template) {
         skeleUtils.globalUtilities.scrollTo(0, configuration.animations.scrollTop);
     },
-    "click .toBottom": function(event, template) {
+    'click .toBottom': function(event, template) {
         // if there are no errors in the form -> scroll to page's bottom
         if ($('.invalid').length === 0) {
             skeleUtils.globalUtilities.scrollTo($('body').height(), configuration.animations.scrollBottom);
