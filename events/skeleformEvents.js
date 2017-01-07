@@ -256,16 +256,8 @@ Template.skeleform.onRendered(function() {
     var self = this;
         skeleformInstance = self;
 
-    //Session.set('formRendered', true);
     self.formRendered.set(true);
-
     skeleUtils.globalUtilities.scrollTo(0, configuration.animations.onRendered);
-
-    Tracker.autorun(function() {
-        if (FlowRouter.subsReady()) {
-            skeleformResetStatus();    // clean validation alerts
-        }
-    });
 
     // set toolbar in container if needed
     var toolbar = this.data.schema.__toolbar;
@@ -278,11 +270,16 @@ Template.skeleform.onRendered(function() {
 
     $('input:first').focusWithoutScrolling();
 
-    Tracker.autorun(function() {
-        if (Session.equals('appRendered', true)) {
+    self.autorun(function() {
+        if (FlowRouter.subsReady()) {
+            // clean validation alerts
+            skeleformResetStatus();
+        }
+    });
+    self.autorun(function() {
+        if (Skeletor.appRendered.get() === true) {
             // static bar
             var $bar = $('.skeleformToolbar');
-
 
             if ($bar.length > 0) {
                 var barOffset = Math.round($bar.offset().top * 1) / 1;

@@ -80,6 +80,7 @@ Template.skeleformSelect.helpers({
 
             return result;
         }
+
         return schema.source;
     },
     isSelected: function(data, option) {
@@ -165,7 +166,6 @@ Template.skeleformSelect.onRendered(function() {
     var self = this;
 
     $getFieldId(self, self.data.schema).material_select();
-
     self.isActivated.set(true);
 });
 Template.skeleformSelect.events({

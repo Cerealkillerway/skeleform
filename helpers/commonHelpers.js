@@ -49,7 +49,6 @@ $getShadowFieldId = function(template, schema) {
 // and fires appropriate i18n method on the field is special handling for i18n is required
 setFieldValue = function(template, data, schema) {
     template.view.autorun(function() {
-        var value = SkeleformStandardFieldValue(data, schema);
         // register dependency from current language; used to fire custom i18n callback
         // for fields that requires special i18n treatment...
         var currentLang = TAPi18n.getLanguage();
@@ -70,47 +69,50 @@ setFieldValue = function(template, data, schema) {
         var isActivated = template.isActivated;
 
         if (isActivated.get() === true) {
-            FlowRouter.subsReady(function() {
-                //skeleUtils.globalUtilities.logger(schema.name + '-value: ' + value, 'skeleformCommon');
-                //skeleUtils.globalUtilities.logger(schema.name + '-getValue(): ' + template.getValue(), 'skeleformCommon');
-                //skeleUtils.globalUtilities.logger('------------------', 'skeleformCommon');
+            if (!FlowRouter.subsReady()) {
+                return false;
+            }
+            var value = SkeleformStandardFieldValue(data, schema);
 
-                if (value === undefined) {
-                    value = '';
+            //skeleUtils.globalUtilities.logger(schema.name + '-value: ' + value, 'skeleformCommon');
+            //skeleUtils.globalUtilities.logger(schema.name + '-getValue(): ' + template.getValue(), 'skeleformCommon');
+            //skeleUtils.globalUtilities.logger('------------------', 'skeleformCommon');
+
+            /*if (value === undefined || value === null) {
+                value = '';
+            }*/
+            var tmp = template.getValue();
+            if (value !== template.getValue()) {
+                template.setValue(value);
+                template.isValid();
+
+                if (formRendered === true) {
+                    template.callbacksCalled.onChange = true;
+                    InvokeCallback(template, value, schema, 'onChange');
                 }
-                if (value !== template.getValue()) {
-                    template.setValue(value);
+            }
+            else {
+                // if the callback has not fired yet, fire it now!
+                if (template.callbacksCalled.onChange === false) {
+                    template.callbacksCalled.onChange = true;
+
+                    if (template.pluginSetHappened !== undefined) {
+                        template.pluginSetHappened = false;
+                    }
+                    InvokeCallback(template, value, schema, 'onChange');
+                }
+
+                // if the field has not been validated, validate it now!
+                if (!template.isValidated) {
+                    template.isValidated = true;
                     template.isValid();
-
-                    if (formRendered === true) {
-                        template.callbacksCalled.onChange = true;
-                        InvokeCallback(template, value, schema, 'onChange');
-                    }
                 }
-                else {
-                    // if the callback has not fired yet, fire it now!
-                    if (template.callbacksCalled.onChange === false) {
-                        template.callbacksCalled.onChange = true;
+            }
 
-                        if (template.pluginSetHappened !== undefined) {
-                            template.pluginSetHappened = false;
-                        }
-
-                        InvokeCallback(template, value, schema, 'onChange');
-                    }
-
-                    // if the field has not been validated, validate it now!
-                    if (!template.isValidated) {
-                        template.isValidated = true;
-                        template.isValid();
-                    }
-                }
-
-                // call custom i18n if necessary
-                if (template.i18n) {
-                    template.i18n(currentLang);
-                }
-            });
+            // call custom i18n if necessary
+            if (template.i18n) {
+                template.i18n(currentLang);
+            }
         }
     });
 };

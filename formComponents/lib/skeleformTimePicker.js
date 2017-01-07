@@ -51,6 +51,7 @@ Template.skeleformTimePicker.onRendered(function() {
     var self = this;
     var data = self.data.item;
     var schema = this.data.schema;
+    self.setCounter = 0;
 
     // activates validation on set
     self.initOptions = {
@@ -59,7 +60,12 @@ Template.skeleformTimePicker.onRendered(function() {
             var value = self.getValue();
 
             self.isValid();
-            InvokeCallback(self, value, schema, 'onChange');
+
+            // workaround to avoid multiple callback invocation on startup
+            if (self.setCounter > 0) {
+                InvokeCallback(self, value, schema, 'onChange');
+            }
+            self.setCounter++;
 
             // workaround for "closeOnSelect" option ignored by materializeCSS
             if (self.initOptions.closeOnSelect === undefined || self.initOptions.closeOnSelect === true) {
