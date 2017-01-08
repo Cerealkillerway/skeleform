@@ -6,132 +6,129 @@
 Template.skeleformClockPicker.helpers(skeleformGeneralHelpers);
 Template.skeleformClockPicker.helpers({
     fieldClock: function(data, schema) {
-        var template = Template.instance();
+        const instance = Template.instance();
 
-        setFieldValue(template, data, schema);
+        setFieldValue(instance, data, schema);
     }
 });
 
 Template.skeleformClockPicker.onCreated(function() {
-    var self = this;
-    self.isActivated = new ReactiveVar(false);
-    self.initOptions = {};
+    this.isActivated = new ReactiveVar(false);
+    this.initOptions = {};
 
-    //register self on form' store
-    self.data.formInstance.Fields.push(self);
+    //register this on form' store
+    this.data.formInstance.Fields.push(this);
 
-    self.i18n = function(currentLang) {
-        var $element = $getFieldId(self, self.data.schema);
+    this.i18n = (currentLang) => {
+        let $element = $getFieldId(this, this.data.schema);
 
-        self.initOptions.donetext = TAPi18n.__('pickadateButtons_labels').split(' ')[2];
+        this.initOptions.donetext = TAPi18n.__('pickadateButtons_labels').split(' ')[2];
         $element.clockpicker('remove');
-        $element.clockpicker(self.initOptions);
+        $element.clockpicker(this.initOptions);
     };
-    self.getValue = function() {
-        return moment($getFieldId(self, self.data.schema).val(), self.initOptions.format).format(self.initOptions.formatSubmit);
+    this.getValue = () => {
+        return moment($getFieldId(this, this.data.schema).val(), this.initOptions.format).format(this.initOptions.formatSubmit);
     };
-    self.isValid = function() {
+    this.isValid = () => {
         //skeleUtils.globalUtilities.logger('clockpicker validation', 'skeleformFieldValidation');
-        var formInstance = self.data.formInstance;
+        let formInstance = this.data.formInstance;
 
-        return Skeleform.validate.checkOptions(self.getValue(), self.data.schema, formInstance.data.schema, formInstance.data.item);
+        return Skeleform.validate.checkOptions(this.getValue(), this.data.schema, formInstance.data.schema, formInstance.data.item);
     };
-    self.setValue = function(value) {
-        var initOptions = self.initOptions;
+    this.setValue = (value) => {
+        let initOptions = this.initOptions;
 
         // avoid empty strings since in that case moment will use current datetime as input;
         if (value === undefined || value.length === 0) return;
 
         value = moment(value, initOptions.formatSubmit).format(initOptions.format);
-        $getFieldId(self, self.data.schema).val(value);
+        $getFieldId(this, this.data.schema).val(value);
     };
 });
 
 Template.skeleformClockPicker.onRendered(function() {
-    var self = this;
-    var data = self.data.item;
-    var schema = this.data.schema;
+    let data = this.data.item;
+    let schema = this.data.schema;
+    let options = schema.pickerOptions;
 
     // activates validation on set
-    self.initOptions = {
-        afterDone: function() {
+    this.initOptions = {
+        afterDone: () => {
             // perform validation and callback invocation on change
-            var value = self.getValue();
+            let value = this.getValue();
 
-            self.isValid();
-            InvokeCallback(self, value, schema, 'onChange');
+            this.isValid();
+            InvokeCallback(this, value, schema, 'onChange');
         }
     };
 
-    var options = schema.pickerOptions;
-
     // format used to display
     if (options && options.format) {
-        self.initOptions.format = options.format;
+        this.initOptions.format = options.format;
     }
     else {
-        self.initOptions.format = 'H:mm';
+        this.initOptions.format = 'H:mm';
     }
 
     // format used for the value to be submitted
     if (options && options.formatSubmit) {
-        self.initOptions.formatSubmit = options.formatSubmit;
+        this.initOptions.formatSubmit = options.formatSubmit;
     }
     else {
-        self.initOptions.formatSubmit = 'HHmm';
+        this.initOptions.formatSubmit = 'HHmm';
     }
 
     // default time
     if (options && options.default) {
-        self.initOptions.default = options.default;
+        this.initOptions.default = options.default;
     }
     else {
-        self.initOptions.default = 'now';
+        this.initOptions.default = 'now';
     }
 
     // 12/24 hours
     if (options && options.twelvehour) {
-        self.initOptions.twelvehour = options.twelvehour;
+        this.initOptions.twelvehour = options.twelvehour;
     }
     else {
-        self.initOptions.twelvehour = false;
+        this.initOptions.twelvehour = false;
     }
 
     // autoclose
     if (options && options.autoclose) {
-        self.initOptions.autoclose = options.autoclose;
+        this.initOptions.autoclose = options.autoclose;
     }
     else {
-        self.initOptions.autoclose = true;
+        this.initOptions.autoclose = true;
     }
 
     if (options) {
         // am/pm button clickable
         if (options.ampmclickable !== undefined) {
-            self.initOptions.ampmclickable = options.ampmclickable;
+            this.initOptions.ampmclickable = options.ampmclickable;
         }
 
         // vibration on mobile devices while dragging
         if (options.vibrate !== undefined) {
-            self.initOptions.vibrate = options.vibrate;
+            this.initOptions.vibrate = options.vibrate;
         }
 
         // popover placement
         if (options.placement !== undefined) {
-            self.initOptions.placement = options.placement;
+            this.initOptions.placement = options.placement;
         }
 
         // popover arrow align
         if (options.align !== undefined) {
-            self.initOptions.align = options.align;
+            this.initOptions.align = options.align;
         }
 
         // set default time to * milliseconds from now (using with default = 'now')
         if (options.fromnow !== undefined) {
-            self.initOptions.fromnow = options.fromnow;
+            this.initOptions.fromnow = options.fromnow;
         }
     }
 
-    $getFieldId(self, self.data.schema).clockpicker(self.initOptions);
-    self.isActivated.set(true);
+    $getFieldId(this, this.data.schema).clockpicker(this.initOptions);
+    this.isActivated.set(true);
 });

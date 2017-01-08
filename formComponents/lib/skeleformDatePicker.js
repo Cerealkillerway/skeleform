@@ -7,23 +7,22 @@
 Template.skeleformDatePicker.helpers(skeleformGeneralHelpers);
 Template.skeleformDatePicker.helpers({
     fieldDate: function(data, schema) {
-        var template = Template.instance();
+        const instance = Template.instance();
 
-        setFieldValue(template, data, schema);
+        setFieldValue(instance, data, schema);
     }
 });
 
 Template.skeleformDatePicker.onCreated(function() {
-    var self = this;
-    self.isActivated = new ReactiveVar(false);
+    this.isActivated = new ReactiveVar(false);
 
-    self.initOptions = {};
+    this.initOptions = {};
 
-    //register self on form' store
-    self.data.formInstance.Fields.push(self);
+    //register this on form' store
+    this.data.formInstance.Fields.push(this);
 
-    self.i18n = function() {
-        var pickerInstance = self.pickerInstance;
+    this.i18n = () => {
+        let pickerInstance = this.pickerInstance;
 
         pickerInstance.component.settings.monthsFull = TAPi18n.__('monthsFull_labels').split(' ');
         pickerInstance.component.settings.monthsShort = TAPi18n.__('monthsShort_labels').split(' ');
@@ -40,33 +39,32 @@ Template.skeleformDatePicker.onCreated(function() {
 
         pickerInstance.render();
         // set again the value to translate also in the input box
-        //pickerInstance.set('select', SkeleformStandardFieldValue(self.data.item, self.data.schema), {format: self.initOptions.formatSubmit});
-        self.setValue(SkeleformStandardFieldValue(self.data.item, self.data.schema));
+        //pickerInstance.set('select', SkeleformStandardFieldValue(this.data.item, this.data.schema), {format: this.initOptions.formatSubmit});
+        this.setValue(SkeleformStandardFieldValue(this.data.item, this.data.schema));
     };
-    self.getValue = function() {
-        var value = self.pickerInstance.get('select', self.initOptions.formatSubmit);
+    this.getValue = () => {
+        let value = this.pickerInstance.get('select', this.initOptions.formatSubmit);
 
         return value;
     };
-    self.isValid = function() {
+    this.isValid = () => {
         //skeleUtils.globalUtilities.logger('datepicker validation', 'skeleformFieldValidation');
-        var formInstance = self.data.formInstance;
+        let formInstance = this.data.formInstance;
 
-        return Skeleform.validate.checkOptions(self.getValue(), self.data.schema, formInstance.data.schema, formInstance.data.item);
+        return Skeleform.validate.checkOptions(this.getValue(), this.data.schema, formInstance.data.schema, formInstance.data.item);
     };
-    self.setValue = function(value) {
-        self.pickerInstance.set('select', value, {format: self.initOptions.formatSubmit});
+    this.setValue = (value) => {
+        this.pickerInstance.set('select', value, {format: this.initOptions.formatSubmit});
     };
 });
 
 Template.skeleformDatePicker.onRendered(function() {
-    var self = this;
-    var data = self.data.item;
-    var schema = this.data.schema;
-    var $element = $getFieldId(self, schema);
+    let data = this.data.item;
+    let schema = this.data.schema;
+    let $element = $getFieldId(this, schema);
 
     // activates validation on set
-    self.initOptions = {
+    this.initOptions = {
         monthsFull: TAPi18n.__("monthsFull_labels").split(' '),
         monthsShort: TAPi18n.__('monthsShort_labels').split(' '),
         weekdaysFull: TAPi18n.__('weekDaysFull_labels').split(' '),
@@ -80,22 +78,22 @@ Template.skeleformDatePicker.onRendered(function() {
         labelMonthSelect: TAPi18n.__('monthSelect_label'),
         labelYearSelect: TAPi18n.__('yearSelect_label'),
 
-        onSet: function(context) {
+        onSet: (context) => {
             // perform validation and callback invocation on change
-            var value = self.getValue();
+            let value = this.getValue();
 
             // workaround to avoid multiple callback invocation on startup
             // if context.select is numeric -> setted by user, otherwise -> setted from db
             if (typeof(context.select) === 'number') {
-                self.isValid();
-                InvokeCallback(self, value, schema, 'onChange');
+                this.isValid();
+                InvokeCallback(this, value, schema, 'onChange');
             }
 
             // workaround for "closeOnSelect" option ignored by materializeCSS
-            if (self.initOptions.closeOnSelect === undefined || self.initOptions.closeOnSelect === true) {
+            if (this.initOptions.closeOnSelect === undefined || this.initOptions.closeOnSelect === true) {
                 //prevent closing on selecting month/year
                 if ('select' in context) {
-                    this.close();
+                    this.pickerInstance.close();
                 }
             }
         }
@@ -105,63 +103,63 @@ Template.skeleformDatePicker.onRendered(function() {
 
     // format used to display
     if (options && options.format) {
-        self.initOptions.format = options.format;
+        this.initOptions.format = options.format;
     }
     else {
-        self.initOptions.format = 'd mmmm yyyy';
+        this.initOptions.format = 'd mmmm yyyy';
     }
 
     // format used to submit
     if (options && options.formatSubmit) {
-        self.initOptions.formatSubmit = options.formatSubmit;
+        this.initOptions.formatSubmit = options.formatSubmit;
     }
     else {
-        self.initOptions.formatSubmit = 'yyyymmdd';
+        this.initOptions.formatSubmit = 'yyyymmdd';
     }
 
     if (options) {
         // years and months dropdowns
         if (options.selectYears !== undefined) {
-            self.initOptions.selectYears = options.selectYears;
+            this.initOptions.selectYears = options.selectYears;
         }
         if (options.selectMonths !== undefined) {
-            self.initOptions.selectMonths = options.selectMonths;
+            this.initOptions.selectMonths = options.selectMonths;
         }
 
         // editable input box
         if (options.editable !== undefined) {
-            self.initOptions.editable = options.editable;
+            this.initOptions.editable = options.editable;
         }
 
         // first day of the week
         if (options.firstDay !== undefined) {
-            self.initOptions.firstDay = options.firstDay;
+            this.initOptions.firstDay = options.firstDay;
         }
 
         // date limits
         if (options.min !== undefined) {
-            self.initOptions.min = options.min;
+            this.initOptions.min = options.min;
         }
         if (options.max !== undefined) {
-            self.initOptions.max = options.max;
+            this.initOptions.max = options.max;
         }
 
         // disable dates
         if (options.disable !== undefined) {
-            self.initOptions.disable = options.disable;
+            this.initOptions.disable = options.disable;
         }
 
         // close on user actions
         if (options.closeOnSelect !== undefined) {
             // actually ignored (materializeCSS customization to match google datepicker behavior
-            self.initOptions.closeOnSelect = options.closeOnSelect;
+            this.initOptions.closeOnSelect = options.closeOnSelect;
         }
         if (options.closeOnClear !== undefined) {
-            self.initOptions.closeOnClear = options.closeOnClear;
+            this.initOptions.closeOnClear = options.closeOnClear;
         }
     }
 
-    $element.pickadate(self.initOptions);
-    self.pickerInstance = $element.pickadate('picker');
-    self.isActivated.set(true);
+    $element.pickadate(this.initOptions);
+    this.pickerInstance = $element.pickadate('picker');
+    this.isActivated.set(true);
 });

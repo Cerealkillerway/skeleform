@@ -16,7 +16,8 @@ else {
 // ==========================================================================================
 // looks up for translated string if argument is not a number
 function translateErrorDetail(detail) {
-    var regex = /^([0-9]|[ #\-\+\(\)])+$/;
+    let regex = /^([0-9]|[ #\-\+\(\)])+$/;
+
     if (regex.test(detail) === false) return TAPi18n.__(detail + '_validationDetail');
     return detail;
 }
@@ -24,9 +25,9 @@ function translateErrorDetail(detail) {
 
 setInvalid = function(id, schema, result) {
     skeleUtils.globalUtilities.logger('VALIDATION - invalid ' + id, debugType);
-    var errorString = '';
-    var reasons = result.reasons;
-    var isShadowField = false;
+    let errorString = '';
+    let reasons = result.reasons;
+    let isShadowField = false;
 
     if (id.indexOf('ShadowConfirm') >= 0) {
         isShadowField = true;
@@ -42,8 +43,8 @@ setInvalid = function(id, schema, result) {
     for (i = 0; i < reasons.length; i++) {
         if (i > 0) errorString = errorString +' - ';
 
-        var errorDetail;
-        var rValue = reasons[i];
+        let errorDetail;
+        let rValue = reasons[i];
 
         // ignore "shadowValue" validation error on the main field (this type of error should be displayed only on the shadow field)
         if (rValue === 'shadowValue' && !isShadowField) {
@@ -69,8 +70,8 @@ setInvalid = function(id, schema, result) {
 
 // validation loop for entire form against fields' values
 skeleformValidateForm = function(data, Fields) {
-    var valid = true;
-    var currentLang = FlowRouter.getParam('itemLang');
+    let valid = true;
+    let currentLang = FlowRouter.getParam('itemLang');
 
     try {
         Fields.forEach(function(field) {
@@ -83,9 +84,9 @@ skeleformValidateForm = function(data, Fields) {
     }
     catch(error) {
         valid = false;
-        var schema = error.field.data.schema;
-        var id = '#' + schema.name.replace('.', '\\.');
-        var offsetCorrection = 80;
+        let schema = error.field.data.schema;
+        let id = '#' + schema.name.replace('.', '\\.');
+        let offsetCorrection = 80;
 
         setInvalid(id, schema, error.result);
 
@@ -102,7 +103,7 @@ Skeleform.utils.skeleformValidateForm = skeleformValidateForm;
 
 //reset success and error status on the form
 skeleformResetStatus = function(id) {
-    var column = $('#' + id).closest('.col');
+    let column = $('#' + id).closest('.col');
 
     if (id) {
         column.alterClass('valid', '');
@@ -117,9 +118,9 @@ skeleformResetStatus = function(id) {
 
 //set success status
 skeleformSuccessStatus = function(id, schema) {
-    var selector = '#' + id;
-    var column = $(selector).closest('.col');
-    var fieldAlert = column.find('.skeleformFieldAlert');
+    let selector = '#' + id;
+    let column = $(selector).closest('.col');
+    let fieldAlert = column.find('.skeleformFieldAlert');
 
     column.alterClass('invalid', 'valid');
     fieldAlert.html('');
@@ -132,9 +133,9 @@ skeleformSuccessStatus = function(id, schema) {
 
 //set error status
 skeleformErrorStatus = function(id, errorString) {
-    var selector = '#' + id;
-    var column = $(selector).closest('.col');
-    var fieldAlert = column.find('.skeleformFieldAlert');
+    let selector = '#' + id;
+    let column = $(selector).closest('.col');
+    let fieldAlert = column.find('.skeleformFieldAlert');
 
     column.alterClass('valid', 'invalid');
     fieldAlert.html(TAPi18n.__('error_validation', errorString));
@@ -162,10 +163,11 @@ skeleformCleanForm = function() {
         canvas.width = 300;
         canvas.height = 150;
 
-        var ctx = canvas.getContext('2d');
+        let ctx = canvas.getContext('2d');
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     });
+
     skeleformResetStatus();
 };
 
@@ -176,7 +178,7 @@ skeleformHandleResult = function(error, result, type, data, paths) {
         Materialize.toast(TAPi18n.__('serverError_error'), 5000, 'error');
     }
     else {
-        var title, content;
+        let title, content;
         switch (type) {
             case 'update':
             title = TAPi18n.__('updateConfirm_msg');
@@ -191,7 +193,7 @@ skeleformHandleResult = function(error, result, type, data, paths) {
         }
 
         Materialize.toast(content, 1300, 'success', function() {
-            var redirectPath = paths['redirectOn' + type.capitalize()];
+            let redirectPath = paths['redirectOn' + type.capitalize()];
 
             // if the form is setted up for a redirect after the current action -> redirect
             if (redirectPath) {
@@ -215,16 +217,16 @@ skeleformHandleResult = function(error, result, type, data, paths) {
 // GATHERING
 // gather data from form's fields
 skeleformGatherData = function(formContext, Fields) {
-    var formItem = formContext.item;
-    var lang = FlowRouter.getParam('itemLang');
-    var data = {};
+    let formItem = formContext.item;
+    let lang = FlowRouter.getParam('itemLang');
+    let data = {};
 
     Fields.forEach(function(field) {
-        var fieldSchema = field.data.schema;
-        var fieldValue = field.getValue();
+        let fieldSchema = field.data.schema;
+        let fieldValue = field.getValue();
 
         if (fieldSchema.i18n === undefined) {
-            var currentValue = formItem ? formItem[lang + '---' + fieldSchema.name] : null;
+            let currentValue = formItem ? formItem[lang + '---' + fieldSchema.name] : null;
 
             if (!currentValue || (currentValue && fieldValue !== currentValue)) {
                 data[lang + '---' + fieldSchema.name] = fieldValue;
@@ -253,36 +255,36 @@ Template.skeleform.onCreated(function() {
     this.Fields = [];
 });
 Template.skeleform.onRendered(function() {
-    var self = this;
-        skeleformInstance = self;
-
-    self.formRendered.set(true);
+    skeleformInstance = this;
+    this.formRendered.set(true);
     skeleUtils.globalUtilities.scrollTo(0, configuration.animations.onRendered);
 
     // set toolbar in container if needed
-    var toolbar = this.data.schema.__toolbar;
+    let toolbar = this.data.schema.__toolbar;
+
     if (toolbar && toolbar.containerId) {
-        if (self.data.Fields === undefined) {
-            self.data.Fields = self.Fields;
+        if (this.data.Fields === undefined) {
+            this.data.Fields = this.Fields;
         }
         Blaze.renderWithData(Template[toolbar.template], this.data, $('#' + toolbar.containerId)[0]);
     }
 
     $('input:first').focusWithoutScrolling();
 
-    self.autorun(function() {
+    this.autorun(function() {
         if (FlowRouter.subsReady()) {
             // clean validation alerts
             skeleformResetStatus();
         }
     });
-    self.autorun(function() {
+    this.autorun(function() {
         if (Skeletor.appRendered.get() === true) {
             // static bar
-            var $bar = $('.skeleformToolbar');
+            let $bar = $('.skeleformToolbar');
 
             if ($bar.length > 0) {
-                var barOffset = Math.round($bar.offset().top * 1) / 1;
+                let barOffset = Math.round($bar.offset().top * 1) / 1;
+
                 skeleUtils.globalUtilities.logger ('static bar calculated offset: ' + barOffset, debugType);
 
                 $(window).on('scroll', function() {
@@ -307,12 +309,12 @@ Template.skeleform.destroyed = function() {
 // create buttons (toolbar)
 Template.skeleformCreateButtons.events({
     'click .skeleformCreate': function(event, template) {
-        var formContext = template.data.formContext;
-        var Fields = template.data.Fields;
-        var data = skeleformGatherData(formContext, Fields);
-        var schema = formContext.schema;
-        var method;
-        var options = {};
+        let formContext = template.data.formContext;
+        let Fields = template.data.Fields;
+        let data = skeleformGatherData(formContext, Fields);
+        let schema = formContext.schema;
+        let method;
+        let options = {};
 
         if (schema.__options) {
             if (schema.__options.loadingModal) {
@@ -346,13 +348,13 @@ Template.skeleformCreateButtons.events({
 // update buttons (toolbar)
 Template.skeleformUpdateButtons.events({
     'click .skeleformUpdate': function(event, template) {
-        var formContext = template.data.formContext;
-        var Fields = template.data.Fields;
-        var data = skeleformGatherData(formContext, Fields);
-        var documentId = formContext.item._id;
-        var schema = formContext.schema;
-        var method;
-        var options = {};
+        let formContext = template.data.formContext;
+        let Fields = template.data.Fields;
+        let data = skeleformGatherData(formContext, Fields);
+        let documentId = formContext.item._id;
+        let schema = formContext.schema;
+        let method;
+        let options = {};
 
         if (schema.__options) {
             if (schema.__options.loadingModal) {
@@ -368,10 +370,10 @@ Template.skeleformUpdateButtons.events({
         }
 
         // get route params to manage if current update should redirect to a new path
-        var currentRoute = FlowRouter.current();
-        var params = currentRoute.params;
-        var unNestedDataKeys = [];
-        var relationships = {};
+        let currentRoute = FlowRouter.current();
+        let params = currentRoute.params;
+        let unNestedDataKeys = [];
+        let relationships = {};
 
         skeleUtils.globalUtilities.logger ('url change monitor:', debugType);
         skeleUtils.globalUtilities.logger(params, debugType);
@@ -379,14 +381,14 @@ Template.skeleformUpdateButtons.events({
         dataKeys = _.keys(data);
 
         dataKeys.forEach(function(dataKey, index) {
-            var unNested = dataKey.split('.');
+            let unNested = dataKey.split('.');
                 unNested = unNested[unNested.length - 1];
 
             unNestedDataKeys.push(unNested);
             relationships[unNested] = dataKey;  // save original name of un-nested param
         });
 
-        var changedParams = _.intersection(params, unNestedDataKeys);
+        let changedParams = _.intersection(params, unNestedDataKeys);
 
         if (skeleformValidateForm(data, Fields)) {
             if (options.useModal) {
@@ -415,7 +417,7 @@ Template.skeleformUpdateButtons.events({
 // skeleform language bar
 Template.skeleformLangBar.events({
     'click .langFlag': function(event, template) {
-        var newLang = $(event.target).closest('.langFlag').data('lang');
+        let newLang = $(event.target).closest('.langFlag').data('lang');
 
         FlowRouter.setParams({'itemLang': newLang});
     }
@@ -434,7 +436,7 @@ Template.skeleformStaticAddons.events({
         }
         // otherwise scroll to first error
         else {
-            var offsetCorrection = 80;
+            let offsetCorrection = 80;
 
             if ($('.staticTop').length === 0) {
                 offsetCorrection = offsetCorrection + 66;

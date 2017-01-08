@@ -9,7 +9,7 @@ Template.skeleformSelect.helpers({
         // if source field is a query result, then build the option objects using
         // defined "sourceName" and "sourceValue" fields
         if (schema.sourceValue) {
-            var result = [];
+            let result = [];
 
             if (schema.allowBlank) {
                 result.push({
@@ -19,19 +19,19 @@ Template.skeleformSelect.helpers({
             }
 
             schema.source.forEach(function(item, index) {
-                var option;
-                var lang = FlowRouter.getParam('itemLang');
-                var defaultLang = Skeletor.configuration.lang.default;
-                var sourceName = schema.sourceName;
-                var sourceValue = schema.sourceValue;
-                var nameAttr = item;
-                var valueAttr = item;
-                var missingTranslation = false;
+                let option;
+                let lang = FlowRouter.getParam('itemLang');
+                let defaultLang = Skeletor.configuration.lang.default;
+                let sourceName = schema.sourceName;
+                let sourceValue = schema.sourceValue;
+                let nameAttr = item;
+                let valueAttr = item;
+                let missingTranslation = false;
 
                 // get the displaying name for the option
                 schema.sourceName.split('.').forEach(function(nameShard, index) {
                     if (nameShard.indexOf(':itemLang---') === 0) {
-                        var nameOnly = nameShard.substring(12, nameShard.length);
+                        let nameOnly = nameShard.substring(12, nameShard.length);
 
                         if (nameAttr[lang + '---' + nameOnly]) {
                             nameAttr = nameAttr[lang + '---' + nameOnly];
@@ -84,13 +84,13 @@ Template.skeleformSelect.helpers({
         return schema.source;
     },
     isSelected: function(data, option) {
-        var schema = data.schema;
-        var pathShards = schema.name.split('.');
-        var value = data.item;
-        var name;
+        let schema = data.schema;
+        let pathShards = schema.name.split('.');
+        let value = data.item;
+        let name;
 
         if (!data.item) {
-            return "";
+            return '';
         }
 
         if (data.schema.i18n === undefined) {
@@ -121,7 +121,8 @@ Template.skeleformSelect.helpers({
         return '';
     },
     isMultiple: function() {
-        var schema = Template.instance().data.schema;
+        const instance = Template.instance();
+        let schema = instance.data.schema;
 
         if (schema.multi) {
             return 'multiple';
@@ -132,41 +133,38 @@ Template.skeleformSelect.helpers({
         if (option.icon) {
             return option.icon;
         }
-        return "";
+        return '';
     }
 });
 
 
 // Events
 Template.skeleformSelect.onCreated(function() {
-    var self = this;
-    self.isActivated = new ReactiveVar(false);
+    this.isActivated = new ReactiveVar(false);
 
-    //register self on form' store
-    self.data.formInstance.Fields.push(self);
+    //register this on form' store
+    this.data.formInstance.Fields.push(this);
 
-    self.i18n = function() {
-        $getFieldId(self, self.data.schema).material_select();
+    this.i18n = () => {
+        $getFieldId(this, this.data.schema).material_select();
     };
-    self.getValue = function() {
+    this.getValue = () => {
         //skeleUtils.globalUtilities.logger('select validation', 'skeleformFieldValidation');
-        return $getFieldId(self, self.data.schema).val();
+        return $getFieldId(this, this.data.schema).val();
     };
-    self.isValid = function() {
-        var formInstance = self.data.formInstance;
+    this.isValid = () => {
+        var formInstance = this.data.formInstance;
 
-        return Skeleform.validate.checkOptions(self.getValue(), self.data.schema, formInstance.data.schema, formInstance.data.item);
+        return Skeleform.validate.checkOptions(this.getValue(), this.data.schema, formInstance.data.schema, formInstance.data.item);
     };
-    self.setValue = function(value) {
+    this.setValue = (value) => {
         // in this field value is not setted by "setValue()" since it's determinated by "isSelected helper";
         // anyway the standard "fieldValue" helper is also included in the template since it handles i18n for the field;
     };
 });
 Template.skeleformSelect.onRendered(function() {
-    var self = this;
-
-    $getFieldId(self, self.data.schema).material_select();
-    self.isActivated.set(true);
+    $getFieldId(this, this.data.schema).material_select();
+    this.isActivated.set(true);
 });
 Template.skeleformSelect.events({
     'blur select': function(event, template) {
@@ -174,8 +172,8 @@ Template.skeleformSelect.events({
     },
     'change select': function(event, template) {
         // perform validation and callback invocation on change
-        var value = template.getValue();
-        var schema = template.data.schema;
+        let value = template.getValue();
+        let schema = template.data.schema;
 
         template.isValid();
 

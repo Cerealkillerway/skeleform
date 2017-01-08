@@ -8,6 +8,7 @@ Template.skeleformInput.helpers(skeleformGeneralHelpers);
 Template.skeleformInput.helpers({
     inputType: function(renderAs) {
         if (!renderAs) return 'text';
+
         return renderAs.toLowerCase();
     }
 });
@@ -31,41 +32,41 @@ handleGettedValue = function(value, schema) {
 
 // Events
 Template.skeleformInput.onCreated(function() {
-    var self = this;
-    self.isActivated = new ReactiveVar(false);
-    var schema = self.data.schema;
+    //var self = this;
+    this.isActivated = new ReactiveVar(false);
+    let schema = this.data.schema;
 
-    //register self on form' store
-    self.data.formInstance.Fields.push(self);
+    //register this on form' store
+    this.data.formInstance.Fields.push(this);
 
-    self.getValue = function() {
-        var value;
+    this.getValue = () => {
+        let value;
 
         if (schema.shadowConfirm) {
             value = {
-                standard: $getFieldId(self, schema).val(),
-                shadow: $getShadowFieldId(self, schema).val()
+                standard: $getFieldId(this, schema).val(),
+                shadow: $getShadowFieldId(this, schema).val()
             };
         }
         else {
-            value = $getFieldId(self, schema).val();
+            value = $getFieldId(this, schema).val();
         }
 
         return handleGettedValue(value, schema);
     };
-    self.isValid = function() {
-        var formInstance = self.data.formInstance;
+    this.isValid = () => {
+        let formInstance = this.data.formInstance;
 
-        return Skeleform.validate.checkOptions(self.getValue(), self.data.schema, formInstance.data.schema, formInstance.data.item, self);
+        return Skeleform.validate.checkOptions(this.getValue(), this.data.schema, formInstance.data.schema, formInstance.data.item, this);
     };
-    self.setValue = function(value) {
-        $getFieldId(self, schema).val(value);
+    this.setValue = (value) => {
+        $getFieldId(this, schema).val(value);
     };
 });
 Template.skeleformInput.onRendered(function() {
-    var self = this;
-    var schema = self.data.schema;
-    var id = schema.name;
+    let self = this;
+    let schema = self.data.schema;
+    let id = schema.name;
 
     // handle formats
     switch (schema.formatAs) {
@@ -110,10 +111,10 @@ Template.skeleformInput.onRendered(function() {
 Template.skeleformInput.events({
     'keyup .skeleValidate, keyup .shadowField': function(event, template) {
         // perform validation and callback invocation on change
-        var value = template.getValue();
-        var schema = template.data.schema;
-        var result = template.isValid();
-        var id = $(event.target).attr('id');
+        let value = template.getValue();
+        let schema = template.data.schema;
+        let result = template.isValid();
+        let id = $(event.target).attr('id');
 
         if (!result.valid) {
             setInvalid(id, schema, result);

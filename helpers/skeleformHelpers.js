@@ -1,7 +1,7 @@
 // Skeleform helpers
 Template.skeleform.helpers({
     isFieldInCurrentForm: function(fieldSchema) {
-        var formData = Template.instance().data.item;
+        let formData = Template.instance().data.item;
 
         switch (fieldSchema.showOnly) {
             case 'create':
@@ -53,7 +53,7 @@ Template.skeleformUpdateButtons.helpers(toolbarsHelpers);
 // SkeleformLangBar
 Template.skeleformLangBar.helpers({
     langs: function() {
-        var result = [];
+        let result = [];
 
         if (Skeletor.GlobalConf) {
             _.each(Skeletor.GlobalConf.langEnable, function(value, key) {

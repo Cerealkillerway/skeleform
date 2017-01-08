@@ -48,43 +48,41 @@ editorToolbars = {
 Template.skeleformEditor.helpers(skeleformGeneralHelpers);
 Template.skeleformEditor.helpers({
     fieldEditor: function(data, schema) {
-        var template = Template.instance();
+        const instance = Template.instance();
 
-        setFieldValue(template, data, schema);
+        setFieldValue(instance, data, schema);
     }
 });
 
 
 // Events
 Template.skeleformEditor.onCreated(function() {
-    var self = this;
-    self.isActivated = new ReactiveVar(false);
+    this.isActivated = new ReactiveVar(false);
 
-    //register self on form' store
-    self.data.formInstance.Fields.push(self);
+    //register this on form' store
+    this.data.formInstance.Fields.push(this);
 
-    self.getValue = function() {
-        return $getFieldId(self, self.data.schema).code().trim();
+    this.getValue = () => {
+        return $getFieldId(this, this.data.schema).code().trim();
     };
-    self.isValid = function() {
+    this.isValid = () => {
         //skeleUtils.globalUtilities.logger('editor validation', 'skeleformFieldValidation');
-        var formInstance = self.data.formInstance;
+        let formInstance = this.data.formInstance;
 
-        return Skeleform.validate.checkOptions(self.getValue(), self.data.schema, formInstance.data.schema, formInstance.data.item);
+        return Skeleform.validate.checkOptions(this.getValue(), this.data.schema, formInstance.data.schema, formInstance.data.item);
     };
-    self.setValue = function(value) {
+    this.setValue = (value) => {
         if (value === undefined) {
             value = '';
         }
-        $getFieldId(self, self.data.schema).code(value);
+        $getFieldId(this, this.data.schema).code(value);
     };
 });
 Template.skeleformEditor.onRendered(function() {
-    var self = this;
-    var editor = self.$('.editor');
-    var schema = self.data.schema;
-    var toolbar = schema.toolbar;
-    var imageParams = self.data.schema.image;
+    let editor = this.$('.editor');
+    let schema = this.data.schema;
+    let toolbar = schema.toolbar;
+    let imageParams = this.data.schema.image;
 
     if ((toolbar === undefined)|| (editorToolbars[toolbar] === undefined)) toolbar = "default";
 
@@ -93,18 +91,18 @@ Template.skeleformEditor.onRendered(function() {
         toolbar: editorToolbars[toolbar],
         height: 400,
         minHeight: 100,
-        onInit: function() {
+        onInit: () => {
             //place validate class on the correct element newly created by materialnote
             editor.removeClass('validate');
-            self.$('.note-editor').addClass('validate');
+            this.$('.note-editor').addClass('validate');
         },
-        onKeyup: function(event) {
+        onKeyup: (event) => {
             console.log('keyup');
             // perform validation and callback invocation on change
-            var value = self.getValue();
+            var value = this.getValue();
 
-            self.isValid();
-            InvokeCallback(self, value, schema, 'onChange');
+            this.isValid();
+            InvokeCallback(this, value, schema, 'onChange');
         }/*,
         onImageUpload: function(files) {
             var filesArray = [];
@@ -158,5 +156,5 @@ Template.skeleformEditor.onRendered(function() {
         }*/
     });
 
-    self.isActivated.set(true);
+    this.isActivated.set(true);
 });

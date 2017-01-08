@@ -7,12 +7,13 @@
 Template.skeleformCheckBox.helpers(skeleformGeneralHelpers);
 Template.skeleformCheckBox.helpers({
     fieldValue: function(data, schema) {
-        var template = Template.instance();
+        const instance = Template.instance();
 
-        setFieldValue(template, data, schema);
+        setFieldValue(instance, data, schema);
     },
     isCheckBox: function() {
-        var schema = Template.instance().data.schema;
+        const instance = Template.instance();
+        let schema = instance.data.schema;
 
         if (!schema.renderAs || schema.renderAs === 'checkbox') {
             return true;
@@ -20,7 +21,8 @@ Template.skeleformCheckBox.helpers({
         return false;
     },
     switchLabel: function(type) {
-        var schema = Template.instance().data.schema;
+        const instance = Template.instance();
+        let schema = instance.data.schema;
 
         if (type === 'off') {
             if (schema.labels && schema.labels.off) {
@@ -40,21 +42,20 @@ Template.skeleformCheckBox.helpers({
 
 // Events
 Template.skeleformCheckBox.onCreated(function() {
-    var self = this;
-    self.isActivated = new ReactiveVar(false);
+    this.isActivated = new ReactiveVar(false);
 
-    // register self on form' store
-    self.data.formInstance.Fields.push(self);
+    // register this on form' store
+    this.data.formInstance.Fields.push(this);
 
-    self.getValue = function() {
-        var value = $getFieldId(self, self.data.schema).prop('checked');
+    this.getValue = () => {
+        let value = $getFieldId(this, this.data.schema).prop('checked');
 
         return value;
     };
-    self.isValid = function() {
+    this.isValid = () => {
         //skeleUtils.globalUtilities.logger('checkbox validation', 'skeleformFieldValidation');
-        var validationOptions = self.data.schema.validation;
-        var result = {
+        let validationOptions = this.data.schema.validation;
+        let result = {
             valid: true,
             reasons: [],
             invalidMessages: {
@@ -63,7 +64,7 @@ Template.skeleformCheckBox.onCreated(function() {
         };
 
         if (validationOptions && validationOptions.min === 1) {
-            if (!self.getValue()) {
+            if (!this.getValue()) {
                 result.valid = false;
                 result.reasons.push('min');
             }
@@ -71,8 +72,8 @@ Template.skeleformCheckBox.onCreated(function() {
 
         return result;
     };
-    self.setValue = function(value) {
-        $getFieldId(self, self.data.schema).prop('checked', value);
+    this.setValue = (value) => {
+        $getFieldId(this, this.data.schema).prop('checked', value);
     };
 });
 
@@ -84,8 +85,8 @@ Template.skeleformCheckBox.onRendered(function() {
 Template.skeleformCheckBox.events({
     'change .skeleValidate': function(event, template) {
         // perform validation and callback invocation on change
-        var value = template.getValue();
-        var schema = template.data.schema;
+        let value = template.getValue();
+        let schema = template.data.schema;
 
         template.isValid();
 
