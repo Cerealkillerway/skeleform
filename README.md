@@ -1,4 +1,4 @@
-      ..___________          .__          _____
+      ___________          .__          _____
      /   _____/  | __ ____ |  |   _____/ ____\___________  _____
      \_____  \|  |/ // __ \|  | _/ __ \   __\/  _ \_  __ \/     \
      /        \    <\  ___/|  |_\  ___/|  | (  <_> )  | \/  Y Y  \
@@ -6,6 +6,7 @@
             \/     \/    \/          \/                        \/
 
 #### INTRO
+**Skeleform** package is part of the **Skeletor** project and is not meant be used alone.
 
 Skeleform is an advanced form creation tool that enables you to instantly create complex forms with different input types and validation.
 It is built on top of Skeletor and MaterializeCSS.
