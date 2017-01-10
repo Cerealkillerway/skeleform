@@ -73,6 +73,8 @@ setFieldValue = function(instance, data, schema) {
                 return false;
             }
             let value = SkeleformStandardFieldValue(data, schema);
+            //console.log(value);
+            //console.log(instance.getValue());
 
             //skeleUtils.globalUtilities.logger(schema.name + '-value: ' + value, 'skeleformCommon');
             //skeleUtils.globalUtilities.logger(schema.name + '-getValue(): ' + instance.getValue(), 'skeleformCommon');

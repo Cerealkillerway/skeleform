@@ -8,7 +8,7 @@
 #### INTRO
 **Skeleform** package is part of the **Skeletor** project and is not meant be used alone.
 
-Skeleform is an advanced form creation tool that enables you to instantly create complex forms with different input types and validation.
+Inside a Skeletor app this package is used to build and validate forms; it supports a large number of field types and options and it's extensible.
 It is built on top of Skeletor and MaterializeCSS.
 If you have any problem using it, please have a look to the "troubleshooting" section at the bottom.
 
@@ -27,6 +27,7 @@ Please remember the followings:
 - - **containerId**: *[string] (optional/available only if "template"option is used)* id of DOM element to place the toolbar in;
 - - **extrasCreate**: *[string] (optional)* template for extra buttons to be added to standard create toolbar;
 - - **extrasUpdate**: *[string] (optional)* template for extra buttons to be added to standard update toolbar;
+- **__autoScrollTop**: *[boolean] (optional)* by default every skeleform instance auto scrolls to `offset = 0` inside `"onRendered"`; set this property to false to disable this behavior;
 - **__paths**: *[object] (optional)* dictionary of paths to be used in different situations:
 - - **undoPath**: *[string, object] (required)* specify the path to be used for cancel button; the string is the path definition (can contain ":" params), and the object is the params dictionary (NOT optional, pass empty object if no params are needed); the string 'this' used as a value in params object means that the value must be taken from skeleform's gathered data object. For itemLang param, the value 'auto' means that it is taken from the current route's URL;
 - - **redirectOnCreate**: *[string, object] (optional)* specify the path to be used as a redirect after a succesful create; the string is the path definition (can contain ":" params), and the object is the params dictionary (NOT optional, pass empty object if no params are needed); the string 'this' used as a value in params object means that the value must be taken from skeleform's gathered data object. For itemLang param, the value 'auto' means that it is taken from the current route's URL; (default behaviour: clean the form and be ready for a new document);
@@ -34,17 +35,7 @@ Please remember the followings:
 - **__options**:
 - - **loadingModal** *[boolean] (optional)*: if true use a loading modal while performing skeleform operations; default to false;
 - - **tracked**: *[boolean] (optional)* if true save to each document data about user and timestamp of creation and last update; default to false;
-- **__listView**: *[object] (optional)* skelelist options
-- - **style**: *[string] (mandatory)*type of list to create; default "table";
-- - **classes**: *[string] (optional)* CSS classes to assign to the listView;
-- - **itemFields**: *[array of strings] (mandatory)* list of fields to use in the listView;
-- - **itemActions**: *[array of strings] (mandatory)* list of actions to use for each document in the list; (built in actions: "delete", "changePassword");
-- - **detailLink**: *[object] (mandatory)* definition of the link for detail view
-- - - **basePath**: *[string] (mandatory)* the path definition for the link
-- - - **params**: *[array of strings] (optional)* list of the params used in the previous *basePath*;
-- - **sourceFields**: *[object] (optional)* dictionary of fields used in *itemFields* that are external links to other documents; each element is an [object] with the field's name as key and these properties:
-- - - **mapTo**: *[string] (mandatory)* name of the attribute in the external document to use;
-- - - **collection**: *[string] (mandatory)* name of the collection where to find the external document;
+- **__listView**: *[object] (optional)* skelelist options; see the **Skelelist package**'s *readme* for details;
 - **fields**: *[Array of Objects] (mandatory)* each object in this array represents a field that can have the following properties:
 
 
@@ -52,9 +43,7 @@ Please remember the followings:
 
 #### Generic options (available for all kind of fields)
 
-- **__listView**: *[object] (optional)* options for the field in the list view:
-- - **stripHTML**: *[boolean] (optional)* set to true to strip out HTML from the value (default false);
-- - **truncate**: *[integer] (optional)* number of characters to keep (default all);
+- **__listView**: *[object] (optional)* options for the field in the list view; see the **Skelelist package**'s *readme* for details;
 - **name**: *[String] (required)* the name of the field **(MUST be an UNIQUE identifier)**;
 - **output**: *[String] (required)* form element (available valuse: *"staticTitle", "input", "checkBox", "editor", "select", "datePicker", "timePicker", "clockPicker"*);
 - **i18n**: *[boolean] (optional)* specify that the field will be prefixed with *"<:currentLang>---"* object; (default *true*);

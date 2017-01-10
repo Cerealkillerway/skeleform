@@ -257,16 +257,24 @@ Template.skeleform.onCreated(function() {
 Template.skeleform.onRendered(function() {
     skeleformInstance = this;
     this.formRendered.set(true);
-    skeleUtils.globalUtilities.scrollTo(0, configuration.animations.onRendered);
+    let data = this.data;
+
+    if (data.schema.__autoScrollTop !== false) {
+        skeleUtils.globalUtilities.scrollTo(0, configuration.animations.onRendered);
+    }
 
     // set toolbar in container if needed
-    let toolbar = this.data.schema.__toolbar;
+    let toolbar = data.schema.__toolbar;
 
     if (toolbar && toolbar.containerId) {
-        if (this.data.Fields === undefined) {
-            this.data.Fields = this.Fields;
-        }
-        Blaze.renderWithData(Template[toolbar.template], this.data, $('#' + toolbar.containerId)[0]);
+        /*if (data.Fields === undefined) {
+            data.Fields = this.Fields;
+        }*/
+        let toolbarContext = {
+            Fields: this.Fields,
+            formContext: this.data
+        };
+        this.toolbarInstance = Blaze.renderWithData(Template[toolbar.template], toolbarContext, $('#' + toolbar.containerId)[0]);
     }
 
     $('input:first').focusWithoutScrolling();
@@ -302,6 +310,9 @@ Template.skeleform.onRendered(function() {
     });
 });
 Template.skeleform.destroyed = function() {
+    if (this.toolbarInstance) {
+        Blaze.remove(this.toolbarInstance);
+    }
     $(window).unbind('scroll');
 };
 
