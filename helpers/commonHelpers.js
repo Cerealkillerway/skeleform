@@ -48,6 +48,7 @@ $getShadowFieldId = function(instance, schema) {
 // it waits for any custom initialization on the field, and reactively watch lang changes
 // and fires appropriate i18n method on the field is special handling for i18n is required
 setFieldValue = function(instance, data, schema) {
+    console.log(instance.data.formInstance.data.skeleSubsReady.get());
     instance.view.autorun(function() {
         // register dependency from current language; used to fire custom i18n callback
         // for fields that requires special i18n treatment...
@@ -69,7 +70,7 @@ setFieldValue = function(instance, data, schema) {
         let isActivated = instance.isActivated;
 
         if (isActivated.get() === true) {
-            if (!FlowRouter.subsReady()) {
+            if (!instance.data.formInstance.data.skeleSubsReady.get()) {
                 return false;
             }
             let value = SkeleformStandardFieldValue(data, schema);
