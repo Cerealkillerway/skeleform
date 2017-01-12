@@ -97,7 +97,6 @@ Template.skeleformEditor.onRendered(function() {
             this.$('.note-editor').addClass('validate');
         },
         onKeyup: (event) => {
-            console.log('keyup');
             // perform validation and callback invocation on change
             var value = this.getValue();
 
