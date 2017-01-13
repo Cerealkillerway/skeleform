@@ -17,8 +17,17 @@ Template.skeleformSelect.helpers({
                     value: 'undefined'
                 });
             }
+            let source;
 
-            schema.source.forEach(function(item, index) {
+            // check if source is a Mongo cursor, an arary or a function;
+            if (Match.test(schema.source, Mongo.Cursor) || Match.test(schema.source, [Match.Any])) {
+                source = schema.source;
+            }
+            else {
+                source = schema.source();
+            }
+
+            source.forEach(function(item, index) {
                 let option;
                 let lang = FlowRouter.getParam('itemLang');
                 let defaultLang = Skeletor.configuration.lang.default;

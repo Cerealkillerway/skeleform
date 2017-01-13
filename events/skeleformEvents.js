@@ -85,7 +85,7 @@ skeleformValidateForm = function(data, Fields) {
     catch(error) {
         valid = false;
         let schema = error.field.data.schema;
-        let id = '#' + schema.name.replace('.', '\\.');
+        let id = schema.name.replace('.', '\\.');
         let offsetCorrection = 80;
 
         setInvalid(id, schema, error.result);
