@@ -64,7 +64,8 @@ Other than the previous options, each field can have specific options depending 
 
 ##### staticTitle
 
-- **mini**: *[boolean] (optional)* use `<h3>` tag instead of `<h4>`;
+- **tag**: *[string] (optional)* the tag to use to wrap the title (default `<h3>`);
+- **classes**: *[array of strings] (optional)* array of classes to use on the *tag*;
 
 ##### input
 
@@ -106,7 +107,9 @@ Other than the previous options, each field can have specific options depending 
 - - **possibility 2**: a document from a query on a mongo collection;
 - **sourceValue**: *[string] (required if "source" is of type 2)* the name of the documents' field to be used as value in the option; it is possible to use the segment *":itemLang---"* that will be translated into the current language prefix;
 - **sourceName**: *[string] (required if "source" is of type 2)* the name of the documents' field to be used as display name in the option; it is possible to use the segment *":itemLang---"* that will be translated into the current language prefix;
-- **sourceNameTransformation(value, item)**: *[function] (optional)* a callback executed on every source's item; it receives the current *sourceName*'s value and the current item;
+- **sourceNameTransformation**: *[object] (optional)* can contain two methods: *transform* and *antiTransform*, explained below;
+- - **transform(value, item)**: *[function] (required if *sourceNameTransformation* is defined)* a callback executed on every source's item; it receives the current *sourceName*'s value and the current item; transforms the value to be displayed in another form;
+- -  **antiTransform()** TO IMPLEMENT...
 - **icons**: *[boolean] (optional)* used to assign *"icons"* class for icons on options dropdown; **IMPORTANT**: it is required to be *true* if source is of type *1* and "icon" is setted on its elements;
 - **allowBlank**: *[boolean] (optional)* allow select none (default undefined option is created automatically); this options is meant to be used only if "source" is of type 2; otherwise is ignored, since with type 1 you can manually define the *"blank option"* in the array used as *"source"*;
 - **multi**: *[boolean] (optional)* defines the select as a *"multiple select"*; default to *false*;

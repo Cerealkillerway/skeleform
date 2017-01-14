@@ -75,10 +75,15 @@ skeleformValidateForm = function(data, Fields) {
 
     try {
         Fields.forEach(function(field) {
-            var result = field.isValid();
+            let fieldSchema = field.data.schema;
+            let $field = $getFieldId(field, fieldSchema);
 
-            if (!result.valid) {
-                throw {field: field, result: result};
+            if ($field.hasClass('skeleValidate')) {
+                let result = field.isValid();
+
+                if (!result.valid) {
+                    throw {field: field, result: result};
+                }
             }
         });
     }
@@ -223,19 +228,26 @@ skeleformGatherData = function(formContext, Fields) {
 
     Fields.forEach(function(field) {
         let fieldSchema = field.data.schema;
-        let fieldValue = field.getValue();
+        let $field = $getFieldId(field, fieldSchema);
 
-        if (fieldSchema.i18n === undefined) {
-            let currentValue = formItem ? formItem[lang + '---' + fieldSchema.name] : null;
+        if ($field.hasClass('skeleGather')) {
+            let fieldValue = field.getValue();
 
-            if (!currentValue || (currentValue && fieldValue !== currentValue)) {
-                data[lang + '---' + fieldSchema.name] = fieldValue;
+            if (fieldSchema.i18n === undefined) {
+                let currentValue = formItem ? formItem[lang + '---' + fieldSchema.name] : null;
+
+                if (!currentValue || (currentValue && fieldValue !== currentValue)) {
+                    data[lang + '---' + fieldSchema.name] = fieldValue;
+                }
+            }
+            else {
+                if (!formItem || fieldValue !== formItem[fieldSchema.name]) {
+                    data[fieldSchema.name] = fieldValue;
+                }
             }
         }
         else {
-            if (!formItem || fieldValue !== formItem[fieldSchema.name]) {
-                data[fieldSchema.name] = fieldValue;
-            }
+            skeleUtils.globalUtilities.logger('<separator>Skipped field: ' + fieldSchema.name, 'skeleWarning');
         }
     });
 
@@ -344,7 +356,7 @@ Template.skeleformCreateButtons.events({
             if (options.useModal) {
                 $('#gearLoadingModal').openModal();
             }
-            if (schema.formCallbacks.beforeSave) {
+            if (schema.formCallbacks && schema.formCallbacks.beforeSave) {
                 data = schema.formCallbacks.beforeSave(template.data, data);
             }
 
@@ -408,7 +420,7 @@ Template.skeleformUpdateButtons.events({
             if (options.useModal) {
                 $('#gearLoadingModal').openModal();
             }
-            if (schema.formCallbacks.beforeSave) {
+            if (schema.formCallbacks && schema.formCallbacks.beforeSave) {
                 data = schema.formCallbacks.beforeSave(template.data, data);
             }
 

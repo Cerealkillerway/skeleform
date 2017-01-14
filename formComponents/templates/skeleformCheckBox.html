@@ -1,7 +1,7 @@
 <template name="skeleformCheckBox">
     <div class="input-field col {{fieldSize schema.size}} {{schema.style}}">
 		{{#if isCheckBox}}
-            <input {{fieldValue item schema}} type="checkbox" class="skeleValidate gather" id="{{field schema.name}}" style="{{fieldStyle schema}}">
+            <input {{fieldValue item schema}} type="checkbox" class="skeleValidate skeleGather" id="{{field schema.name}}" style="{{fieldStyle schema}}">
             <label for="{{field schema.name}}">{{label schema.name}}{{required}}</label>
 		{{else}}
 			<div class="switchLabel" for="{{field schema.name}}">{{label schema.name}}{{required}}</div>
@@ -9,7 +9,7 @@
 				<label>
 				  	{{switchLabel 'off'}}
                     {{fieldValue item schema}}
-                    <input type="checkbox" class="skeleValidate gather" id="{{field schema.name}}" style="{{fieldStyle schema}}">
+                    <input type="checkbox" class="skeleValidate skeleGather" id="{{field schema.name}}" style="{{fieldStyle schema}}">
 				  	<span class="lever"></span>
 				  	{{switchLabel "on"}}
 				</label>
