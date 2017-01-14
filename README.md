@@ -37,7 +37,8 @@ Please remember the followings:
 - - **tracked**: *[boolean] (optional)* if true save to each document data about user and timestamp of creation and last update; default to false;
 - **__listView**: *[object] (optional)* skelelist options; see the **Skelelist package**'s *readme* for details;
 - **fields**: *[Array of Objects] (mandatory)* each object in this array represents a field that can have the following properties:
-
+- **formCallbacks**: *[object] (optional)* dictionary of callbacks executed on the form;
+- - **beforeSave(formDataContext, gatheredValue)**: *[function] (optional)* callback executed just before saving (before creating and before updating) the form; it receives the form's data context and the values of all form's field gathered by Skeleform;
 
 ### SCHEMA FIELDS OPTIONS
 
@@ -105,6 +106,7 @@ Other than the previous options, each field can have specific options depending 
 - - **possibility 2**: a document from a query on a mongo collection;
 - **sourceValue**: *[string] (required if "source" is of type 2)* the name of the documents' field to be used as value in the option; it is possible to use the segment *":itemLang---"* that will be translated into the current language prefix;
 - **sourceName**: *[string] (required if "source" is of type 2)* the name of the documents' field to be used as display name in the option; it is possible to use the segment *":itemLang---"* that will be translated into the current language prefix;
+- **sourceNameTransformation(value, item)**: *[function] (optional)* a callback executed on every source's item; it receives the current *sourceName*'s value and the current item;
 - **icons**: *[boolean] (optional)* used to assign *"icons"* class for icons on options dropdown; **IMPORTANT**: it is required to be *true* if source is of type *1* and "icon" is setted on its elements;
 - **allowBlank**: *[boolean] (optional)* allow select none (default undefined option is created automatically); this options is meant to be used only if "source" is of type 2; otherwise is ignored, since with type 1 you can manually define the *"blank option"* in the array used as *"source"*;
 - **multi**: *[boolean] (optional)* defines the select as a *"multiple select"*; default to *false*;

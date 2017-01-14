@@ -344,6 +344,9 @@ Template.skeleformCreateButtons.events({
             if (options.useModal) {
                 $('#gearLoadingModal').openModal();
             }
+            if (schema.formCallbacks.beforeSave) {
+                data = schema.formCallbacks.beforeSave(template.data, data);
+            }
 
             Meteor.call(method, data, formContext.schemaName, function(error, result) {
                 if (options.useModal) {
@@ -404,6 +407,9 @@ Template.skeleformUpdateButtons.events({
         if (skeleformValidateForm(data, Fields)) {
             if (options.useModal) {
                 $('#gearLoadingModal').openModal();
+            }
+            if (schema.formCallbacks.beforeSave) {
+                data = schema.formCallbacks.beforeSave(template.data, data);
             }
 
             Meteor.call(method, documentId, data, formContext.schemaName, function(error, result) {

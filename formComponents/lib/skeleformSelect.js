@@ -81,7 +81,12 @@ Template.skeleformSelect.helpers({
                     option.name = '#(' + nameAttr + ')';
                 }
                 else {
-                    option.name = nameAttr;
+                    if (schema.sourceNameTransformation) {
+                        option.name = schema.sourceNameTransformation(nameAttr, item);
+                    }
+                    else {
+                        option.name = nameAttr;
+                    }
                 }
 
                 result.push(option);
