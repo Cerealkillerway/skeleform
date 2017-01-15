@@ -202,7 +202,15 @@ skeleformHandleResult = function(error, result, type, data, paths) {
 
             // if the form is setted up for a redirect after the current action -> redirect
             if (redirectPath) {
-                var params = createPath(redirectPath, data);
+                let params = createPath(redirectPath, data);
+
+                // if updating, maybe the fields that are dynamic segments have not been gathered (because they are unchanged);
+                // in that case they are undefined in the "data" object so we need to get them from current url
+                _.each(params.params, function(param, paramName) {
+                    if (param === undefined) {
+                        params.params[paramName] = FlowRouter.getParam(paramName);
+                    }
+                });
 
                 params.queryParams.lang = FlowRouter.getQueryParam('lang');
 
@@ -351,11 +359,11 @@ Template.skeleformCreateButtons.events({
         }
 
         // select method to call for this operation
-        if (!formContext.methods) {
-            method = configuration.defaultMethods.insert;
+        if (formContext.methods && formContext.methods.insert) {
+            method = formContext.methods.insert;
         }
         else {
-            method = formContext.methods.insert;
+            method = configuration.defaultMethods.insert;
         }
 
         // if necessary launch form callbacks!
@@ -397,33 +405,12 @@ Template.skeleformUpdateButtons.events({
         }
 
         // select method to call for this operation
-        if (!formContext.methods) {
-            method = configuration.defaultMethods.update;
-        }
-        else {
+        if (formContext.methods && formContext.methods.update) {
             method = formContext.methods.update;
         }
-
-        // get route params to manage if current update should redirect to a new path
-        let currentRoute = FlowRouter.current();
-        let params = currentRoute.params;
-        let unNestedDataKeys = [];
-        let relationships = {};
-
-        skeleUtils.globalUtilities.logger ('url change monitor:', debugType);
-        skeleUtils.globalUtilities.logger(params, debugType);
-        params = _.keys(params);
-        dataKeys = _.keys(data);
-
-        dataKeys.forEach(function(dataKey, index) {
-            let unNested = dataKey.split('.');
-                unNested = unNested[unNested.length - 1];
-
-            unNestedDataKeys.push(unNested);
-            relationships[unNested] = dataKey;  // save original name of un-nested param
-        });
-
-        let changedParams = _.intersection(params, unNestedDataKeys);
+        else {
+            method = configuration.defaultMethods.update;
+        }
 
         // if necessary launch form callbacks!
         if (schema.formCallbacks && schema.formCallbacks.beforeSave) {
@@ -441,14 +428,6 @@ Template.skeleformUpdateButtons.events({
                 }
                 skeleformHandleResult(error, result, 'update', data, schema.__paths);
             });
-            if (changedParams.length > 0) {
-                var newParams = {};
-
-                changedParams.forEach(function(param, index) {
-                    newParams[param] = data[relationships[param]];
-                });
-                FlowRouter.setParams(newParams);
-            }
         }
     }
 });
