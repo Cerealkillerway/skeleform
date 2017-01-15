@@ -57,6 +57,7 @@ Please remember the followings:
 - - **max**: *[number] (optional)* maximum length; if the value returned by the field is an object, this parameter is referred to the number of its properties; on input fields this will automatically set the "maxLength" property on the html `<input>` tag;
 - - **unique**: *[boolean] (optional)* specifies that field's value should be unique;
 - **style**: *[string] (optional)* wrapper css class for custom styling of the field;
+- **showOnly**: *[string ('create'/'update')] (optional)* defines if the field should be rendered only on creation or only on update; **IMPORTANT**: this option can be set also on a *skeleformGroup* object and will take effect on all fields of the group;
 
 #### Field specific options:
 
@@ -171,6 +172,39 @@ The `Skeleform.validate.checkOptions()` global function is the standard way to p
 If it's necessary to use a custom invalid message it is possible to add the field *"invalidMessages"* to the "result" object;
 
 - **invalidMessages**: *[object] (optional)* should be a dictionary of custom i18n strings to use for each validation type;
+
+### OTHER THAN SCHEMA
+
+Skeleforms invokes a **Meteor method** once gathered and validated the form's data; the method persists the data on the server; it is set to use a default method that will persist your data as a new document in the collection defined on the schema; anyway it is possible to make it call a custom method;
+the metod to use is not defined on the schema but is part of the data context passed to the skeleform instance.
+Ex.: the *userCreate* template:
+
+    Template.userCreate.helpers({
+        data: function() {
+            const instance = Template.instance();
+            let context = {};
+            let username = FlowRouter.getParam('username');
+
+            if (username && instance.skeleSubsReady.get()) {
+                context.item = Skeletor.Data.Users.findOne({username: username});
+                context.item.userEmail = context.item.emails[0].address;
+            }
+
+            context.schemaName = 'Users_default';
+            context.schema = Skeletor.Schemas.Users_default;
+            context.methods = {
+                insert: 'insertUser',
+                update: 'updateUser'
+            };
+            context.skeleSubsReady = instance.skeleSubsReady;
+
+            return context;
+        }
+    });
+
+it provides *methods* object in the data context; than the template will invoke **Skeleform** passing that data context to it:
+
+    {{> skeleform data}}
 
 ### TROUBLESHOOTING
 

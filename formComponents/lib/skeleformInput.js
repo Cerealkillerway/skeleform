@@ -17,7 +17,7 @@ handleGettedValue = function(value, schema) {
     if (!schema.validation) {
         return value;
     }
-    
+
     switch (schema.validation.type) {
         case 'url':
             if (schema.shadowConfirm) {

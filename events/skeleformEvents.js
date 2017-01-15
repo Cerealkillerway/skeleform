@@ -234,9 +234,14 @@ skeleformGatherData = function(formContext, Fields) {
             let fieldValue = field.getValue();
 
             if (fieldSchema.i18n === undefined) {
-                let currentValue = formItem ? formItem[lang + '---' + fieldSchema.name] : null;
+                let currentValue = formItem ? formItem[lang + '---' + fieldSchema.name] : undefined;
 
-                if (!currentValue || (currentValue && fieldValue !== currentValue)) {
+                /*console.log(fieldSchema.name);
+                console.log('currentValue: ' + currentValue);
+                console.log('fieldValue: ' + fieldValue);
+                console.log('******************************');*/
+
+                if ((currentValue === undefined) || (currentValue !== undefined && fieldValue !== currentValue)) {
                     data[lang + '---' + fieldSchema.name] = fieldValue;
                 }
             }
@@ -345,19 +350,22 @@ Template.skeleformCreateButtons.events({
             }
         }
 
-        if (!formContext.method) {
+        // select method to call for this operation
+        if (!formContext.methods) {
             method = configuration.defaultMethods.insert;
         }
         else {
-            method = formContext.method.insert;
+            method = formContext.methods.insert;
+        }
+
+        // if necessary launch form callbacks!
+        if (schema.formCallbacks && schema.formCallbacks.beforeSave) {
+            data = schema.formCallbacks.beforeSave(template.data, data);
         }
 
         if (skeleformValidateForm(data, Fields)) {
             if (options.useModal) {
                 $('#gearLoadingModal').openModal();
-            }
-            if (schema.formCallbacks && schema.formCallbacks.beforeSave) {
-                data = schema.formCallbacks.beforeSave(template.data, data);
             }
 
             Meteor.call(method, data, formContext.schemaName, function(error, result) {
@@ -388,11 +396,12 @@ Template.skeleformUpdateButtons.events({
             }
         }
 
-        if (!formContext.method) {
+        // select method to call for this operation
+        if (!formContext.methods) {
             method = configuration.defaultMethods.update;
         }
         else {
-            method = formContext.method.update;
+            method = formContext.methods.update;
         }
 
         // get route params to manage if current update should redirect to a new path
@@ -416,12 +425,14 @@ Template.skeleformUpdateButtons.events({
 
         let changedParams = _.intersection(params, unNestedDataKeys);
 
+        // if necessary launch form callbacks!
+        if (schema.formCallbacks && schema.formCallbacks.beforeSave) {
+            data = schema.formCallbacks.beforeSave(template.data, data);
+        }
+
         if (skeleformValidateForm(data, Fields)) {
             if (options.useModal) {
                 $('#gearLoadingModal').openModal();
-            }
-            if (schema.formCallbacks && schema.formCallbacks.beforeSave) {
-                data = schema.formCallbacks.beforeSave(template.data, data);
             }
 
             Meteor.call(method, documentId, data, formContext.schemaName, function(error, result) {
