@@ -56,6 +56,7 @@ Please remember the followings:
 - - **min**: *[number] (optional)* minimun length; if the value returned by the field is an object, this parameter is referred to the number of its properties; setting min to 1 on a boolean field (ex. checkbox) is interpreted as "field required"; any other value is ignored for those kind of fields;
 - - **max**: *[number] (optional)* maximum length; if the value returned by the field is an object, this parameter is referred to the number of its properties; on input fields this will automatically set the "maxLength" property on the html `<input>` tag;
 - - **unique**: *[boolean] (optional)* specifies that field's value should be unique;
+- - **collectionForUnicityCheck**: *[string] (optional)* the collection where to perform unicity check for the field; if omitted, the unicity check is performed against schema's *__collection*;
 - **style**: *[string] (optional)* wrapper css class for custom styling of the field;
 - **showOnly**: *[string ('create'/'update')] (optional)* defines if the field should be rendered only on creation or only on update; **IMPORTANT**: this option can be set also on a *skeleformGroup* object and will take effect on all fields of the group;
 
