@@ -67,6 +67,11 @@ Template.skeleformInput.onCreated(function() {
         $getFieldId(this, schema).val(value);
     };
 });
+Template.skeleformInput.onDestroyed(function() {
+    let Fields = this.data.formInstance.Fields;
+
+    Fields.removeAt(Fields.indexOf(this));
+});
 Template.skeleformInput.onRendered(function() {
     let self = this;
     let schema = self.data.schema;
@@ -96,6 +101,14 @@ Template.skeleformInput.onRendered(function() {
                 aDec: ',',
                 altDec: '.',
                 vMax: '999.99',
+                wEmpty: 'zero'
+            });
+            break;
+
+        case 'integer':
+            $getFieldId(self, schema).autoNumeric('init', {
+                mDec: '0',
+                vMax: '99',
                 wEmpty: 'zero'
             });
             break;

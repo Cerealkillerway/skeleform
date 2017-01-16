@@ -176,6 +176,11 @@ Template.skeleformSelect.onCreated(function() {
         // anyway the standard "fieldValue" helper is also included in the template since it handles i18n for the field;
     };
 });
+Template.skeleformSelect.onDestroyed(function() {
+    let Fields = this.data.formInstance.Fields;
+
+    Fields.removeAt(Fields.indexOf(this));
+});
 Template.skeleformSelect.onRendered(function() {
     $getFieldId(this, this.data.schema).material_select();
     this.isActivated.set(true);

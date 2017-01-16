@@ -76,6 +76,11 @@ Template.skeleformCheckBox.onCreated(function() {
         $getFieldId(this, this.data.schema).prop('checked', value);
     };
 });
+Template.skeleformCheckBox.onDestroyed(function() {
+    let Fields = this.data.formInstance.Fields;
+
+    Fields.removeAt(Fields.indexOf(this));
+});
 
 Template.skeleformCheckBox.onRendered(function() {
     this.isActivated.set(true);

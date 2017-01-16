@@ -45,6 +45,11 @@ Template.skeleformClockPicker.onCreated(function() {
         $getFieldId(this, this.data.schema).val(value);
     };
 });
+Template.skeleformClockPicker.onDestroyed(function() {
+    let Fields = this.data.formInstance.Fields;
+
+    Fields.removeAt(Fields.indexOf(this));
+});
 
 Template.skeleformClockPicker.onRendered(function() {
     let data = this.data.item;

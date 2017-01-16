@@ -46,6 +46,11 @@ Template.skeleformTimePicker.onCreated(function() {
 
     };
 });
+Template.skeleformTimePicker.onDestroyed(function() {
+    let Fields = this.data.formInstance.Fields;
+
+    Fields.removeAt(Fields.indexOf(this));
+});
 
 Template.skeleformTimePicker.onRendered(function() {
     let data = this.data.item;

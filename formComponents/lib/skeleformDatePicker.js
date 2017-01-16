@@ -57,6 +57,11 @@ Template.skeleformDatePicker.onCreated(function() {
         this.pickerInstance.set('select', value, {format: this.initOptions.formatSubmit});
     };
 });
+Template.skeleformDatePicker.onDestroyed(function() {
+    let Fields = this.data.formInstance.Fields;
+
+    Fields.removeAt(Fields.indexOf(this));
+});
 
 Template.skeleformDatePicker.onRendered(function() {
     let data = this.data.item;

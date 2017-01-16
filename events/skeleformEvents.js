@@ -260,7 +260,7 @@ skeleformGatherData = function(formContext, Fields) {
             }
         }
         else {
-            skeleUtils.globalUtilities.logger('<separator>Skipped field: ' + fieldSchema.name, 'skeleWarning');
+            skeleUtils.globalUtilities.logger('Skipped field: ' + fieldSchema.name, 'skeleWarning');
         }
     });
 

@@ -78,6 +78,11 @@ Template.skeleformEditor.onCreated(function() {
         $getFieldId(this, this.data.schema).code(value);
     };
 });
+Template.skeleformEditor.onDestroyed(function() {
+    let Fields = this.data.formInstance.Fields;
+
+    Fields.removeAt(Fields.indexOf(this));
+});
 Template.skeleformEditor.onRendered(function() {
     let editor = this.$('.editor');
     let schema = this.data.schema;

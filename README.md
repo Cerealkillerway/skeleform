@@ -82,8 +82,8 @@ Other than the previous options, each field can have specific options depending 
 
 - **renderAs**: *[string] (optional)* type of boolean selector to display (available values: *"checkbox", "switch"*); default to *"checkbox"*;
 - **labels**: *[object] (optional)* to be used with *renderAs: "switch"*; can contain 2 (optionals) keys (*"on", "off"*) containing the two strings to be used as i18n strings for the respectives switch states; if it's not provided, the default *"yes_lbl"* and *"no_lbl"* are used;
-- - **on**: *[string] (optional)* i18n string for switch *"on"* state (default *"yes_lbl"*);
-- - **off**: *[string] (optional)* i18n string for switch *"off"* state (default *"no_lbl"*);
+- - **on**: *[string] (optional)* i18n string for switch *"on"* state (default *"yes_lbl"*; note that *"_lbl"* is appended automatically);
+- - **off**: *[string] (optional)* i18n string for switch *"off"* state (default *"no_lbl"*; note that *"_lbl"* is appended automatically);
 
 
 ##### editor
