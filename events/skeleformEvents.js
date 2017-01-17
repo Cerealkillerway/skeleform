@@ -1,5 +1,5 @@
-var debugType = 'skeleform';
-var skeleformInstance;
+let debugType = 'skeleform';
+let skeleformInstance;
 
 // get configuration from skeletor or from the app
 if (Package['cerealkiller:skeletor']) {
@@ -181,6 +181,7 @@ skeleformCleanForm = function() {
 skeleformHandleResult = function(error, result, type, data, paths) {
     if (error) {
         Materialize.toast(TAPi18n.__('serverError_error'), 5000, 'error');
+        skeleUtils.globalUtilities.logger(error, skeleformInstance, false, true);
     }
     else {
         let title, content;
