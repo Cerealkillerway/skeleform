@@ -64,7 +64,16 @@ Template.skeleformInput.onCreated(function() {
         return Skeleform.validate.checkOptions(this.getValue(), this.data.schema, formInstance.data.schema, formInstance.data.item, this);
     };
     this.setValue = (value) => {
-        $getFieldId(this, schema).val(value);
+        let $field = $getFieldId(this, schema);
+
+        $field.val(value);
+
+        // when setting value trigger autoresize if it's a textarea
+        // as documented on materialize's docs:
+        // http://materializecss.com/forms.html
+        if (schema.renderAs === 'textarea') {
+            $field.trigger('autoresize');
+        }
     };
 });
 Template.skeleformInput.onDestroyed(function() {
