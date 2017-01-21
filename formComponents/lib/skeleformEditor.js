@@ -66,7 +66,7 @@ Template.skeleformEditor.onCreated(function() {
         return $getFieldId(this, this.data.schema).code().trim();
     };
     this.isValid = () => {
-        //skeleUtils.globalUtilities.logger('editor validation', 'skeleformFieldValidation');
+        //SkeleUtils.GlobalUtilities.logger('editor validation', 'skeleformFieldValidation');
         let formInstance = this.data.formInstance;
 
         return Skeleform.validate.checkOptions(this.getValue(), this.data.schema, formInstance.data.schema, formInstance.data.item);
@@ -92,7 +92,7 @@ Template.skeleformEditor.onRendered(function() {
     if ((toolbar === undefined)|| (editorToolbars[toolbar] === undefined)) toolbar = "default";
 
     $(editor).materialnote({
-        lang: skeleUtils.globalUtilities.doubleLangCode(FlowRouter.getParam("itemLang")),
+        lang: SkeleUtils.GlobalUtilities.doubleLangCode(FlowRouter.getParam("itemLang")),
         toolbar: editorToolbars[toolbar],
         height: 400,
         minHeight: 100,

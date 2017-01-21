@@ -48,7 +48,7 @@ Template.skeleformDatePicker.onCreated(function() {
         return value;
     };
     this.isValid = () => {
-        //skeleUtils.globalUtilities.logger('datepicker validation', 'skeleformFieldValidation');
+        //SkeleUtils.GlobalUtilities.logger('datepicker validation', 'skeleformFieldValidation');
         let formInstance = this.data.formInstance;
 
         return Skeleform.validate.checkOptions(this.getValue(), this.data.schema, formInstance.data.schema, formInstance.data.item);

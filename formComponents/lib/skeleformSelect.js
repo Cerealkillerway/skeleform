@@ -11,10 +11,10 @@ Template.skeleformSelect.helpers({
         if (schema.sourceValue) {
             let result = [];
 
-            if (schema.allowBlank) {
+            if (schema.blankValue) {
                 result.push({
                     name: TAPi18n.__("none_lbl"),
-                    value: 'undefined'
+                    value: schema.blankValue
                 });
             }
             let source;
@@ -163,7 +163,7 @@ Template.skeleformSelect.onCreated(function() {
         $getFieldId(this, this.data.schema).material_select();
     };
     this.getValue = () => {
-        //skeleUtils.globalUtilities.logger('select validation', 'skeleformFieldValidation');
+        //SkeleUtils.GlobalUtilities.logger('select validation', 'skeleformFieldValidation');
         return $getFieldId(this, this.data.schema).val();
     };
     this.isValid = () => {

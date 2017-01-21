@@ -30,7 +30,7 @@ Template.skeleformClockPicker.onCreated(function() {
         return moment($getFieldId(this, this.data.schema).val(), this.initOptions.format).format(this.initOptions.formatSubmit);
     };
     this.isValid = () => {
-        //skeleUtils.globalUtilities.logger('clockpicker validation', 'skeleformFieldValidation');
+        //SkeleUtils.GlobalUtilities.logger('clockpicker validation', 'skeleformFieldValidation');
         let formInstance = this.data.formInstance;
 
         return Skeleform.validate.checkOptions(this.getValue(), this.data.schema, formInstance.data.schema, formInstance.data.item);

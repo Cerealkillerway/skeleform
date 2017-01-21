@@ -1,12 +1,9 @@
 Package.describe({
     name: 'cerealkiller:skeleform',
-    version: '0.51.1',
-    // Brief, one-line summary of the package.
+    version: '2.17.17',
     summary: 'form from schema creator',
     // URL to the Git repository containing the source code for this package.
     git: '',
-    // By default, Meteor will default to using README.md for documentation.
-    // To avoid submitting documentation, set this field to null.
     documentation: 'README.md'
 });
 
@@ -14,122 +11,94 @@ Package.onUse(function(api) {
     // namespace
     api.addFiles('namespace.js');
 
-    // packages
-    api.use('jquery', 'client');
-    api.use('underscore@1.0.0');
-    api.use('check');
-    api.use('session', 'client');
-    api.use('ecmascript');
-    api.use('fourseven:scss@3.2.0', 'client');
-    api.use('tap:i18n');
-    api.use('cerealkiller:materialnote@1.0.0', 'client');
-    api.use('blaze-html-templates', 'client');
-    api.use('cerealkiller:skeleutils@1.0.0');
-    // if skeletor is in use, load it before
-    api.use('cerealkiller:skeletor@0.0.3', {weak: true});
+    // dependencies
+    api.use([
+        'session',
+        'jquery',
+        'fourseven:scss@3.2.0',
+        'cerealkiller:materialnote@1.0.0',
+        'blaze-html-templates'
+    ],
+    ['client']);
 
-    // exports
-    api.export('Skeleform');   // package namespace
+    api.use([
+        'check',
+        'ecmascript',
+        'underscore@1.0.0',
+        'cerealkiller:skeleutils',
+        'cerealkiller:skeletor'
+    ],
+    ['client', 'server']);
 
     // styles
-    api.addFiles('styles/skeleform.scss', 'client');
-    api.addFiles('styles/_clockpicker.primary.scss', 'client');
-
+    api.addFiles([
+        'styles/skeleform.scss',
+        'styles/_clockpicker.primary.scss'
+    ],
+    ['client']);
 
     // templates
-    api.addFiles('templates/skeleform.html', 'client');
-    api.addFiles('formComponents/templates/skeleformDatePicker.html', 'client');
-    api.addFiles('formComponents/templates/skeleformEditor.html', 'client');
-    api.addFiles('formComponents/templates/ckMaterialNotePlugins.html', 'client');
-    api.addFiles('formComponents/templates/skeleformImageUpload.html', 'client');
-    api.addFiles('formComponents/templates/skeleformInput.html', 'client');
-    api.addFiles('formComponents/templates/skeleformSelect.html', 'client');
-    api.addFiles('formComponents/templates/skeleformStaticTitle.html', 'client');
-    api.addFiles('formComponents/templates/skeleformCheckBox.html', 'client');
-    api.addFiles('formComponents/templates/skeleformTimePicker.html', 'client');
-    api.addFiles('formComponents/templates/skeleformClockPicker.html', 'client');
-
-
-    // i18n
-    api.addFiles('i18n/it.i18n.json');
-    api.addFiles('i18n/en.i18n.json');
-
+    api.addFiles([
+        'templates/skeleform.html',
+        'formComponents/templates/skeleformDatePicker.html',
+        'formComponents/templates/skeleformEditor.html',
+        'formComponents/templates/ckMaterialNotePlugins.html',
+        'formComponents/templates/skeleformImageUpload.html',
+        'formComponents/templates/skeleformInput.html',
+        'formComponents/templates/skeleformSelect.html',
+        'formComponents/templates/skeleformStaticTitle.html',
+        'formComponents/templates/skeleformCheckBox.html',
+        'formComponents/templates/skeleformTimePicker.html',
+        'formComponents/templates/skeleformClockPicker.html'
+    ],
+    ['client']);
 
     // libraries
-    api.addFiles('lib/jquery.alterClass.js', 'client');
-    api.addFiles('lib/validate.js');
-    api.addFiles('lib/editEvents.js', 'client');
-    api.addFiles('lib/autoNumeric.js', 'client');
-    api.addFiles('lib/materialize.clockpicker.js', 'client');
-    api.addFiles('lib/timepickersConflictResolver.js', 'client');
-    api.addFiles('lib/picker.time.js', 'client');
+    api.addFiles([
+        'lib/editEvents.js',
+        'lib/autoNumeric.js',
+        'lib/materialize.clockpicker.js',
+        'lib/timepickersConflictResolver.js',
+        'lib/picker.time.js',
+        'helpers/commonHelpers.js',
+        'helpers/skeleformHelpers.js',
+        'events/skeleformEvents.js'
+    ],
+    ['client']);
 
-    api.addFiles('helpers/commonHelpers.js', 'client');
-    api.addFiles('helpers/skeleformHelpers.js', 'client');
-
-    api.addFiles('events/skeleformEvents.js', 'client');
+    api.addFiles(['lib/validate.js'], ['client', 'server']);
 
     // form components
-    api.addFiles('formComponents/lib/skeleformDatePicker.js', 'client');
-    api.addFiles('formComponents/lib/skeleformEditor.js', 'client');
-    api.addFiles('formComponents/lib/skeleformImageUpload.js', 'client');
-    api.addFiles('formComponents/lib/skeleformInput.js', 'client');
-    api.addFiles('formComponents/lib/skeleformSelect.js', 'client');
-    api.addFiles('formComponents/lib/skeleformStaticTitle.js', 'client');
-    api.addFiles('formComponents/lib/skeleformCheckBox.js', 'client');
-    api.addFiles('formComponents/lib/skeleformTimePicker.js', 'client');
-    api.addFiles('formComponents/lib/skeleformClockPicker.js', 'client');
+    api.addFiles([
+        'formComponents/lib/skeleformDatePicker.js',
+        'formComponents/lib/skeleformEditor.js',
+        'formComponents/lib/skeleformImageUpload.js',
+        'formComponents/lib/skeleformInput.js',
+        'formComponents/lib/skeleformSelect.js',
+        'formComponents/lib/skeleformStaticTitle.js',
+        'formComponents/lib/skeleformCheckBox.js',
+        'formComponents/lib/skeleformTimePicker.js',
+        'formComponents/lib/skeleformClockPicker.js'
+    ],
+    ['client']);
 
     // assets
-    api.addAssets('public/icons/ok.png', 'client');
-    api.addAssets('public/icons/cancel.png', 'client');
+    api.addAssets([
+        'public/icons/ok.png',
+        'public/icons/cancel.png'
+    ],
+    ['client']);
+
+
+    // exports
+    api.export(['Skeleform']);
 });
 
 Package.onTest(function(api) {
-    api.use('tinytest');
-    api.use('cerealkiller:skeleform');
-    api.addFiles('skeleform-tests.js');
+    api.use([
+        'tinytest',
+        'cerealkiller:skeleform'
+    ]);
+
+    api.addFiles(['skeleform-tests.js']);
 });
-
-
-
-
-// UTILITIES
-// get list of all files in a folder
-function getFilesFromFolder(packageName, folder){
-    // local imports
-    var _ = Npm.require("underscore");
-    var fs = Npm.require("fs");
-    var path = Npm.require("path");
-    // helper function, walks recursively inside nested folders and return absolute filenames
-    function walk(folder){
-        var filenames = [];
-        // get relative filenames from folder
-        var folderContent=fs.readdirSync(folder);
-        // iterate over the folder content to handle nested folders
-        _.each(folderContent,function(filename){
-            // build absolute filename
-            var absoluteFilename=folder + path.sep + filename;
-            // get file stats
-            var stat=fs.statSync(absoluteFilename);
-            if (stat.isDirectory()){
-                // directory case => add filenames fetched from recursive call
-                filenames=filenames.concat(walk(absoluteFilename));
-            }
-            else {
-                // file case => simply add it
-                filenames.push(absoluteFilename);
-            }
-        });
-        return filenames;
-    }
-    // save current working directory (something like "/home/user/projects/my-project")
-    var cwd = process.cwd();
-    // chdir to our package directory
-    process.chdir("packages" + path.sep + packageName);
-    // launch initial walk
-    var result = walk(folder);
-    // restore previous cwd
-    process.chdir(cwd);
-    return result;
-}

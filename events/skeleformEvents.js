@@ -4,11 +4,11 @@ let skeleformInstance;
 // get configuration from skeletor or from the app
 if (Package['cerealkiller:skeletor']) {
     configuration = Package['cerealkiller:skeletor'].Skeletor.configuration;
-    skeleUtils.globalUtilities.logger('loaded configuration:', debugType);
-    skeleUtils.globalUtilities.logger(configuration, debugType);
+    SkeleUtils.GlobalUtilities.logger('loaded configuration:', debugType);
+    SkeleUtils.GlobalUtilities.logger(configuration, debugType);
 }
 else {
-    skeleUtils.globalUtilities.logger('Can\'t load configuration from Skeletor', 'skeleError', true);
+    SkeleUtils.GlobalUtilities.logger('Can\'t load configuration from Skeletor', 'skeleError', true);
 }
 
 
@@ -24,7 +24,7 @@ function translateErrorDetail(detail) {
 
 
 setInvalid = function(id, schema, result) {
-    skeleUtils.globalUtilities.logger('VALIDATION - invalid ' + id, debugType);
+    SkeleUtils.GlobalUtilities.logger('VALIDATION - invalid ' + id, debugType);
     let errorString = '';
     let reasons = result.reasons;
     let isShadowField = false;
@@ -98,7 +98,7 @@ skeleformValidateForm = function(data, Fields) {
         if ($('.staticTop').length === 0) {
             offsetCorrection = offsetCorrection + 66;
         }
-        skeleUtils.globalUtilities.scrollTo($('.invalid').first().offset().top - offsetCorrection, configuration.animations.scrollError);
+        SkeleUtils.GlobalUtilities.scrollTo($('.invalid').first().offset().top - offsetCorrection, configuration.animations.scrollError);
     }
 
     return valid;
@@ -181,7 +181,7 @@ skeleformCleanForm = function() {
 skeleformHandleResult = function(error, result, type, data, paths) {
     if (error) {
         Materialize.toast(TAPi18n.__('serverError_error'), 5000, 'error');
-        skeleUtils.globalUtilities.logger(error, skeleformInstance, false, true);
+        SkeleUtils.GlobalUtilities.logger(error, skeleformInstance, false, true);
     }
     else {
         let title, content;
@@ -221,7 +221,7 @@ skeleformHandleResult = function(error, result, type, data, paths) {
             }
             // otherwise scroll to top
             else {
-                skeleUtils.globalUtilities.scrollTo(0, configuration.animations.scrollTop);
+                SkeleUtils.GlobalUtilities.scrollTo(0, configuration.animations.scrollTop);
             }
         });
     }
@@ -261,12 +261,12 @@ skeleformGatherData = function(formContext, Fields) {
             }
         }
         else {
-            skeleUtils.globalUtilities.logger('Skipped field: ' + fieldSchema.name, 'skeleWarning');
+            SkeleUtils.GlobalUtilities.logger('Skipped field: ' + fieldSchema.name, 'skeleWarning');
         }
     });
 
-    skeleUtils.globalUtilities.logger('<separator>form gathered data:', debugType);
-    skeleUtils.globalUtilities.logger(data, debugType);
+    SkeleUtils.GlobalUtilities.logger('<separator>form gathered data:', debugType);
+    SkeleUtils.GlobalUtilities.logger(data, debugType);
 
     return data;
 };
@@ -286,7 +286,7 @@ Template.skeleform.onRendered(function() {
     let data = this.data;
 
     if (data.schema.__autoScrollTop !== false) {
-        skeleUtils.globalUtilities.scrollTo(0, configuration.animations.onRendered);
+        SkeleUtils.GlobalUtilities.scrollTo(0, configuration.animations.onRendered);
     }
 
     // set toolbar in container if needed
@@ -319,7 +319,7 @@ Template.skeleform.onRendered(function() {
             if ($bar.length > 0) {
                 let barOffset = Math.round($bar.offset().top * 1) / 1;
 
-                skeleUtils.globalUtilities.logger ('static bar calculated offset: ' + barOffset, debugType);
+                SkeleUtils.GlobalUtilities.logger ('static bar calculated offset: ' + barOffset, debugType);
 
                 $(window).on('scroll', function() {
                     if ($(document).scrollTop() >= barOffset) {
@@ -447,12 +447,12 @@ Template.skeleformLangBar.events({
 // skeletor static addons
 Template.skeleformStaticAddons.events({
     'click .toTop': function(event, template) {
-        skeleUtils.globalUtilities.scrollTo(0, configuration.animations.scrollTop);
+        SkeleUtils.GlobalUtilities.scrollTo(0, configuration.animations.scrollTop);
     },
     'click .toBottom': function(event, template) {
         // if there are no errors in the form -> scroll to page's bottom
         if ($('.invalid').length === 0) {
-            skeleUtils.globalUtilities.scrollTo($('body').height(), configuration.animations.scrollBottom);
+            SkeleUtils.GlobalUtilities.scrollTo($('body').height(), configuration.animations.scrollBottom);
         }
         // otherwise scroll to first error
         else {
@@ -462,7 +462,7 @@ Template.skeleformStaticAddons.events({
                 offsetCorrection = offsetCorrection + 66;
             }
 
-            skeleUtils.globalUtilities.scrollTo($('.invalid').first().offset().top - offsetCorrection, configuration.animations.scrollBottom);
+            SkeleUtils.GlobalUtilities.scrollTo($('.invalid').first().offset().top - offsetCorrection, configuration.animations.scrollBottom);
         }
     }
 });
