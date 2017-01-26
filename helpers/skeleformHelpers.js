@@ -1,7 +1,26 @@
 // Skeleform helpers
 Template.skeleform.helpers({
+    toolbarContext: function() {
+        return {
+            Fields: Template.instance().Fields,
+            formContext: Template.instance().data
+        };
+    },
+    generalContext: function() {
+        let data = Template.instance().data;
+
+        data.formInstance = Template.instance();
+        return data;
+    }
+});
+
+
+// skeleform body helpers
+Template.skeleformBody.helpers({
     isFieldInCurrentForm: function(fieldSchema) {
-        let formData = Template.instance().data.item;
+        const instance = Template.instance();
+        let formData = instance.data.item;
+        let data;
 
         switch (fieldSchema.showOnly) {
             case 'create':
@@ -17,19 +36,21 @@ Template.skeleform.helpers({
             break;
         }
 
+        data = {
+            formInstance: Template.instance().data.formInstance,
+            schema: fieldSchema,
+            item: formData,
+            groupLevel: instance.data.groupLevel || 0
+        };
+
+        // data.groupLevel will contain the level of group nesting of the field
+        if (fieldSchema.skeleformGroup) {
+            data.groupLevel = data.groupLevel + 1;
+        }
+
         return {
             template: fieldSchema.output ? 'skeleform' + fieldSchema.output.capitalize() : null,
-            data: {
-                formInstance: Template.instance(),
-                schema: fieldSchema,
-                item: formData,
-            }
-        };
-    },
-    toolbarContext: function() {
-        return {
-            Fields: Template.instance().Fields,
-            formContext: Template.instance().data
+            data: data
         };
     }
 });
@@ -44,6 +65,7 @@ Template.skeleformUpdateButtons.helpers({
         return false;
     }
 });
+
 
 // Toolbars
 Template.skeleformCreateButtons.helpers(toolbarsHelpers);

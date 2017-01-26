@@ -144,6 +144,7 @@ Other than the previous options, each field can have specific options depending 
 By default every field is wrapped in a `<div class="row">`, but it's possible to display two or more fields in the same row by wrapping them into an object in the schema; this object must have this form:
 
 - **skeleformGroup**: *[boolean] (mandatory)* indicates that the object represents a group of inline fields (*true* is the only value possible);
+- **size**: *[string] (optional)* materialize's grid system classes; by default the group does not create any column and inside of it each field creates its own;
 - **fields**: *[array] (optional)* the normal schema of the fields to be displayed in the same row;
 
 ### CUSTOM FIELDS CREATION

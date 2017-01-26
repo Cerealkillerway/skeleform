@@ -13,24 +13,36 @@
 
     <!-- form fields -->
     <div class="skeleformFields">
-        {{#each schema.fields}}
-            {{#with isFieldInCurrentForm this}}
-                {{#if data.schema.skeleformGroup}}
-                    <div class="row">
-                        {{#each data.schema.fields}}
-                            {{#with isFieldInCurrentForm this}}
-                                {{> Template.dynamic template=template data=data}}
-                            {{/with}}
-                        {{/each}}
-                    </div>
-                {{else}}
+        {{#with generalContext}}
+            {{> skeleformBody this}}
+        {{/with}}
+    </div>
+</template>
+
+<template name="skeleformBody">
+    {{#each schema.fields}}
+        {{#with isFieldInCurrentForm this}}
+            {{#if data.schema.skeleformGroup}}
+                <div class="row">
+                    {{#if data.schema.size}}
+                        <div class="col {{data.schema.size}}">
+                            {{> skeleformBody data}}
+                        </div>
+                    {{else}}
+                        {{> skeleformBody data}}
+                    {{/if}}
+                </div>
+            {{else}}
+                {{#if (test data.groupLevel 0)}}
                     <div class="row">
                         {{> Template.dynamic template=template data=data}}
                     </div>
+                {{else}}
+                    {{> Template.dynamic template=template data=data}}
                 {{/if}}
-            {{/with}}
-        {{/each}}
-    </div>
+            {{/if}}
+        {{/with}}
+    {{/each}}
 </template>
 
 
