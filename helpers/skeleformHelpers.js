@@ -22,6 +22,11 @@ Template.skeleformBody.helpers({
         let formData = instance.data.item;
         let data;
 
+        // skip fields that have not to be displayed in form
+        if (fieldSchema.output === 'none') {
+            return false;
+        }
+
         switch (fieldSchema.showOnly) {
             case 'create':
             if (formData) {

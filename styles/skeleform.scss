@@ -57,7 +57,7 @@ i.material-icons.prefix.dateIcon, i.material-icons.prefix.timeIcon {
 
             img {
                 max-height: 30px;
-                border: solid 3px darken($thirdColorBorder, 10%);
+                border: solid 3px darken($thirdPanelColorBorder, 10%);
                 cursor: pointer !important;
             }
 
@@ -81,11 +81,11 @@ i.material-icons.prefix.dateIcon, i.material-icons.prefix.timeIcon {
     top: 0;
     left: 0;
     width: 100%;
-    background-color: lighten($firstColor, 10%);
+    background-color: lighten($firstPanelColor, 10%);
     z-index: 2001;
     padding-top: 10px;
     height: 70px;
-    border-bottom: solid 3px $firstColorBorder;
+    border-bottom: solid 3px $firstPanelColorBorder;
     margin-top: 0 !important;
     margin-left: 0 !important;
 
@@ -97,7 +97,7 @@ i.material-icons.prefix.dateIcon, i.material-icons.prefix.timeIcon {
         color: $firstHoverColor !important;
     }
     i.firstHoverColor:hover {
-        color: $firstColorLinkHover !important;
+        color: $firstPanelColorLinkHover !important;
     }
 }
 /* --- end toolbars --- */
@@ -256,7 +256,7 @@ i.material-icons.prefix.dateIcon, i.material-icons.prefix.timeIcon {
     float: left;
     padding: 30px;
     min-height: 200px;
-    border: solid 5px $secondColor;
+    border: solid 5px $secondPanelColor;
     border-radius: 2px;
     max-width: 100%;
 

@@ -19,7 +19,7 @@
     font-size: 70px;
     padding: 10px;
     padding-bottom: 0px;
-    color: $firstColorText;
+    color: $firstPanelColorText;
 }
 
 .clockpicker-display-column {
@@ -36,7 +36,7 @@
     display: inline-block;
     font-size: 23px;
     line-height: 25px;
-    color: $firstColorText;
+    color: $firstPanelColorText;
 }
 
 .clockpicker-span-hours,
@@ -137,7 +137,7 @@
     &.text-primary {
         -webkit-animation-name: pulse;
         animation-name: pulse;
-        color: $firstColorText;
+        color: $firstPanelColorText;
     }
 }
 
@@ -146,7 +146,7 @@
 }
 
 .clockpicker-plate {
-    background-color: lighten($firstColor, 15%);
+    background-color: lighten($firstPanelColor, 15%);
     border-radius: 50%;
     width: 270px;
     height: 270px;
@@ -178,7 +178,7 @@
 
 .clockpicker-tick {
     border-radius: 50%;
-    color: $firstColorText;
+    color: $firstPanelColorText;
     line-height: 40px;
     text-align: center;
     width: 40px;
@@ -192,7 +192,7 @@
     transition: background-color 300ms;
     &.active,
     &:hover {
-        background-color: lighten($secondColor, 15%);
+        background-color: lighten($secondPanelColor, 15%);
     }
 }
 
@@ -238,28 +238,28 @@
 
 .clockpicker-canvas-bearing {
     stroke: none;
-    fill: $secondColor;
+    fill: $secondPanelColor;
 }
 
 .clockpicker-canvas-fg {
     stroke: none;
-    fill: rgba($firstColor, 0);
+    fill: rgba($firstPanelColor, 0);
     &.active {
-        fill: rgba($secondColor, 0.5);
+        fill: rgba($secondPanelColor, 0.5);
     }
 }
 
 .clockpicker-canvas-bg {
     stroke: none;
-    fill: rgba(lighten($secondColor, 15%), 0.7);
+    fill: rgba(lighten($secondPanelColor, 15%), 0.7);
 }
 
 .clockpicker-canvas-bg-trans {
-    fill: rgba(lighten($secondColor, 15%), 0.7);
+    fill: rgba(lighten($secondPanelColor, 15%), 0.7);
 }
 
 .clockpicker-canvas line {
-    stroke: lighten($secondColor, 15%);
+    stroke: lighten($secondPanelColor, 15%);
     stroke-width: 1;
     stroke-linecap: round;
     /*shape-rendering: crispEdges;*/
@@ -286,7 +286,7 @@
 }
 
 button {
-    color: $secondColor;
+    color: $secondPanelColor;
 }
 
 //buttons
@@ -301,7 +301,7 @@ button {
             background-color: transparent;
         }
         &:active {
-            background-color: lighten($secondColor, 15%);
+            background-color: lighten($secondPanelColor, 15%);
         }
     }
 }
@@ -311,13 +311,13 @@ button {
     .clockpicker-button {
         margin: auto;
         margin-top: 15px;
-        color: $firstColorText;
+        color: $firstPanelColorText;
         &:focus {
             background-color: transparent;
         }
         &:active {
-            background-color: $secondColor;
-            color: $secondColorText;
+            background-color: $secondPanelColor;
+            color: $secondPanelColorText;
         }
     }
 }
