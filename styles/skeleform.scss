@@ -8,107 +8,113 @@
 
 .skeleformWrapper {
     margin-top: 60px;
-}
-.skeleformFieldAlert {
-    margin: 0;
 
-    &.skeleformCheckBoxAlert {
-        margin-top: 15px;
+    .skeleformFieldAlert {
+        margin: 0;
 
-        .switch + & {
-            margin-top: 45px;
+        &.skeleformCheckBoxAlert {
+            margin-top: 15px;
+
+            .switch + & {
+                margin-top: 45px;
+            }
         }
     }
-}
 
-.switchLabel {
-    margin-bottom: 15px;
-}
-.switch {
-    label {
-        margin-top: 15px;
+    .switchLabel {
+        margin-bottom: 15px;
     }
-}
-
-.skeleformAlwaysActiveLabel {
-    font-size: 0.8rem !important;
-    transform: translateY(-140%) !important;
-}
-
-/* --- icons --- */
-i.material-icons.prefix.dateIcon, i.material-icons.prefix.timeIcon {
-    margin-top: 8px;
-}
-
-/* --- toolbars --- */
-.staticBar{
-    .skeleformToolbar {
-        margin-bottom: 30px;
+    .switch {
+        label {
+            margin-top: 15px;
+        }
     }
 
-    .skeleformLangs {
-        display: inline-block;
-        vertical-align: middle;
-        margin-right: 25px;
+    .skeleformAlwaysActiveLabel {
+        font-size: 0.8rem !important;
+        transform: translateY(-140%) !important;
+    }
 
-        .langFlag {
-            float: left;
-            margin: 3px 4px;
+    /* --- icons --- */
+    i.material-icons.prefix.dateIcon, i.material-icons.prefix.timeIcon {
+        margin-top: 8px;
+    }
 
-            img {
-                max-height: 30px;
-                border: solid 3px darken($thirdPanelColorBorder, 10%);
-                cursor: pointer !important;
-            }
+    /* --- toolbars --- */
+    .skeleskeleStaticBarPlaceholder {
+        width: 100%;
+    }
 
-            &.active {
+    .skeleStaticBar{
+        .skeleformToolbar {
+            margin-bottom: 30px;
+        }
+
+        .skeleformLangs {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 25px;
+
+            .langFlag {
+                float: left;
+                margin: 3px 4px;
+
                 img {
-                    border-color: $firstHoverColor;
+                    max-height: 30px;
+                    border: solid 3px darken($thirdPanelColorBorder, 10%);
+                    cursor: pointer !important;
+                }
+
+                &.active {
+                    img {
+                        border-color: $firstHoverColor;
+                    }
                 }
             }
         }
+
+        .staticAddons {
+            margin-top: -12px;
+            line-height: 1 !important;
+            vertical-align: middle;
+        }
     }
 
-    .staticAddons {
-        margin-top: -12px;
-        line-height: 1 !important;
-        vertical-align: middle;
+    .staticTop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: lighten($firstPanelColor, 10%);
+        z-index: 2001;
+        padding-top: 10px;
+        height: 60px;
+        border-bottom: solid 3px $firstPanelColorBorder;
+        margin-top: 0 !important;
+        margin-left: 0 !important;
+
+        .centralBody{
+            margin-top: 6px;
+        }
+
+        i.firstHoverColor {
+            color: $firstHoverColor !important;
+        }
+        i.firstHoverColor:hover {
+            color: $firstPanelColorLinkHover !important;
+        }
     }
+    /* --- end toolbars --- */
+
+
+    /* --- fields specific --- */
+    // skeleform editor
+    .note-editor + label {
+        top: -0.2rem !important;
+    }
+    /* --- end fields specific --- */
+
 }
-
-.staticTop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: lighten($firstPanelColor, 10%);
-    z-index: 2001;
-    padding-top: 10px;
-    height: 70px;
-    border-bottom: solid 3px $firstPanelColorBorder;
-    margin-top: 0 !important;
-    margin-left: 0 !important;
-
-    .centralBody{
-        margin-top: 6px;
-    }
-
-    i.firstHoverColor {
-        color: $firstHoverColor !important;
-    }
-    i.firstHoverColor:hover {
-        color: $firstPanelColorLinkHover !important;
-    }
-}
-/* --- end toolbars --- */
-
-
-/* --- fields specific --- */
-// skeleform editor
-.note-editor + label {
-    top: -0.2rem !important;
-}
-/* --- end fields specific --- */
 
 
 

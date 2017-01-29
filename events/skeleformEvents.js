@@ -188,7 +188,7 @@ skeleformHandleResult = function(error, result, type, data, paths) {
         switch (type) {
             case 'update':
             title = TAPi18n.__('updateConfirm_msg');
-            content = TAPi18n.__('pageUpdatedOk_msg');
+            content = TAPi18n.__('genericUpdate_msg');
             break;
 
             case 'create':
@@ -284,13 +284,14 @@ Template.skeleform.onRendered(function() {
     skeleformInstance = this;
     this.formRendered.set(true);
     let data = this.data;
+    let schema = data.schema;
 
-    if (data.schema.__autoScrollTop !== false) {
+    if (schema.__autoScrollTop !== false) {
         SkeleUtils.GlobalUtilities.scrollTo(0, configuration.animations.onRendered);
     }
 
     // set toolbar in container if needed
-    let toolbar = data.schema.__toolbar;
+    let toolbar = schema.__toolbar;
 
     if (toolbar && toolbar.containerId) {
         /*if (data.Fields === undefined) {
@@ -306,11 +307,26 @@ Template.skeleform.onRendered(function() {
     $('input:first').focusWithoutScrolling();
 
     this.autorun(function() {
-        if (FlowRouter.subsReady()) {
+        if (data.skeleSubsReady.get()) {
             // clean validation alerts
             skeleformResetStatus();
         }
     });
+
+    this.autorun(() => {
+        // register dependency from form's language
+        let formLang = FlowRouter.getParam('itemLang');
+        // register dependency from form's data
+        let item = this.data.item;
+
+        if (this.data.skeleSubsReady.get()) {
+            // fire onRendered callback if it's defined
+            if (schema.formCallbacks && schema.formCallbacks.onRendered) {
+                schema.formCallbacks.onRendered(this.data.item, skeleformInstance);
+            }
+        }
+    });
+
     this.autorun(function() {
         if (Skeletor.appRendered.get() === true) {
             // static bar
@@ -322,13 +338,22 @@ Template.skeleform.onRendered(function() {
                 SkeleUtils.GlobalUtilities.logger ('static bar calculated offset: ' + barOffset, debugType);
 
                 $(window).on('scroll', function() {
+                    let $placeholder = this.$('.skeleskeleStaticBarPlaceholder');
+
                     if ($(document).scrollTop() >= barOffset) {
-                        $('.staticBar').addClass('staticTop');
-                        $('.staticTop').children().addClass('centralBody hPadded');
+                        let height = $('.skeleStaticBar').height();
+
+                        if (height > $placeholder.height()) {
+                            $placeholder.height(height);
+                        }
+
+                        $('.skeleStaticBar').addClass('staticTop');
+                        $('.staticTop').children().addClass('skeleCentralBody hPadded');
                     }
                     else {
-                        $('.staticTop').children().removeClass('centralBody hPadded');
-                        $('.staticBar').removeClass('staticTop');
+                        $placeholder.height(0);
+                        $('.staticTop').children().removeClass('skeleCentralBody hPadded');
+                        $('.skeleStaticBar').removeClass('staticTop');
                     }
                 });
             }

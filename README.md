@@ -38,6 +38,7 @@ Please remember the followings:
 - **__listView**: *[object] (optional)* skelelist options; see the **Skelelist package**'s *readme* for details;
 - **fields**: *[Array of Objects] (mandatory)* each object in this array represents a field that can have the following properties:
 - **formCallbacks**: *[object] (optional)* dictionary of callbacks executed on the form;
+- - **onRendered(currentDocument, formInstance)**: *[function] (optional)* callbacke fired when the form is rendered; it receives the currentDocument (if any) and the form instance as arguments;
 - - **beforeSave(formDataContext, gatheredValue)**: *[function] (optional)* callback executed just before saving (before creating and before updating) the form; it receives the form's data context and the values of all form's field gathered by Skeleform;
 
 ### SCHEMA FIELDS OPTIONS

@@ -1,21 +1,23 @@
 <template name="skeleform">
-    <!-- form loading modal -->
-    {{#if schema.__options.loadingModal}}
-        {{> gearLoading}}
-    {{/if}}
+    <div class="skeleform">
+        <!-- form loading modal -->
+        {{#if schema.__options.loadingModal}}
+            {{> gearLoading}}
+        {{/if}}
 
-    <!-- toolbar -->
-    {{#unless schema.__toolbar.containerId}}
-        {{#with toolbarContext}}
-            {{> skeleformToolbar this}}
-        {{/with}}
-    {{/unless}}
+        <!-- toolbar -->
+        {{#unless schema.__toolbar.containerId}}
+            {{#with toolbarContext}}
+                {{> skeleformToolbar this}}
+            {{/with}}
+        {{/unless}}
 
-    <!-- form fields -->
-    <div class="skeleformFields">
-        {{#with generalContext}}
-            {{> skeleformBody this}}
-        {{/with}}
+        <!-- form fields -->
+        <div class="skeleformFields">
+            {{#with generalContext}}
+                {{> skeleformBody this}}
+            {{/with}}
+        </div>
     </div>
 </template>
 
@@ -48,6 +50,7 @@
 
 <!-- loads default or custom toolbar on top of skeleform -->
 <template name="skeleformToolbar">
+    <div class="skeleskeleStaticBarPlaceholder"></div>
     {{#if schema.__toolbar.template}}
         {{> Template.dynamic template=schema.__toolbar.template data=this}}
     {{else}}
@@ -63,7 +66,7 @@
 <!-- skeleform default toolbars -->
 <!-- create toolbar -->
 <template name="skeleformCreateButtons">
-    <div class="staticBar">
+    <div class="skeleStaticBar">
         <div class="skeleformToolbar">
             <div class="waves-effect waves-light btn thirdColor skeleformCreate">
                 <i class="material-icons small left">add_circle</i>
@@ -85,7 +88,7 @@
 
 <!-- update toolbar -->
 <template name ="skeleformUpdateButtons">
-    <div class="staticBar">
+    <div class="skeleStaticBar">
         <div class="skeleformToolbar">
             <div class="waves-effect waves-light btn secondColor skeleformUpdate">
                 <i class="material-icons small left">beenhere</i>
