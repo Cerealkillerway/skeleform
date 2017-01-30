@@ -180,8 +180,14 @@ skeleformCleanForm = function() {
 //handle method results and performs error/success operations on the client
 skeleformHandleResult = function(error, result, type, data, paths) {
     if (error) {
-        Materialize.toast(TAPi18n.__('serverError_error'), 5000, 'error');
-        SkeleUtils.GlobalUtilities.logger(error, skeleformInstance, false, true);
+        if (error.error === 'unauthorized') {
+            Materialize.toast(TAPi18n.__('permissions_error'), 5000, 'permissionsError');
+            SkeleUtils.GlobalUtilities.logger(error, skeleformInstance, false, true);
+        }
+        else {
+            Materialize.toast(TAPi18n.__('serverError_error'), 5000, 'error');
+            SkeleUtils.GlobalUtilities.logger(error, skeleformInstance, false, true);
+        }
     }
     else {
         let title, content;
