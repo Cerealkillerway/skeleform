@@ -219,6 +219,6 @@ skeleformGeneralHelpers = {
 toolbarsHelpers = {
     makeUndoPath: function(path) {
         let params = createPath(path);
-        return FlowRouter.path(path[0], params.params, {lang: FlowRouter.getQueryParam("lang")});
+        return FlowRouter.path(path[0], params.params, {lang: TAPi18n.getLanguage()});
     }
 };
