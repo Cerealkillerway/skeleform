@@ -261,7 +261,14 @@ skeleformGatherData = function(formContext, Fields) {
                 }
             }
             else {
-                if (!formItem || fieldValue !== formItem[fieldSchema.name]) {
+                let nameShards = fieldSchema.name.split('.');
+
+                oldValue = formItem;
+                nameShards.forEach(function(nameShard, index) {
+                    oldValue = oldValue[nameShard];
+                });
+
+                if (!formItem || fieldValue !== oldValue) {
                     data[fieldSchema.name] = fieldValue;
                 }
             }
