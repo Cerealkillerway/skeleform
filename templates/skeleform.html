@@ -25,9 +25,9 @@
     {{#each schema.fields}}
         {{#with isFieldInCurrentForm this}}
             {{#if data.schema.skeleformGroup}}
-                <div class="row">
+                <div class="row {{formatClasses data.schema.classes}}">
                     {{#if data.schema.size}}
-                        <div class="col {{data.schema.size}}">
+                        <div class="col {{data.schema.size}} {{formatClasses data.schema.classes}}">
                             {{> skeleformBody data}}
                         </div>
                     {{else}}

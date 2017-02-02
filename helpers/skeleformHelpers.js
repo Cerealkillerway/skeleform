@@ -57,6 +57,10 @@ Template.skeleformBody.helpers({
             template: fieldSchema.output ? 'skeleform' + fieldSchema.output.capitalize() : null,
             data: data
         };
+    },
+
+    formatClasses: function(classes) {
+        return classes ? classes.join(' ') : '';
     }
 });
 

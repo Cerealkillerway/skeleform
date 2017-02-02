@@ -47,7 +47,7 @@ Please remember the followings:
 
 - **__listView**: *[object] (optional)* options for the field in the list view; see the **Skelelist package**'s *readme* for details;
 - **name**: *[String] (required)* the name of the field **(MUST be an UNIQUE identifier)**;
-- **output**: *[String] (required)* form element (available valuse: *"staticTitle", "input", "checkBox", "editor", "select", "datePicker", "timePicker", "clockPicker"*);
+- **output**: *[String] (required)* form element (available valuse: *"none", "staticTitle", "input", "checkBox", "editor", "select", "datePicker", "timePicker", "clockPicker"*);
 - **i18n**: *[boolean] (optional)* specify that the field will be prefixed with *"<:currentLang>---"* object; (default *true*);
 - **size**: *[string] (optional)* materialize's grid system classes; default to *"s12 m6"*;
 - **callbacks**: *[object] (optional)* dictionary of callbacks;
@@ -64,6 +64,10 @@ Please remember the followings:
 #### Field specific options:
 
 Other than the previous options, each field can have specific options depending on its *output* type:
+
+##### none
+
+A filed with `output: "none"` will not be displayed (and so it's never gathered or validated by **Skeleform**)
 
 ##### staticTitle
 
@@ -146,6 +150,7 @@ By default every field is wrapped in a `<div class="row">`, but it's possible to
 
 - **skeleformGroup**: *[boolean] (mandatory)* indicates that the object represents a group of inline fields (*true* is the only value possible);
 - **size**: *[string] (optional)* materialize's grid system classes; by default the group does not create any column and inside of it each field creates its own;
+- **classes**: *[array] (optional)* array of custom classes for the group's div container;
 - **fields**: *[array] (optional)* the normal schema of the fields to be displayed in the same row;
 
 ### CUSTOM FIELDS CREATION
