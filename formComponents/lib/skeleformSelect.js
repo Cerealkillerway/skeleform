@@ -6,6 +6,8 @@ Template.skeleformSelect.helpers(skeleformGeneralHelpers);
 Template.skeleformSelect.helpers({
     // create sources list for selct's options
     options: function(schema) {
+        const instance = Template.instance();
+
         // if source field is a query result, then build the option objects using
         // defined "sourceName" and "sourceValue" fields
         if (schema.sourceValue) {
@@ -19,7 +21,7 @@ Template.skeleformSelect.helpers({
             }
             let source;
 
-            // check if source is a Mongo cursor, an arary or a function;
+            // check if source is a Mongo cursor, an array or a function;
             if (Match.test(schema.source, Mongo.Cursor) || Match.test(schema.source, [Match.Any])) {
                 source = schema.source;
             }
@@ -92,6 +94,8 @@ Template.skeleformSelect.helpers({
                 result.push(option);
             });
 
+            instance.isActivated.set(false);
+            console.log(result);
             return result;
         }
 
@@ -176,15 +180,22 @@ Template.skeleformSelect.onCreated(function() {
         // anyway the standard "fieldValue" helper is also included in the template since it handles i18n for the field;
     };
 });
+
+Template.skeleformSelect.onRendered(function() {
+    this.autorun(() => {
+        this.isActivated.get();
+        console.log('recalculate');
+        $getFieldId(this, this.data.schema).material_select();
+        this.isActivated.set(true);
+    });
+});
+
 Template.skeleformSelect.onDestroyed(function() {
     let Fields = this.data.formInstance.Fields;
 
     Fields.removeAt(Fields.indexOf(this));
 });
-Template.skeleformSelect.onRendered(function() {
-    $getFieldId(this, this.data.schema).material_select();
-    this.isActivated.set(true);
-});
+
 Template.skeleformSelect.events({
     'blur select': function(event, template) {
         skeleformSuccessStatus('#' + template.data.schema.name);

@@ -264,9 +264,11 @@ skeleformGatherData = function(formContext, Fields) {
                 let nameShards = fieldSchema.name.split('.');
 
                 oldValue = formItem;
-                nameShards.forEach(function(nameShard, index) {
-                    oldValue = oldValue[nameShard];
-                });
+                if (oldValue) {
+                    nameShards.forEach(function(nameShard, index) {
+                        oldValue = oldValue[nameShard];
+                    });
+                }
 
                 if (!formItem || fieldValue !== oldValue) {
                     data[fieldSchema.name] = fieldValue;
