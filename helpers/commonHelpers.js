@@ -30,7 +30,7 @@ InvokeCallback = function(instance, value, schema, type) {
         case 'onChange':
         // if defined, perform the callback
         if (schema.callbacks && schema.callbacks.onChange) {
-            schema.callbacks.onChange(value);
+            schema.callbacks.onChange(value, instance);
         }
     }
 };
