@@ -15,7 +15,7 @@ Template.skeleformSelect.helpers({
 
             if (schema.blankValue) {
                 result.push({
-                    name: TAPi18n.__("none_lbl"),
+                    name: TAPi18n.__('none_lbl'),
                     value: schema.blankValue
                 });
             }
@@ -26,7 +26,7 @@ Template.skeleformSelect.helpers({
                 source = schema.source;
             }
             else {
-                source = schema.source();
+                source = schema.source(instance);
             }
 
             source.forEach(function(item, index) {
@@ -95,7 +95,6 @@ Template.skeleformSelect.helpers({
             });
 
             instance.isActivated.set(false);
-            console.log(result);
             return result;
         }
 
@@ -160,6 +159,9 @@ Template.skeleformSelect.helpers({
 Template.skeleformSelect.onCreated(function() {
     this.isActivated = new ReactiveVar(false);
 
+    setReplicaIndex(this);
+    InvokeCallback(this, null, this.data.schema, 'onCreated');
+
     //register this on form' store
     this.data.formInstance.Fields.push(this);
 
@@ -182,11 +184,19 @@ Template.skeleformSelect.onCreated(function() {
 });
 
 Template.skeleformSelect.onRendered(function() {
+    let schema = this.data.schema;
+
     this.autorun(() => {
         this.isActivated.get();
-        console.log('recalculate');
-        $getFieldId(this, this.data.schema).material_select();
-        this.isActivated.set(true);
+
+        Meteor.setTimeout(() => {
+            let value = this.getValue();
+
+            $getFieldId(this, schema).material_select();
+            this.isActivated.set(true);
+
+            InvokeCallback(this, value, schema, 'onChange');
+        }, 50);
     });
 });
 
@@ -197,16 +207,16 @@ Template.skeleformSelect.onDestroyed(function() {
 });
 
 Template.skeleformSelect.events({
-    'blur select': function(event, template) {
-        skeleformSuccessStatus('#' + template.data.schema.name);
+    'blur select': function(event, instance) {
+        skeleformSuccessStatus('#' + instance.data.schema.name);
     },
-    'change select': function(event, template) {
+    'change select': function(event, instance) {
         // perform validation and callback invocation on change
-        let value = template.getValue();
-        let schema = template.data.schema;
+        let value = instance.getValue();
+        let schema = instance.data.schema;
 
-        template.isValid();
+        instance.isValid();
 
-        InvokeCallback(template, value, schema, 'onChange');
+        InvokeCallback(instance, value, schema, 'onChange');
     }
 });

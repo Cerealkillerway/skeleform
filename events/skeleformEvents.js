@@ -2,14 +2,7 @@ let debugType = 'skeleform';
 let skeleformInstance;
 
 // get configuration from skeletor or from the app
-if (Package['cerealkiller:skeletor']) {
-    configuration = Package['cerealkiller:skeletor'].Skeletor.configuration;
-    SkeleUtils.GlobalUtilities.logger('loaded configuration:', debugType);
-    SkeleUtils.GlobalUtilities.logger(configuration, debugType);
-}
-else {
-    SkeleUtils.GlobalUtilities.logger('Can\'t load configuration from Skeletor', 'skeleError', true);
-}
+configuration = Skeletor.configuration;
 
 
 // VALIDATION
@@ -21,6 +14,12 @@ function translateErrorDetail(detail) {
     if (regex.test(detail) === false) return TAPi18n.__(detail + '_validationDetail');
     return detail;
 }
+
+setReplicaIndex = function(instance) {
+    if (instance.data.replicaSet) {
+        instance.replicaIndex = instance.data.formInstance.replicaSets[instance.data.replicaSet.name].index;
+    }
+};
 
 
 setInvalid = function(id, schema, result) {
@@ -266,7 +265,9 @@ skeleformGatherData = function(formContext, Fields) {
                 oldValue = formItem;
                 if (oldValue) {
                     nameShards.forEach(function(nameShard, index) {
-                        oldValue = oldValue[nameShard];
+                        if (oldValue) {
+                            oldValue = oldValue[nameShard];
+                        }
                     });
                 }
 
@@ -294,6 +295,7 @@ Template.skeleform.onCreated(function() {
     this.formRendered = new ReactiveVar(false);
 
     this.Fields = [];
+    this.replicaSets = {};
 });
 Template.skeleform.onRendered(function() {
     skeleformInstance = this;
@@ -375,12 +377,12 @@ Template.skeleform.onRendered(function() {
         }
     });
 });
-Template.skeleform.destroyed = function() {
+Template.skeleform.onDestroyed(function() {
     if (this.toolbarInstance) {
         Blaze.remove(this.toolbarInstance);
     }
     $(window).unbind('scroll');
-};
+});
 
 
 // create buttons (toolbar)
@@ -404,7 +406,7 @@ Template.skeleformCreateButtons.events({
             method = formContext.methods.insert;
         }
         else {
-            method = configuration.defaultMethods.insert;
+            method = configuration.defaultMethods.create;
         }
 
         // if necessary launch form callbacks!

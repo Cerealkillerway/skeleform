@@ -22,7 +22,7 @@
 </template>
 
 <template name="skeleformBody">
-    {{#each schema.fields}}
+    {{#each (fields schema.fields)}}
         {{#with isFieldInCurrentForm this}}
             {{#if data.schema.skeleformGroup}}
                 <div class="row {{formatClasses data.schema.classes}}">
@@ -33,11 +33,19 @@
                     {{else}}
                         {{> skeleformBody data}}
                     {{/if}}
+
+                    {{#if data.schema.replicaSet}}
+                        {{> Template.dynamic template=data.replicaSet.template data=data}}
+                    {{/if}}
                 </div>
             {{else}}
                 {{#if (test data.groupLevel 0)}}
                     <div class="row">
                         {{> Template.dynamic template=template data=data}}
+
+                        {{#if data.schema.replicaSet}}
+                            {{> Template.dynamic template=data.replicaSet.template data=data}}
+                        {{/if}}
                     </div>
                 {{else}}
                     {{> Template.dynamic template=template data=data}}

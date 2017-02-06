@@ -12,7 +12,9 @@ SkeleformStandardFieldValue = function(data, schema) {
     }
     else {
         name.split('.').forEach(function(nameShard, index) {
-            data = data[nameShard];
+            if (data !== undefined) {
+                data = data[nameShard];
+            }
         });
     }
 
@@ -26,18 +28,42 @@ SkeleformStandardFieldValue = function(data, schema) {
 
 // invoke a specific callback for a field
 InvokeCallback = function(instance, value, schema, type) {
-    switch (type) {
-        case 'onChange':
-        // if defined, perform the callback
-        if (schema.callbacks && schema.callbacks.onChange) {
-            schema.callbacks.onChange(value, instance);
+    if (schema.callbacks) {
+        switch (type) {
+            case 'onCreated':
+            // if defined, perform the callback
+            if (schema.callbacks.onCreated) {
+                schema.callbacks.onCreated(instance);
+            }
+            break;
+
+            case 'onChange':
+            // if defined, perform the callback
+            if (schema.callbacks.onChange) {
+                schema.callbacks.onChange(value, instance);
+            }
+            break;
         }
     }
 };
 
+function createFieldId(instance, name, isSelecting) {
+    let replicaIndex = instance.replicaIndex;
+
+    if (isSelecting) {
+        name = name.replace('.', '\\.');
+    }
+
+    if (replicaIndex) {
+        return name + '-' + replicaIndex;
+    }
+
+    return name;
+}
+
 // get the field's object
 $getFieldId = function(instance, schema) {
-    return instance.$('#' + schema.name.replace('.', '\\.'));
+    return instance.$('#' + createFieldId(instance, schema.name, true));
 };
 // get the field' shadow object
 $getShadowFieldId = function(instance, schema) {
@@ -179,7 +205,13 @@ skeleformGeneralHelpers = {
         return Template.instance();
     },
     label: function(name, options) {
-        name = name.substring(name.lastIndexOf('.') + 1, name.length);
+        //name = name.substring(name.lastIndexOf('.') + 1, name.length);
+        name = name.split('.');
+
+        for (i = 1; i < name.length; i++) {
+            name[i] = name[i].capitalize();
+        }
+        name = name.join('');
 
         switch(options) {
             case 'shadowConfirm':
@@ -193,7 +225,7 @@ skeleformGeneralHelpers = {
         }
     },
     field: function(name) {
-        return name;
+        return createFieldId(Template.instance(), name);
     },
     required: function() {
         if ((this.schema.validation && this.schema.validation.min !== undefined) || this.schema.validation && this.schema.validation.type === 'date') return ' *';

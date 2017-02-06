@@ -38,6 +38,10 @@ handleGettedValue = function(value, schema) {
 Template.skeleformInput.onCreated(function() {
     //var self = this;
     this.isActivated = new ReactiveVar(false);
+
+    setReplicaIndex(this);
+    InvokeCallback(this, null, this.data.schema, 'onCreated');
+
     let schema = this.data.schema;
 
     //register this on form' store

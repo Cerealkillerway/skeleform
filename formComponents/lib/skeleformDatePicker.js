@@ -16,6 +16,9 @@ Template.skeleformDatePicker.helpers({
 Template.skeleformDatePicker.onCreated(function() {
     this.isActivated = new ReactiveVar(false);
 
+    setReplicaIndex(this);
+    InvokeCallback(this, null, this.data.schema, 'onCreated');
+
     this.initOptions = {};
 
     //register this on form' store

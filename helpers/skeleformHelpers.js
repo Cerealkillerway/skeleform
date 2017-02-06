@@ -17,8 +17,18 @@ Template.skeleform.helpers({
 
 // skeleform body helpers
 Template.skeleformBody.helpers({
+    fields: function(fields) {
+        if (Template.instance().data.replicaSet) {
+            fields.forEach(function(field) {
+                field.replicaSet = Template.instance().data.replicaSet;
+            });
+        }
+        return fields;
+    },
+
     isFieldInCurrentForm: function(fieldSchema) {
         const instance = Template.instance();
+        let formInstance = instance.data.formInstance;
         let formData = instance.data.item;
         let data;
 
@@ -42,7 +52,7 @@ Template.skeleformBody.helpers({
         }
 
         data = {
-            formInstance: Template.instance().data.formInstance,
+            formInstance: formInstance,
             schema: fieldSchema,
             item: formData,
             groupLevel: instance.data.groupLevel || 0
@@ -51,6 +61,26 @@ Template.skeleformBody.helpers({
         // data.groupLevel will contain the level of group nesting of the field
         if (fieldSchema.skeleformGroup) {
             data.groupLevel = data.groupLevel + 1;
+        }
+
+        // replica set template
+        let replicaSetOptions = fieldSchema.replicaSet;
+
+        if (replicaSetOptions) {
+            data.replicaSet = replicaSetOptions;
+
+            // if template for replica set buttons add/remove is not supplied, use the default one
+            if (!data.replicaSet.template) {
+                data.replicaSet.template = 'skeleformDefaultReplicaBtns';
+            }
+
+            // initialize replicaSet object if not already defined
+            if (!formInstance.replicaSets[replicaSetOptions.name]) {
+                formInstance.replicaSets[replicaSetOptions.name] = {
+                    copies: replicaSetOptions.initCopies || 1,
+                    index: replicaSetOptions.initCopies || 1
+                };
+            }
         }
 
         return {

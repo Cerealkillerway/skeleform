@@ -44,6 +44,9 @@ Template.skeleformCheckBox.helpers({
 Template.skeleformCheckBox.onCreated(function() {
     this.isActivated = new ReactiveVar(false);
 
+    setReplicaIndex(this);
+    InvokeCallback(this, null, this.data.schema, 'onCreated');
+
     // register this on form' store
     this.data.formInstance.Fields.push(this);
 

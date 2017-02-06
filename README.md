@@ -38,7 +38,7 @@ Please remember the followings:
 - **__listView**: *[object] (optional)* skelelist options; see the **Skelelist package**'s *readme* for details;
 - **fields**: *[Array of Objects] (mandatory)* each object in this array represents a field that can have the following properties:
 - **formCallbacks**: *[object] (optional)* dictionary of callbacks executed on the form;
-- - **onRendered(currentDocument, formInstance)**: *[function] (optional)* callbacke fired when the form is rendered; it receives the currentDocument (if any) and the form instance as arguments;
+- - **onRendered(currentDocument, formInstance)**: *[function] (optional)* callback fired when the form is rendered; it receives the currentDocument (if any) and the form instance as arguments;
 - - **beforeSave(formDataContext, gatheredValue)**: *[function] (optional)* callback executed just before saving (before creating and before updating) the form; it receives the form's data context and the values of all form's field gathered by Skeleform;
 
 ### SCHEMA FIELDS OPTIONS
@@ -51,7 +51,8 @@ Please remember the followings:
 - **i18n**: *[boolean] (optional)* specify that the field will be prefixed with *"<:currentLang>---"* object; (default *true*);
 - **size**: *[string] (optional)* materialize's grid system classes; default to *"s12 m6"*;
 - **callbacks**: *[object] (optional)* dictionary of callbacks;
-- - **onChange(value)**: *[function] (optional)* a callback to be performed when the value of the field changes; it receives the field's value as parameter;
+- - **onChange(value, fieldInstance)**: *[function] (optional)* a callback to be performed when the value of the field changes; it receives the field's value and the field's instance as parameters;
+- - **onCreated(fieldInstance)**: a callback fired when the field is created (on the field component's onCreated callback); it receives the field's instance as parameter;
 - **validation**: *[object]* set the validation rules:
 - - **type**: *[string] (optional)* validation match (available values: *"string", "number", "email", "url", "date", "time"*); **IMPORTANT**: *"date"* and *"time"* are validated against the plugin's *"formatSubmit"*;
 - - **min**: *[number] (optional)* minimun length; if the value returned by the field is an object, this parameter is referred to the number of its properties; setting min to 1 on a boolean field (ex. checkbox) is interpreted as "field required"; any other value is ignored for those kind of fields;

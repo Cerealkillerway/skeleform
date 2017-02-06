@@ -40,6 +40,7 @@ Package.onUse(function(api) {
     // templates
     api.addFiles([
         'templates/skeleform.html',
+        'templates/components/skeleformDefaultReplicaBtns.html',
         'formComponents/templates/skeleformDatePicker.html',
         'formComponents/templates/skeleformEditor.html',
         'formComponents/templates/ckMaterialNotePlugins.html',
@@ -62,7 +63,8 @@ Package.onUse(function(api) {
         'lib/picker.time.js',
         'helpers/commonHelpers.js',
         'helpers/skeleformHelpers.js',
-        'events/skeleformEvents.js'
+        'events/skeleformEvents.js',
+        'events/componentsEvents.js'
     ],
     ['client']);
 
