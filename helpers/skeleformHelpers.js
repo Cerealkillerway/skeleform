@@ -78,7 +78,8 @@ Template.skeleformBody.helpers({
             if (!formInstance.replicaSets[replicaSetOptions.name]) {
                 formInstance.replicaSets[replicaSetOptions.name] = {
                     copies: replicaSetOptions.initCopies || 1,
-                    index: replicaSetOptions.initCopies || 1
+                    index: replicaSetOptions.initCopies || 1,
+                    instances: []
                 };
             }
         }
