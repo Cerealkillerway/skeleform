@@ -77,9 +77,10 @@ Template.skeleformBody.helpers({
             // initialize replicaSet object if not already defined
             if (!formInstance.replicaSets[replicaSetOptions.name]) {
                 formInstance.replicaSets[replicaSetOptions.name] = {
-                    copies: replicaSetOptions.initCopies || 1,
-                    index: replicaSetOptions.initCopies || 1,
-                    instances: []
+                    copies: 1,
+                    index: 1,
+                    instances: [],
+                    options: replicaSetOptions
                 };
             }
         }

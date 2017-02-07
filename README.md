@@ -62,6 +62,12 @@ Please remember the followings:
 - - **collectionForUnicityCheck**: *[string] (optional)* the collection where to perform unicity check for the field; if omitted, the unicity check is performed against schema's *__collection*;
 - **style**: *[string] (optional)* wrapper css class for custom styling of the field;
 - **showOnly**: *[string ('create'/'update')] (optional)* defines if the field should be rendered only on creation or only on update; **IMPORTANT**: this option can be set also on a *skeleformGroup* object and will take effect on all fields of the group;
+- **replicaSet**: *[object] (optional)* defines the field (or the group) as a replica set; that means that the field(s) will be replicable by the user who will be able to add or remove copies of this field(s);
+- - **name**: *[string] (mandatory)* the name for the replica set; must be unique in the form;
+- - **template**: *[string] (optional)* the name of the template to be used for replica actions; by default it's "skeleformDefaultReplicaBtns", a built-in template that will render a "+" and "-" buttons, that will make possible for the user to add or remove copies of the replica set;
+- - **minCopies**: *[number] (optional)* the minimum number of copies of the replica set allowed (default *1*);
+- - **maxCopies**: *[number] (optional)* the maximum number of copies of the replica set allowed (default *infinite*);
+- - **initCopies**: *[number] (optional)* the number of copies of the replica set to include in the form during the first render (default *1*);
 
 #### Field specific options:
 
