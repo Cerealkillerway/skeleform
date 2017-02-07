@@ -75,7 +75,7 @@ skeleformValidateForm = function(data, Fields) {
     try {
         Fields.forEach(function(field) {
             let fieldSchema = field.data.schema;
-            let $field = $getFieldId(field, fieldSchema);
+            let $field = $getFieldById(field, fieldSchema);
 
             if ($field.hasClass('skeleValidate')) {
                 let result = field.isValid();
@@ -242,7 +242,7 @@ skeleformGatherData = function(formContext, Fields) {
 
     Fields.forEach(function(field) {
         let fieldSchema = field.data.schema;
-        let $field = $getFieldId(field, fieldSchema);
+        let $field = $getFieldById(field, fieldSchema);
 
         if ($field.hasClass('skeleGather')) {
             let fieldValue = field.getValue();

@@ -166,7 +166,7 @@ Every field in *Skeleform* must implement this methods:
 - **isValid()**: *[function] (mandatory)* must perform validation on the field's value; it is called by skeleform before gathering values to be saved in the db; normally this is done by calling `Skeleform.validate.checkOptions()` from this method;
 - **setValue(value)**: *[function] (mandatory)* receives the current unformatted field value; must format it to be displayed (if required) and set it on the proper *DOM* element of the field;
 
-Inside these methods (and everywhere in the field's code) calling `$getFieldId(templateInstance, schema)` is the preferred way to get the jQuery object wrapping the DOM of the main field's input element.
+Inside these methods (and everywhere in the field's code) calling `$getFieldById(templateInstance, schema)` is the preferred way to get the jQuery object wrapping the DOM of the main field's input element.
 
 ### VALIDATION
 

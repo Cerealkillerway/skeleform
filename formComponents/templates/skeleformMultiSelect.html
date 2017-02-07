@@ -1,0 +1,13 @@
+<template name="skeleformMultiSelect">
+    <div class="input-field col {{#if schema.icons}}icons{{/if}} {{fieldSize schema.size}} {{schema.style}}">
+        <select {{isMultiple}} class="skeleValidate skeleGather" id="{{field schema.name}}">
+            {{fieldValue templateInstance}}
+            {{#each options schema}}
+                <option data-icon="{{icon this}}" value="{{this.value}}" {{isSelected .. this.value}}>{{_ this.name}}</option>
+            {{/each}}
+        </select>
+        <label class="active">{{label schema.name}}{{required}}</label>
+
+        <p class="skeleformFieldAlert"></p>
+    </div>
+</template>

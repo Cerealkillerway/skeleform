@@ -66,7 +66,7 @@ Template.skeleformEditor.onCreated(function() {
     this.data.formInstance.Fields.push(this);
 
     this.getValue = () => {
-        return $getFieldId(this, this.data.schema).code().trim();
+        return $getFieldById(this, this.data.schema).code().trim();
     };
     this.isValid = () => {
         //SkeleUtils.GlobalUtilities.logger('editor validation', 'skeleformFieldValidation');
@@ -78,7 +78,7 @@ Template.skeleformEditor.onCreated(function() {
         if (value === undefined) {
             value = '';
         }
-        $getFieldId(this, this.data.schema).code(value);
+        $getFieldById(this, this.data.schema).code(value);
     };
 });
 Template.skeleformEditor.onDestroyed(function() {

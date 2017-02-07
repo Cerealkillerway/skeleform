@@ -69,7 +69,7 @@ Template.skeleformDatePicker.onDestroyed(function() {
 Template.skeleformDatePicker.onRendered(function() {
     let data = this.data.item;
     let schema = this.data.schema;
-    let $element = $getFieldId(this, schema);
+    let $element = $getFieldById(this, schema);
 
     // activates validation on set
     this.initOptions = {

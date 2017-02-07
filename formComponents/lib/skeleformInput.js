@@ -52,12 +52,12 @@ Template.skeleformInput.onCreated(function() {
 
         if (schema.shadowConfirm) {
             value = {
-                standard: $getFieldId(this, schema).val(),
+                standard: $getFieldById(this, schema).val(),
                 shadow: $getShadowFieldId(this, schema).val()
             };
         }
         else {
-            value = $getFieldId(this, schema).val();
+            value = $getFieldById(this, schema).val();
         }
 
         return handleGettedValue(value, schema);
@@ -68,7 +68,7 @@ Template.skeleformInput.onCreated(function() {
         return Skeleform.validate.checkOptions(this.getValue(), this.data.schema, formInstance.data.schema, formInstance.data.item, this);
     };
     this.setValue = (value) => {
-        let $field = $getFieldId(this, schema);
+        let $field = $getFieldById(this, schema);
 
         $field.val(value);
 
@@ -93,7 +93,7 @@ Template.skeleformInput.onRendered(function() {
     // handle formats
     switch (schema.formatAs) {
         case 'currency':
-            $getFieldId(self, schema).autoNumeric('init', {
+            $getFieldById(self, schema).autoNumeric('init', {
                 aSep: ' ',
                 aDec: ',',
                 altDec: '.',
@@ -103,13 +103,13 @@ Template.skeleformInput.onRendered(function() {
                 wEmpty: 'zero'
             });
 
-            $getFieldId(self, schema).click(function() {
+            $getFieldById(self, schema).click(function() {
                 $(this).select();
             });
             break;
 
         case 'float':
-            $getFieldId(self, schema).autoNumeric('init', {
+            $getFieldById(self, schema).autoNumeric('init', {
                 aSep: ' ',
                 aDec: ',',
                 altDec: '.',
@@ -119,7 +119,7 @@ Template.skeleformInput.onRendered(function() {
             break;
 
         case 'integer':
-            $getFieldId(self, schema).autoNumeric('init', {
+            $getFieldById(self, schema).autoNumeric('init', {
                 mDec: '0',
                 vMax: '99',
                 wEmpty: 'zero'
@@ -132,7 +132,7 @@ Template.skeleformInput.onRendered(function() {
 
     // if necessary enable character counter
     if (schema.charCounter) {
-        $getFieldId(self, schema).characterCounter();
+        $getFieldById(self, schema).characterCounter();
     }
 
     self.isActivated.set(true);

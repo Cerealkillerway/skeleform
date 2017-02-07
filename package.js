@@ -33,7 +33,8 @@ Package.onUse(function(api) {
     // styles
     api.addFiles([
         'styles/skeleform.scss',
-        'styles/_clockpicker.primary.scss'
+        'styles/_clockpicker.primary.scss',
+        'styles/_multi-select.scss'
     ],
     ['client']);
 
@@ -50,7 +51,8 @@ Package.onUse(function(api) {
         'formComponents/templates/skeleformStaticTitle.html',
         'formComponents/templates/skeleformCheckBox.html',
         'formComponents/templates/skeleformTimePicker.html',
-        'formComponents/templates/skeleformClockPicker.html'
+        'formComponents/templates/skeleformClockPicker.html',
+        'formComponents/templates/skeleformMultiSelect.html'
     ],
     ['client']);
 
@@ -61,6 +63,7 @@ Package.onUse(function(api) {
         'lib/materialize.clockpicker.js',
         'lib/timepickersConflictResolver.js',
         'lib/picker.time.js',
+        'lib/jquery.multi-select.js',
         'helpers/commonHelpers.js',
         'helpers/skeleformHelpers.js',
         'events/skeleformEvents.js',
@@ -80,7 +83,8 @@ Package.onUse(function(api) {
         'formComponents/lib/skeleformStaticTitle.js',
         'formComponents/lib/skeleformCheckBox.js',
         'formComponents/lib/skeleformTimePicker.js',
-        'formComponents/lib/skeleformClockPicker.js'
+        'formComponents/lib/skeleformClockPicker.js',
+        'formComponents/lib/skeleformMultiSelect.js'
     ],
     ['client']);
 

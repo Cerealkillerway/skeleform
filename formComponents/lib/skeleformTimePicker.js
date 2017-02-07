@@ -143,7 +143,7 @@ Template.skeleformTimePicker.onRendered(function() {
         }
     }
 
-    let $field = $getFieldId(this, this.data.schema);
+    let $field = $getFieldById(this, this.data.schema);
 
     $field.pickatime(this.initOptions);
     this.pickerInstance = $field.pickatime('picker');

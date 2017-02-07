@@ -51,7 +51,7 @@ Template.skeleformCheckBox.onCreated(function() {
     this.data.formInstance.Fields.push(this);
 
     this.getValue = () => {
-        let value = $getFieldId(this, this.data.schema).prop('checked');
+        let value = $getFieldById(this, this.data.schema).prop('checked');
 
         return value;
     };
@@ -76,7 +76,7 @@ Template.skeleformCheckBox.onCreated(function() {
         return result;
     };
     this.setValue = (value) => {
-        $getFieldId(this, this.data.schema).prop('checked', value);
+        $getFieldById(this, this.data.schema).prop('checked', value);
     };
 });
 Template.skeleformCheckBox.onDestroyed(function() {

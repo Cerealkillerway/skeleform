@@ -62,7 +62,7 @@ function createFieldId(instance, name, isSelecting) {
 }
 
 // get the field's object
-$getFieldId = function(instance, schema) {
+$getFieldById = function(instance, schema) {
     return instance.$('#' + createFieldId(instance, schema.name, true));
 };
 // get the field' shadow object

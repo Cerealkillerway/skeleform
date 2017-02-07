@@ -2,8 +2,8 @@
 // select box field
 
 // Helpers
-Template.skeleformSelect.helpers(skeleformGeneralHelpers);
-Template.skeleformSelect.helpers({
+Template.skeleformMultiSelect.helpers(skeleformGeneralHelpers);
+Template.skeleformMultiSelect.helpers({
     // create sources list for selct's options
     options: function(schema) {
         const instance = Template.instance();
@@ -156,7 +156,7 @@ Template.skeleformSelect.helpers({
 
 
 // Events
-Template.skeleformSelect.onCreated(function() {
+Template.skeleformMultiSelect.onCreated(function() {
     this.isActivated = new ReactiveVar(false);
 
     setReplicaIndex(this);
@@ -183,7 +183,7 @@ Template.skeleformSelect.onCreated(function() {
     };
 });
 
-Template.skeleformSelect.onRendered(function() {
+Template.skeleformMultiSelect.onRendered(function() {
     let schema = this.data.schema;
 
     // start plugin and fire onChange callback when DOM is ready
@@ -207,13 +207,13 @@ Template.skeleformSelect.onRendered(function() {
     });
 });
 
-Template.skeleformSelect.onDestroyed(function() {
+Template.skeleformMultiSelect.onDestroyed(function() {
     let Fields = this.data.formInstance.Fields;
 
     Fields.removeAt(Fields.indexOf(this));
 });
 
-Template.skeleformSelect.events({
+Template.skeleformMultiSelect.events({
     'blur select': function(event, instance) {
         skeleformSuccessStatus('#' + instance.data.schema.name);
     },

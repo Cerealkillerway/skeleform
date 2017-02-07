@@ -24,14 +24,14 @@ Template.skeleformClockPicker.onCreated(function() {
     this.data.formInstance.Fields.push(this);
 
     this.i18n = (currentLang) => {
-        let $element = $getFieldId(this, this.data.schema);
+        let $element = $getFieldById(this, this.data.schema);
 
         this.initOptions.donetext = TAPi18n.__('pickadateButtons_labels').split(' ')[2];
         $element.clockpicker('remove');
         $element.clockpicker(this.initOptions);
     };
     this.getValue = () => {
-        return moment($getFieldId(this, this.data.schema).val(), this.initOptions.format).format(this.initOptions.formatSubmit);
+        return moment($getFieldById(this, this.data.schema).val(), this.initOptions.format).format(this.initOptions.formatSubmit);
     };
     this.isValid = () => {
         //SkeleUtils.GlobalUtilities.logger('clockpicker validation', 'skeleformFieldValidation');
@@ -46,7 +46,7 @@ Template.skeleformClockPicker.onCreated(function() {
         if (value === undefined || value.length === 0) return;
 
         value = moment(value, initOptions.formatSubmit).format(initOptions.format);
-        $getFieldId(this, this.data.schema).val(value);
+        $getFieldById(this, this.data.schema).val(value);
     };
 });
 Template.skeleformClockPicker.onDestroyed(function() {
@@ -138,6 +138,6 @@ Template.skeleformClockPicker.onRendered(function() {
         }
     }
 
-    $getFieldId(this, this.data.schema).clockpicker(this.initOptions);
+    $getFieldById(this, this.data.schema).clockpicker(this.initOptions);
     this.isActivated.set(true);
 });
