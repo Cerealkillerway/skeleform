@@ -321,7 +321,9 @@ Template.skeleform.onRendered(function() {
         this.toolbarInstance = Blaze.renderWithData(Template[toolbar.template], toolbarContext, $('#' + toolbar.containerId)[0]);
     }
 
-    $('input:first').focusWithoutScrolling();
+    if (schema.__autoFocusFirst !== false) {
+        this.$('input, textarea').filter(':visible:first').focusWithoutScrolling();
+    }
 
     this.autorun(function() {
         if (data.skeleSubsReady.get()) {

@@ -7,6 +7,7 @@ function addReplicaSetInstance(instance, replicaSetData, replicaFields) {
     SkeleUtils.GlobalUtilities.logger('adding replica instance: ' + instance.replicaIndex, 'skeleform');
     // disallow removing more copies when reached the minimum
     if (maxCopies && replicaSetData.copies >= maxCopies) {
+        Materialize.toast(TAPi18n.__('maxReplicaCopies_error', maxCopies), 5000, 'error');
         SkeleUtils.GlobalUtilities.logger('Cannot add: reached the maximum allowed copies of this set (' + maxCopies + ')', 'skeleform');
         return false;
     }
@@ -85,6 +86,7 @@ Template.skeleformDefaultReplicaBtns.events({
 
         // disallow removing more copies when reached the minimum
         if (replicaSetData.copies <= minCopies) {
+            Materialize.toast(TAPi18n.__('minReplicaCopies_error', minCopies), 5000, 'error');
             SkeleUtils.GlobalUtilities.logger('Cannot remove: reached the minimum allowed copies of this set (' + minCopies + ')', 'skeleform');
             return false;
         }
