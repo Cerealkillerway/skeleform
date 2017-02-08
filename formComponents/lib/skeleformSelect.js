@@ -193,8 +193,9 @@ Template.skeleformSelect.onRendered(function() {
     // start plugin and fire onChange callback when DOM is changed
     let observer = new MutationObserver((mutations) => {
         let value = this.getValue();
+        let $field = $getFieldById(this, schema);
 
-        $getFieldById(this, schema).material_select();
+        $field.material_select();
         this.isActivated.set(true);
 
         InvokeCallback(this, value, schema, 'onChange');

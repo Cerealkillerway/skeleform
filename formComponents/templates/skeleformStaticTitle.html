@@ -1,5 +1,5 @@
 <template name="skeleformStaticTitle">
     <div class="input-field col {{fieldSize schema.size}} {{schema.style}}">
-        {{{createTitle (label schema.name) schema.tag schema.classes}}}
+        <span  id="{{field schema.name}}">{{{createTitle (label schema.name) schema.tag schema.classes}}}</span>
     </div>
 </template>

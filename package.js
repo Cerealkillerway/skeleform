@@ -52,7 +52,8 @@ Package.onUse(function(api) {
         'formComponents/templates/skeleformCheckBox.html',
         'formComponents/templates/skeleformTimePicker.html',
         'formComponents/templates/skeleformClockPicker.html',
-        'formComponents/templates/skeleformMultiSelect.html'
+        'formComponents/templates/skeleformMultiSelect.html',
+        'formComponents/templates/skeleformContainer.html'
     ],
     ['client']);
 
@@ -84,7 +85,8 @@ Package.onUse(function(api) {
         'formComponents/lib/skeleformCheckBox.js',
         'formComponents/lib/skeleformTimePicker.js',
         'formComponents/lib/skeleformClockPicker.js',
-        'formComponents/lib/skeleformMultiSelect.js'
+        'formComponents/lib/skeleformMultiSelect.js',
+        'formComponents/lib/skeleformContainer.js'
     ],
     ['client']);
 

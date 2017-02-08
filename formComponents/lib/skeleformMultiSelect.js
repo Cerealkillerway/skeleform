@@ -166,7 +166,7 @@ Template.skeleformMultiSelect.onCreated(function() {
     this.data.formInstance.Fields.push(this);
 
     this.i18n = () => {
-        $getFieldById(this, this.data.schema).material_select();
+        $getFieldById(this, this.data.schema).multiSelect('refresh');
     };
     this.getValue = () => {
         //SkeleUtils.GlobalUtilities.logger('select validation', 'skeleformFieldValidation');
@@ -187,14 +187,16 @@ Template.skeleformMultiSelect.onRendered(function() {
     let schema = this.data.schema;
 
     // start plugin and fire onChange callback when DOM is ready
-    $getFieldById(this, schema).material_select();
+    $getFieldById(this, schema).multiSelect();
     InvokeCallback(this, this.getValue(), schema, 'onChange');
 
     // start plugin and fire onChange callback when DOM is changed
     let observer = new MutationObserver((mutations) => {
         let value = this.getValue();
 
-        $getFieldById(this, schema).material_select();
+        // FIX this will be an infinite loop since this plugin edits self DOM
+        console.log(mutations);
+        $getFieldById(this, schema).multiSelect('refresh');
         this.isActivated.set(true);
 
         InvokeCallback(this, value, schema, 'onChange');

@@ -17,3 +17,7 @@ Template.skeleformStaticTitle.helpers({
         return title;
     }
 });
+
+Template.skeleformStaticTitle.onCreated(function() {
+    setReplicaIndex(this);
+});
