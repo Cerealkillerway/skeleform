@@ -42,6 +42,7 @@ Template.skeleformCheckBox.helpers({
 
 // Events
 Template.skeleformCheckBox.onCreated(function() {
+    let schema = this.data.schema;
     this.isActivated = new ReactiveVar(false);
 
     setReplicaIndex(this);
@@ -51,13 +52,13 @@ Template.skeleformCheckBox.onCreated(function() {
     this.data.formInstance.Fields.push(this);
 
     this.getValue = () => {
-        let value = $getFieldById(this, this.data.schema).prop('checked');
+        let value = $getFieldById(this, schema).prop('checked');
 
         return value;
     };
     this.isValid = () => {
         //SkeleUtils.GlobalUtilities.logger('checkbox validation', 'skeleformFieldValidation');
-        let validationOptions = this.data.schema.validation;
+        let validationOptions = schema.validation;
         let result = {
             valid: true,
             reasons: [],
@@ -76,7 +77,12 @@ Template.skeleformCheckBox.onCreated(function() {
         return result;
     };
     this.setValue = (value) => {
-        $getFieldById(this, this.data.schema).prop('checked', value);
+        // if setting a real value, fire onChange callback
+        if (value !== undefined) {
+            InvokeCallback(this, value, schema, 'onChange');
+        }
+
+        $getFieldById(this, schema).prop('checked', value);
     };
 });
 Template.skeleformCheckBox.onDestroyed(function() {

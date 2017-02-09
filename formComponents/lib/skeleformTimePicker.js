@@ -13,10 +13,11 @@ Template.skeleformTimePicker.helpers({
 });
 
 Template.skeleformTimePicker.onCreated(function() {
+    let schema = this.data.schema;
     this.isActivated = new ReactiveVar(false);
 
     setReplicaIndex(this);
-    InvokeCallback(this, null, this.data.schema, 'onCreated');
+    InvokeCallback(this, null, schema, 'onCreated');
 
     this.initOptions = {};
 
@@ -35,13 +36,16 @@ Template.skeleformTimePicker.onCreated(function() {
     this.isValid = () => {
         let formInstance = this.data.formInstance;
 
-        return Skeleform.validate.checkOptions(this.getValue(), this.data.schema, formInstance.data.schema, formInstance.data.item);
+        return Skeleform.validate.checkOptions(this.getValue(), schema, formInstance.data.schema, formInstance.data.item);
     };
     this.setValue = (value) => {
         const instance = Template.instance();
         let pickerInstance = instance.pickerInstance;
 
         if (!value) return;
+
+        // fire onChange callback
+        InvokeCallback(this, value, schema, 'onChange');
 
         // reactively set the value on the timepicker
         if (pickerInstance) {

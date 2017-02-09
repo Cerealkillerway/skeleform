@@ -13,10 +13,11 @@ Template.skeleformClockPicker.helpers({
 });
 
 Template.skeleformClockPicker.onCreated(function() {
+    let schema = this.data.schema;
     this.isActivated = new ReactiveVar(false);
 
     setReplicaIndex(this);
-    InvokeCallback(this, null, this.data.schema, 'onCreated');
+    InvokeCallback(this, null, schema, 'onCreated');
 
     this.initOptions = {};
 
@@ -24,26 +25,29 @@ Template.skeleformClockPicker.onCreated(function() {
     this.data.formInstance.Fields.push(this);
 
     this.i18n = (currentLang) => {
-        let $element = $getFieldById(this, this.data.schema);
+        let $element = $getFieldById(this, schema);
 
         this.initOptions.donetext = TAPi18n.__('pickadateButtons_labels').split(' ')[2];
         $element.clockpicker('remove');
         $element.clockpicker(this.initOptions);
     };
     this.getValue = () => {
-        return moment($getFieldById(this, this.data.schema).val(), this.initOptions.format).format(this.initOptions.formatSubmit);
+        return moment($getFieldById(this, schema).val(), this.initOptions.format).format(this.initOptions.formatSubmit);
     };
     this.isValid = () => {
         //SkeleUtils.GlobalUtilities.logger('clockpicker validation', 'skeleformFieldValidation');
         let formInstance = this.data.formInstance;
 
-        return Skeleform.validate.checkOptions(this.getValue(), this.data.schema, formInstance.data.schema, formInstance.data.item);
+        return Skeleform.validate.checkOptions(this.getValue(), schema, formInstance.data.schema, formInstance.data.item);
     };
     this.setValue = (value) => {
         let initOptions = this.initOptions;
 
         // avoid empty strings since in that case moment will use current datetime as input;
         if (value === undefined || value.length === 0) return;
+
+        // fire onChange callback
+        InvokeCallback(this, value, schema, 'onChange');
 
         value = moment(value, initOptions.formatSubmit).format(initOptions.format);
         $getFieldById(this, this.data.schema).val(value);

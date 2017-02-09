@@ -36,13 +36,11 @@ handleGettedValue = function(value, schema) {
 
 // Events
 Template.skeleformInput.onCreated(function() {
-    //var self = this;
+    let schema = this.data.schema;
     this.isActivated = new ReactiveVar(false);
 
     setReplicaIndex(this);
-    InvokeCallback(this, null, this.data.schema, 'onCreated');
-
-    let schema = this.data.schema;
+    InvokeCallback(this, null, schema, 'onCreated');
 
     //register this on form' store
     this.data.formInstance.Fields.push(this);
@@ -65,14 +63,19 @@ Template.skeleformInput.onCreated(function() {
     this.isValid = () => {
         let formInstance = this.data.formInstance;
 
-        return Skeleform.validate.checkOptions(this.getValue(), this.data.schema, formInstance.data.schema, formInstance.data.item, this);
+        return Skeleform.validate.checkOptions(this.getValue(), schema, formInstance.data.schema, formInstance.data.item, this);
     };
     this.setValue = (value) => {
         let $field = $getFieldById(this, schema);
 
         $field.val(value);
 
-        // when setting value trigger autoresize if it's a textarea
+        // if setting a real value, fire onChange callback
+        if (value !== undefined) {
+            InvokeCallback(this, value, schema, 'onChange');
+        }
+
+        // when setting a value, trigger autoresize if it's a textarea
         // as documented on materialize's docs:
         // http://materializecss.com/forms.html
         if (schema.renderAs === 'textarea') {

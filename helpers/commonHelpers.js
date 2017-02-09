@@ -114,22 +114,25 @@ setFieldValue = function(instance, data, schema) {
             if (value !== instance.getValue()) {
                 instance.setValue(value);
                 instance.isValid();
+                instance.isValidated = true;
 
-                if (formRendered === true) {
+                /*if (formRendered === true) {
                     instance.callbacksCalled.onChange = true;
+                    if (schema.name === 'shopCategory') {console.log(data);}
                     InvokeCallback(instance, value, schema, 'onChange');
-                }
+                }*/
             }
             else {
                 // if the callback has not fired yet, fire it now!
-                if (instance.callbacksCalled.onChange === false) {
+                /*if (instance.callbacksCalled.onChange === false) {
                     instance.callbacksCalled.onChange = true;
 
                     if (instance.pluginSetHappened !== undefined) {
                         instance.pluginSetHappened = false;
                     }
+                    if (schema.name === 'shopCategory') {console.log(value);}
                     InvokeCallback(instance, value, schema, 'onChange');
-                }
+                }*/
 
                 // if the field has not been validated, validate it now!
                 if (!instance.isValidated) {

@@ -14,10 +14,11 @@ Template.skeleformDatePicker.helpers({
 });
 
 Template.skeleformDatePicker.onCreated(function() {
+    let schema = this.data.schema;
     this.isActivated = new ReactiveVar(false);
 
     setReplicaIndex(this);
-    InvokeCallback(this, null, this.data.schema, 'onCreated');
+    InvokeCallback(this, null, schema, 'onCreated');
 
     this.initOptions = {};
 
@@ -43,7 +44,7 @@ Template.skeleformDatePicker.onCreated(function() {
         pickerInstance.render();
         // set again the value to translate also in the input box
         //pickerInstance.set('select', SkeleformStandardFieldValue(this.data.item, this.data.schema), {format: this.initOptions.formatSubmit});
-        this.setValue(SkeleformStandardFieldValue(this.data.item, this.data.schema));
+        this.setValue(SkeleformStandardFieldValue(this.data.item, schema));
     };
     this.getValue = () => {
         let value = this.pickerInstance.get('select', this.initOptions.formatSubmit);
@@ -54,9 +55,14 @@ Template.skeleformDatePicker.onCreated(function() {
         //SkeleUtils.GlobalUtilities.logger('datepicker validation', 'skeleformFieldValidation');
         let formInstance = this.data.formInstance;
 
-        return Skeleform.validate.checkOptions(this.getValue(), this.data.schema, formInstance.data.schema, formInstance.data.item);
+        return Skeleform.validate.checkOptions(this.getValue(), schema, formInstance.data.schema, formInstance.data.item);
     };
     this.setValue = (value) => {
+        // if setting a real value, fire onChange callback
+        if (value !== undefined) {
+            InvokeCallback(this, value, schema, 'onChange');
+        }
+
         this.pickerInstance.set('select', value, {format: this.initOptions.formatSubmit});
     };
 });

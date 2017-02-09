@@ -57,24 +57,30 @@ Template.skeleformEditor.helpers({
 
 // Events
 Template.skeleformEditor.onCreated(function() {
+    let schema = this.data.schema;
     this.isActivated = new ReactiveVar(false);
 
     setReplicaIndex(this);
-    InvokeCallback(this, null, this.data.schema, 'onCreated');
+    InvokeCallback(this, null, schema, 'onCreated');
 
     //register this on form' store
     this.data.formInstance.Fields.push(this);
 
     this.getValue = () => {
-        return $getFieldById(this, this.data.schema).code().trim();
+        return $getFieldById(this, schema).code().trim();
     };
     this.isValid = () => {
         //SkeleUtils.GlobalUtilities.logger('editor validation', 'skeleformFieldValidation');
         let formInstance = this.data.formInstance;
 
-        return Skeleform.validate.checkOptions(this.getValue(), this.data.schema, formInstance.data.schema, formInstance.data.item);
+        return Skeleform.validate.checkOptions(this.getValue(), schema, formInstance.data.schema, formInstance.data.item);
     };
     this.setValue = (value) => {
+        // if setting a real value, fire onChange callback
+        if (value !== undefined) {
+            InvokeCallback(this, value, schema, 'onChange');
+        }
+        
         if (value === undefined) {
             value = '';
         }

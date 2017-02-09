@@ -404,8 +404,8 @@ Template.skeleformCreateButtons.events({
         }
 
         // select method to call for this operation
-        if (formContext.methods && formContext.methods.insert) {
-            method = formContext.methods.insert;
+        if (formContext.methods && formContext.methods.create) {
+            method = formContext.methods.create;
         }
         else {
             method = configuration.defaultMethods.create;
@@ -421,6 +421,9 @@ Template.skeleformCreateButtons.events({
                 $('#gearLoadingModal').openModal();
             }
 
+            SkeleUtils.GlobalUtilities.logger('will no call method: ' + method + ' data:', 'skeleform');
+            SkeleUtils.GlobalUtilities.logger(data, 'skeleform');
+            SkeleUtils.GlobalUtilities.logger('schema name: ' + formContext.schemaName, 'skeleform');
             Meteor.call(method, data, formContext.schemaName, function(error, result) {
                 if (options.useModal) {
                     $('#gearLoadingModal').closeModal();
@@ -467,6 +470,10 @@ Template.skeleformUpdateButtons.events({
                 $('#gearLoadingModal').openModal();
             }
 
+            SkeleUtils.GlobalUtilities.logger('will no call method: ' + method + ' data:', 'skeleform');
+            SkeleUtils.GlobalUtilities.logger(data, 'skeleform');
+            SkeleUtils.GlobalUtilities.logger('documentId: ' + documentId, 'skeleform');
+            SkeleUtils.GlobalUtilities.logger('schema name: ' + formContext.schemaName, 'skeleform');
             Meteor.call(method, documentId, data, formContext.schemaName, function(error, result) {
                 if (options.useModal) {
                     $('#gearLoadingModal').closeModal();

@@ -186,7 +186,7 @@ Template.skeleformSelect.onCreated(function() {
 Template.skeleformSelect.onRendered(function() {
     let schema = this.data.schema;
 
-    // start plugin and fire onChange callback when DOM is ready
+    // start plugin
     $getFieldById(this, schema).material_select();
     InvokeCallback(this, this.getValue(), schema, 'onChange');
 
