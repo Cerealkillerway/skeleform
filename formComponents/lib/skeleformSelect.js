@@ -101,6 +101,7 @@ Template.skeleformSelect.helpers({
         return schema.source;
     },
     isSelected: function(data, option) {
+        const instance = Template.instance();
         let schema = data.schema;
         let pathShards = schema.name.split('.');
         let value = data.item;
@@ -122,16 +123,27 @@ Template.skeleformSelect.helpers({
 
         if (!value) return;
 
+        option = option.toString();
         // if the select is multi, the value is an array
         if (schema.multi) {
-            if (value.indexOf(option.toString()) >= 0) {
-                return 'selected';
+            if (value.indexOf(option) >= 0) {
+                if (!instance.view.isRendered) {
+                    return 'selected';
+                }
+                let $field = $getFieldById(instance, instance.data.schema);
+                $field.children('option[value="' + option + '"]').prop('selected', true);
+                $field.material_select();
             }
         }
         // otherwise the value is a string
         else {
-            if (option.toString() === value) {
-                return 'selected';
+            if (option === value) {
+                if (!instance.view.isRendered) {
+                    return 'selected';
+                }
+                let $field = $getFieldById(instance, instance.data.schema);
+                $field.children('option[value="' + option + '"]').prop('selected', true);
+                $field.material_select();
             }
         }
 
@@ -162,7 +174,7 @@ Template.skeleformSelect.onCreated(function() {
     setReplicaIndex(this);
     InvokeCallback(this, null, this.data.schema, 'onCreated');
 
-    //register this on form' store
+    // register this on form' store
     this.data.formInstance.Fields.push(this);
 
     this.i18n = () => {
@@ -187,14 +199,17 @@ Template.skeleformSelect.onRendered(function() {
     let schema = this.data.schema;
 
     // start plugin
-    $getFieldById(this, schema).material_select();
+    let $field = $getFieldById(this, schema);
+    let $options = $field.children('option');
+
+    $field.material_select();
     InvokeCallback(this, this.getValue(), schema, 'onChange');
 
     // start plugin and fire onChange callback when DOM is changed
     let observer = new MutationObserver((mutations) => {
         let value = this.getValue();
-        let $field = $getFieldById(this, schema);
 
+        $field = $getFieldById(this, schema);
         $field.material_select();
         this.isActivated.set(true);
 
