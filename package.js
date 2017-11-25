@@ -15,8 +15,8 @@ Package.onUse(function(api) {
     api.use([
         'session',
         'jquery',
-        'fourseven:scss@3.2.0',
-        'cerealkiller:materialnote@1.0.0',
+        'fourseven:scss',
+        'cerealkiller:materialnote@2.0.0',
         'blaze-html-templates'
     ],
     ['client']);

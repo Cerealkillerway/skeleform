@@ -26,10 +26,6 @@ editorToolbars = {
         ['misc', ['link', 'picture', 'table', 'hr', 'codeview', 'fullscreen']],
         ['ckMedia', ['ckImageUploader', 'ckVideoEmbeeder']]
     ],
-    ckMultiMedia: [
-        ['style', ['bold', 'italic', 'underline', 'clear']],
-        ['ckMedia', ['ckImageUploader', 'ckVideoEmbeeder']],
-    ],
     //special for debug
     debug: [
         ['style', ['style', 'bold', 'italic', 'underline', 'strikethrough', 'clear']],
@@ -67,7 +63,7 @@ Template.skeleformEditor.onCreated(function() {
     this.data.formInstance.Fields.push(this);
 
     this.getValue = () => {
-        return $getFieldById(this, schema).code().trim();
+        return $getFieldById(this, schema).materialnote('code').trim();
     };
     this.isValid = () => {
         //SkeleUtils.GlobalUtilities.logger('editor validation', 'skeleformFieldValidation');
@@ -80,11 +76,11 @@ Template.skeleformEditor.onCreated(function() {
         if (value !== undefined) {
             InvokeCallback(this, value, schema, 'onChange');
         }
-        
+
         if (value === undefined) {
             value = '';
         }
-        $getFieldById(this, this.data.schema).code(value);
+        $getFieldById(this, this.data.schema).materialnote('code', value);
     };
 });
 Template.skeleformEditor.onDestroyed(function() {
@@ -103,19 +99,33 @@ Template.skeleformEditor.onRendered(function() {
     $(editor).materialnote({
         lang: SkeleUtils.GlobalUtilities.doubleLangCode(FlowRouter.getParam("itemLang")),
         toolbar: editorToolbars[toolbar],
+        followingToolbar: true,
+        otherStaticBarClass: 'skeleStaticBar',
         height: 400,
         minHeight: 100,
-        onInit: () => {
-            //place validate class on the correct element newly created by materialnote
-            editor.removeClass('validate');
-            this.$('.note-editor').addClass('validate');
-        },
-        onKeyup: (event) => {
-            // perform validation and callback invocation on change
-            var value = this.getValue();
+        posIndex: this.data.schema.name,
+        callbacks: {
+            onInit: () => {
+                //place validate class on the correct element newly created by materialnote
+                editor.removeClass('validate');
+                this.$('.note-editor').addClass('validate');
+            },
+            onKeyup: (event) => {
+                // perform validation and callback invocation on change
+                let value = this.getValue();
+                let schema = this.data.schema;
+                let result = this.isValid();
+                let id = this.data.schema.name;
 
-            this.isValid();
-            InvokeCallback(this, value, schema, 'onChange');
+                if (!result.valid) {
+                    setInvalid(id, schema, result);
+                }
+                else {
+                    skeleformSuccessStatus(id, schema);
+                }
+
+                InvokeCallback(this, value, schema, 'onChange');
+            }
         }/*,
         onImageUpload: function(files) {
             var filesArray = [];

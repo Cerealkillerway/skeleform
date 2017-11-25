@@ -152,7 +152,7 @@ skeleformCleanForm = function() {
     $('input.skeleValidate').val('');
     $('input.shadowField').val('');
     //empty editors
-    $('.editor').code('');
+    $('.editor').materialnote('code', '');
     //select first option on select boxes
     $('select.skeleValidate').val('admin');
 

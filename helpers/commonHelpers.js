@@ -208,7 +208,6 @@ skeleformGeneralHelpers = {
         return Template.instance();
     },
     label: function(name, options) {
-        //name = name.substring(name.lastIndexOf('.') + 1, name.length);
         name = name.split('.');
 
         for (i = 1; i < name.length; i++) {
