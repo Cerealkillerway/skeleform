@@ -12,12 +12,6 @@ Inside a Skeletor app this package is used to build and validate forms; it suppo
 It is built on top of Skeletor and MaterializeCSS.
 If you have any problem using it, please have a look to the "troubleshooting" section at the bottom.
 
-#### MPORTANT NOTES
-
-Please remember the followings:
-
-** In this version i18n fields MUST be on the top level (i18n nested fields are NOT supported); **
-
 
 ### SCHEMA OPTIONS
 
@@ -193,7 +187,7 @@ If it's necessary to use a custom invalid message it is possible to add the fiel
 ### OTHER THAN SCHEMA
 
 Skeleforms invokes a **Meteor method** once gathered and validated the form's data; the method persists the data on the server; it is set to use a default method that will persist your data as a new document in the collection defined on the schema; anyway it is possible to make it call a custom method;
-the metod to use is not defined on the schema but is part of the data context passed to the skeleform instance.
+the method to use is not defined on the schema but is part of the data context passed to the skeleform instance.
 Ex.: the *userCreate* template:
 
     Template.userCreate.helpers({
