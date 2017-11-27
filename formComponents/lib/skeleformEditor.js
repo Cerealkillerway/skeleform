@@ -101,8 +101,8 @@ Template.skeleformEditor.onRendered(function() {
         toolbar: editorToolbars[toolbar],
         followingToolbar: true,
         otherStaticBarClass: 'skeleStaticBar',
-        height: 400,
-        minHeight: 100,
+        height: schema.editorHeight || 400,
+        minHeight: schema.editorMinHeight || 100,
         posIndex: this.data.schema.name,
         callbacks: {
             onInit: () => {

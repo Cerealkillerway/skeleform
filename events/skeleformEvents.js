@@ -322,7 +322,22 @@ Template.skeleform.onRendered(function() {
     }
 
     if (schema.__autoFocusFirst !== false) {
-        this.$('input, textarea').filter(':visible:first').focusWithoutScrolling();
+        let $skeleFields = this.$('.skeleGather');
+
+        for (const field of $skeleFields) {
+            let $field = $(field);
+
+            if ($field.hasClass('editor')) {
+                $field.focusWithoutScrolling();
+                break;
+            }
+            if ($field.is('input') || $field.is('textarea')) {
+                if ($field.is(':visible')) {
+                    $field.focusWithoutScrolling();
+                    break;
+                }
+            }
+        }
     }
 
     this.autorun(function() {
