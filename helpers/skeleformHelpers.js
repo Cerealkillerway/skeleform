@@ -26,6 +26,29 @@ Template.skeleformBody.helpers({
         return fields;
     },
 
+    handleReplicaSet: function() {
+        SkeleUtils.GlobalUtilities.logger('Handling replica set...', 'skeleformCommon');
+        let item = this.data.item;
+
+        if (!item) {
+            return false;
+        }
+
+        let replicaSchema = this.data.schema;
+
+        // lookup for copies of this replica set stored in item
+        let firstFieldName = replicaSchema.fields[0].name + '---';
+        let fieldNames = _.keys(item);
+        let replicas = _.filter(fieldNames, function(fieldName) {
+            if (fieldName.indexOf(firstFieldName) >= 0) {
+                return true;
+            }
+            return false;
+        });
+
+        console.log('number of replicas in this document: ' + replicas.length);
+    },
+
     isFieldInCurrentForm: function(fieldSchema) {
         const instance = Template.instance();
         let formInstance = instance.data.formInstance;

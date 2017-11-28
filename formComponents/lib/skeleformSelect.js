@@ -103,23 +103,20 @@ Template.skeleformSelect.helpers({
     isSelected: function(data, option) {
         const instance = Template.instance();
         let schema = data.schema;
-        let pathShards = schema.name.split('.');
         let value = data.item;
-        let name;
+        let name = schema.name;
 
         if (!data.item) {
             return '';
         }
 
         if (data.schema.i18n === undefined) {
-            name = FlowRouter.getParam('itemLang') + '---' + data.schema.name;
-            value = value[name];
+            name = FlowRouter.getParam('itemLang') + '---' + name;
         }
-        else {
-            pathShards.forEach(function(shard, index) {
-                value = value[shard];
-            });
+        if (instance.replicaIndex) {
+            name = name + '---' + instance.replicaIndex;
         }
+        value = value[name];
 
         if (!value) return;
 

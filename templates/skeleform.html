@@ -36,6 +36,7 @@
 
                     {{#if data.schema.replicaSet}}
                         {{> Template.dynamic template=data.replicaSet.template data=data}}
+                        {{handleReplicaSet}}
                     {{/if}}
                 </div>
             {{else}}

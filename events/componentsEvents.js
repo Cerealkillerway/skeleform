@@ -4,7 +4,6 @@ function addReplicaSetInstance(instance, replicaSetData, replicaFields) {
     let maxCopies = replicaSetData.options.maxCopies || undefined;
     if (!instance.i) instance.i = 0;
 
-    SkeleUtils.GlobalUtilities.logger('adding replica instance: ' + instance.replicaIndex, 'skeleform');
     // disallow removing more copies when reached the minimum
     if (maxCopies && replicaSetData.copies >= maxCopies) {
         Materialize.toast(TAPi18n.__('maxReplicaCopies_error', maxCopies), 5000, 'error');
@@ -72,7 +71,6 @@ Template.skeleformDefaultReplicaBtns.events({
         let formInstance = data.formInstance;
         let replicaSetData = formInstance.replicaSets[data.replicaSet.name];
         let replicaFields = data.schema;
-
         addReplicaSetInstance(instance, replicaSetData, replicaFields);
     },
 

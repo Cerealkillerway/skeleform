@@ -1,27 +1,28 @@
 // standard function to get a field's value form the current data object;
 // it is defined here as a global function so that special field types can override "fieldValue" helper
 // but still call this function if needed and then perform any special handling that is required
-SkeleformStandardFieldValue = function(data, schema) {
+SkeleformStandardFieldValue = function(data, schema, instance) {
+    if (data === undefined) return;
+
     let name = schema.name;
 
-    if (data === undefined) return;
+    if (instance.replicaIndex) {
+        name = name + '---' + instance.replicaIndex;
+    }
 
     if (schema.i18n === undefined) {
         data = data[FlowRouter.getParam('itemLang') + '---' + name];
         if (data === undefined) return;
     }
     else {
-        name.split('.').forEach(function(nameShard, index) {
-            if (data !== undefined) {
-                data = data[nameShard];
-            }
-        });
+        data = data[name];
     }
 
     // set active class on label to avoid overlapping
     if (schema.output === 'input') {
         $('#' + schema.name).next('label').addClass('active');
     }
+
     return data;
 };
 
@@ -98,7 +99,7 @@ setFieldValue = function(instance, data, schema) {
             if (!instance.data.formInstance.data.skeleSubsReady.get()) {
                 return false;
             }
-            let value = SkeleformStandardFieldValue(data, schema);
+            let value = SkeleformStandardFieldValue(data, schema, instance);
             //console.log(value);
             //console.log(instance.getValue());
 
@@ -116,24 +117,8 @@ setFieldValue = function(instance, data, schema) {
                 instance.isValid();
                 instance.isValidated = true;
 
-                /*if (formRendered === true) {
-                    instance.callbacksCalled.onChange = true;
-                    if (schema.name === 'shopCategory') {console.log(data);}
-                    InvokeCallback(instance, value, schema, 'onChange');
-                }*/
             }
             else {
-                // if the callback has not fired yet, fire it now!
-                /*if (instance.callbacksCalled.onChange === false) {
-                    instance.callbacksCalled.onChange = true;
-
-                    if (instance.pluginSetHappened !== undefined) {
-                        instance.pluginSetHappened = false;
-                    }
-                    if (schema.name === 'shopCategory') {console.log(value);}
-                    InvokeCallback(instance, value, schema, 'onChange');
-                }*/
-
                 // if the field has not been validated, validate it now!
                 if (!instance.isValidated) {
                     instance.isValidated = true;
