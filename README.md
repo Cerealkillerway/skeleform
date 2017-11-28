@@ -98,6 +98,8 @@ A filed with `output: "none"` will not be displayed (and so it's never gathered 
 ##### editor
 
 - **toolbar**: *[string] (optional)* specifies the toolbar to use (available values: *"minimal", "default", "full"*);
+- **height**: *[integer] (optional)* the pre-setted editor's height in pixels (default 400);
+- **minHeight**: *[integer] (optional)* the pre-setted editor's minimum height in pixels (default 100);
 - **image**: *[object] (optional)* an object that defines parameters to be used while inserting images:
 - - **quality**: *[float 0 ~ 1] (optional)* the quality of jpeg created;
 - - **width**: *[integer] (optional)* with of the image created;

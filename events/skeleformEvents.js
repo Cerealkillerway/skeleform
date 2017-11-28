@@ -243,12 +243,21 @@ skeleformGatherData = function(formContext, Fields) {
     Fields.forEach(function(field) {
         let fieldSchema = field.data.schema;
         let $field = $getFieldById(field, fieldSchema);
+        let fieldName;
+
+        function setReplicaSuffix(fieldName, field) {
+            if (field.replicaIndex) {
+                fieldName = fieldName + '---' + field.replicaIndex;
+            }
+            return fieldName;
+        }
 
         if ($field.hasClass('skeleGather')) {
             let fieldValue = field.getValue();
 
             if (fieldSchema.i18n === undefined) {
-                let currentValue = formItem ? formItem[lang + '---' + fieldSchema.name] : undefined;
+                fieldName = setReplicaSuffix(lang + '---' + fieldSchema.name, field);
+                let currentValue = formItem ? formItem[fieldName] : undefined;
 
                 /*console.log(fieldSchema.name);
                 console.log('currentValue: ' + currentValue);
@@ -256,23 +265,15 @@ skeleformGatherData = function(formContext, Fields) {
                 console.log('******************************');*/
 
                 if ((currentValue === undefined) || (currentValue !== undefined && fieldValue !== currentValue)) {
-                    data[lang + '---' + fieldSchema.name] = fieldValue;
+                    data[fieldName] = fieldValue;
                 }
             }
             else {
-                let nameShards = fieldSchema.name.split('.');
-
+                fieldName = setReplicaSuffix(fieldSchema.name, field);
                 oldValue = formItem;
-                if (oldValue) {
-                    nameShards.forEach(function(nameShard, index) {
-                        if (oldValue) {
-                            oldValue = oldValue[nameShard];
-                        }
-                    });
-                }
 
                 if (!formItem || fieldValue !== oldValue) {
-                    data[fieldSchema.name] = fieldValue;
+                    data[fieldName] = fieldValue;
                 }
             }
         }
