@@ -53,6 +53,28 @@ Template.skeleformDefaultReplicaBtns.onRendered(function() {
     let replicaFields = data.schema;
     let initCopies = replicaSetData.options.initCopies;
 
+    this.autorun(() => {
+
+        if (formInstance.data.skeleSubsReady.get()) {
+            let replicaName = data.replicaSet.name;
+
+            if (replicaSetData.options.i18n === undefined) {
+                replicaName = FlowRouter.getParam('itemLang') + '---' + replicaName;
+            }
+
+            let replicaItem = formInstance.data.item[replicaName];
+
+            if (!replicaItem) {
+                return;
+            }
+
+            if (replicaItem.length > this.replicaIndex) {
+                Skeleform.addReplicaSetInstance(this, replicaSetData, replicaFields);
+            }
+        }
+
+    });
+
     // if the current number of copies of the replica set is less than the required one on init
     // add one more
     if (initCopies && replicaSetData.copies < initCopies) {

@@ -245,7 +245,7 @@ skeleformGeneralHelpers = {
     fieldValue: function(template) {
         let data = template.data;
 
-        setFieldValue(template, data.item, data.schema);
+        setFieldValue(template, data.item || data.formInstance.data.item, data.schema);
     }
 };
 
