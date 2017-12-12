@@ -25,30 +25,47 @@
     {{#each (fields schema.fields)}}
         {{#with isFieldInCurrentForm this}}
             {{#if data.schema.skeleformGroup}}
-                <div class="row {{formatClasses data.schema.classes}}">
-                    {{#if data.schema.size}}
-                        <div class="col {{data.schema.size}} {{formatClasses data.schema.classes}}">
-                            {{> skeleformBody data}}
+                {{!-- handle not last level skeleform groups --}}
+
+                {{#if data.schema.replicaSet}}
+                    {{!-- handle replica sets of skeleform groups --}}
+
+                    <div class="skeleformReplicaSet">
+                        <div class="row {{formatClasses data.schema.classes}}">
+                            {{#if data.schema.size}}
+                                {{!-- skeleformGroups with user defined size --}}
+                                <div class="col {{data.schema.size}} {{formatClasses data.schema.classes}}">
+                                    {{> skeleformBody data}}
+                                </div>
+                            {{else}}
+                                {{!-- skeleformGroups without user defined size --}}
+                                {{> skeleformBody data}}
+                            {{/if}}
                         </div>
-                    {{else}}
-                        {{> skeleformBody data}}
-                    {{/if}}
-
-                    {{#if data.schema.replicaSet}}
                         {{> Template.dynamic template=data.replicaSet.template data=data}}
-                        {{handleReplicaSet}}
-                    {{/if}}
-                </div>
-            {{else}}
-                {{#if (test data.groupLevel 0)}}
-                    <div class="row">
-                        {{> Template.dynamic template=template data=data}}
-
-                        {{#if data.schema.replicaSet}}
-                            {{> Template.dynamic template=data.replicaSet.template data=data}}
-                        {{/if}}
                     </div>
                 {{else}}
+                    <div class="row {{formatClasses data.schema.classes}}">
+                        {{#if data.schema.size}}
+                            {{!-- skeleformGroups with user defined size --}}
+                            <div class="col {{data.schema.size}} {{formatClasses data.schema.classes}}">
+                                {{> skeleformBody data}}
+                            </div>
+                        {{else}}
+                            {{!-- skeleformGroups without user defined size --}}
+                            {{> skeleformBody data}}
+                        {{/if}}
+                    </div>
+                {{/if}}
+            {{else}}
+                {{#if (test data.groupLevel 0)}}
+                    {{!-- fields natively at level 0 (not grouped) --}}
+
+                    <div class="row">
+                        {{> Template.dynamic template=template data=data}}
+                    </div>
+                {{else}}
+                    {{!-- fields grouped --}}
                     {{> Template.dynamic template=template data=data}}
                 {{/if}}
             {{/if}}

@@ -94,57 +94,10 @@ Template.skeleformSelect.helpers({
                 result.push(option);
             });
 
-            instance.isActivated.set(false);
             return result;
         }
 
         return schema.source;
-    },
-    isSelected: function(data, option) {
-        const instance = Template.instance();
-        let schema = data.schema;
-        let value = data.item;
-        let name = schema.name;
-
-        if (!data.item) {
-            return '';
-        }
-
-        if (data.schema.i18n === undefined) {
-            name = FlowRouter.getParam('itemLang') + '---' + name;
-        }
-        if (instance.replicaIndex) {
-            name = name + '---' + instance.replicaIndex;
-        }
-        value = value[name];
-
-        if (!value) return;
-
-        option = option.toString();
-        // if the select is multi, the value is an array
-        if (schema.multi) {
-            if (value.indexOf(option) >= 0) {
-                if (!instance.view.isRendered) {
-                    return 'selected';
-                }
-                let $field = $getFieldById(instance, instance.data.schema);
-                $field.children('option[value="' + option + '"]').prop('selected', true);
-                $field.material_select();
-            }
-        }
-        // otherwise the value is a string
-        else {
-            if (option === value) {
-                if (!instance.view.isRendered) {
-                    return 'selected';
-                }
-                let $field = $getFieldById(instance, instance.data.schema);
-                $field.children('option[value="' + option + '"]').prop('selected', true);
-                $field.material_select();
-            }
-        }
-
-        return '';
     },
     isMultiple: function() {
         const instance = Template.instance();
@@ -187,8 +140,38 @@ Template.skeleformSelect.onCreated(function() {
         return Skeleform.validate.checkOptions(this.getValue(), this.data.schema, formInstance.data.schema, formInstance.data.item);
     };
     this.setValue = (value) => {
-        // in this field value is not setted by "setValue()" since it's determinated by "isSelected helper";
-        // anyway the standard "fieldValue" helper is also included in the template since it handles i18n for the field;
+        if (!value) {
+            return '';
+        }
+
+        const instance = Template.instance();
+        let schema = this.data.schema;
+        let name = schema.name;
+        let $field = $getFieldById(instance, instance.data.schema);
+
+
+        for (const option of $field.children()) {
+            let optionValue = $(option).val();
+
+            // if the select is multi, the value is an array
+            if (schema.multi) {
+                if (value.indexOf(optionValue) >= 0) {
+                    $(option).prop('selected', true);
+                    $field.material_select();
+                }
+            }
+
+            // otherwise the value is a string
+            else {
+                if (value === optionValue) {
+                    $(option).prop('selected', true);
+                    $field.material_select();
+                    break;
+                }
+            }
+        }
+
+        return '';
     };
 });
 
@@ -200,6 +183,8 @@ Template.skeleformSelect.onRendered(function() {
     let $options = $field.children('option');
 
     $field.material_select();
+    this.isActivated.set(true);
+
     InvokeCallback(this, this.getValue(), schema, 'onChange');
 
     // start plugin and fire onChange callback when DOM is changed
@@ -208,7 +193,7 @@ Template.skeleformSelect.onRendered(function() {
 
         $field = $getFieldById(this, schema);
         $field.material_select();
-        this.isActivated.set(true);
+
 
         InvokeCallback(this, value, schema, 'onChange');
     });

@@ -1,10 +1,10 @@
 // Replica set component
-function addReplicaSetInstance(instance, replicaSetData, replicaFields) {
+Skeleform.addReplicaSetInstance = function(instance, replicaSetData, replicaFields) {
     let data = instance.data;
     let maxCopies = replicaSetData.options.maxCopies || undefined;
     if (!instance.i) instance.i = 0;
 
-    // disallow removing more copies when reached the minimum
+    // disallow adding more copies when reached the maximum
     if (maxCopies && replicaSetData.copies >= maxCopies) {
         Materialize.toast(TAPi18n.__('maxReplicaCopies_error', maxCopies), 5000, 'error');
         SkeleUtils.GlobalUtilities.logger('Cannot add: reached the maximum allowed copies of this set (' + maxCopies + ')', 'skeleform');
@@ -56,7 +56,7 @@ Template.skeleformDefaultReplicaBtns.onRendered(function() {
     // if the current number of copies of the replica set is less than the required one on init
     // add one more
     if (initCopies && replicaSetData.copies < initCopies) {
-        addReplicaSetInstance(this, replicaSetData, replicaFields);
+        Skeleform.addReplicaSetInstance(this, replicaSetData, replicaFields);
     }
     // otherwise unset "initCopies" to avoid adding more than one copy when clicking "+" button
     // when initialization is finished
@@ -71,7 +71,8 @@ Template.skeleformDefaultReplicaBtns.events({
         let formInstance = data.formInstance;
         let replicaSetData = formInstance.replicaSets[data.replicaSet.name];
         let replicaFields = data.schema;
-        addReplicaSetInstance(instance, replicaSetData, replicaFields);
+
+        Skeleform.addReplicaSetInstance(instance, replicaSetData, replicaFields);
     },
 
     'click .btnRemove': function(event, instance) {

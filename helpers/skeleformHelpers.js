@@ -18,15 +18,17 @@ Template.skeleform.helpers({
 // skeleform body helpers
 Template.skeleformBody.helpers({
     fields: function(fields) {
-        if (Template.instance().data.replicaSet) {
+        const instance = Template.instance();
+
+        if (instance.data.replicaSet) {
             fields.forEach(function(field) {
-                field.replicaSet = Template.instance().data.replicaSet;
+                field.replicaSet = instance.data.replicaSet;
             });
         }
         return fields;
     },
 
-    handleReplicaSet: function() {
+    /*handleReplicaSet: function() {
         SkeleUtils.GlobalUtilities.logger('Handling replica set...', 'skeleformCommon');
         let item = this.data.item;
 
@@ -47,7 +49,7 @@ Template.skeleformBody.helpers({
         });
 
         console.log('number of replicas in this document: ' + replicas.length);
-    },
+    },*/
 
     isFieldInCurrentForm: function(fieldSchema) {
         const instance = Template.instance();

@@ -245,34 +245,51 @@ skeleformGatherData = function(formContext, Fields) {
         let $field = $getFieldById(field, fieldSchema);
         let fieldName;
 
-        function setReplicaSuffix(fieldName, field) {
-            if (field.replicaIndex) {
-                fieldName = fieldName + '---' + field.replicaIndex;
-            }
-            return fieldName;
+        if (field.data.replicaSet) {
+            fieldName = field.data.replicaSet.name;
+        }
+        else {
+            fieldName = fieldSchema.name;
         }
 
         if ($field.hasClass('skeleGather')) {
             let fieldValue = field.getValue();
 
             if (fieldSchema.i18n === undefined) {
-                fieldName = setReplicaSuffix(lang + '---' + fieldSchema.name, field);
-                let currentValue = formItem ? formItem[fieldName] : undefined;
+                fieldName = lang + '---' + fieldName;
 
                 /*console.log(fieldSchema.name);
                 console.log('currentValue: ' + currentValue);
                 console.log('fieldValue: ' + fieldValue);
                 console.log('******************************');*/
 
-                if ((currentValue === undefined) || (currentValue !== undefined && fieldValue !== currentValue)) {
-                    data[fieldName] = fieldValue;
-                }
             }
-            else {
-                fieldName = setReplicaSuffix(fieldSchema.name, field);
-                oldValue = formItem;
+            let currentValue = formItem ? formItem[fieldName] : undefined;
 
-                if (!formItem || fieldValue !== oldValue) {
+            if (field.data.replicaSet) {
+                currentValue = undefined;
+            }
+
+            if ((currentValue === undefined) || fieldValue !== currentValue) {
+                // in case of replicaset, update the relative field in the array or create a new one if needed
+                if (field.data.replicaSet) {
+                    if (data[fieldName] === undefined) {
+                        data[fieldName] = [];
+                    }
+
+                    let index = field.replicaIndex - 1;
+
+                    if (data[fieldName][index]) {
+                        data[fieldName][index][fieldSchema.name] = fieldValue;
+                    }
+                    else {
+                        let replicaObject = {};
+
+                        replicaObject[fieldSchema.name] = fieldValue;
+                        data[fieldName].push(replicaObject);
+                    }
+                }
+                else {
                     data[fieldName] = fieldValue;
                 }
             }

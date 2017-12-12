@@ -7,15 +7,30 @@ SkeleformStandardFieldValue = function(data, schema, instance) {
     let name = schema.name;
 
     if (instance.replicaIndex) {
-        name = name + '---' + instance.replicaIndex;
-    }
+        let replicaSetOptions = instance.data.replicaSet;
+        name = replicaSetOptions.name;
 
-    if (schema.i18n === undefined) {
-        data = data[FlowRouter.getParam('itemLang') + '---' + name];
-        if (data === undefined) return;
+        if (replicaSetOptions.i18n === undefined) {
+            name = FlowRouter.getParam('itemLang') + '---' + name;
+        }
+
+        if (!data[name] || !data[name][instance.replicaIndex - 1]) {
+            return;
+        }
+
+        let replicaData = data[name];
+
+        data = replicaData[instance.replicaIndex - 1][schema.name];
     }
     else {
-        data = data[name];
+        if (schema.i18n === undefined) {
+            data = data[FlowRouter.getParam('itemLang') + '---' + name];
+
+            if (data === undefined) return '';
+        }
+        else {
+            data = data[name];
+        }
     }
 
     // set active class on label to avoid overlapping
@@ -93,13 +108,14 @@ setFieldValue = function(instance, data, schema) {
         }
 
         // avoid setting the value if the view is not fully rendered yet
-        let isActivated = instance.isActivated;
+        let isActivated = instance.isActivated.get();
 
-        if (isActivated.get() === true) {
+        if (isActivated === true) {
             if (!instance.data.formInstance.data.skeleSubsReady.get()) {
                 return false;
             }
             let value = SkeleformStandardFieldValue(data, schema, instance);
+
             //console.log(value);
             //console.log(instance.getValue());
 
@@ -110,7 +126,6 @@ setFieldValue = function(instance, data, schema) {
             /*if (value === undefined || value === null) {
                 value = '';
             }*/
-            let tmp = instance.getValue();
 
             if (value !== instance.getValue()) {
                 instance.setValue(value);
