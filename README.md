@@ -43,7 +43,7 @@ If you have any problem using it, please have a look to the "troubleshooting" se
 - **__listView**: *[object] (optional)* options for the field in the list view; see the **Skelelist package**'s *readme* for details;
 - **name**: *[String] (required)* the name of the field **(MUST be an UNIQUE identifier)**;
 - **output**: *[String] (required)* form element (available valuse: *"none", "staticTitle", "input", "checkBox", "editor", "select", "datePicker", "timePicker", "clockPicker"*);
-- **i18n**: *[boolean] (optional)* specify that the field will be prefixed with *"<:currentLang>---"* object; (default *true*);
+- **i18n**: *[boolean] (optional)* specify that the field will be prefixed with *"<:currentLang>---"*; this identifies the field as internationalized; by default the option is enabled; you should use this option only if you want to set it to false; (default *true*);
 - **size**: *[string] (optional)* materialize's grid system classes; default to *"s12 m6"*;
 - **callbacks**: *[object] (optional)* dictionary of callbacks;
 - - **onChange(value, fieldInstance)**: *[function] (optional)* a callback to be performed when the value of the field changes; it receives the field's value and the field's instance as parameters;
@@ -60,6 +60,7 @@ If you have any problem using it, please have a look to the "troubleshooting" se
 - **replicaSet**: *[object] (optional)* defines the group as a replica set; that means that the field(s) will be replicable by the user who will be able to add or remove copies of this field(s);
 *Important:* this option doesn't work on a single field, but only on a skeleformGroup; if you need a single replicable field, you should define it inside a skeleformGroup.
 - - **name**: *[string] (mandatory)* the name for the replica set; must be unique in the form;
+- - **i18n**: *[boolean] (optional)* specify that the field will be prefixed with *"<:currentLang>---"*; this identifies the field as internationalized; by default the option is enabled; you should use this option only if you want to set it to false; (default *true*);
 - - **template**: *[string] (optional)* the name of the template to be used for replica actions; by default it's "skeleformDefaultReplicaBtns", a built-in template that will render a "+" and "-" buttons, that will make possible for the user to add or remove copies of the replica set;
 - - **minCopies**: *[number] (optional)* the minimum number of copies of the replica set allowed (default *1*);
 - - **maxCopies**: *[number] (optional)* the maximum number of copies of the replica set allowed (default *infinite*);
@@ -150,7 +151,7 @@ A filed with `output: "none"` will not be displayed (and so it's never gathered 
 - - width [integer]
 - - height [integer]
 
-#### DISPLAYING INLINE
+#### SKELEFORMGROUP (DISPLAYING INLINE)
 
 By default every field is wrapped in a `<div class="row">`, but it's possible to display two or more fields in the same row by wrapping them into an object in the schema; this object must have this form:
 

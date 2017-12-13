@@ -56,6 +56,10 @@ Template.skeleformDefaultReplicaBtns.onRendered(function() {
     this.autorun(() => {
 
         if (formInstance.data.skeleSubsReady.get()) {
+            if (!formInstance.data || !formInstance.data.item) {
+                return;
+            }
+            
             let replicaName = data.replicaSet.name;
 
             if (replicaSetData.options.i18n === undefined) {
@@ -116,7 +120,7 @@ Template.skeleformDefaultReplicaBtns.events({
 
         // remove the current copy of the replica set
         if (instance.replicaIndex === 1) {
-            instance.$('.skeleformReplicaBtnsWrapper').parent('.row').remove();
+            instance.$('.skeleformReplicaBtnsWrapper').parent('.skeleformReplicaSet').remove();
         }
         else {
             let instanceToRemove = _.find(replicaSetData.instances, function(instanceToCheck) {

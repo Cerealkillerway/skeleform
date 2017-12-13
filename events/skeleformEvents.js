@@ -239,6 +239,7 @@ skeleformGatherData = function(formContext, Fields) {
     let formItem = formContext.item;
     let lang = FlowRouter.getParam('itemLang');
     let data = {};
+    let replicasToClean = [];
 
     Fields.forEach(function(field) {
         let fieldSchema = field.data.schema;
@@ -283,6 +284,19 @@ skeleformGatherData = function(formContext, Fields) {
                         data[fieldName][index][fieldSchema.name] = fieldValue;
                     }
                     else {
+                        // can happen that it tries to insert to an index beyond the array's length
+                        // this is due to the fact that one or more replicas can be deleted by user
+                        // before updating, so that their replica index does not reflect any more
+                        // their real position in the set
+                        while (data[fieldName].length < index) {
+                            data[fieldName].push({});
+
+                            // reminder for later cleaning the array from empty objects
+                            if (replicasToClean.indexOf(fieldName) < 0) {
+                                replicasToClean.push(fieldName);
+                            }
+                        }
+
                         let replicaObject = {};
 
                         replicaObject[fieldSchema.name] = fieldValue;
@@ -298,6 +312,13 @@ skeleformGatherData = function(formContext, Fields) {
             SkeleUtils.GlobalUtilities.logger('Skipped field: ' + fieldSchema.name, 'skeleWarning');
         }
     });
+
+    // now that all fields has been gathered, proceed if needed to clean replicas
+    for (const replicaName of replicasToClean) {
+        data[replicaName] = data[replicaName].filter((value) => {
+            return Object.keys(value).length > 0;
+        });
+    }
 
     SkeleUtils.GlobalUtilities.logger('<separator>form gathered data:', debugType);
     SkeleUtils.GlobalUtilities.logger(data, debugType);
