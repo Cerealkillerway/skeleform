@@ -59,7 +59,7 @@ Template.skeleformDefaultReplicaBtns.onRendered(function() {
             if (!formInstance.data || !formInstance.data.item) {
                 return;
             }
-            
+
             let replicaName = data.replicaSet.name;
 
             if (replicaSetData.options.i18n === undefined) {
@@ -72,7 +72,7 @@ Template.skeleformDefaultReplicaBtns.onRendered(function() {
                 return;
             }
 
-            if (replicaItem.length > this.replicaIndex) {
+            if (replicaItem.length > this.replicaIndex && replicaSetData.copies < replicaItem.length) {
                 Skeleform.addReplicaSetInstance(this, replicaSetData, replicaFields);
             }
         }

@@ -3,7 +3,7 @@
         <select {{isMultiple}} class="skeleValidate skeleGather" id="{{field schema.name}}">
             {{fieldValue templateInstance}}
             {{#each options schema}}
-                <option data-icon="{{icon this}}" value="{{this.value}}">{{_ this.name}}</option>
+                <option data-icon="{{icon this}}" value="{{this.value}}" class="{{iconClasses this}}">{{_ this.name}}</option>
             {{/each}}
         </select>
         <label class="active">{{label schema.name}}{{required}}</label>

@@ -72,7 +72,8 @@ Other than the previous options, each field can have specific options depending 
 
 ##### none
 
-A filed with `output: "none"` will not be displayed (and so it's never gathered or validated by **Skeleform**)
+A filed with `output: "none"` will not be displayed (and so it's never gathered or validated by **Skeleform**);
+this is just for debug purposes (to temporarily disable a field);
 
 ##### staticTitle
 

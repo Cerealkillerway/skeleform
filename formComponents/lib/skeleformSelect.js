@@ -113,6 +113,12 @@ Template.skeleformSelect.helpers({
             return option.icon;
         }
         return '';
+    },
+    iconClasses: function(option) {
+        if (option.iconClasses) {
+            return option.iconClasses.join(' ');
+        }
+        return '';
     }
 });
 
