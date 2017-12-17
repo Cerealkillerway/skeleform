@@ -155,6 +155,7 @@ Template.skeleformSelect.onCreated(function() {
         let name = schema.name;
         let $field = $getFieldById(instance, instance.data.schema);
 
+        InvokeCallback(this, value, schema, 'onChange');
 
         for (const option of $field.children()) {
             let optionValue = $(option).val();

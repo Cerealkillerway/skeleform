@@ -437,6 +437,15 @@ Template.skeleform.onDestroyed(function() {
     if (this.toolbarInstance) {
         Blaze.remove(this.toolbarInstance);
     }
+
+    let data = this.data;
+    let schema = data.schema;
+
+    // if necessary call "onClose" callback
+    if (schema.formCallbacks && schema.formCallbacks.onClose) {
+        schema.formCallbacks.onClose(data.item, this);
+    }
+
     $(window).unbind('scroll');
 });
 

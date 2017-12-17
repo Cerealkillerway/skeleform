@@ -35,6 +35,7 @@ If you have any problem using it, please have a look to the "troubleshooting" se
 - **formCallbacks**: *[object] (optional)* dictionary of callbacks executed on the form;
 - - **onRendered(currentDocument, formInstance)**: *[function] (optional)* callback fired when the form is rendered; it receives the currentDocument (if any) and the form instance as arguments;
 - - **beforeSave(formDataContext, gatheredValue)**: *[function] (optional)* callback executed just before saving (before creating and before updating) the form; it receives the form's data context and the values of all form's field gathered by Skeleform;
+- - **onClose(currentDocument, formInstance)**: *[function] (optional)* callback fired when the form is destroyed: it receives the currentDocument (if any) and the form instance as arguments;
 
 ### SCHEMA FIELDS OPTIONS
 

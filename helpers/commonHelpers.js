@@ -24,12 +24,14 @@ SkeleformStandardFieldValue = function(data, schema, instance) {
     }
     else {
         if (schema.i18n === undefined) {
-            data = data[FlowRouter.getParam('itemLang') + '---' + name];
+            //data = data[FlowRouter.getParam('itemLang') + '---' + name];
+            data = SkeleUtils.GlobalUtilities.getPropertyFromString(FlowRouter.getParam('itemLang') + '---' + name, data)
 
             if (data === undefined) return '';
         }
         else {
-            data = data[name];
+            //data = data[name];
+            data = SkeleUtils.GlobalUtilities.getPropertyFromString(name, data);
         }
     }
 
@@ -114,6 +116,7 @@ setFieldValue = function(instance, data, schema) {
             if (!instance.data.formInstance.data.skeleSubsReady.get()) {
                 return false;
             }
+
             let value = SkeleformStandardFieldValue(data, schema, instance);
 
             //console.log(value);
