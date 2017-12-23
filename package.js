@@ -61,9 +61,9 @@ Package.onUse(function(api) {
     api.addFiles([
         'lib/editEvents.js',
         'lib/autoNumeric.js',
-        'lib/materialize.clockpicker.js',
-        'lib/timepickersConflictResolver.js',
-        'lib/picker.time.js',
+        //'lib/materialize.clockpicker.js',
+        //'lib/timepickersConflictResolver.js',
+        //'lib/picker.time.js',
         'lib/jquery.multi-select.js',
         'helpers/commonHelpers.js',
         'helpers/skeleformHelpers.js',

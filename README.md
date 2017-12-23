@@ -71,17 +71,17 @@ If you have any problem using it, please have a look to the "troubleshooting" se
 
 Other than the previous options, each field can have specific options depending on its *output* type:
 
-##### none
+#### none
 
 A filed with `output: "none"` will not be displayed (and so it's never gathered or validated by **Skeleform**);
 this is just for debug purposes (to temporarily disable a field);
 
-##### staticTitle
+#### staticTitle
 
 - **tag**: *[string] (optional)* the tag to use to wrap the title (default `<h3>`);
 - **classes**: *[array of strings] (optional)* array of classes to use on the *tag*;
 
-##### input
+#### input
 
 - **icon**: *[string] (optional)* materialize's icon class;
 - **renderAs**: *[string] (optional)* type of input field to render (available values: *"password", "text", "textarea"*); default to "text"; when using the *"password"* option, the field is not gathered for submit if left empty; **IMPORTANT**: when using *"password"* option don't set *"max"* validation option, since the value is hashed with sha256 (becomes longer);
@@ -91,7 +91,7 @@ this is just for debug purposes (to temporarily disable a field);
 - **charCounter**: *[number] (optional)* enables the materializeCSS's character counter plugin; **IMPORTANT**: the character counter does not set the *"maxlength"* property on the input (this is done by using validation -> max);
 
 
-##### checkBox
+#### checkBox
 
 - **renderAs**: *[string] (optional)* type of boolean selector to display (available values: *"checkbox", "switch"*); default to *"checkbox"*;
 - **labels**: *[object] (optional)* to be used with *renderAs: "switch"*; can contain 2 (optionals) keys (*"on", "off"*) containing the two strings to be used as i18n strings for the respectives switch states; if it's not provided, the default *"yes_lbl"* and *"no_lbl"* are used;
@@ -99,7 +99,7 @@ this is just for debug purposes (to temporarily disable a field);
 - - **off**: *[string] (optional)* i18n string for switch *"off"* state (default *"no_lbl"*; note that *"_lbl"* is appended automatically);
 
 
-##### editor
+#### editor
 
 - **toolbar**: *[string] (optional)* specifies the toolbar to use (available values: *"minimal", "default", "full"*);
 - **height**: *[integer] (optional)* the pre-setted editor's height in pixels (default 400);
@@ -113,7 +113,7 @@ this is just for debug purposes (to temporarily disable a field);
 - - **height**: *[integer] (optional)* height of the video frame;
 
 
-##### select
+#### select
 
 - **source**: *[array of objects / mongo cursor] (required)* data source for options; must be an array of objects used to create the options of the field;each element of the array can be:
 - - **possibility 1** *[object]* an object with these fields:
@@ -130,22 +130,24 @@ this is just for debug purposes (to temporarily disable a field);
 - **allowBlank**: *[boolean] (optional)* allow select none (default undefined option is created automatically); this options is meant to be used only if "source" is of type 2; otherwise is ignored, since with type 1 you can manually define the *"blank option"* in the array used as *"source"*;
 - **multi**: *[boolean] (optional)* defines the select as a *"multiple select"*; default to *false*;
 
-##### datePicker
+**note**: if you want to dinamically add options to a select field, then you need to re-initialize the materialize's plugin by calling `material_select()` on it.
+
+#### datePicker
 
 - **icon**: *[string] (optional)* materialize's icon class;
 - **pickerOptions**: *[object] (optional)* dictionary of init options to override when starting the pickadate plugin (more info at http://amsul.ca/pickadate.js/date/);
 
 
-##### timePicker
+#### timePicker
 
 - **icon**: *[string] (optional)* materialize's icon class;
 - **pickerOptions**: *[object] (optional)* dictionary of init options to override when starting the pickatime plugin (more info at http://amsul.ca/pickadate.js/time);
 
-##### clockPicker
+#### clockPicker
 - **icon**: *[string] (optional)* materialize's icon class;
 - **pickerOptions**: *[object] (optional)* dictionary of init options to override when starting the clockpicker plugin (more info at https://github.com/weareoutman/clockpicker and https://github.com/chingyawhao/materialize-clockpicker);
 
-##### imageUpload
+#### imageUpload
 
 (WORK IN PROGRESS...)
 - can have options (image, thumb) that decides what will be created and uploaded [object]; both are objects with these properties:

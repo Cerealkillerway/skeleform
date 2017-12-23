@@ -194,12 +194,14 @@ Template.skeleformSelect.onRendered(function() {
 
     InvokeCallback(this, this.getValue(), schema, 'onChange');
 
+    // DISABLED - was causing infinite loop
     // start plugin and fire onChange callback when DOM is changed
-    let observer = new MutationObserver((mutations) => {
+    /*let observer = new MutationObserver((mutations) => {
         let value = this.getValue();
 
         $field = $getFieldById(this, schema);
-        $field.material_select();
+        // DISABLED the following instruction was causing the infinite loop
+        //$field.material_select();
 
 
         InvokeCallback(this, value, schema, 'onChange');
@@ -209,7 +211,7 @@ Template.skeleformSelect.onRendered(function() {
         childList: true,
         characterData: true,
         subtree: true
-    });
+    });*/
 });
 
 Template.skeleformSelect.onDestroyed(function() {
