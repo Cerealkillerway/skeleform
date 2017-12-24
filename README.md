@@ -56,6 +56,7 @@ If you have any problem using it, please have a look to the "troubleshooting" se
 - - **unique**: *[boolean] (optional)* specifies that field's value should be unique;
 - - **ignoreCaseForUnicity**: *[boolean] (optional)* if set to *true* the unicity check will be case insensitive; default *false*;
 - - **collectionForUnicityCheck**: *[string] (optional)* the collection where to perform unicity check for the field; if omitted, the unicity check is performed against schema's *__collection*;
+- - **showErrorOn**: *[string / array of strings]* the name (or array of names) of another field where to show errors relative of this field; this is useful if the current field is hidden and generated starting from other fields values (for example a hidden url-slug parameter generated dasherizing the field "name"; setting this to "name" will show validation errors for the url-slug field, that is invisible, on the "name" field, that is visible);
 - **style**: *[string] (optional)* wrapper css class for custom styling of the field;
 - **showOnly**: *[string ('create'/'update')] (optional)* defines if the field should be rendered only on creation or only on update; **IMPORTANT**: this option can be set also on a *skeleformGroup* object and will take effect on all fields of the group;
 - **replicaSet**: *[object] (optional)* defines the group as a replica set; that means that the field(s) will be replicable by the user who will be able to add or remove copies of this field(s);

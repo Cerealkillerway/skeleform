@@ -63,7 +63,7 @@ setInvalid = function(id, schema, result) {
         }
     }
 
-    skeleformErrorStatus(id, errorString);
+    skeleformErrorStatus(id, errorString, schema);
 };
 
 
@@ -136,13 +136,31 @@ skeleformSuccessStatus = function(id, schema) {
 
 
 //set error status
-skeleformErrorStatus = function(id, errorString) {
-    let selector = '#' + id;
-    let column = $(selector).closest('.col');
-    let fieldAlert = column.find('.skeleformFieldAlert');
+skeleformErrorStatus = function(id, errorString, schema) {
+    let selectors = [];
+    let validation = schema.validation;
 
-    column.alterClass('valid', 'invalid');
-    fieldAlert.html(TAPi18n.__('error_validation', errorString));
+    if (validation.showErrorOn) {
+        if (Array.isArray(validation.showErrorOn)) {
+            for (id of validation.showErrorOn) {
+                selectors.push('#' + id);
+            }
+        }
+        else {
+            selectors.push('#' + schema.validation.showErrorOn);
+        }
+    }
+    else {
+        selectors.push('#' + id);
+    }
+
+    selectors.forEach(function(selector) {
+        let column = $(selector).closest('.col');
+        let fieldAlert = column.find('.skeleformFieldAlert');
+
+        column.alterClass('valid', 'invalid');
+        fieldAlert.html(TAPi18n.__('error_validation', errorString));
+    });
 };
 
 
