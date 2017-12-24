@@ -1,5 +1,5 @@
 <template name="skeleformCheckBox">
-    <div class="input-field col {{fieldSize schema.size}} {{schema.style}}">
+    <div class="col {{fieldSize schema.size}} {{schema.style}}">
 		{{#if isCheckBox}}
             <input {{fieldValue item schema}} type="checkbox" class="skeleValidate skeleGather" id="{{field schema.name}}" style="{{fieldStyle schema}}">
             <label for="{{field schema.name}}">{{label schema.name}}{{required}}</label>

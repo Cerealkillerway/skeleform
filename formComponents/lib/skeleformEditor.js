@@ -17,14 +17,14 @@ editorToolbars = {
         ['color', ['color']]
     ],
     full: [
-        ['style', ['bold', 'italic', 'underline', 'strikethrough', 'clear']],
-        ['fonts', ['fontsize', 'fontname']],
-        ['color', ['color']],
-        ['undo', ['undo', 'redo', 'help']],
-        ['para', ['ul', 'ol', 'paragraph']],
+        ['style', ['bold', 'italic', 'underline', 'clear']],
+        ['font', ['fontname', 'color', 'strikethrough', 'superscript', 'subscript']],
+        ['fontsize', ['fontsize']],
+        ['para', ['ul', 'ol', 'paragraph', 'paragraphAlignLeft', 'paragraphAlignRight', 'paragraphAlignCenter', 'paragraphAlignFull', 'paragraphOutdent', 'paragraphIndent']],
         ['height', ['height']],
-        ['misc', ['link', 'picture', 'table', 'hr', 'codeview', 'fullscreen']],
-        ['ckMedia', ['ckImageUploader', 'ckVideoEmbeeder']]
+        ['materialize', ['materializeCard']],
+        ['insert', ['picture', 'link', 'video', 'table', 'hr']],
+        ['misc', ['fullscreen', 'codeview', 'undo', 'redo', 'help']]
     ],
     //special for debug
     debug: [

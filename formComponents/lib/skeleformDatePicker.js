@@ -41,10 +41,10 @@ Template.skeleformDatePicker.onCreated(function() {
         pickerInstance.component.settings.labelMonthSelect = TAPi18n.__('monthSelect_label');
         pickerInstance.component.settings.labelYearSelect = TAPi18n.__('yearSelect_label');
 
-        pickerInstance.render();
+        //pickerInstance.render();
         // set again the value to translate also in the input box
         //pickerInstance.set('select', SkeleformStandardFieldValue(this.data.item, this.data.schema), {format: this.initOptions.formatSubmit});
-        this.setValue(SkeleformStandardFieldValue(this.data.item, schema));
+        this.setValue(SkeleformStandardFieldValue(this.data.item, schema, this));
     };
     this.getValue = () => {
         let value = this.pickerInstance.get('select', this.initOptions.formatSubmit);

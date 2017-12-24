@@ -120,8 +120,8 @@ Template.skeleformLangBar.helpers({
     langs: function() {
         let result = [];
 
-        if (Skeletor.GlobalConf) {
-            _.each(Skeletor.GlobalConf.langEnable, function(value, key) {
+        if (Skeletor.configuration) {
+            _.each(Skeletor.configuration.langEnable, function(value, key) {
                 if (value) {
                     result.push(key);
                 }

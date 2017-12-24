@@ -97,13 +97,14 @@ Template.skeleformCheckBox.onRendered(function() {
 
 
 Template.skeleformCheckBox.events({
-    'change .skeleValidate': function(event, template) {
+    'change .skeleValidate': function(event, instance) {
         // perform validation and callback invocation on change
-        let value = template.getValue();
-        let schema = template.data.schema;
+        console.log('switch change!');
+        let value = instance.getValue();
+        let schema = instance.data.schema;
 
-        template.isValid();
+        instance.isValid();
 
-        InvokeCallback(template, value, schema, 'onChange');
+        InvokeCallback(instance, value, schema, 'onChange');
     },
 });
