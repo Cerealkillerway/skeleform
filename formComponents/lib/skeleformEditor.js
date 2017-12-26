@@ -28,14 +28,14 @@ editorToolbars = {
     ],
     //special for debug
     debug: [
-        ['style', ['style', 'bold', 'italic', 'underline', 'strikethrough', 'clear']],
-        ['fonts', ['fontsize', 'fontname']],
-        ['color', ['color']],
-        ['undo', ['undo', 'redo', 'help']],
-        ['ckMedia', ['ckImageUploader', 'ckVideoEmbeeder']],
-        ['misc', ['link', 'picture', 'table', 'hr', 'codeview', 'fullscreen']],
-        ['para', ['ul', 'ol', 'paragraph', 'leftButton', 'centerButton', 'rightButton', 'justifyButton', 'outdentButton', 'indentButton']],
-        ['height', ['lineheight']],
+        ['style', ['bold', 'italic', 'underline', 'clear']],
+        ['font', ['fontname', 'color', 'strikethrough', 'superscript', 'subscript']],
+        ['fontsize', ['fontsize']],
+        ['para', ['ul', 'ol', 'paragraph', 'paragraphAlignLeft', 'paragraphAlignRight', 'paragraphAlignCenter', 'paragraphAlignFull', 'paragraphOutdent', 'paragraphIndent']],
+        ['height', ['height']],
+        ['materialize', ['materializeCard']],
+        ['insert', ['picture', 'link', 'video', 'table', 'hr']],
+        ['misc', ['fullscreen', 'codeview', 'undo', 'redo', 'help']]
     ]
 };
 
@@ -61,6 +61,21 @@ Template.skeleformEditor.onCreated(function() {
 
     //register this on form' store
     this.data.formInstance.Fields.push(this);
+
+    // now commented because very slow...
+    /*this.i18n = () => {
+        if (FlowRouter.getQueryParam('lang') === this.currentLang) {
+            return;
+        }
+
+        this.currentLang = FlowRouter.getQueryParam('lang');
+        let editor = this.$('.editor');
+
+        this.options.lang = SkeleUtils.GlobalUtilities.doubleLangCode(FlowRouter.getQueryParam('lang'));
+
+        $(editor).materialnote('destroy');
+        $(editor).materialnote(this.options);
+    };*/
 
     this.getValue = () => {
         return $getFieldById(this, schema).materialnote('code').trim();
@@ -93,11 +108,12 @@ Template.skeleformEditor.onRendered(function() {
     let schema = this.data.schema;
     let toolbar = schema.toolbar;
     let imageParams = this.data.schema.image;
+    this.currentLang = FlowRouter.getQueryParam('lang');
 
-    if ((toolbar === undefined)|| (editorToolbars[toolbar] === undefined)) toolbar = "default";
+    if ((toolbar === undefined)|| (editorToolbars[toolbar] === undefined)) toolbar = 'default';
 
-    $(editor).materialnote({
-        lang: SkeleUtils.GlobalUtilities.doubleLangCode(FlowRouter.getParam("itemLang")),
+    this.options = {
+        lang: SkeleUtils.GlobalUtilities.doubleLangCode(this.currentLang),
         toolbar: editorToolbars[toolbar],
         followingToolbar: true,
         otherStaticBarClass: 'skeleStaticBar',
@@ -177,7 +193,9 @@ Template.skeleformEditor.onRendered(function() {
                 reader.readAsDataURL(file);
             });
         }*/
-    });
+    }
+
+    $(editor).materialnote(this.options);
 
     this.isActivated.set(true);
 });

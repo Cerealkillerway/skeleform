@@ -149,12 +149,10 @@ this is just for debug purposes (to temporarily disable a field);
 - **pickerOptions**: *[object] (optional)* dictionary of init options to override when starting the clockpicker plugin (more info at https://github.com/weareoutman/clockpicker and https://github.com/chingyawhao/materialize-clockpicker);
 
 #### imageUpload
-
-(WORK IN PROGRESS...)
-- can have options (image, thumb) that decides what will be created and uploaded [object]; both are objects with these properties:
-- - [float 0 ~ 1] the quality of jpeg created
-- - width [integer]
-- - height [integer]
+- **placeholder**: *[string] (optional)* a i18n string to be used as placeholder in the input field;
+- **thumbnail**: *[object] (optional)* dictionary of options for the thumbnail(s) to be created for selected images
+- - **widht**: *[number] (optional)* the width in pixels for the image thumbnail (default to 200);
+- - **height**: *[number] (optional)* the height in pixels for the image thumbnail (default to 200);
 
 #### SKELEFORMGROUP (DISPLAYING INLINE)
 

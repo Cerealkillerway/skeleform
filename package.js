@@ -33,8 +33,7 @@ Package.onUse(function(api) {
     // styles
     api.addFiles([
         'styles/skeleform.scss',
-        'styles/_clockpicker.primary.scss',
-        'styles/_multi-select.scss'
+        'styles/_clockpicker.primary.scss'
     ],
     ['client']);
 
