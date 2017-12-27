@@ -1,18 +1,22 @@
 <template name="skeleformImageUpload">
     <div class="input-field col {{fieldSize schema.size}} {{schema.style}}">
+
+        {{fieldValue templateInstance}}
         <div class="file-field input-field">
             <div class="btn">
+                {{#if schema.icon}}
+                    <i class="material-icons {{photoClasses schema}}">{{schema.icon}}</i>
+                {{/if}}
                 <span>{{label schema.name}}{{required}}</span>
-                <input type="file" class="skeleValidate skeleGather imageUploader" multiple>
+                <input type="file" class="skeleValidate skeleGather skeleImageUploader" id="{{field schema.name}}" {{isMultiple schema}}>
             </div>
             <div class="file-path-wrapper">
                 <input class="file-path validate" type="text" placeholder="{{placeholder schema.placeholder}}">
             </div>
         </div>
 
-        <div id="{{field schema.name}}" class="firstColor z-depth-1 canvasContainer" data-validate="imageUpload">
+        <div class="skeleCanvasContainer"></div>
 
-        </div>
         <div style="clear:both;"></div>
         <p class="skeleformFieldAlert text-danger"></p>
     </div>

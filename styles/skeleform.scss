@@ -3,7 +3,7 @@
 // clockpicker;
 //@import "clockpicker.variables";
 @import "clockpicker.primary";
-
+@import "file-uploader";
 
 
 .skeleformWrapper {
@@ -116,5 +116,9 @@
 
     .skeleformReplicaBtnsWrapper {
         margin-bottom: 30px;
+    }
+
+    .select-wrapper + label {
+        top: 0;
     }
 }

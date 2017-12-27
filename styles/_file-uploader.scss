@@ -1,0 +1,10 @@
+.skeleCanvasContainer {
+    .skeleThumbCanvas {
+        border: solid 4px $firstPanelColor;
+        margin-right: 10px;
+    }
+
+    .skeleMainCanvas {
+        display: none;
+    }
+}

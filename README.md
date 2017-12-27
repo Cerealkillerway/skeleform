@@ -133,6 +133,7 @@ this is just for debug purposes (to temporarily disable a field);
 
 **note**: if you want to dinamically add options to a select field, then you need to re-initialize the materialize's plugin by calling `material_select()` on it.
 
+
 #### datePicker
 
 - **icon**: *[string] (optional)* materialize's icon class;
@@ -144,15 +145,29 @@ this is just for debug purposes (to temporarily disable a field);
 - **icon**: *[string] (optional)* materialize's icon class;
 - **pickerOptions**: *[object] (optional)* dictionary of init options to override when starting the pickatime plugin (more info at http://amsul.ca/pickadate.js/time);
 
+
 #### clockPicker
+
 - **icon**: *[string] (optional)* materialize's icon class;
 - **pickerOptions**: *[object] (optional)* dictionary of init options to override when starting the clockpicker plugin (more info at https://github.com/weareoutman/clockpicker and https://github.com/chingyawhao/materialize-clockpicker);
 
+
 #### imageUpload
+
+This type of field automatically tests that the selected file(s) matches an image type;
+
+- **icon**: *[string] (optional)* materialize's icon class;
+- **iconClasses**: *[string / array of strings] (optional)* class(es) to be used on the icon (default to 'left');
 - **placeholder**: *[string] (optional)* a i18n string to be used as placeholder in the input field;
-- **thumbnail**: *[object] (optional)* dictionary of options for the thumbnail(s) to be created for selected images
-- - **widht**: *[number] (optional)* the width in pixels for the image thumbnail (default to 200);
+- **multiple**: *[boolean] (optional)* enable the file chooser to select multiple files at once (default false);
+- **thumbnail**: *[object] (optional)* dictionary of options for the thumbnail(s) to be created for selected images;
+- - **width**: *[number] (optional)* the width in pixels for the image thumbnail (default to 200);
 - - **height**: *[number] (optional)* the height in pixels for the image thumbnail (default to 200);
+- **image**: *[object] (optional)* dictionary of options for the image(s) to be uploaded;
+- - **maxWidth**: *[number] (optional)* max width in pixels for the image to be uploaded (default to 1000);
+- - **maxHeight**: *[number] (optional)* max height in pixels for the image to be uploaded (default to 1000);
+- - **quality**: *[number 0~1] (optional)* the quality used for dataUrl conversion of the image (default 1);
+
 
 #### SKELEFORMGROUP (DISPLAYING INLINE)
 
@@ -162,6 +177,7 @@ By default every field is wrapped in a `<div class="row">`, but it's possible to
 - **size**: *[string] (optional)* materialize's grid system classes; by default the group does not create any column and inside of it each field creates its own;
 - **classes**: *[array] (optional)* array of custom classes for the group's div container;
 - **fields**: *[array] (optional)* the normal schema of the fields to be displayed in the same row;
+
 
 ### CUSTOM FIELDS CREATION
 
@@ -176,6 +192,7 @@ Every field in *Skeleform* must implement this methods:
 
 Inside these methods (and everywhere in the field's code) calling `$getFieldById(templateInstance, schema)` is the preferred way to get the jQuery object wrapping the DOM of the main field's input element.
 
+
 ### VALIDATION
 
 The method `isValid()` should perform the field's validation when required and return a *"result"* object with this form:
@@ -185,11 +202,13 @@ The method `isValid()` should perform the field's validation when required and r
 
 The `Skeleform.validate.checkOptions()` global function is the standard way to perform validity check; it implements all needed *type*, *length* and *unicity* checks;
 
+
 ##### CUSTOM INVALID MESSAGE
 
 If it's necessary to use a custom invalid message it is possible to add the field *"invalidMessages"* to the "result" object;
 
 - **invalidMessages**: *[object] (optional)* should be a dictionary of custom i18n strings to use for each validation type;
+
 
 ### OTHER THAN SCHEMA
 

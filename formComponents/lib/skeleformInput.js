@@ -142,11 +142,11 @@ Template.skeleformInput.onRendered(function() {
 });
 
 Template.skeleformInput.events({
-    'keyup .skeleValidate, keyup .shadowField': function(event, template) {
+    'keyup .skeleValidate, keyup .shadowField': function(event, instance) {
         // perform validation and callback invocation on change
-        let value = template.getValue();
-        let schema = template.data.schema;
-        let result = template.isValid();
+        let value = instance.getValue();
+        let schema = instance.data.schema;
+        let result = instance.isValid();
         let id = $(event.target).attr('id');
 
         if (!result.valid) {
@@ -161,6 +161,6 @@ Template.skeleformInput.events({
             $(event.target).select();
         }
 
-        InvokeCallback(template, value, schema, 'onChange');
+        InvokeCallback(instance, value, schema, 'onChange');
     }
 });

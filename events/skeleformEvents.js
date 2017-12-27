@@ -551,10 +551,11 @@ Template.skeleformUpdateButtons.events({
                 $('#gearLoadingModal').openModal();
             }
 
-            SkeleUtils.GlobalUtilities.logger('will no call method: ' + method + ' data:', 'skeleform');
+            SkeleUtils.GlobalUtilities.logger('will now call method: ' + method + ' data:', 'skeleform');
             SkeleUtils.GlobalUtilities.logger(data, 'skeleform');
             SkeleUtils.GlobalUtilities.logger('documentId: ' + documentId, 'skeleform');
             SkeleUtils.GlobalUtilities.logger('schema name: ' + formContext.schemaName, 'skeleform');
+            
             Meteor.call(method, documentId, data, formContext.schemaName, function(error, result) {
                 if (options.useModal) {
                     $('#gearLoadingModal').closeModal();
