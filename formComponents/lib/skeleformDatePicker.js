@@ -99,7 +99,16 @@ Template.skeleformDatePicker.onRendered(function() {
             // workaround to avoid multiple callback invocation on startup
             // if context.select is numeric -> setted by user, otherwise -> setted from db
             if (typeof(context.select) === 'number') {
-                this.isValid();
+                let result = this.isValid();
+                let id = schema.name.replace('.', '\\.');
+
+                if (!result.valid) {
+                    setInvalid(id, schema, result);
+                }
+                else {
+                    skeleformSuccessStatus(id, schema);
+                }
+
                 InvokeCallback(this, value, schema, 'onChange');
             }
 
@@ -110,6 +119,21 @@ Template.skeleformDatePicker.onRendered(function() {
                     this.pickerInstance.close();
                 }
             }
+            /*
+            let value = this.getValue();
+            let result = this.isValid();
+            let id = schema.name.replace('.', '\\.');
+
+            console.log(value);
+
+            if (!result.valid) {
+                setInvalid(id, schema, result);
+            }
+            else {
+                skeleformSuccessStatus(id, schema);
+            }
+
+            InvokeCallback(this, value, schema, 'onChange');*/
         }
     };
 
@@ -176,4 +200,26 @@ Template.skeleformDatePicker.onRendered(function() {
     $element.pickadate(this.initOptions);
     this.pickerInstance = $element.pickadate('picker');
     this.isActivated.set(true);
+    InvokeCallback(this, null, schema, 'onRendered');
 });
+
+/*Template.skeleformDatePicker.events = {
+    'change .datepicker': function(event, instance) {
+        // perform validation and callback invocation on change
+        let schema = instance.data.schema;
+        let value = instance.getValue();
+        let result = instance.isValid();
+        let id = schema.name.replace('.', '\\.');
+
+        console.log(value);
+
+        if (!result.valid) {
+            setInvalid(id, schema, result);
+        }
+        else {
+            skeleformSuccessStatus(id, schema);
+        }
+
+        InvokeCallback(instance, value, schema, 'onChange');
+    }
+};*/

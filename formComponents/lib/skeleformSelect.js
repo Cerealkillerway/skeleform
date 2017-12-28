@@ -29,6 +29,15 @@ Template.skeleformSelect.helpers({
                 source = schema.source(instance);
             }
 
+            // add blank option if needed
+            if (schema.allowBlank) {
+                result.push({
+                    name: TAPi18n.__('none_lbl'),
+                    value: '',
+                    disabled: 'disabled'
+                });
+            }
+
             source.forEach(function(item, index) {
                 let option;
                 let lang = FlowRouter.getParam('itemLang');
@@ -192,7 +201,8 @@ Template.skeleformSelect.onRendered(function() {
     $field.material_select();
     this.isActivated.set(true);
 
-    InvokeCallback(this, this.getValue(), schema, 'onChange');
+    //InvokeCallback(this, this.getValue(), schema, 'onChange');
+    InvokeCallback(this, null, schema, 'onRendered');
 
     // DISABLED - was causing infinite loop
     // start plugin and fire onChange callback when DOM is changed

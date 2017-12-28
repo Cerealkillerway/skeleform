@@ -31,7 +31,7 @@
                     {{!-- handle replica sets of skeleform groups --}}
 
                     <div class="skeleformReplicaSet">
-                        <div class="row {{formatClasses data.schema.classes}}">
+                        <div class="row {{formatClasses data.schema.classes}}" id="{{data.schema.id}}">
                             {{#if data.schema.size}}
                                 {{!-- skeleformGroups with user defined size --}}
                                 <div class="col {{data.schema.size}} {{formatClasses data.schema.classes}}">
@@ -45,7 +45,7 @@
                         {{> Template.dynamic template=data.replicaSet.template data=data}}
                     </div>
                 {{else}}
-                    <div class="row {{formatClasses data.schema.classes}}">
+                    <div class="row {{formatClasses data.schema.classes}}" id="{{data.schema.id}}">
                         {{#if data.schema.size}}
                             {{!-- skeleformGroups with user defined size --}}
                             <div class="col {{data.schema.size}} {{formatClasses data.schema.classes}}">

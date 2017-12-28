@@ -57,6 +57,13 @@ Template.skeleformImageUpload.helpers({
 
         // if is a string
         return classes;
+    },
+
+    filePathClass: function(schema) {
+        if (schema.filePath === false) {
+            return 'skeleformInvisible'
+        }
+        return '';
     }
 });
 
@@ -194,9 +201,8 @@ Template.skeleformImageUpload.onRendered(function() {
     let schema = this.data.schema;
     this.currentLang = FlowRouter.getQueryParam('lang');
 
-
-
     this.isActivated.set(true);
+    InvokeCallback(this, null, schema, 'onRendered');
 });
 
 Template.skeleformImageUpload.events = {

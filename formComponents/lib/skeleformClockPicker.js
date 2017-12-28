@@ -144,4 +144,5 @@ Template.skeleformClockPicker.onRendered(function() {
 
     $getFieldById(this, this.data.schema).clockpicker(this.initOptions);
     this.isActivated.set(true);
+    InvokeCallback(this, null, schema, 'onRendered');
 });

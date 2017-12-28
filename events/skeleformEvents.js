@@ -485,11 +485,11 @@ Template.skeleformCreateButtons.events({
         }
 
         // select method to call for this operation
-        if (formContext.methods && formContext.methods.create) {
-            method = formContext.methods.create;
+        if (formContext.methods && formContext.methods.insert) {
+            method = formContext.methods.insert;
         }
         else {
-            method = configuration.defaultMethods.create;
+            method = configuration.defaultMethods.insert;
         }
 
         // if necessary launch form callbacks!
@@ -555,7 +555,7 @@ Template.skeleformUpdateButtons.events({
             SkeleUtils.GlobalUtilities.logger(data, 'skeleform');
             SkeleUtils.GlobalUtilities.logger('documentId: ' + documentId, 'skeleform');
             SkeleUtils.GlobalUtilities.logger('schema name: ' + formContext.schemaName, 'skeleform');
-            
+
             Meteor.call(method, documentId, data, formContext.schemaName, function(error, result) {
                 if (options.useModal) {
                     $('#gearLoadingModal').closeModal();

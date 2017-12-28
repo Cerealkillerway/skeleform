@@ -1,3 +1,6 @@
+import { Random } from 'meteor/random'
+
+
 // INPUT
 // The standard input field
 // it integrates autonumeric.js plugin to manage "formatAs" options
@@ -62,8 +65,24 @@ Template.skeleformInput.onCreated(function() {
     };
     this.isValid = () => {
         let formInstance = this.data.formInstance;
+        let value = this.getValue();
+        let validationResult = Skeleform.validate.checkOptions(value, schema, formInstance.data.schema, formInstance.data.item, this);
 
-        return Skeleform.validate.checkOptions(this.getValue(), schema, formInstance.data.schema, formInstance.data.item, this);
+        if (schema.validation && schema.validation.unique === 'autoset') {
+            let uniqueReasonIndex = validationResult.reasons.indexOf('unique');
+
+            if (!validationResult.valid && uniqueReasonIndex >= 0) {
+                this.setValue(value + '-' + Random.id());
+
+                validationResult.reasons.removeAt(uniqueReasonIndex);
+
+                if (validationResult.reasons.length === 0) {
+                    validationResult.valid = true;
+                }
+            }
+        }
+
+        return validationResult;
     };
     this.setValue = (value) => {
         let $field = $getFieldById(this, schema);
@@ -139,6 +158,7 @@ Template.skeleformInput.onRendered(function() {
     }
 
     self.isActivated.set(true);
+    InvokeCallback(this, null, schema, 'onRendered');
 });
 
 Template.skeleformInput.events({

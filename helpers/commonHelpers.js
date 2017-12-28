@@ -55,6 +55,13 @@ InvokeCallback = function(instance, value, schema, type) {
             }
             break;
 
+            case 'onRendered':
+            // if defined, perform the callback
+            if (schema.callbacks.onRendered) {
+                schema.callbacks.onRendered(instance);
+            }
+            break;
+
             case 'onChange':
             // if defined, perform the callback
             if (schema.callbacks.onChange) {

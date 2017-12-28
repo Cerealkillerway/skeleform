@@ -9,6 +9,10 @@
 .skeleformWrapper {
     margin-top: 60px;
 
+    .skeleformInvisible {
+        opacity: 0 !important;
+    }
+
     .skeleformFieldAlert {
         margin: 0;
 
@@ -120,5 +124,9 @@
 
     .select-wrapper + label {
         top: 0;
+    }
+
+    .dropdown-content [type="checkbox"] + label {
+        top: -10px !important;
     }
 }

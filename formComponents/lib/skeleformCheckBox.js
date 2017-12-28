@@ -93,6 +93,7 @@ Template.skeleformCheckBox.onDestroyed(function() {
 
 Template.skeleformCheckBox.onRendered(function() {
     this.isActivated.set(true);
+    InvokeCallback(this, null, this.data.schema, 'onRendered');
 });
 
 

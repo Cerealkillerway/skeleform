@@ -152,4 +152,5 @@ Template.skeleformTimePicker.onRendered(function() {
     $field.pickatime(this.initOptions);
     this.pickerInstance = $field.pickatime('picker');
     this.isActivated.set(true);
+    InvokeCallback(this, null, schema, 'onRendered');
 });

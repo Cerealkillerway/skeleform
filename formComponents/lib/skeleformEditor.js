@@ -198,4 +198,5 @@ Template.skeleformEditor.onRendered(function() {
     $(editor).materialnote(this.options);
 
     this.isActivated.set(true);
+    InvokeCallback(this, null, schema, 'onRendered');
 });

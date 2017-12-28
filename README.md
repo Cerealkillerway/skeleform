@@ -48,12 +48,13 @@ If you have any problem using it, please have a look to the "troubleshooting" se
 - **size**: *[string] (optional)* materialize's grid system classes; default to *"s12 m6"*;
 - **callbacks**: *[object] (optional)* dictionary of callbacks;
 - - **onChange(value, fieldInstance)**: *[function] (optional)* a callback to be performed when the value of the field changes; it receives the field's value and the field's instance as parameters;
-- - **onCreated(fieldInstance)**: a callback fired when the field is created (on the field component's onCreated callback); it receives the field's instance as parameter;
+- - **onCreated(fieldInstance)**: a callback fired when the field is created; it receives the field's instance as parameter;
+- - **onRendered(fieldInstance)**: a callback fired when the field has finished rendering; it receives the field's instance as parameter;
 - **validation**: *[object]* set the validation rules:
 - - **type**: *[string] (optional)* validation match (available values: *"string", "number", "email", "url", "date", "time"*); **IMPORTANT**: *"date"* and *"time"* are validated against the plugin's *"formatSubmit"*;
 - - **min**: *[number] (optional)* minimun length; if the value returned by the field is an object, this parameter is referred to the number of its properties; setting min to 1 on a boolean field (ex. checkbox) is interpreted as "field required"; any other value is ignored for those kind of fields;
 - - **max**: *[number] (optional)* maximum length; if the value returned by the field is an object, this parameter is referred to the number of its properties; on input fields this will automatically set the "maxLength" property on the html `<input>` tag;
-- - **unique**: *[boolean] (optional)* specifies that field's value should be unique;
+- - **unique**: *[boolean / string] (optional)* specifies that field's value should be unique; can be true/false or 'autoset', that means that if unicity validation fails, a random id is appended to the field's value to make it unique; **Important**: the 'autoset' option is available only for *input* fields;
 - - **ignoreCaseForUnicity**: *[boolean] (optional)* if set to *true* the unicity check will be case insensitive; default *false*;
 - - **collectionForUnicityCheck**: *[string] (optional)* the collection where to perform unicity check for the field; if omitted, the unicity check is performed against schema's *__collection*;
 - - **showErrorOn**: *[string / array of strings]* the name (or array of names) of another field where to show errors relative of this field; this is useful if the current field is hidden and generated starting from other fields values (for example a hidden url-slug parameter generated dasherizing the field "name"; setting this to "name" will show validation errors for the url-slug field, that is invisible, on the "name" field, that is visible);
@@ -121,14 +122,14 @@ this is just for debug purposes (to temporarily disable a field);
 - - - **name**: *[string] (required)* the i18n string to be used when displaying the option;
 - - - **value**: *[string/numeric/boolean] (required)* the value to be used for the option;
 - - - **icon**: *[string] (optional)* path to the icon to be used for the option;
-- - **possibility 2**: a document from a query on a mongo collection;
+- - **possibility 2**: a cursor from a query on a mongo collection;
 - **sourceValue**: *[string] (required if "source" is of type 2)* the name of the documents' field to be used as value in the option; it is possible to use the segment *":itemLang---"* that will be translated into the current language prefix;
 - **sourceName**: *[string] (required if "source" is of type 2)* the name of the documents' field to be used as display name in the option; it is possible to use the segment *":itemLang---"* that will be translated into the current language prefix;
 - **sourceNameTransformation**: *[object] (optional)* can contain two methods: *transform* and *antiTransform*, explained below;
 - - **transform(value, item)**: *[function] (required if *sourceNameTransformation* is defined)* a callback executed on every source's item; it receives the current *sourceName*'s value and the current item; transforms the value to be displayed in another form;
 - -  **antiTransform()** TO IMPLEMENT...
 - **icons**: *[boolean] (optional)* used to assign *"icons"* class for icons on options dropdown; **IMPORTANT**: it is required to be *true* if source is of type *1* and "icon" is setted on its elements;
-- **allowBlank**: *[boolean] (optional)* allow select none (default undefined option is created automatically); this options is meant to be used only if "source" is of type 2; otherwise is ignored, since with type 1 you can manually define the *"blank option"* in the array used as *"source"*;
+- **allowBlank**: *[boolean] (optional)* allow select none (default undefined option is created automatically);
 - **multi**: *[boolean] (optional)* defines the select as a *"multiple select"*; default to *false*;
 
 **note**: if you want to dinamically add options to a select field, then you need to re-initialize the materialize's plugin by calling `material_select()` on it.
@@ -175,6 +176,7 @@ By default every field is wrapped in a `<div class="row">`, but it's possible to
 
 - **skeleformGroup**: *[boolean] (mandatory)* indicates that the object represents a group of inline fields (*true* is the only value possible);
 - **size**: *[string] (optional)* materialize's grid system classes; by default the group does not create any column and inside of it each field creates its own;
+- **id**: *[string] (optional)* an optional id to assign to the skeleformGroup's `.row` wrapper div;
 - **classes**: *[array] (optional)* array of custom classes for the group's div container;
 - **fields**: *[array] (optional)* the normal schema of the fields to be displayed in the same row;
 
@@ -191,6 +193,29 @@ Every field in *Skeleform* must implement this methods:
 - **setValue(value)**: *[function] (mandatory)* receives the current unformatted field value; must format it to be displayed (if required) and set it on the proper *DOM* element of the field;
 
 Inside these methods (and everywhere in the field's code) calling `$getFieldById(templateInstance, schema)` is the preferred way to get the jQuery object wrapping the DOM of the main field's input element.
+
+
+### TIPS ABOUT THE CALLBACKS
+
+If you want to update another field's value from within a field's callback, the best way is to update the `fieldInstance.data.formInstance.data.item` object; this will reactively update the field's value;
+
+**Ex.:**
+In this example we will update the value of `username` field from within the `userId`'s `onChange` callback.
+
+    {
+        name: 'userId',
+        output: 'input',
+        i18n: false,
+        callbacks: {
+            onChange: function(value, fieldInstance) {
+                let userDocument = Skeletor.Data.Users.findOne({_id: value});
+
+                // setting the value on the formInstance's item object will reactively
+                // update the value of the 'username' field
+                fieldInstance.data.formInstance.data.item.username = userDocument.username;
+            }
+        }
+    }
 
 
 ### VALIDATION
