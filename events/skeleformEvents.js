@@ -33,7 +33,7 @@ setInvalid = function(id, schema, result) {
     }
 
     if (reasons.length === 1 && reasons[0] === 'shadowValue' && !isShadowField) {
-        skeleformSuccessStatus(id);
+        Skeleform.utils.skeleformSuccessStatus(id);
 
         id = id + 'ShadowConfirm';
         isShadowField = true;
@@ -63,7 +63,7 @@ setInvalid = function(id, schema, result) {
         }
     }
 
-    skeleformErrorStatus(id, errorString, schema);
+    Skeleform.utils.skeleformErrorStatus(id, errorString, schema);
 };
 
 
@@ -106,23 +106,23 @@ Skeleform.utils.skeleformValidateForm = skeleformValidateForm;
 
 
 //reset success and error status on the form
-skeleformResetStatus = function(id) {
-    let column = $('#' + id).closest('.col');
+Skeleform.utils.skeleformResetStatus = function(name) {
+    let column = $('#' + name).closest('.col');
 
-    if (id) {
-        column.alterClass('valid', '');
+    if (name) {
+        column.alterClass('valid invalid', '');
         column.find('.skeleformFieldAlert').html('');
     }
     else {
-        $('.col').alterClass('valid', '');
+        $('.col').alterClass('valid invalid', '');
         $('.skeleformFieldAlert').html('');
     }
 };
 
 
 //set success status
-skeleformSuccessStatus = function(id, schema) {
-    let selector = '#' + id;
+Skeleform.utils.skeleformSuccessStatus = function(name, schema) {
+    let selector = '#' + name;
     let column = $(selector).closest('.col');
     let fieldAlert = column.find('.skeleformFieldAlert');
 
@@ -130,20 +130,20 @@ skeleformSuccessStatus = function(id, schema) {
     fieldAlert.html('');
 
     if (schema && schema.shadowConfirm) {
-        skeleformSuccessStatus(id + 'ShadowConfirm');
+        Skeleform.utils.skeleformSuccessStatus(name + 'ShadowConfirm');
     }
 };
 
 
 //set error status
-skeleformErrorStatus = function(id, errorString, schema) {
+Skeleform.utils.skeleformErrorStatus = function(name, errorString, schema) {
     let selectors = [];
     let validation = schema.validation;
 
     if (validation.showErrorOn) {
         if (Array.isArray(validation.showErrorOn)) {
             for (id of validation.showErrorOn) {
-                selectors.push('#' + id);
+                selectors.push('#' + name);
             }
         }
         else {
@@ -151,7 +151,7 @@ skeleformErrorStatus = function(id, errorString, schema) {
         }
     }
     else {
-        selectors.push('#' + id);
+        selectors.push('#' + name);
     }
 
     selectors.forEach(function(selector) {
@@ -190,7 +190,7 @@ skeleformCleanForm = function() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     });
 
-    skeleformResetStatus();
+    Skeleform.utils.skeleformResetStatus();
 };
 
 
@@ -400,7 +400,7 @@ Template.skeleform.onRendered(function() {
     this.autorun(function() {
         if (data.skeleSubsReady.get()) {
             // clean validation alerts
-            skeleformResetStatus();
+            Skeleform.utils.skeleformResetStatus();
         }
     });
 

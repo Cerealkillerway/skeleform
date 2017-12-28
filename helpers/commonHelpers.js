@@ -240,7 +240,13 @@ skeleformGeneralHelpers = {
         return createFieldId(Template.instance(), name);
     },
     required: function() {
-        if ((this.schema.validation && this.schema.validation.min !== undefined) || this.schema.validation && this.schema.validation.type === 'date') return ' *';
+        let instance = Template.instance();
+        let validationOptions = this.schema.validation;
+
+        if (instance.data.schema.output === 'input') {
+            instance.forcedReloads.get();
+        }
+        if ((validationOptions && validationOptions.min !== undefined) || validationOptions && validationOptions.type === 'date') return ' *';
         return '';
     },
     fieldStyle: function(context) {

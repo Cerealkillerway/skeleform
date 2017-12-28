@@ -217,6 +217,48 @@ In this example we will update the value of `username` field from within the `us
         }
     }
 
+Sometimes you need to alter some field(s) schema(s) at runtime;
+you can always access all field(s) properties starting from a `fieldInstance` and update any of them; it's all reactive;
+
+Let' say that in the `userId.onChange` callback just seen here above you need to update the schema of the `email` field to make it required; The *SkeleUtils* package, that is part of the *Skeletor* project (as *Skeleform* is) has an handy function to retrieve a fieldInstance starting from the formInstance (accessible from within any fieldInstance at `fieldInstance.data.formInstance`) called `SkeleUtils.GlobalUtilities.getFieldInstance()`; *SkeleUtils* is exported by *Skeletor* so it's accessible from within your app by calling `Skeletor.Skeleutils`; so our example would be:
+
+    {
+        name: 'userId',
+        output: 'input',
+        i18n: false,
+        callbacks: {
+            onChange: function(value, fieldInstance) {
+                let emailField = Skeletor.SkeleUtils.GlobalUtilities.getFieldInstance(fieldInstance.data.formInstance, 'email');
+
+                // make the field required reactively
+                emailField.data.schema.validation = {min: 3};
+
+                // refresh field to recalculate associated helpers
+                // (such as 'required' helper that will add '*' to the field's label)
+                Skeletor.SkeleUtils.GlobalUtilities.refreshField(emailField);
+            }
+        }
+    }
+
+It is also possible to call some *Skeleform*'s functions if needed:
+
+#### `Skeletor.Skeleform.utils.skeleformResetStatus(fieldName)`  
+resets validation classes on the field;  
+**parameters**
+- *fieldName*: [string] the name of the field to be resetted; (accessible from the *fieldInstance* at `fieldInstance.data.schema.name`);  
+
+#### `Skeletor.Skeleform.utils.skeleformSuccessStatus(fieldName, fieldSchema)`  
+sets valid class on the field (eventually resets its invalid state);  
+**parameters**
+- *fieldName*: [string] the name of the field to be resetted; (accessible from the *fieldInstance* at `fieldInstance.data.schema.name`);
+- *schema*: [object] the field's schema (accessible from the *fieldInstance* at `fieldInstance.data.schema`);
+
+#### `Skeletor.Skeleform.utils.skeleformErrorStatus(name, errorString, schema)`  
+sets invalid class on the field and shows error (eventually resets its valid state);  
+**parameters**
+- *fieldName*: [string] the name of the field to be resetted; (accessible from the *fieldInstance* at `fieldInstance.data.schema.name`);
+- *errorString*: [string] a string describing the validation error occurred;
+- *schema*: [object] the field's schema (accessible from the *fieldInstance* at `fieldInstance.data.schema`);
 
 ### VALIDATION
 

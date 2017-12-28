@@ -19,5 +19,7 @@ Template.skeleformStaticTitle.helpers({
 });
 
 Template.skeleformStaticTitle.onCreated(function() {
+    this.isActivated = new ReactiveVar(true);
+    this.forcedReloads = new ReactiveVar(0);
     setReplicaIndex(this);
 });

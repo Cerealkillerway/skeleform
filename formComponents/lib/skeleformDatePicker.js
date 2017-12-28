@@ -14,8 +14,10 @@ Template.skeleformDatePicker.helpers({
 });
 
 Template.skeleformDatePicker.onCreated(function() {
-    let schema = this.data.schema;
     this.isActivated = new ReactiveVar(false);
+    this.forcedReloads = new ReactiveVar(0);
+
+    let schema = this.data.schema;
 
     setReplicaIndex(this);
     InvokeCallback(this, null, schema, 'onCreated');
@@ -106,7 +108,7 @@ Template.skeleformDatePicker.onRendered(function() {
                     setInvalid(id, schema, result);
                 }
                 else {
-                    skeleformSuccessStatus(id, schema);
+                    Skeleform.utils.skeleformSuccessStatus(id, schema);
                 }
 
                 InvokeCallback(this, value, schema, 'onChange');
@@ -130,7 +132,7 @@ Template.skeleformDatePicker.onRendered(function() {
                 setInvalid(id, schema, result);
             }
             else {
-                skeleformSuccessStatus(id, schema);
+                Skeleform.utils.skeleformSuccessStatus(id, schema);
             }
 
             InvokeCallback(this, value, schema, 'onChange');*/
@@ -217,7 +219,7 @@ Template.skeleformDatePicker.onRendered(function() {
             setInvalid(id, schema, result);
         }
         else {
-            skeleformSuccessStatus(id, schema);
+            Skeleform.utils.skeleformSuccessStatus(id, schema);
         }
 
         InvokeCallback(instance, value, schema, 'onChange');

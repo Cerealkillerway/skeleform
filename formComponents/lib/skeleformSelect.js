@@ -135,6 +135,7 @@ Template.skeleformSelect.helpers({
 // Events
 Template.skeleformSelect.onCreated(function() {
     this.isActivated = new ReactiveVar(false);
+    this.forcedReloads = new ReactiveVar(0);
 
     setReplicaIndex(this);
     InvokeCallback(this, null, this.data.schema, 'onCreated');
@@ -232,7 +233,7 @@ Template.skeleformSelect.onDestroyed(function() {
 
 Template.skeleformSelect.events({
     'blur select': function(event, instance) {
-        skeleformSuccessStatus('#' + instance.data.schema.name);
+        Skeleform.utils.skeleformSuccessStatus('#' + instance.data.schema.name);
     },
     'change select': function(event, instance) {
         // perform validation and callback invocation on change

@@ -3,3 +3,5 @@ Skeleform = {
     methods: {},
     utils: {}
 };
+
+Skeletor.Skeleform = Skeleform;

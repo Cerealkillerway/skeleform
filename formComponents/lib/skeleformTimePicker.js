@@ -13,8 +13,10 @@ Template.skeleformTimePicker.helpers({
 });
 
 Template.skeleformTimePicker.onCreated(function() {
-    let schema = this.data.schema;
     this.isActivated = new ReactiveVar(false);
+    this.forcedReloads = new ReactiveVar(0);
+
+    let schema = this.data.schema;
 
     setReplicaIndex(this);
     InvokeCallback(this, null, schema, 'onCreated');
