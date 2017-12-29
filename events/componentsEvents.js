@@ -16,9 +16,9 @@ Skeleform.addReplicaSetInstance = function(instance, replicaSetData, replicaFiel
 
     // the first time fields data coming from template helper must be nested one level more
     if (instance.i === 0) {
-        data.schema = {
+        data.schema-set({
             fields: [replicaFields]
-        };
+        });
 
         if (data.groupLevel) {
             data.groupLevel = data.groupLevel - 1;
@@ -50,7 +50,7 @@ Template.skeleformDefaultReplicaBtns.onRendered(function() {
     let data = this.data;
     let formInstance = data.formInstance;
     let replicaSetData = formInstance.replicaSets[data.replicaSet.name];
-    let replicaFields = data.schema;
+    let replicaFields = data.schema.get();
     let initCopies = replicaSetData.options.initCopies;
 
     this.autorun(() => {
@@ -96,7 +96,7 @@ Template.skeleformDefaultReplicaBtns.events({
         let data = instance.data;
         let formInstance = data.formInstance;
         let replicaSetData = formInstance.replicaSets[data.replicaSet.name];
-        let replicaFields = data.schema;
+        let replicaFields = data.schema.get();
 
         Skeleform.addReplicaSetInstance(instance, replicaSetData, replicaFields);
     },

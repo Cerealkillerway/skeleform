@@ -73,7 +73,7 @@ Template.skeleformImageUpload.onCreated(function() {
     this.isActivated = new ReactiveVar(false);
     this.forcedReloads = new ReactiveVar(0);
 
-    let schema = this.data.schema;
+    let schema = this.data.schema.get();
 
     setReplicaIndex(this);
     InvokeCallback(this, null, schema, 'onCreated');
@@ -200,7 +200,7 @@ Template.skeleformImageUpload.onDestroyed(function() {
 });
 Template.skeleformImageUpload.onRendered(function() {
     let editor = this.$('.editor');
-    let schema = this.data.schema;
+    let schema = this.data.schema.get();
     this.currentLang = FlowRouter.getQueryParam('lang');
 
     this.isActivated.set(true);
@@ -210,7 +210,7 @@ Template.skeleformImageUpload.onRendered(function() {
 Template.skeleformImageUpload.events = {
     'change .skeleImageUploader': function(event, instance) {
         let $canvasContainer = instance.$('.skeleCanvasContainer');
-        let schema = instance.data.schema;
+        let schema = instance.data.schema.get();
         let images = event.target.files;
 
         if (images.length === 0) {

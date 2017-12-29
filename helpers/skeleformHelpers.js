@@ -95,6 +95,12 @@ Template.skeleformBody.helpers({
 
     formatClasses: function(classes) {
         return classes ? classes.join(' ') : '';
+    },
+
+    createDataForField: function(data) {
+        data.schema = new ReactiveVar(data.schema);
+
+        return data;
     }
 });
 

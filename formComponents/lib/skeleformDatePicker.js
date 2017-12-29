@@ -17,7 +17,7 @@ Template.skeleformDatePicker.onCreated(function() {
     this.isActivated = new ReactiveVar(false);
     this.forcedReloads = new ReactiveVar(0);
 
-    let schema = this.data.schema;
+    let schema = this.data.schema.get();
 
     setReplicaIndex(this);
     InvokeCallback(this, null, schema, 'onCreated');
@@ -76,7 +76,7 @@ Template.skeleformDatePicker.onDestroyed(function() {
 
 Template.skeleformDatePicker.onRendered(function() {
     let data = this.data.item;
-    let schema = this.data.schema;
+    let schema = this.data.schema.get();
     let $element = $getFieldById(this, schema);
 
     // activates validation on set
@@ -139,7 +139,7 @@ Template.skeleformDatePicker.onRendered(function() {
         }
     };
 
-    var options = schema.pickerOptions;
+    let options = schema.pickerOptions;
 
     // format used to display
     if (options && options.format) {

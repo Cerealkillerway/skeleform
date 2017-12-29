@@ -110,7 +110,7 @@ Template.skeleformSelect.helpers({
     },
     isMultiple: function() {
         const instance = Template.instance();
-        let schema = instance.data.schema;
+        let schema = instance.data.schema.get();
 
         if (schema.multi) {
             return 'multiple';
@@ -137,23 +137,25 @@ Template.skeleformSelect.onCreated(function() {
     this.isActivated = new ReactiveVar(false);
     this.forcedReloads = new ReactiveVar(0);
 
+    let schema = this.data.schema.get();
+
     setReplicaIndex(this);
-    InvokeCallback(this, null, this.data.schema, 'onCreated');
+    InvokeCallback(this, null, schema, 'onCreated');
 
     // register this on form' store
     this.data.formInstance.Fields.push(this);
 
     this.i18n = () => {
-        $getFieldById(this, this.data.schema).material_select();
+        $getFieldById(this, schema).material_select();
     };
     this.getValue = () => {
         //SkeleUtils.GlobalUtilities.logger('select validation', 'skeleformFieldValidation');
-        return $getFieldById(this, this.data.schema).val();
+        return $getFieldById(this, schema).val();
     };
     this.isValid = () => {
         var formInstance = this.data.formInstance;
 
-        return Skeleform.validate.checkOptions(this.getValue(), this.data.schema, formInstance.data.schema, formInstance.data.item);
+        return Skeleform.validate.checkOptions(this.getValue(), schema, formInstance.data.schema, formInstance.data.item);
     };
     this.setValue = (value) => {
         if (!value) {
@@ -161,9 +163,8 @@ Template.skeleformSelect.onCreated(function() {
         }
 
         const instance = Template.instance();
-        let schema = this.data.schema;
         let name = schema.name;
-        let $field = $getFieldById(instance, instance.data.schema);
+        let $field = $getFieldById(instance, schema);
 
         InvokeCallback(this, value, schema, 'onChange');
 
@@ -193,7 +194,7 @@ Template.skeleformSelect.onCreated(function() {
 });
 
 Template.skeleformSelect.onRendered(function() {
-    let schema = this.data.schema;
+    let schema = this.data.schema.get();
 
     // start plugin
     let $field = $getFieldById(this, schema);
@@ -233,12 +234,12 @@ Template.skeleformSelect.onDestroyed(function() {
 
 Template.skeleformSelect.events({
     'blur select': function(event, instance) {
-        Skeleform.utils.skeleformSuccessStatus('#' + instance.data.schema.name);
+        Skeleform.utils.skeleformSuccessStatus('#' + instance.data.schema.get().name);
     },
     'change select': function(event, instance) {
         // perform validation and callback invocation on change
         let value = instance.getValue();
-        let schema = instance.data.schema;
+        let schema = instance.data.schema.get();
 
         instance.isValid();
 

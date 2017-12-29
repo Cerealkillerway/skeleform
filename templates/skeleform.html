@@ -62,11 +62,11 @@
                     {{!-- fields natively at level 0 (not grouped) --}}
 
                     <div class="row">
-                        {{> Template.dynamic template=template data=data}}
+                        {{> Template.dynamic template=template data=(createDataForField data)}}
                     </div>
                 {{else}}
                     {{!-- fields grouped --}}
-                    {{> Template.dynamic template=template data=data}}
+                    {{> Template.dynamic template=template data=(createDataForField data)}}
                 {{/if}}
             {{/if}}
         {{/with}}

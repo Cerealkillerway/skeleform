@@ -16,7 +16,7 @@ Template.skeleformTimePicker.onCreated(function() {
     this.isActivated = new ReactiveVar(false);
     this.forcedReloads = new ReactiveVar(0);
 
-    let schema = this.data.schema;
+    let schema = this.data.schema.get();
 
     setReplicaIndex(this);
     InvokeCallback(this, null, schema, 'onCreated');
@@ -64,7 +64,7 @@ Template.skeleformTimePicker.onDestroyed(function() {
 
 Template.skeleformTimePicker.onRendered(function() {
     let data = this.data.item;
-    let schema = this.data.schema;
+    let schema = this.data.schema.get();
     this.setCounter = 0;
 
     // activates validation on set
@@ -149,7 +149,7 @@ Template.skeleformTimePicker.onRendered(function() {
         }
     }
 
-    let $field = $getFieldById(this, this.data.schema);
+    let $field = $getFieldById(this, schema);
 
     $field.pickatime(this.initOptions);
     this.pickerInstance = $field.pickatime('picker');

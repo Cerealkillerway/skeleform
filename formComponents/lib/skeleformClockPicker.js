@@ -16,7 +16,7 @@ Template.skeleformClockPicker.onCreated(function() {
     this.isActivated = new ReactiveVar(false);
     this.forcedReloads = new ReactiveVar(0);
 
-    let schema = this.data.schema;
+    let schema = this.data.schema.get();
 
     setReplicaIndex(this);
     InvokeCallback(this, null, schema, 'onCreated');
@@ -63,7 +63,7 @@ Template.skeleformClockPicker.onDestroyed(function() {
 
 Template.skeleformClockPicker.onRendered(function() {
     let data = this.data.item;
-    let schema = this.data.schema;
+    let schema = this.data.schema.get();
     let options = schema.pickerOptions;
 
     // activates validation on set

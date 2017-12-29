@@ -56,7 +56,7 @@ Template.skeleformEditor.onCreated(function() {
     this.isActivated = new ReactiveVar(false);
     this.forcedReloads = new ReactiveVar(0);
 
-    let schema = this.data.schema;
+    let schema = this.data.schema.get();
 
     setReplicaIndex(this);
     InvokeCallback(this, null, schema, 'onCreated');
@@ -97,7 +97,7 @@ Template.skeleformEditor.onCreated(function() {
         if (value === undefined) {
             value = '';
         }
-        $getFieldById(this, this.data.schema).materialnote('code', value);
+        $getFieldById(this, schema).materialnote('code', value);
     };
 });
 Template.skeleformEditor.onDestroyed(function() {
@@ -107,7 +107,7 @@ Template.skeleformEditor.onDestroyed(function() {
 });
 Template.skeleformEditor.onRendered(function() {
     let editor = this.$('.editor');
-    let schema = this.data.schema;
+    let schema = this.data.schema.get();
     let toolbar = schema.toolbar;
     let imageParams = this.data.schema.image;
     this.currentLang = FlowRouter.getQueryParam('lang');
@@ -131,9 +131,8 @@ Template.skeleformEditor.onRendered(function() {
             onKeyup: (event) => {
                 // perform validation and callback invocation on change
                 let value = this.getValue();
-                let schema = this.data.schema;
                 let result = this.isValid();
-                let id = this.data.schema.name;
+                let id = schema.name;
 
                 if (!result.valid) {
                     setInvalid(id, schema, result);

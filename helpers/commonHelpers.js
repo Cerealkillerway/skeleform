@@ -236,16 +236,19 @@ skeleformGeneralHelpers = {
             return TAPi18n.__(name + '_lbl');
         }
     },
+    schema: function() {
+        return Template.instance().data.schema.get();
+    },
     field: function(name) {
         return createFieldId(Template.instance(), name);
     },
     required: function() {
         let instance = Template.instance();
-        let validationOptions = this.schema.validation;
+        let validationOptions = this.schema.get().validation;
 
-        if (instance.data.schema.output === 'input') {
+        /*if (instance.data.schema.output === 'input') {
             instance.forcedReloads.get();
-        }
+        }*/
         if ((validationOptions && validationOptions.min !== undefined) || validationOptions && validationOptions.type === 'date') return ' *';
         return '';
     },
@@ -261,7 +264,7 @@ skeleformGeneralHelpers = {
     fieldValue: function(template) {
         let data = template.data;
 
-        setFieldValue(template, data.formInstance.data.item, data.schema);
+        setFieldValue(template, data.formInstance.data.item, data.schema.get());
     }
 };
 

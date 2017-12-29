@@ -74,7 +74,7 @@ skeleformValidateForm = function(data, Fields) {
 
     try {
         Fields.forEach(function(field) {
-            let fieldSchema = field.data.schema;
+            let fieldSchema = field.data.schema.get();
             let $field = $getFieldById(field, fieldSchema);
 
             if ($field.hasClass('skeleValidate')) {
@@ -88,7 +88,7 @@ skeleformValidateForm = function(data, Fields) {
     }
     catch(error) {
         valid = false;
-        let schema = error.field.data.schema;
+        let schema = error.field.data.schema.get();
         let id = schema.name.replace('.', '\\.');
         let offsetCorrection = 80;
 
@@ -260,7 +260,7 @@ skeleformGatherData = function(formContext, Fields) {
     let replicasToClean = [];
 
     Fields.forEach(function(field) {
-        let fieldSchema = field.data.schema;
+        let fieldSchema = field.data.schema.get();
         let $field = $getFieldById(field, fieldSchema);
         let fieldName;
 

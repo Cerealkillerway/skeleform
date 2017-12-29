@@ -13,7 +13,7 @@ Template.skeleformCheckBox.helpers({
     },
     isCheckBox: function() {
         const instance = Template.instance();
-        let schema = instance.data.schema;
+        let schema = instance.data.schema.get();
 
         if (!schema.renderAs || schema.renderAs === 'checkbox') {
             return true;
@@ -22,7 +22,7 @@ Template.skeleformCheckBox.helpers({
     },
     switchLabel: function(type) {
         const instance = Template.instance();
-        let schema = instance.data.schema;
+        let schema = instance.data.schema.get();
 
         if (type === 'off') {
             if (schema.labels && schema.labels.off) {
@@ -45,7 +45,7 @@ Template.skeleformCheckBox.onCreated(function() {
     this.isActivated = new ReactiveVar(false);
     this.forcedReloads = new ReactiveVar(0);
 
-    let schema = this.data.schema;
+    let schema = this.data.schema.get();
 
     setReplicaIndex(this);
     InvokeCallback(this, null, this.data.schema, 'onCreated');
@@ -95,7 +95,7 @@ Template.skeleformCheckBox.onDestroyed(function() {
 
 Template.skeleformCheckBox.onRendered(function() {
     this.isActivated.set(true);
-    InvokeCallback(this, null, this.data.schema, 'onRendered');
+    InvokeCallback(this, null, this.data.schema.get(), 'onRendered');
 });
 
 
@@ -107,6 +107,6 @@ Template.skeleformCheckBox.events({
 
         instance.isValid();
 
-        InvokeCallback(instance, value, schema, 'onChange');
+        InvokeCallback(instance, value, schema.get(), 'onChange');
     },
 });
