@@ -14,7 +14,6 @@ Template.skeleformClockPicker.helpers({
 
 Template.skeleformClockPicker.onCreated(function() {
     this.isActivated = new ReactiveVar(false);
-    this.forcedReloads = new ReactiveVar(0);
 
     let schema = this.data.schema.get();
 

@@ -220,7 +220,10 @@ In this example we will update the value of `username` field from within the `us
 Sometimes you need to alter some field(s) schema(s) at runtime;
 you can always access all field(s) properties starting from a `fieldInstance` and update any of them; it's all reactive;
 
-Let' say that in the `userId.onChange` callback just seen here above you need to update the schema of the `email` field to make it required; The *SkeleUtils* package, that is part of the *Skeletor* project (as *Skeleform* is) has an handy function to retrieve a fieldInstance starting from the formInstance (accessible from within any fieldInstance at `fieldInstance.data.formInstance`) called `SkeleUtils.GlobalUtilities.getFieldInstance()`; *SkeleUtils* is exported by *Skeletor* so it's accessible from within your app by calling `Skeletor.Skeleutils`; so our example would be:
+Let' say that in the `userId.onChange` callback just seen here above you need to update the schema of the `email` field to make it required;  
+The schema of every fiels is wrapped inside a reactive var, that means that calling `set()` on it will cause the rerun of every function that uses 'get()' from it; in other words setting a new value on a field' schema will re-render it;
+
+The *SkeleUtils* package, that is part of the *Skeletor* project (as *Skeleform* is) has an handy function to retrieve a fieldInstance starting from the formInstance (accessible from within any fieldInstance at `fieldInstance.data.formInstance`) called `SkeleUtils.GlobalUtilities.getFieldInstance()`; *SkeleUtils* is exported by *Skeletor* so it's accessible from within your app by calling `Skeletor.Skeleutils`; so our example would be:
 
     {
         name: 'userId',
@@ -229,13 +232,13 @@ Let' say that in the `userId.onChange` callback just seen here above you need to
         callbacks: {
             onChange: function(value, fieldInstance) {
                 let emailField = Skeletor.SkeleUtils.GlobalUtilities.getFieldInstance(fieldInstance.data.formInstance, 'email');
+                let emailSchema = emailField.data.schema.get();
 
                 // make the field required reactively
-                emailField.data.schema.validation = {min: 3};
+                emailSchema.validation = {min: 3};
 
-                // refresh field to recalculate associated helpers
-                // (such as 'required' helper that will add '*' to the field's label)
-                Skeletor.SkeleUtils.GlobalUtilities.refreshField(emailField);
+                // set the new schema (this will refresh the field)
+                emailField.data.schema.set(emailSchema);
             }
         }
     }
