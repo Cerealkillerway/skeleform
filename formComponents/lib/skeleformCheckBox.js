@@ -93,8 +93,17 @@ Template.skeleformCheckBox.onDestroyed(function() {
 });
 
 Template.skeleformCheckBox.onRendered(function() {
+    let schema = this.data.schema.get();
+
     this.isActivated.set(true);
-    InvokeCallback(this, null, this.data.schema.get(), 'onRendered');
+    InvokeCallback(this, null, schema, 'onRendered');
+
+    // on checkboxes it is necessary to fire onChange on load since for "false" value, the "setValue()" never happens
+    if (this.data.formInstance.data.skeleSubsReady.get()) {
+        if (this.getValue() === false) {
+            InvokeCallback(this, this.getValue(), schema, 'onChange');
+        }
+    }
 });
 
 
