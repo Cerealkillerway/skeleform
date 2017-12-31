@@ -86,6 +86,7 @@ this is just for debug purposes (to temporarily disable a field);
 
 - **tag**: *[string] (optional)* the tag to use to wrap the title (default `<h3>`);
 - **classes**: *[array of strings] (optional)* array of classes to use on the *tag*;
+- **labelType**: *[string] (optional)* defines the suffix used for the lookup of the label's i18n string (default *_lbl*; available values: `title` for *_title*, `text` for *text*);
 
 #### 2.2.3 input
 

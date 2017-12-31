@@ -232,6 +232,9 @@ skeleformGeneralHelpers = {
             case 'title':
             return TAPi18n.__(name + '_title');
 
+            case 'text':
+            return TAPi18n.__(name + '_text');
+
             default:
             return TAPi18n.__(name + '_lbl');
         }

@@ -199,11 +199,11 @@ skeleformHandleResult = function(error, result, type, data, paths) {
     if (error) {
         if (error.error === 'unauthorized') {
             Materialize.toast(TAPi18n.__('permissions_error'), 5000, 'permissionsError');
-            SkeleUtils.GlobalUtilities.logger(error, skeleformInstance, false, true);
+            SkeleUtils.GlobalUtilities.logger(error, 'skeleWarning', false, true);
         }
         else {
             Materialize.toast(TAPi18n.__('serverError_error'), 5000, 'error');
-            SkeleUtils.GlobalUtilities.logger(error, skeleformInstance, false, true);
+            SkeleUtils.GlobalUtilities.logger(error, 'skeleWarning', false, true);
         }
     }
     else {
@@ -485,7 +485,7 @@ Template.skeleformCreateButtons.events({
         }
 
         // select method to call for this operation
-        if (formContext.methods && formContext.methods.insert) {
+        if (schema.__methods && schema.__methods.create) {
             method = schema.__methods.create;
         }
         else {
@@ -502,7 +502,7 @@ Template.skeleformCreateButtons.events({
                 $('#gearLoadingModal').openModal();
             }
 
-            SkeleUtils.GlobalUtilities.logger('will no call method: ' + method + ' data:', 'skeleform');
+            SkeleUtils.GlobalUtilities.logger('will now call method: ' + method + ' data:', 'skeleform');
             SkeleUtils.GlobalUtilities.logger(data, 'skeleform');
             SkeleUtils.GlobalUtilities.logger('schema name: ' + formContext.schemaName, 'skeleform');
             Meteor.call(method, data, formContext.schemaName, function(error, result) {
@@ -534,7 +534,7 @@ Template.skeleformUpdateButtons.events({
         }
 
         // select method to call for this operation
-        if (formContext.methods && formContext.methods.update) {
+        if (schema.__methods && schema.__methods.update) {
             method = schema.__methods.update;
         }
         else {
