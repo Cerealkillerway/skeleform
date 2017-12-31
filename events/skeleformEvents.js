@@ -486,10 +486,10 @@ Template.skeleformCreateButtons.events({
 
         // select method to call for this operation
         if (formContext.methods && formContext.methods.insert) {
-            method = formContext.methods.insert;
+            method = schema.__methods.create;
         }
         else {
-            method = configuration.defaultMethods.insert;
+            method = configuration.defaultMethods.create;
         }
 
         // if necessary launch form callbacks!
@@ -535,7 +535,7 @@ Template.skeleformUpdateButtons.events({
 
         // select method to call for this operation
         if (formContext.methods && formContext.methods.update) {
-            method = formContext.methods.update;
+            method = schema.__methods.update;
         }
         else {
             method = configuration.defaultMethods.update;

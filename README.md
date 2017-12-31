@@ -5,7 +5,7 @@
     /_______  /__|_ \\___  >____/\___  >__|  \____/|__|  |__|_|  /
             \/     \/    \/          \/                        \/
 
-#### INTRO
+#### 0 INTRO
 **Skeleform** package is part of the **Skeletor** project and is not meant be used alone.
 
 Inside a Skeletor app this package is used to build and validate forms; it supports a large number of field types and options and it's extensible.
@@ -13,7 +13,7 @@ It is built on top of Skeletor and MaterializeCSS.
 If you have any problem using it, please have a look to the "troubleshooting" section at the bottom.
 
 
-### SCHEMA OPTIONS
+### 1 SCHEMA OPTIONS
 
 - **__collection**: *[string] (required)* name of collection that is manipulated by this form;
 - **__toolbar**: *[object] (optional)*
@@ -30,6 +30,10 @@ If you have any problem using it, please have a look to the "troubleshooting" se
 - **__options**:
 - - **loadingModal** *[boolean] (optional)*: if true use a loading modal while performing skeleform operations; default to false;
 - - **tracked**: *[boolean] (optional)* if true save to each document data about user and timestamp of creation and last update; default to false;
+- **__methods**: *[object] (optional)* a dictionary of custom methods that skeleform and skelelist will use to create, update, delete documents on this schema; (default to standard skeleform methods)
+- - **create**: *[string] (optional)* nane of custom method to be called for new documents creation (default to `skeleCreateDocument`);
+- - **update**: *[string] (optional)* name of custom method to be called when updating a document (default to `skeleUpdateDocument`);
+- - **delete**: *[string] (optional)* name of custom method to be called for deleting documents (default to `skeleDeleteDocument`);
 - **__listView**: *[object] (optional)* skelelist options; see the **Skelelist package**'s *readme* for details;
 - **fields**: *[Array of Objects] (mandatory)* each object in this array represents a field that can have the following properties:
 - **formCallbacks**: *[object] (optional)* dictionary of callbacks executed on the form;
@@ -37,9 +41,9 @@ If you have any problem using it, please have a look to the "troubleshooting" se
 - - **beforeSave(formDataContext, gatheredValue)**: *[function] (optional)* callback executed just before saving (before creating and before updating) the form; it receives the form's data context and the values of all form's field gathered by Skeleform;
 - - **onClose(currentDocument, formInstance)**: *[function] (optional)* callback fired when the form is destroyed: it receives the currentDocument (if any) and the form instance as arguments;
 
-### SCHEMA FIELDS OPTIONS
+### 2 SCHEMA FIELDS OPTIONS
 
-#### Generic options (available for all kind of fields)
+#### 2.1 Generic options (available for all kind of fields)
 
 - **__listView**: *[object] (optional)* options for the field in the list view; see the **Skelelist package**'s *readme* for details;
 - **name**: *[String] (required)* the name of the field **(MUST be an UNIQUE identifier)**;
@@ -69,21 +73,21 @@ If you have any problem using it, please have a look to the "troubleshooting" se
 - - **maxCopies**: *[number] (optional)* the maximum number of copies of the replica set allowed (default *infinite*);
 - - **initCopies**: *[number] (optional)* the number of copies of the replica set to include in the form during the first render (default *1*);
 
-#### Field specific options:
+#### 2.2 Field specific options:
 
 Other than the previous options, each field can have specific options depending on its *output* type:
 
-#### none
+#### 2.2.1 none
 
 A filed with `output: "none"` will not be displayed (and so it's never gathered or validated by **Skeleform**);
 this is just for debug purposes (to temporarily disable a field);
 
-#### staticTitle
+#### 2.2.2 staticTitle
 
 - **tag**: *[string] (optional)* the tag to use to wrap the title (default `<h3>`);
 - **classes**: *[array of strings] (optional)* array of classes to use on the *tag*;
 
-#### input
+#### 2.2.3 input
 
 - **icon**: *[string] (optional)* materialize's icon class;
 - **renderAs**: *[string] (optional)* type of input field to render (available values: *"password", "text", "textarea"*); default to "text"; when using the *"password"* option, the field is not gathered for submit if left empty; **IMPORTANT**: when using *"password"* option don't set *"max"* validation option, since the value is hashed with sha256 (becomes longer);
@@ -93,7 +97,7 @@ this is just for debug purposes (to temporarily disable a field);
 - **charCounter**: *[number] (optional)* enables the materializeCSS's character counter plugin; **IMPORTANT**: the character counter does not set the *"maxlength"* property on the input (this is done by using validation -> max);
 
 
-#### checkBox
+#### 2.2.4 checkBox
 
 - **renderAs**: *[string] (optional)* type of boolean selector to display (available values: *"checkbox", "switch"*); default to *"checkbox"*;
 - **labels**: *[object] (optional)* to be used with *renderAs: "switch"*; can contain 2 (optionals) keys (*"on", "off"*) containing the two strings to be used as i18n strings for the respectives switch states; if it's not provided, the default *"yes_lbl"* and *"no_lbl"* are used;
@@ -101,7 +105,7 @@ this is just for debug purposes (to temporarily disable a field);
 - - **off**: *[string] (optional)* i18n string for switch *"off"* state (default *"no_lbl"*; note that *"_lbl"* is appended automatically);
 
 
-#### editor
+#### 2.2.5 editor
 
 - **toolbar**: *[string] (optional)* specifies the toolbar to use (available values: *"minimal", "default", "full"*);
 - **height**: *[integer] (optional)* the pre-setted editor's height in pixels (default 400);
@@ -115,7 +119,7 @@ this is just for debug purposes (to temporarily disable a field);
 - - **height**: *[integer] (optional)* height of the video frame;
 
 
-#### select
+#### 2.2.6 select
 
 - **source**: *[array of objects / mongo cursor] (required)* data source for options; must be an array of objects used to create the options of the field;each element of the array can be:
 - - **possibility 1** *[object]* an object with these fields:
@@ -135,25 +139,25 @@ this is just for debug purposes (to temporarily disable a field);
 **note**: if you want to dinamically add options to a select field, then you need to re-initialize the materialize's plugin by calling `material_select()` on it.
 
 
-#### datePicker
+#### 2.2.7 datePicker
 
 - **icon**: *[string] (optional)* materialize's icon class;
 - **pickerOptions**: *[object] (optional)* dictionary of init options to override when starting the pickadate plugin (more info at http://amsul.ca/pickadate.js/date/);
 
 
-#### timePicker
+#### 2.2.8 timePicker
 
 - **icon**: *[string] (optional)* materialize's icon class;
 - **pickerOptions**: *[object] (optional)* dictionary of init options to override when starting the pickatime plugin (more info at http://amsul.ca/pickadate.js/time);
 
 
-#### clockPicker
+#### 2.2.9 clockPicker
 
 - **icon**: *[string] (optional)* materialize's icon class;
 - **pickerOptions**: *[object] (optional)* dictionary of init options to override when starting the clockpicker plugin (more info at https://github.com/weareoutman/clockpicker and https://github.com/chingyawhao/materialize-clockpicker);
 
 
-#### imageUpload
+#### 2.2.10 imageUpload
 
 This type of field automatically tests that the selected file(s) matches an image type;
 
@@ -170,7 +174,7 @@ This type of field automatically tests that the selected file(s) matches an imag
 - - **quality**: *[number 0~1] (optional)* the quality used for dataUrl conversion of the image (default 1);
 
 
-#### SKELEFORMGROUP (DISPLAYING INLINE)
+#### 3 SKELEFORMGROUP (DISPLAYING INLINE)
 
 By default every field is wrapped in a `<div class="row">`, but it's possible to display two or more fields in the same row by wrapping them into an object in the schema; this object must have this form:
 
@@ -181,7 +185,7 @@ By default every field is wrapped in a `<div class="row">`, but it's possible to
 - **fields**: *[array] (optional)* the normal schema of the fields to be displayed in the same row;
 
 
-### CUSTOM FIELDS CREATION
+### 4 CUSTOM FIELDS CREATION
 
 Every field in *Skeleform* must implement this methods:
 
@@ -195,7 +199,9 @@ Every field in *Skeleform* must implement this methods:
 Inside these methods (and everywhere in the field's code) calling `$getFieldById(templateInstance, schema)` is the preferred way to get the jQuery object wrapping the DOM of the main field's input element.
 
 
-### TIPS ABOUT THE CALLBACKS
+### 5 TIPS ABOUT THE CALLBACKS
+
+#### 5.1 UPDATE FIELD VALUES
 
 If you want to update another field's value from within a field's callback, the best way is to update the `fieldInstance.data.formInstance.data.item` object; this will reactively update the field's value;
 
@@ -216,6 +222,8 @@ In this example we will update the value of `username` field from within the `us
             }
         }
     }
+
+#### 5.2 UPDATE FIELD SCHEMAS
 
 Sometimes you need to alter some field(s) schema(s) at runtime;
 you can always access all field(s) properties starting from a `fieldInstance` and update any of them; it's all reactive;
@@ -243,6 +251,8 @@ The *SkeleUtils* package, that is part of the *Skeletor* project (as *Skeleform*
         }
     }
 
+#### 5.3 AVAILABLE SKELEFORM FUNCTIONS
+
 It is also possible to call some *Skeleform*'s functions if needed:
 
 #### `Skeletor.Skeleform.utils.skeleformResetStatus(fieldName)`  
@@ -263,7 +273,7 @@ sets invalid class on the field and shows error (eventually resets its valid sta
 - *errorString*: [string] a string describing the validation error occurred;
 - *schema*: [object] the field's schema (accessible from the *fieldInstance* at `fieldInstance.data.schema`);
 
-### VALIDATION
+### 6 VALIDATION
 
 The method `isValid()` should perform the field's validation when required and return a *"result"* object with this form:
 
@@ -273,47 +283,29 @@ The method `isValid()` should perform the field's validation when required and r
 The `Skeleform.validate.checkOptions()` global function is the standard way to perform validity check; it implements all needed *type*, *length* and *unicity* checks;
 
 
-##### CUSTOM INVALID MESSAGE
+##### 6.1 CUSTOM INVALID MESSAGE
 
 If it's necessary to use a custom invalid message it is possible to add the field *"invalidMessages"* to the "result" object;
 
 - **invalidMessages**: *[object] (optional)* should be a dictionary of custom i18n strings to use for each validation type;
 
 
-### OTHER THAN SCHEMA
+### 7 ABOUT METHODS
 
-Skeleforms invokes a **Meteor method** once gathered and validated the form's data; the method persists the data on the server; it is set to use a default method that will persist your data as a new document in the collection defined on the schema; anyway it is possible to make it call a custom method;
-the method to use is not defined on the schema but is part of the data context passed to the skeleform instance.
-Ex.: the *userCreate* template:
+Skeleforms invokes a **Meteor method** once gathered and validated the form's data to persist it on the server;  
+It is set to use 3 default methods for the 3 basic operations:
 
-    Template.userCreate.helpers({
-        data: function() {
-            const instance = Template.instance();
-            let context = {};
-            let username = FlowRouter.getParam('username');
+- `skeleCreateDocument`: for new documents creation;
+- `skeleUpdateDocument`: for updating documents;
+- `skeleDeleteDocument`: for deleting documents;
 
-            if (username && instance.skeleSubsReady.get()) {
-                context.item = Skeletor.Data.Users.findOne({username: username});
-                context.item.userEmail = context.item.emails[0].address;
-            }
+These methods, before doing the actual document creation, update or delete perform the followings:
 
-            context.schemaName = 'Users_default';
-            context.schema = Skeletor.Schemas.Users_default;
-            context.methods = {
-                insert: 'insertUser',
-                update: 'updateUser'
-            };
-            context.skeleSubsReady = instance.skeleSubsReady;
+ - call `SkeleUtils.GlobalUtilities.checkPermission()` to check that the current user have the right permissions to perform the operation;
+ - for create or update, validate the collected data against the schema; this provide a server-side too security check on the data to be saved;
+ - if required add the "tracked" object to store informations about the current action (see `__options.tracked` in the **schema options** - chapter 1);
 
-            return context;
-        }
-    });
-
-it provides *methods* object in the data context; than the template will invoke **Skeleform** passing that data context to it:
-
-    {{> skeleform data}}
-
-### TROUBLESHOOTING
+### 8 TROUBLESHOOTING
 
 Experimenting errors in your form? Try the followings:
 
