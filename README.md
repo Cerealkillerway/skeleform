@@ -6,6 +6,7 @@
             \/     \/    \/          \/                        \/
 
 #### 0 INTRO
+
 **Skeleform** package is part of the **Skeletor** project and is not meant be used alone.
 
 Inside a Skeletor app this package is used to build and validate forms; it supports a large number of field types and options and it's extensible.
