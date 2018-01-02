@@ -221,32 +221,33 @@ skeleformHandleResult = function(error, result, type, data, paths) {
             break;
         }
 
-        Materialize.toast(content, 1300, 'success', function() {
-            let redirectPath = paths['redirectOn' + type.capitalize()];
+        Materialize.toast(content, 1300, 'success');
 
-            // if the form is setted up for a redirect after the current action -> redirect
-            if (redirectPath) {
-                let params = createPath(redirectPath, data);
+        // handle redirect
+        let redirectPath = paths['redirectOn' + type.capitalize()];
 
-                // if updating, maybe the fields that are dynamic segments have not been gathered (because they are unchanged);
-                // in that case they are undefined in the "data" object so we need to get them from current url
-                _.each(params.params, function(param, paramName) {
-                    if (param === undefined) {
-                        params.params[paramName] = FlowRouter.getParam(paramName);
-                    }
-                });
+        // if the form is setted up for a redirect after the current action -> redirect
+        if (redirectPath) {
+            let params = createPath(redirectPath, data);
 
-                params.queryParams.lang = FlowRouter.getQueryParam('lang');
+            // if updating, maybe the fields that are dynamic segments have not been gathered (because they are unchanged);
+            // in that case they are undefined in the "data" object so we need to get them from current url
+            _.each(params.params, function(param, paramName) {
+                if (param === undefined) {
+                    params.params[paramName] = FlowRouter.getParam(paramName);
+                }
+            });
 
-                Session.set('currentItem', undefined);    // reset skelelist's setted currentItem
+            params.queryParams.lang = FlowRouter.getQueryParam('lang');
 
-                FlowRouter.go(redirectPath[0], params.params, params.queryParams);
-            }
-            // otherwise scroll to top
-            else {
-                SkeleUtils.GlobalUtilities.scrollTo(0, configuration.animations.scrollTop);
-            }
-        });
+            Session.set('currentItem', undefined);    // reset skelelist's setted currentItem
+
+            FlowRouter.go(redirectPath[0], params.params, params.queryParams);
+        }
+        // otherwise scroll to top
+        else {
+            SkeleUtils.GlobalUtilities.scrollTo(0, configuration.animations.scrollTop);
+        }
     }
 };
 
