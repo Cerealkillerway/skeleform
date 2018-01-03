@@ -263,11 +263,23 @@ skeleformGeneralHelpers = {
         if (!size) return 's12 m6';
         return size;
     },
-    // sets the value on the field, used by most field types
+
     fieldValue: function(template) {
+        // sets the value on the field, used by most field types
         let data = template.data;
 
         setFieldValue(template, data.formInstance.data.item, data.schema.get());
+    },
+    formatClasses: function(classes) {
+        if (!classes) {
+            return '';
+        }
+
+        if (Array.isArray(classes)) {
+            return classes ? classes.join(' ') : '';
+        }
+
+        return classes;
     }
 };
 
