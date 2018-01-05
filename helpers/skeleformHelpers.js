@@ -94,7 +94,10 @@ Template.skeleformBody.helpers({
     },
 
     formatClasses: function(classes) {
-        return classes ? classes.join(' ') : '';
+        if (Array.isArray(classes)) {
+            return classes.join(' ');
+        }
+        return classes;
     },
 
     createDataForField: function(data) {

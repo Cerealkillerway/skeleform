@@ -37,14 +37,23 @@ Skeleform.addReplicaSetInstance = function(instance, replicaSetData, replicaFiel
         )
     });
 
-    instance.i++;
+    if (instance.replicaIndex !== 1) {
+        instance.i++;
+    }
 }
+
+
+Template.skeleformReplicaSet.onRendered(function() {
+    //console.log(this.data);
+});
+
 
 Template.skeleformDefaultReplicaBtns.onCreated(function() {
     let data = this.data;
 
     this.replicaIndex = data.formInstance.replicaSets[data.replicaSet.name].index;
 });
+
 
 Template.skeleformDefaultReplicaBtns.onRendered(function() {
     let data = this.data;

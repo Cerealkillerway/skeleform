@@ -600,3 +600,7 @@ Template.skeleformStaticAddons.events({
         }
     }
 });
+
+Template.skeleformBody.onRendered(function() {
+    //console.log(this.data);
+});

@@ -66,6 +66,7 @@ Package.onUse(function(api) {
         //'lib/jquery.multi-select.js',
         'helpers/commonHelpers.js',
         'helpers/skeleformHelpers.js',
+        'helpers/componentHelpers.js',
         'events/skeleformEvents.js',
         'events/componentsEvents.js'
     ],

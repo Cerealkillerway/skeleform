@@ -1,0 +1,1 @@
+Template.skeleformReplicaSet.helpers(skeleformGeneralHelpers);

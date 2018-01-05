@@ -29,21 +29,8 @@
 
                 {{#if data.schema.replicaSet}}
                     {{!-- handle replica sets of skeleform groups --}}
+                    {{> skeleformReplicaSet data=data}}
 
-                    <div class="skeleformReplicaSet">
-                        <div class="row {{formatClasses data.schema.classes}}" id="{{data.schema.id}}">
-                            {{#if data.schema.size}}
-                                {{!-- skeleformGroups with user defined size --}}
-                                <div class="col {{data.schema.size}} {{formatClasses data.schema.classes}}">
-                                    {{> skeleformBody data}}
-                                </div>
-                            {{else}}
-                                {{!-- skeleformGroups without user defined size --}}
-                                {{> skeleformBody data}}
-                            {{/if}}
-                        </div>
-                        {{> Template.dynamic template=data.replicaSet.template data=data}}
-                    </div>
                 {{else}}
                     <div class="row {{formatClasses data.schema.classes}}" id="{{data.schema.id}}">
                         {{#if data.schema.size}}
@@ -71,6 +58,25 @@
             {{/if}}
         {{/with}}
     {{/each}}
+</template>
+
+
+<template name="skeleformReplicaSet">
+    <div class="skeleformReplicaSet">
+        <div class="row {{formatClasses data.schema.classes}}" id="{{data.schema.id}}">
+            {{#if data.schema.size}}
+                {{!-- skeleformGroups with user defined size --}}
+                <div class="col {{data.schema.size}} {{formatClasses data.schema.classes}}">
+                    {{> skeleformBody data}}
+                </div>
+            {{else}}
+                {{!-- skeleformGroups without user defined size --}}
+                {{> skeleformBody data}}
+            {{/if}}
+
+            {{> Template.dynamic template=data.replicaSet.template data=data}}
+        </div>
+    </div>
 </template>
 
 
