@@ -2,7 +2,8 @@
 Skeleform.addReplicaSetInstance = function(instance, replicaSetData, replicaFields) {
     let data = instance.data;
     let maxCopies = replicaSetData.options.maxCopies || undefined;
-    if (!instance.i) instance.i = 0;
+    let $firstNode = $(instance.firstNode);
+    let $replicaContainer = $firstNode.closest('.skeleformReplicaSet');
 
     // disallow adding more copies when reached the maximum
     if (maxCopies && replicaSetData.copies >= maxCopies) {
@@ -14,32 +15,29 @@ Skeleform.addReplicaSetInstance = function(instance, replicaSetData, replicaFiel
     replicaSetData.copies = replicaSetData.copies + 1;
     replicaSetData.index = replicaSetData.index + 1;
 
-    // the first time fields data coming from template helper must be nested one level more
-    if (instance.i === 0) {
-        data.schema = {
-            fields: [replicaFields]
-        };
-
-        if (data.groupLevel) {
-            data.groupLevel = data.groupLevel - 1;
-        }
-    }
-
     // render a new copy of the replica set
+
     SkeleUtils.GlobalUtilities.logger('adding replica instance: ' + replicaSetData.index, 'skeleform');
     replicaSetData.instances.push({
         replicaIndex: replicaSetData.index,
         instance: Blaze.renderWithData(
-            Template.skeleformBody,
-            data,
-            instance.$('.skeleformReplicaBtnsWrapper').parent().parent()[0],
-            instance.$('.skeleformReplicaBtnsWrapper').parent().next()[0]
+            Template.skeleformReplicaSet,
+            {data: data},
+            $replicaContainer[0],
+            $firstNode.closest('.skeleformReplicaFrame').next()[0]
         )
     });
 
-    if (instance.replicaIndex !== 1) {
-        instance.i++;
+    if (replicaSetData.options.indexes) {
+        Skeleform.handleReplicaIndexes($replicaContainer);
     }
+}
+
+// Calculate positional indexes for replicaFrames
+Skeleform.handleReplicaIndexes = function($replicaContainer) {
+    $.each($replicaContainer.find('.skeleformReplicaFrame'), function(index, frame) {
+        $(frame).find('.replica_index').html(index + 1);
+    });
 }
 
 
@@ -115,6 +113,8 @@ Template.skeleformDefaultReplicaBtns.events({
         let formInstance = data.formInstance;
         let replicaSetData = formInstance.replicaSets[data.replicaSet.name];
         let minCopies = replicaSetData.options.minCopies !== undefined ? replicaSetData.options.minCopies : 1;
+        let $firstNode = $(instance.firstNode);
+        let $replicaContainer = $firstNode.closest('.skeleformReplicaSet');
 
         SkeleUtils.GlobalUtilities.logger('removing replica instance: ' + instance.replicaIndex, 'skeleform');
 
@@ -129,7 +129,7 @@ Template.skeleformDefaultReplicaBtns.events({
 
         // remove the current copy of the replica set
         if (instance.replicaIndex === 1) {
-            instance.$('.skeleformReplicaBtnsWrapper').parent('.skeleformReplicaSet').remove();
+            $(instance.firstNode).closest('.skeleformReplicaFrame').remove();
         }
         else {
             let instanceToRemove = _.find(replicaSetData.instances, function(instanceToCheck) {
@@ -138,5 +138,7 @@ Template.skeleformDefaultReplicaBtns.events({
 
             Blaze.remove(instanceToRemove.instance);
         }
+
+        Skeleform.handleReplicaIndexes($replicaContainer);
     }
 });

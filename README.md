@@ -48,7 +48,7 @@ If you have any problem using it, please have a look to the "troubleshooting" se
 
 - **__listView**: *[object] (optional)* options for the field in the list view; see the **Skelelist package**'s *readme* for details;
 - **name**: *[String] (required)* the name of the field **(MUST be an UNIQUE identifier)**;
-- **output**: *[String] (required)* form element (available valuse: *"none", "staticTitle", "input", "checkBox", "editor", "select", "datePicker", "timePicker", "clockPicker"*);
+- **output**: *[String] (required)* form element (available valuse: *"none", "container", "staticTitle", "input", "checkBox", "editor", "select", "datePicker", "timePicker", "clockPicker"*);
 - **i18n**: *[boolean] (optional)* specify that the field will be prefixed with *"<:currentLang>---"*; this identifies the field as internationalized; by default the option is enabled; you should use this option only if you want to set it to false; (default *true*);
 - **size**: *[string] (optional)* materialize's grid system classes; default to *"s12 m6"*;
 - **callbacks**: *[object] (optional)* dictionary of callbacks;
@@ -73,6 +73,7 @@ If you have any problem using it, please have a look to the "troubleshooting" se
 - - **minCopies**: *[number] (optional)* the minimum number of copies of the replica set allowed (default *1*);
 - - **maxCopies**: *[number] (optional)* the maximum number of copies of the replica set allowed (default *infinite*);
 - - **initCopies**: *[number] (optional)* the number of copies of the replica set to include in the form during the first render (default *1*);
+- - **indexes**: *[boolean] (optional)* if set to true will update a DOM element with class `replica_index` within each replica with its current positional order; this is useful if you want to show the positional order of each set in the replica set; the DOM element with class `replica_index` is not added automatically but must be created (for example adding in the replicaSet's fields array a container field with `replica_index` class);
 
 #### 2.2 Field specific options:
 
@@ -83,13 +84,19 @@ Other than the previous options, each field can have specific options depending 
 A filed with `output: "none"` will not be displayed (and so it's never gathered or validated by **Skeleform**);
 this is just for debug purposes (to temporarily disable a field);
 
-#### 2.2.2 staticTitle
+
+#### 2.2.2 container
+
+Creates a container `<div>` (empty); it's useful for putting into it any runtime-generated data you want to dynamically add to the form's DOM.
+- **classes**: *[array of strings] (optional)* array of classes to use on the *tag*;
+
+#### 2.2.3 staticTitle
 
 - **tag**: *[string] (optional)* the tag to use to wrap the title (default `<h3>`);
 - **classes**: *[array of strings] (optional)* array of classes to use on the *tag*;
 - **labelType**: *[string] (optional)* defines the suffix used for the lookup of the label's i18n string (default *_lbl*; available values: `title` for *_title*, `text` for *text*);
 
-#### 2.2.3 input
+#### 2.2.4 input
 
 - **icon**: *[string] (optional)* materialize's icon class;
 - **renderAs**: *[string] (optional)* type of input field to render (available values: *"password", "text", "textarea"*); default to "text"; when using the *"password"* option, the field is not gathered for submit if left empty; **IMPORTANT**: when using *"password"* option don't set *"max"* validation option, since the value is hashed with sha256 (becomes longer);
@@ -99,7 +106,7 @@ this is just for debug purposes (to temporarily disable a field);
 - **charCounter**: *[number] (optional)* enables the materializeCSS's character counter plugin; **IMPORTANT**: the character counter does not set the *"maxlength"* property on the input (this is done by using validation -> max);
 
 
-#### 2.2.4 checkBox
+#### 2.2.5 checkBox
 
 - **renderAs**: *[string] (optional)* type of boolean selector to display (available values: *"checkbox", "switch"*); default to *"checkbox"*;
 - **labels**: *[object] (optional)* to be used with *renderAs: "switch"*; can contain 2 (optionals) keys (*"on", "off"*) containing the two strings to be used as i18n strings for the respectives switch states; if it's not provided, the default *"yes_lbl"* and *"no_lbl"* are used;
@@ -107,7 +114,7 @@ this is just for debug purposes (to temporarily disable a field);
 - - **off**: *[string] (optional)* i18n string for switch *"off"* state (default *"no_lbl"*; note that *"_lbl"* is appended automatically);
 
 
-#### 2.2.5 editor
+#### 2.2.6 editor
 
 - **toolbar**: *[string] (optional)* specifies the toolbar to use (available values: *"minimal", "default", "full"*);
 - **height**: *[integer] (optional)* the pre-setted editor's height in pixels (default 400);
@@ -121,7 +128,7 @@ this is just for debug purposes (to temporarily disable a field);
 - - **height**: *[integer] (optional)* height of the video frame;
 
 
-#### 2.2.6 select
+#### 2.2.7 select
 
 - **source**: *[array of objects / mongo cursor] (required)* data source for options; must be an array of objects used to create the options of the field;each element of the array can be:
 - - **possibility 1** *[object]* an object with these fields:
@@ -141,25 +148,25 @@ this is just for debug purposes (to temporarily disable a field);
 **note**: if you want to dinamically add options to a select field, then you need to re-initialize the materialize's plugin by calling `material_select()` on it.
 
 
-#### 2.2.7 datePicker
+#### 2.2.8 datePicker
 
 - **icon**: *[string] (optional)* materialize's icon class;
 - **pickerOptions**: *[object] (optional)* dictionary of init options to override when starting the pickadate plugin (more info at http://amsul.ca/pickadate.js/date/);
 
 
-#### 2.2.8 timePicker
+#### 2.2.9timePicker
 
 - **icon**: *[string] (optional)* materialize's icon class;
 - **pickerOptions**: *[object] (optional)* dictionary of init options to override when starting the pickatime plugin (more info at http://amsul.ca/pickadate.js/time);
 
 
-#### 2.2.9 clockPicker
+#### 2.2.10 clockPicker
 
 - **icon**: *[string] (optional)* materialize's icon class;
 - **pickerOptions**: *[object] (optional)* dictionary of init options to override when starting the clockpicker plugin (more info at https://github.com/weareoutman/clockpicker and https://github.com/chingyawhao/materialize-clockpicker);
 
 
-#### 2.2.10 imageUpload
+#### 2.2.11 imageUpload
 
 This type of field automatically tests that the selected file(s) matches an image type;
 
