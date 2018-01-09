@@ -440,6 +440,8 @@ Template.skeleform.onRendered(function() {
         }
     });
 });
+
+
 Template.skeleform.onDestroyed(function() {
     if (this.toolbarInstance) {
         Blaze.remove(this.toolbarInstance);

@@ -104,6 +104,10 @@ Template.skeleformBody.helpers({
         data.schema = new ReactiveVar(data.schema);
 
         return data;
+    },
+
+    handleReplicaSets: function() {
+
     }
 });
 

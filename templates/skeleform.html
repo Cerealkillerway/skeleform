@@ -29,7 +29,7 @@
 
                 {{#if data.schema.replicaSet}}
                     {{!-- handle replica sets of skeleform groups --}}
-                    {{> skeleformReplicaSetWrapper data=data}}
+                    {{!-- {{> skeleformReplicaSetWrapper data=data}} --}}
 
                 {{else}}
                     <div class="row {{formatClasses data.schema.classes}}" id="{{data.schema.id}}">

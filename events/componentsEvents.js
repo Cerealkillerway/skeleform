@@ -94,32 +94,6 @@ Template.skeleformDefaultReplicaBtns.onRendered(function() {
     let initCopies = replicaSetData.options.initCopies;
     let $replicaContainer = $(this.firstNode).closest('.skeleformReplicaSet');
 
-    this.autorun(() => {
-        if (formInstance.data.skeleSubsReady.get()) {
-            if (!formInstance.data || !formInstance.data.item) {
-                return;
-            }
-
-            let replicaName = data.replicaSet.name;
-
-            if (replicaSetData.options.i18n === undefined) {
-                replicaName = FlowRouter.getParam('itemLang') + '---' + replicaName;
-            }
-
-            let replicaItem = formInstance.data.item[replicaName];
-
-            if (!replicaItem) {
-                return;
-            }
-
-            if (replicaItem.length > this.replicaIndex && replicaSetData.copies < replicaItem.length) {
-                Skeleform.addReplicaSetInstance(this, replicaSetData, replicaFields);
-            }
-
-            Skeleform.handleReplicaIndexes($replicaContainer, data.schema.fields, data.formInstance.Fields);
-        }
-
-    });
 
     // if the current number of copies of the replica set is less than the required one on init
     // add one more
