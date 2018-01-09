@@ -24,7 +24,6 @@ SkeleformStandardFieldValue = function(data, schema, instance) {
     }
     else {
         if (schema.i18n === undefined) {
-            //data = data[FlowRouter.getParam('itemLang') + '---' + name];
             data = SkeleUtils.GlobalUtilities.getPropertyFromString(FlowRouter.getParam('itemLang') + '---' + name, data)
 
             if (data === undefined) return '';
@@ -133,23 +132,9 @@ setFieldValue = function(instance, data, schema) {
             //SkeleUtils.GlobalUtilities.logger(schema.name + '-getValue(): ' + instance.getValue(), 'skeleformCommon');
             //SkeleUtils.GlobalUtilities.logger('------------------', 'skeleformCommon');
 
-            /*if (value === undefined || value === null) {
-                value = '';
-            }*/
-
-            if (value !== instance.getValue()) {
-                instance.setValue(value);
-                instance.isValid();
-                instance.isValidated = true;
-
-            }
-            else {
-                // if the field has not been validated, validate it now!
-                if (!instance.isValidated) {
-                    instance.isValidated = true;
-                    instance.isValid();
-                }
-            }
+            instance.setValue(value);
+            instance.isValid();
+            instance.isValidated = true;
 
             // call custom i18n if necessary
             if (instance.i18n) {

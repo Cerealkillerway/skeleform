@@ -1,1 +1,2 @@
+Template.skeleformReplicaSetWrapper.helpers(skeleformGeneralHelpers);
 Template.skeleformReplicaSet.helpers(skeleformGeneralHelpers);

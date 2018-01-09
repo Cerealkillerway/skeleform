@@ -549,6 +549,7 @@ Template.skeleformUpdateButtons.events({
                 if (options.useModal) {
                     $('#gearLoadingModal').closeModal();
                 }
+
                 skeleformHandleResult(error, result, 'update', data, schema.__paths);
             });
         }
@@ -587,8 +588,4 @@ Template.skeleformStaticAddons.events({
             SkeleUtils.GlobalUtilities.scrollTo($('.invalid').first().offset().top - offsetCorrection, configuration.animations.scrollBottom);
         }
     }
-});
-
-Template.skeleformBody.onRendered(function() {
-    //console.log(this.data);
 });

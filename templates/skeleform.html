@@ -62,13 +62,13 @@
 
 
 <template name="skeleformReplicaSetWrapper">
-    <div class="skeleformReplicaSet">
+    <div class="skeleformReplicaSet {{formatClasses data.schema.classes}}">
         {{> skeleformReplicaSet this}}
     </div>
 </template>
 
 <template name="skeleformReplicaSet">
-    <div class="row skeleformReplicaFrame {{formatClasses data.schema.classes}}" id="{{data.schema.id}}">
+    <div class="row skeleformReplicaFrame {{formatClasses data.schema.groupClasses}}" id="{{data.schema.id}}">
         {{#if data.schema.size}}
             {{!-- skeleformGroups with user defined size --}}
             <div class="col {{data.schema.size}} {{formatClasses data.schema.classes}}">

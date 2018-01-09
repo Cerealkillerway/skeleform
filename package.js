@@ -42,6 +42,7 @@ Package.onUse(function(api) {
     api.addFiles([
         'templates/skeleform.html',
         'templates/components/skeleformDefaultReplicaBtns.html',
+        'templates/test/skelePanelTest.html',
         'formComponents/templates/skeleformDatePicker.html',
         'formComponents/templates/skeleformEditor.html',
         'formComponents/templates/ckMaterialNotePlugins.html',
@@ -68,7 +69,8 @@ Package.onUse(function(api) {
         'helpers/skeleformHelpers.js',
         'helpers/componentHelpers.js',
         'events/skeleformEvents.js',
-        'events/componentsEvents.js'
+        'events/componentsEvents.js',
+        'events/testEvents.js'
     ],
     ['client']);
 
@@ -99,6 +101,10 @@ Package.onUse(function(api) {
 
     // exports
     api.export(['Skeleform']);
+});
+
+Npm.depends({
+    'sortablejs': '1.7.0'
 });
 
 Package.onTest(function(api) {

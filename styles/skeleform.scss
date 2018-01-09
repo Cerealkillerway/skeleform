@@ -129,4 +129,21 @@
     .dropdown-content [type="checkbox"] + label {
         top: -10px !important;
     }
+
+    .skeleReplicaBtnMoveUp {
+        margin-left: 25px;
+    }
+}
+
+.skelePanelTest {
+    .container {
+        div {
+            background-color: $firstPanelColor;
+            color: $firstPanelColorText;
+            padding: 12px 22px;
+            margin-bottom: 7px;
+            max-width: 300px;
+            cursor: pointer;
+        }
+    }
 }

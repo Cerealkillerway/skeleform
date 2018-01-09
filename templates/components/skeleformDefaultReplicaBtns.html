@@ -1,12 +1,21 @@
 <template name="skeleformDefaultReplicaBtns">
     <div class="row skeleformReplicaBtnsWrapper">
         <div class="col s12">
-            <div class="waves-effect waves-light btn secondColor skeleformUpdate btnAdd">
+            <div class="waves-effect waves-light btn confirmColor skeleReplicaBtnAdd">
                 <i class="material-icons small">&#xE145;</i>
             </div>
-            <div class="waves-effect waves-light btn firstColor skeleformUpdate btnRemove">
+            <div class="waves-effect waves-light btn undoColor skeleReplicaBtnRemove">
                 <i class="material-icons small">&#xE15B;</i>
             </div>
+
+            {{#if this.replicaSet.sortable}}
+            <div class="waves-effect waves-light btn fourthColor skeleReplicaBtnMoveUp">
+                <i class="material-icons small">&#xE5D8;</i>
+            </div>
+            <div class="waves-effect waves-light btn fourthColor skeleReplicaBtnMoveDown">
+                <i class="material-icons small">&#xE5DB;</i>
+            </div>
+            {{/if}}
         </div>
     </div>
 </template>

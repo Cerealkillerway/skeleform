@@ -1,3 +1,5 @@
+import Sortable from 'sortablejs';
+
 // Replica set component
 Skeleform.addReplicaSetInstance = function(instance, replicaSetData, replicaFields) {
     let data = instance.data;
@@ -29,20 +31,51 @@ Skeleform.addReplicaSetInstance = function(instance, replicaSetData, replicaFiel
     });
 
     if (replicaSetData.options.indexes) {
-        Skeleform.handleReplicaIndexes($replicaContainer);
+        Skeleform.handleReplicaIndexes($replicaContainer, data.schema.fields, data.formInstance.Fields);
     }
 }
 
+
 // Calculate positional indexes for replicaFrames
-Skeleform.handleReplicaIndexes = function($replicaContainer) {
+Skeleform.handleReplicaIndexes = function($replicaContainer, replicaFields, formFields) {
     $.each($replicaContainer.find('.skeleformReplicaFrame'), function(index, frame) {
-        $(frame).find('.replica_index').html(index + 1);
+        let currentIndex = index + 1 ;
+        let $frame = $(frame);
+        let $indexContainer = $frame.find('.replica_index');
+        let oldIndex = $indexContainer.text()
+
+        $indexContainer.html(currentIndex);
+
+
+        if (oldIndex.length > 0) {
+            for (const replicaField of replicaFields) {
+                let name = replicaField.name;
+                let oldName = name + '-' + oldIndex;
+                let newName = name + '-' + currentIndex;
+
+                $frame.find('#' + oldName).attr('id', newName);
+            }
+        }
     });
 }
 
 
-Template.skeleformReplicaSet.onRendered(function() {
-    //console.log(this.data);
+Template.skeleformReplicaSetWrapper.onRendered(function() {
+    let data = this.data.data;
+
+    if (data.replicaSet.sortable) {
+        let $replicaContainer = this.$('.skeleformReplicaSet');
+        let items = $replicaContainer[0];
+        let sortable = Sortable.create(items, {
+            animation: 150,
+            draggable: '.skeleformReplicaFrame',
+            filter: '.skeleValidate',
+            preventOnFilter: false,
+            onEnd: function(event) {
+                Skeleform.handleReplicaIndexes($replicaContainer, data.schema.fields, data.formInstance.Fields);
+            }
+        });
+    }
 });
 
 
@@ -59,9 +92,9 @@ Template.skeleformDefaultReplicaBtns.onRendered(function() {
     let replicaSetData = formInstance.replicaSets[data.replicaSet.name];
     let replicaFields = data.schema;
     let initCopies = replicaSetData.options.initCopies;
+    let $replicaContainer = $(this.firstNode).closest('.skeleformReplicaSet');
 
     this.autorun(() => {
-
         if (formInstance.data.skeleSubsReady.get()) {
             if (!formInstance.data || !formInstance.data.item) {
                 return;
@@ -82,6 +115,8 @@ Template.skeleformDefaultReplicaBtns.onRendered(function() {
             if (replicaItem.length > this.replicaIndex && replicaSetData.copies < replicaItem.length) {
                 Skeleform.addReplicaSetInstance(this, replicaSetData, replicaFields);
             }
+
+            Skeleform.handleReplicaIndexes($replicaContainer, data.schema.fields, data.formInstance.Fields);
         }
 
     });
@@ -99,7 +134,7 @@ Template.skeleformDefaultReplicaBtns.onRendered(function() {
 });
 
 Template.skeleformDefaultReplicaBtns.events({
-    'click .btnAdd': function(event, instance) {
+    'click .skeleReplicaBtnAdd': function(event, instance) {
         let data = instance.data;
         let formInstance = data.formInstance;
         let replicaSetData = formInstance.replicaSets[data.replicaSet.name];
@@ -108,7 +143,7 @@ Template.skeleformDefaultReplicaBtns.events({
         Skeleform.addReplicaSetInstance(instance, replicaSetData, replicaFields);
     },
 
-    'click .btnRemove': function(event, instance) {
+    'click .skeleReplicaBtnRemove': function(event, instance) {
         let data = instance.data;
         let formInstance = data.formInstance;
         let replicaSetData = formInstance.replicaSets[data.replicaSet.name];
@@ -139,6 +174,6 @@ Template.skeleformDefaultReplicaBtns.events({
             Blaze.remove(instanceToRemove.instance);
         }
 
-        Skeleform.handleReplicaIndexes($replicaContainer);
+        Skeleform.handleReplicaIndexes($replicaContainer, data.schema.fields, data.formInstance.Fields);
     }
 });
