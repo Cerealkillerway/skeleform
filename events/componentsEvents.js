@@ -98,7 +98,7 @@ Template.skeleformDefaultReplicaBtns.onRendered(function() {
     // if the current number of copies of the replica set is less than the required one on init
     // add one more
     if (initCopies && replicaSetData.copies < initCopies) {
-        Skeleform.addReplicaSetInstance(this, replicaSetData, replicaFields);
+        //Skeleform.addReplicaSetInstance(this, replicaSetData, replicaFields);
     }
     // otherwise unset "initCopies" to avoid adding more than one copy when clicking "+" button
     // when initialization is finished

@@ -29,7 +29,7 @@
 
                 {{#if data.schema.replicaSet}}
                     {{!-- handle replica sets of skeleform groups --}}
-                    {{!-- {{> skeleformReplicaSetWrapper data=data}} --}}
+                    {{> skeleformReplicaSetWrapper data=data}}
 
                 {{else}}
                     <div class="row {{formatClasses data.schema.classes}}" id="{{data.schema.id}}">
@@ -63,23 +63,25 @@
 
 <template name="skeleformReplicaSetWrapper">
     <div class="skeleformReplicaSet {{formatClasses data.schema.classes}}">
-        {{> skeleformReplicaSet this}}
+        {{#each (handleReplicaSets this)}}
+            {{> skeleformReplicaSet this}}
+        {{/each}}
     </div>
 </template>
 
 <template name="skeleformReplicaSet">
-    <div class="row skeleformReplicaFrame {{formatClasses data.schema.groupClasses}}" id="{{data.schema.id}}">
-        {{#if data.schema.size}}
+    <div class="row skeleformReplicaFrame {{formatClasses this.instance.data.schema.groupClasses}}" id="{{this.instance.data.schema.id}}">
+        {{#if this.instance.data.schema.size}}
             {{!-- skeleformGroups with user defined size --}}
-            <div class="col {{data.schema.size}} {{formatClasses data.schema.classes}}">
-                {{> skeleformBody this.data}}
+            <div class="col {{this.instance.data.schema.size}} {{formatClasses this.instance.data.schema.classes}}">
+                {{> skeleformBody this.instance.data}}
             </div>
         {{else}}
             {{!-- skeleformGroups without user defined size --}}
-            {{> skeleformBody this.data}}
+            {{> skeleformBody this.instance.data}}
         {{/if}}
 
-        {{> Template.dynamic template=data.replicaSet.template data=data}}
+        {{> Template.dynamic template=this.instance.data.replicaSet.template data=this.instance.data}}
     </div>
 </template>
 
