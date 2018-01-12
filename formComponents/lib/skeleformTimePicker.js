@@ -46,7 +46,9 @@ Template.skeleformTimePicker.onCreated(function() {
         if (!value) return;
 
         // fire onChange callback
-        InvokeCallback(this, value, schema, 'onChange');
+        if (value !== undefined && value !== this.getValue()) {
+            InvokeCallback(this, value, schema, 'onChange');
+        }
 
         // reactively set the value on the timepicker
         if (pickerInstance) {

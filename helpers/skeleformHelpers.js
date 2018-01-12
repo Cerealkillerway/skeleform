@@ -17,19 +17,36 @@ Template.skeleform.helpers({
 
 // skeleform body helpers
 Template.skeleformBody.helpers({
-    fields: function(fields) {
+    fields: function(context) {
         const instance = Template.instance();
+        let fields;
 
-        if (instance.data.replicaSet) {
-            fields.forEach(function(field) {
-                field.replicaSet = instance.data.replicaSet;
-            });
+        if (context.instance) {
+            fields = context.instance.data.schema.fields;
+
+            if (context.instance.data.replicaSet) {
+                fields.forEach(function(field) {
+                    field.replicaSet = context.instance.data.replicaSet;
+                    field.replicaItem = instance.replicaItem;
+                    field.replicaIndex = instance.replicaIndex;
+                });
+            }
         }
+        else {
+            fields = context.schema.fields;
+        }
+
+
         return fields;
     },
 
     isFieldInCurrentForm: function(fieldSchema) {
-        const instance = Template.instance();
+        let instance = Template.instance();
+
+        if (instance.data.instance) {
+            instance = instance.data.instance;
+        }
+
         let formInstance = instance.data.formInstance;
         let formData = instance.data.item;
         let data;
@@ -61,7 +78,8 @@ Template.skeleformBody.helpers({
         };
 
         // data.groupLevel will contain the level of group nesting of the field
-        if (fieldSchema.skeleformGroup) {
+        if (fieldSchema.skeleformGroup) {            let index = 1;
+
             data.groupLevel = data.groupLevel + 1;
         }
 
@@ -70,6 +88,10 @@ Template.skeleformBody.helpers({
 
         if (replicaSetOptions) {
             data.replicaSet = replicaSetOptions;
+            data.replicaItem = Template.instance().data.replicaItem;
+            data.replicaIndex = Template.instance().data.replicaIndex;
+
+            let replicaSetData = formInstance.replicaSets[replicaSetOptions.name];
 
             // if template for replica set buttons add/remove is not supplied, use the default one
             if (!data.replicaSet.template) {
@@ -77,7 +99,7 @@ Template.skeleformBody.helpers({
             }
 
             // initialize replicaSet object if not already defined
-            if (!formInstance.replicaSets[replicaSetOptions.name]) {
+            if (!replicaSetData) {
                 formInstance.replicaSets[replicaSetOptions.name] = {
                     copies: 1,
                     index: 1,
@@ -85,6 +107,7 @@ Template.skeleformBody.helpers({
                     options: replicaSetOptions
                 };
             }
+
         }
 
         return {
@@ -98,14 +121,17 @@ Template.skeleformBody.helpers({
             return classes.join(' ');
         }
         return classes;
-    },
+    }
+});
 
+
+Template.skeleformField.helpers({
     createDataForField: function(data) {
         data.schema = new ReactiveVar(data.schema);
 
         return data;
     }
-});
+})
 
 
 // update buttons (toolbar)

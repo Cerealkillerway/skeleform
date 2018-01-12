@@ -25,9 +25,14 @@ Template.skeleformReplicaSetWrapper.helpers({
             return [];
         }
 
+        let index = 0;
+
         for (const replica of replicaItem) {
+            index ++;
+
             replicaItems.push({
                 replicaItem: replica,
+                replicaIndex: index,
                 instance: instance
             });
         }
@@ -65,3 +70,15 @@ Template.skeleformReplicaSetWrapper.helpers({
 
 
 Template.skeleformReplicaSet.helpers(skeleformGeneralHelpers);
+Template.skeleformReplicaSet.helpers({
+    handleReplicaIndex: function(context) {
+        let instance = Template.instance();
+
+        if (instance.view.isRendered) {
+
+            let $indexContainer = $(instance.find('.replica_index'));
+
+            $indexContainer.html(context.replicaIndex);
+        }
+    }
+})

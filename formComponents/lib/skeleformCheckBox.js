@@ -79,7 +79,7 @@ Template.skeleformCheckBox.onCreated(function() {
     };
     this.setValue = (value) => {
         // if setting a real value, fire onChange callback
-        if (value !== undefined) {
+        if (value !== undefined && value !== this.getValue()) {
             InvokeCallback(this, value, schema, 'onChange');
         }
 
@@ -99,6 +99,7 @@ Template.skeleformCheckBox.onRendered(function() {
     InvokeCallback(this, null, schema, 'onRendered');
 
     // on checkboxes it is necessary to fire onChange on load since for "false" value, the "setValue()" never happens
+    // because when creating new document, the relative item's field is undefined
     if (this.data.formInstance.data.skeleSubsReady.get()) {
         if (this.getValue() === false) {
             InvokeCallback(this, this.getValue(), schema, 'onChange');

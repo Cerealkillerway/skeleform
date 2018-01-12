@@ -48,7 +48,9 @@ Template.skeleformClockPicker.onCreated(function() {
         if (value === undefined || value.length === 0) return;
 
         // fire onChange callback
-        InvokeCallback(this, value, schema, 'onChange');
+        if (value !== undefined && value !== this.getValue()) {
+            InvokeCallback(this, value, schema, 'onChange');
+        }
 
         value = moment(value, initOptions.formatSubmit).format(initOptions.format);
         $getFieldById(this, this.data.schema).val(value);

@@ -7,20 +7,13 @@ SkeleformStandardFieldValue = function(data, schema, instance) {
     let name = schema.name;
 
     if (instance.replicaIndex) {
-        let replicaSetOptions = instance.data.replicaSet;
-        name = replicaSetOptions.name;
+        let replicaItem = instance.data.replicaItem;
 
-        if (replicaSetOptions.i18n === undefined) {
-            name = FlowRouter.getParam('itemLang') + '---' + name;
-        }
-
-        if (!data[name] || !data[name][instance.replicaIndex - 1]) {
+        if (!replicaItem) {
             return;
         }
 
-        let replicaData = data[name];
-
-        data = replicaData[instance.replicaIndex - 1][schema.name];
+        return replicaItem[name];
     }
     else {
         if (schema.i18n === undefined) {

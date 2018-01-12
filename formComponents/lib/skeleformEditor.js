@@ -89,7 +89,7 @@ Template.skeleformEditor.onCreated(function() {
     };
     this.setValue = (value) => {
         // if setting a real value, fire onChange callback
-        if (value !== undefined) {
+        if (value !== undefined && value !== this.getValue()) {
             InvokeCallback(this, value, schema, 'onChange');
         }
 
