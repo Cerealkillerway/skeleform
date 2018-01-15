@@ -165,12 +165,6 @@ Template.skeleformSelect.onCreated(function() {
         let name = schema.name;
         let $field = $getFieldById(instance, schema);
 
-        // here cannot test value !== this.getValue() since the actual value for the field in the current document
-        // can be the first value (default preselected) for the field;
-        if (value !== undefined) {
-            InvokeCallback(this, value, schema, 'onChange');
-        }
-
         for (const option of $field.children()) {
             let optionValue = $(option).val();
 
@@ -190,6 +184,12 @@ Template.skeleformSelect.onCreated(function() {
                     break;
                 }
             }
+        }
+
+        // here cannot test value !== this.getValue() since the actual value for the field in the current document
+        // can be the first value (default preselected) for the field;
+        if (value !== undefined) {
+            InvokeCallback(this, value, schema, 'onChange');
         }
 
         return '';

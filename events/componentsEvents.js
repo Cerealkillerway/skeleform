@@ -19,7 +19,7 @@ Skeleform.handleReplicaIndexes = function($replicaContainer, replicaFields, form
         for (field of replicaInstance.Fields) {
             field.data.replicaIndex = index;
         }
-        
+
         index++;
     }
 

@@ -127,6 +127,8 @@ setFieldValue = function(instance, data, schema) {
             //SkeleUtils.GlobalUtilities.logger(schema.name + '-getValue(): ' + instance.getValue(), 'skeleformCommon');
             //SkeleUtils.GlobalUtilities.logger('------------------', 'skeleformCommon');
 
+            /*console.log(instance.firstNode);
+            console.log(value);*/
             instance.setValue(value);
             instance.isValid();
             instance.isValidated = true;
