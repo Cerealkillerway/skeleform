@@ -2,7 +2,7 @@
 Template.skeleform.helpers({
     toolbarContext: function() {
         return {
-            Fields: Template.instance().Fields,
+            //Fields: Template.instance().Fields,
             formContext: Template.instance().data
         };
     },
@@ -27,8 +27,10 @@ Template.skeleformBody.helpers({
             if (context.instance.data.replicaSet) {
                 fields.forEach(function(field) {
                     field.replicaSet = context.instance.data.replicaSet;
-                    field.replicaItem = instance.replicaItem;
-                    field.replicaIndex = instance.replicaIndex;
+
+                    // USELESS
+                    //field.replicaItem = instance.replicaItem;
+                    //field.replicaIndex = instance.replicaIndex;
                 });
             }
         }
@@ -101,8 +103,8 @@ Template.skeleformBody.helpers({
             // initialize replicaSet object if not already defined
             if (!replicaSetData) {
                 formInstance.replicaSets[replicaSetOptions.name] = {
-                    copies: 1,
-                    index: 1,
+                    copies: 0,
+                    index: 0,
                     instances: [],
                     options: replicaSetOptions
                 };

@@ -75,7 +75,7 @@
 
 <template name="skeleformReplicaSet">
     <div class="row skeleformReplicaFrame {{formatClasses this.instance.data.schema.groupClasses}}" id="{{this.instance.data.schema.id}}">
-        {{handleReplicaIndex this}}
+        
         {{#if this.instance.data.schema.size}}
             {{!-- skeleformGroups with user defined size --}}
             <div class="col {{this.instance.data.schema.size}} {{formatClasses this.instance.data.schema.classes}}">

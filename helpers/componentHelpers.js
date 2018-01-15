@@ -1,19 +1,40 @@
 Template.skeleformReplicaSetWrapper.helpers(skeleformGeneralHelpers);
 Template.skeleformReplicaSetWrapper.helpers({
-    handleReplicaSets: function(instance) {
-        let data = instance.data;
+    handleReplicaSets: function(context) {
+        let data = context.data;
         let item = data.item;
         let replicaItems = [];
-
-        if (!item) {
-            return [];
-        }
-
         let formInstance = data.formInstance;
         let replicaSetData = formInstance.replicaSets[data.replicaSet.name];
         let replicaFields = data.schema;
-
         let replicaName = data.replicaSet.name;
+        let replicaData = formInstance.replicaSets[replicaName];
+        let index = 0;
+        formInstance.formRendered.set(false);
+
+        function initReplicaSet() {
+            let items= [];
+
+            while (replicaItems.length < replicaSetData.options.minCopies) {
+                index ++;
+                replicaData.copies = index;
+                replicaData.index = index;
+
+                replicaItems.push({
+                    replicaItem: {},
+                    replicaIndex: index,
+                    instance: context,
+                    Fields: []
+                });
+            }
+
+            replicaData.instances = replicaItems;
+            return replicaItems;
+        }
+
+        if (!item) {
+            return initReplicaSet();
+        }
 
         if (replicaSetData.options.i18n === undefined) {
             replicaName = FlowRouter.getParam('itemLang') + '---' + replicaName;
@@ -22,63 +43,26 @@ Template.skeleformReplicaSetWrapper.helpers({
         let replicaItem = formInstance.data.item[replicaName];
 
         if (!replicaItem) {
-            return [];
+            return initReplicaSet();
         }
-
-        let index = 0;
 
         for (const replica of replicaItem) {
             index ++;
+            replicaData.copies = index;
+            replicaData.index = index;
 
             replicaItems.push({
                 replicaItem: replica,
                 replicaIndex: index,
-                instance: instance
+                instance: context,
+                Fields: []
             });
         }
 
-        return replicaItems;
-
-        /*
-        // hanlde replicas
-        if (formInstance.data.skeleSubsReady.get()) {
-            if (!formInstance.data || !formInstance.data.item) {
-                return;
-            }
-
-            let replicaName = data.replicaSet.name;
-
-            if (replicaSetData.options.i18n === undefined) {
-                replicaName = FlowRouter.getParam('itemLang') + '---' + replicaName;
-            }
-
-            let replicaItem = formInstance.data.item[replicaName];
-
-            if (!replicaItem) {
-                return;
-            }
-
-            if (replicaItem.length > data.replicaIndex && replicaSetData.copies < replicaItem.length) {
-                //Skeleform.addReplicaSetInstance(this, replicaSetData, replicaFields);
-            }
-            let $replicaContainer = $(Template.instance().firstNode).closest('.skeleformReplicaSet');
-
-            Skeleform.handleReplicaIndexes($replicaContainer, data.schema.fields, data.formInstance.Fields);
-        }*/
+        formInstance.formRendered.set(true);
+        return initReplicaSet();
     }
 });
 
 
 Template.skeleformReplicaSet.helpers(skeleformGeneralHelpers);
-Template.skeleformReplicaSet.helpers({
-    handleReplicaIndex: function(context) {
-        let instance = Template.instance();
-
-        if (instance.view.isRendered) {
-
-            let $indexContainer = $(instance.find('.replica_index'));
-
-            $indexContainer.html(context.replicaIndex);
-        }
-    }
-})

@@ -6,7 +6,7 @@ SkeleformStandardFieldValue = function(data, schema, instance) {
 
     let name = schema.name;
 
-    if (instance.replicaIndex) {
+    if (instance.data.replicaSet) {
         let replicaItem = instance.data.replicaItem;
 
         if (!replicaItem) {
@@ -64,8 +64,9 @@ InvokeCallback = function(instance, value, schema, type) {
     }
 };
 
+
 function createFieldId(instance, name, isSelecting) {
-    let replicaIndex = instance.replicaIndex;
+    let replicaIndex = instance.data.replicaIndex;
 
     if (isSelecting) {
         name = name.replace('.', '\\.');
@@ -77,6 +78,7 @@ function createFieldId(instance, name, isSelecting) {
 
     return name;
 }
+
 
 // get the field's object
 $getFieldById = function(instance, schema) {

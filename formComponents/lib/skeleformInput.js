@@ -43,11 +43,8 @@ Template.skeleformInput.onCreated(function() {
 
     let schema = this.data.schema.get();
 
-    setReplicaIndex(this);
+    registerField(this);
     InvokeCallback(this, null, schema, 'onCreated');
-
-    //register this on form' store
-    this.data.formInstance.Fields.push(this);
 
     this.getValue = () => {
         let value;

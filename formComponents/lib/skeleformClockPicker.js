@@ -17,13 +17,13 @@ Template.skeleformClockPicker.onCreated(function() {
 
     let schema = this.data.schema.get();
 
-    setReplicaIndex(this);
+    registerField(this);
     InvokeCallback(this, null, schema, 'onCreated');
 
     this.initOptions = {};
 
-    //register this on form' store
-    this.data.formInstance.Fields.push(this);
+    
+    
 
     this.i18n = (currentLang) => {
         let $element = $getFieldById(this, schema);

@@ -15,9 +15,28 @@ function translateErrorDetail(detail) {
     return detail;
 }
 
-setReplicaIndex = function(instance) {
-    if (instance.data.replicaSet) {
-        instance.replicaIndex = instance.data.formInstance.replicaSets[instance.data.replicaSet.name].index;
+registerField = function(instance) {
+    let formInstance = instance.data.formInstance;
+
+    // if the field is not part of a replica set, register it on formInstance.Fields
+    if (!instance.data.replicaSet) {
+        //instance.replicaIndex = instance.data.formInstance.replicaSets[instance.data.replicaSet.name].index;
+        formInstance.Fields.push(instance);
+    }
+    // otherwise register it on formInstance.replicaSets[replicaName].instances[index].Fields
+    else {
+        instance.autorun(() => {
+            let isReady = formInstance.formRendered.get();
+
+            if (!isReady) {
+                return;
+            }
+            let index = instance.data.replicaIndex - 1;
+            let replicaName = instance.data.replicaSet.name;
+            let registeredReplicaInstance = formInstance.replicaSets[replicaName].instances[index];
+
+            registeredReplicaInstance.Fields.push(instance);
+        });
     }
 };
 
@@ -263,6 +282,7 @@ skeleformGatherData = function(formContext, Fields) {
     Fields.forEach(function(field) {
         let fieldSchema = field.data.schema.get();
         let $field = $getFieldById(field, fieldSchema);
+        //console.log($field);
         let fieldName;
 
         if (field.data.replicaSet) {
@@ -297,7 +317,7 @@ skeleformGatherData = function(formContext, Fields) {
                     let $replicaContainer = $(field.firstNode).closest('.skeleformReplicaSet');
                     let $replicas = $replicaContainer.find('.skeleformReplicaFrame');
                     let $currentReplica = $(field.firstNode).closest('.skeleformReplicaFrame')
-                    let index = $replicas.index($currentReplica)
+                    let index = $replicas.index($currentReplica);
 
                     if (data[fieldName] === undefined) {
                         data[fieldName] = [];
@@ -463,11 +483,15 @@ Template.skeleform.onDestroyed(function() {
 Template.skeleformCreateButtons.events({
     'click .skeleformCreate': function(event, template) {
         let formContext = template.data.formContext;
-        let Fields = template.data.Fields;
+        let formInstance = formContext.formInstance;
+        let Fields = formInstance.Fields;
         let data = skeleformGatherData(formContext, Fields);
         let schema = formContext.schema;
         let method;
         let options = {};
+
+        // add replicas fields to Field object
+
 
         if (schema.__options) {
             if (schema.__options.loadingModal) {
@@ -511,12 +535,21 @@ Template.skeleformCreateButtons.events({
 Template.skeleformUpdateButtons.events({
     'click .skeleformUpdate': function(event, template) {
         let formContext = template.data.formContext;
-        let Fields = template.data.Fields;
-        let data = skeleformGatherData(formContext, Fields);
+        let formInstance = formContext.formInstance;
+        let Fields = formInstance.Fields;
         let documentId = formContext.item._id;
         let schema = formContext.schema;
         let method;
         let options = {};
+
+        // add replicas fields to Field object
+        _.each(formInstance.replicaSets, function(replicaSet) {
+            for (instance of replicaSet.instances) {
+                Fields = Fields.concat(instance.Fields);
+            }
+        });
+
+        let data = skeleformGatherData(formContext, Fields);
 
         if (schema.__options) {
             if (schema.__options.loadingModal) {

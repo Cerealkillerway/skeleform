@@ -74,11 +74,9 @@ Template.skeleformImageUpload.onCreated(function() {
 
     let schema = this.data.schema.get();
 
-    setReplicaIndex(this);
+    registerField(this);
     InvokeCallback(this, null, schema, 'onCreated');
 
-    //register this on form' store
-    this.data.formInstance.Fields.push(this);
     this.isSettingValue = false;
 
     this.getValue = () => {

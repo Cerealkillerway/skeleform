@@ -138,11 +138,11 @@ Template.skeleformSelect.onCreated(function() {
 
     let schema = this.data.schema.get();
 
-    setReplicaIndex(this);
+    registerField(this);
     InvokeCallback(this, null, schema, 'onCreated');
 
     // register this on form' store
-    this.data.formInstance.Fields.push(this);
+
 
     this.i18n = () => {
         $getFieldById(this, schema).material_select();
@@ -165,7 +165,9 @@ Template.skeleformSelect.onCreated(function() {
         let name = schema.name;
         let $field = $getFieldById(instance, schema);
 
-        if (value !== undefined && value !== this.getValue()) {
+        // here cannot test value !== this.getValue() since the actual value for the field in the current document
+        // can be the first value (default preselected) for the field;
+        if (value !== undefined) {
             InvokeCallback(this, value, schema, 'onChange');
         }
 
@@ -204,7 +206,6 @@ Template.skeleformSelect.onRendered(function() {
     $field.material_select();
     this.isActivated.set(true);
 
-    //InvokeCallback(this, this.getValue(), schema, 'onChange');
     InvokeCallback(this, null, schema, 'onRendered');
 
     // DISABLED - was causing infinite loop
