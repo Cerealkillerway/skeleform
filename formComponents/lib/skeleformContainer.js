@@ -3,6 +3,6 @@
 
 Template.skeleformContainer.helpers(skeleformGeneralHelpers);
 
-Template.skeleformContainer.onCreated(function() {
+Template.skeleformContainer.onRendered(function() {
     registerField(this);
 });

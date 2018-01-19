@@ -138,7 +138,6 @@ Template.skeleformSelect.onCreated(function() {
 
     let schema = this.data.schema.get();
 
-    registerField(this);
     InvokeCallback(this, null, schema, 'onCreated');
 
     // register this on form' store
@@ -161,9 +160,8 @@ Template.skeleformSelect.onCreated(function() {
             return '';
         }
 
-        const instance = Template.instance();
         let name = schema.name;
-        let $field = $getFieldById(instance, schema);
+        let $field = $getFieldById(this, schema);
 
         for (const option of $field.children()) {
             let optionValue = $(option).val();
@@ -186,6 +184,10 @@ Template.skeleformSelect.onCreated(function() {
             }
         }
 
+        console.log('+++++++++++++++++++++++++++++++++++++++++++++');
+        console.log(this.firstNode);
+        console.log(value);
+        console.log('+++++++++++++++++++++++++++++++++++++++++++++');
         // here cannot test value !== this.getValue() since the actual value for the field in the current document
         // can be the first value (default preselected) for the field;
         if (value !== undefined) {
@@ -198,6 +200,8 @@ Template.skeleformSelect.onCreated(function() {
 
 Template.skeleformSelect.onRendered(function() {
     let schema = this.data.schema.get();
+
+    registerField(this);
 
     // start plugin
     let $field = $getFieldById(this, schema);

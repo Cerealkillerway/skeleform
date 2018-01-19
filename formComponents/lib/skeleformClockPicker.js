@@ -17,13 +17,12 @@ Template.skeleformClockPicker.onCreated(function() {
 
     let schema = this.data.schema.get();
 
-    registerField(this);
     InvokeCallback(this, null, schema, 'onCreated');
 
     this.initOptions = {};
 
-    
-    
+
+
 
     this.i18n = (currentLang) => {
         let $element = $getFieldById(this, schema);
@@ -66,6 +65,8 @@ Template.skeleformClockPicker.onRendered(function() {
     let data = this.data.item;
     let schema = this.data.schema.get();
     let options = schema.pickerOptions;
+
+    registerField(this);
 
     // activates validation on set
     this.initOptions = {

@@ -22,7 +22,6 @@ SkeleformStandardFieldValue = function(data, schema, instance) {
             if (data === undefined) return '';
         }
         else {
-            //data = data[name];
             data = SkeleUtils.GlobalUtilities.getPropertyFromString(name, data);
         }
     }
@@ -93,7 +92,7 @@ $getShadowFieldId = function(instance, schema) {
 // it waits for any custom initialization on the field, and reactively watch lang changes
 // and fires appropriate i18n method on the field is special handling for i18n is required
 setFieldValue = function(instance, data, schema) {
-    instance.view.autorun(function() {
+    //instance.view.autorun(function() {
         // register dependency from current language; used to fire custom i18n callback
         // for fields that requires special i18n treatment...
         let currentLang = TAPi18n.getLanguage();
@@ -120,15 +119,11 @@ setFieldValue = function(instance, data, schema) {
 
             let value = SkeleformStandardFieldValue(data, schema, instance);
 
-            //console.log(value);
-            //console.log(instance.getValue());
 
             //SkeleUtils.GlobalUtilities.logger(schema.name + '-value: ' + value, 'skeleformCommon');
             //SkeleUtils.GlobalUtilities.logger(schema.name + '-getValue(): ' + instance.getValue(), 'skeleformCommon');
             //SkeleUtils.GlobalUtilities.logger('------------------', 'skeleformCommon');
 
-            /*console.log(instance.firstNode);
-            console.log(value);*/
             instance.setValue(value);
             instance.isValid();
             instance.isValidated = true;
@@ -138,7 +133,7 @@ setFieldValue = function(instance, data, schema) {
                 instance.i18n(currentLang);
             }
         }
-    });
+    //});
 };
 
 
@@ -196,9 +191,6 @@ createPath = function(path, data) {
 
 //helpers used by form elements
 skeleformGeneralHelpers = {
-    templateInstance: function() {
-        return Template.instance();
-    },
     label: function(name, options) {
         name = name.split('.');
 
@@ -246,11 +238,12 @@ skeleformGeneralHelpers = {
         return size;
     },
 
-    fieldValue: function(template) {
+    fieldValue: function() {
         // sets the value on the field, used by most field types
-        let data = template.data;
+        let instance = Template.instance();
+        let data = instance.data;
 
-        setFieldValue(template, data.formInstance.data.item, data.schema.get());
+        setFieldValue(instance, data.formInstance.data.item, data.schema.get());
     },
     formatClasses: function(classes) {
         if (!classes) {

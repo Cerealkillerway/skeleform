@@ -10,7 +10,10 @@ Template.skeleformReplicaSetWrapper.helpers({
         let replicaName = data.replicaSet.name;
         let replicaData = formInstance.replicaSets[replicaName];
         let index = 0;
-        formInstance.formRendered.set(false);
+
+        // here formRendered reactive var is used to make registerField wait for replicaSet object
+        // to be initialized
+        formInstance.replicasReady.set(false);
 
         function initReplicaSet() {
             let items= [];
@@ -23,7 +26,7 @@ Template.skeleformReplicaSetWrapper.helpers({
                 replicaItems.push({
                     replicaItem: {},
                     replicaIndex: index,
-                    instance: context,
+                    context: context,
                     Fields: []
                 });
             }
@@ -54,12 +57,13 @@ Template.skeleformReplicaSetWrapper.helpers({
             replicaItems.push({
                 replicaItem: replica,
                 replicaIndex: index,
-                instance: context,
+                context: context,
                 Fields: []
             });
         }
 
-        formInstance.formRendered.set(true);
+        formInstance.replicasReady.set(true);
+        SkeleUtils.GlobalUtilities.logger('re-init replicaSet', 'skeleError');
         return initReplicaSet();
     }
 });

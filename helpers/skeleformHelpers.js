@@ -18,19 +18,14 @@ Template.skeleform.helpers({
 // skeleform body helpers
 Template.skeleformBody.helpers({
     fields: function(context) {
-        const instance = Template.instance();
         let fields;
 
-        if (context.instance) {
-            fields = context.instance.data.schema.fields;
+        if (context.context) {
+            fields = context.context.data.schema.fields;
 
-            if (context.instance.data.replicaSet) {
+            if (context.context.data.replicaSet) {
                 fields.forEach(function(field) {
-                    field.replicaSet = context.instance.data.replicaSet;
-
-                    // USELESS
-                    //field.replicaItem = instance.replicaItem;
-                    //field.replicaIndex = instance.replicaIndex;
+                    field.replicaSet = context.context.data.replicaSet;
                 });
             }
         }
@@ -38,19 +33,22 @@ Template.skeleformBody.helpers({
             fields = context.schema.fields;
         }
 
-
         return fields;
     },
 
     isFieldInCurrentForm: function(fieldSchema) {
-        let instance = Template.instance();
+        let context;
+        let templateInstance = Template.instance();
 
-        if (instance.data.instance) {
-            instance = instance.data.instance;
+        if (templateInstance.data.context) {
+            context = templateInstance.data.context;
+        }
+        else {
+            context = Template.instance();
         }
 
-        let formInstance = instance.data.formInstance;
-        let formData = instance.data.item;
+        let formInstance = context.data.formInstance;
+        let formData = context.data.item;
         let data;
 
         // skip fields that have not to be displayed in form
@@ -76,12 +74,11 @@ Template.skeleformBody.helpers({
             formInstance: formInstance,
             schema: fieldSchema,
             item: formData,
-            groupLevel: instance.data.groupLevel || 0
+            groupLevel: context.data.groupLevel || 0
         };
 
         // data.groupLevel will contain the level of group nesting of the field
-        if (fieldSchema.skeleformGroup) {            let index = 1;
-
+        if (fieldSchema.skeleformGroup) {
             data.groupLevel = data.groupLevel + 1;
         }
 
@@ -90,8 +87,8 @@ Template.skeleformBody.helpers({
 
         if (replicaSetOptions) {
             data.replicaSet = replicaSetOptions;
-            data.replicaItem = Template.instance().data.replicaItem;
-            data.replicaIndex = Template.instance().data.replicaIndex;
+            data.replicaItem = templateInstance.data.replicaItem;
+            data.replicaIndex = templateInstance.data.replicaIndex;
 
             let replicaSetData = formInstance.replicaSets[replicaSetOptions.name];
 

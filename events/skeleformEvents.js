@@ -25,17 +25,49 @@ registerField = function(instance) {
     }
     // otherwise register it on formInstance.replicaSets[replicaName].instances[index].Fields
     else {
+        console.log('creating a new autorun cycle');
         instance.autorun(() => {
-            let isReady = formInstance.formRendered.get();
+            // must wait for replicaSet object to be initialized; skeleformReplicaSetWrapper.handleReplicaSets helper
+            // sets formRendered to true once replica objects init is done;
+            let replicasReady = formInstance.replicasReady.get();
+            let subsReady = formInstance.data.skeleSubsReady.get();
 
-            if (!isReady) {
+            if (!replicasReady || !subsReady) {
                 return;
             }
-            let index = instance.data.replicaIndex - 1;
+
+            /*let $replicaContainer = $(instance.firstNode).closest('.skeleformReplicaSet');
+            let $replicas = $replicaContainer.find('.skeleformReplicaFrame');
+            let $currentReplica = $(instance.firstNode).closest('.skeleformReplicaFrame')
+            let index = $replicas.index($currentReplica);
+            let logger = false;
+
+            console.log(instance.firstNode);
+            console.log(instance.view.isRendered);
+            console.log('replica container; %o', $replicaContainer[0]);
+            console.log('current calculated index from DOM: ' + index);
+
             let replicaName = instance.data.replicaSet.name;
             let registeredReplicaInstance = formInstance.replicaSets[replicaName].instances[index];
 
-            registeredReplicaInstance.Fields.push(instance);
+            registeredReplicaInstance.replicaIndex = index + 1;
+
+            console.log('current replica index: ' + instance.data.replicaIndex);
+            console.log('setting replica index to: ' + registeredReplicaInstance.replicaIndex);
+
+            instance.data.replicaIndex = registeredReplicaInstance.replicaIndex;
+            instance.data.replicaItem = registeredReplicaInstance.replicaItem;
+
+            console.log('instance: %o', instance);
+            console.log('now instance replicaIndex should be: ' + instance.data.replicaIndex);*/
+
+            //registeredReplicaInstance.Fields.push(instance);
+            let replicaName = instance.data.replicaSet.name;
+            let index = instance.data.replicaIndex - 1;
+            formInstance.replicaSets[replicaName].instances[index].Fields.push(instance);
+
+            console.log('FORM INSTANCE: %o', formInstance);
+            console.log('=================================================');
         });
     }
 };
@@ -357,8 +389,9 @@ Skeleform.utils.skeleformGatherData = skeleformGatherData;
 
 // Skeleform
 Template.skeleform.onCreated(function() {
-    //Session.set('formRendered', false);
     this.formRendered = new ReactiveVar(false);
+    this.debug = new ReactiveVar(false);
+    this.replicasReady = new ReactiveVar(false);
 
     this.Fields = [];
     this.replicaSets = {};
@@ -485,13 +518,18 @@ Template.skeleformCreateButtons.events({
         let formContext = template.data.formContext;
         let formInstance = formContext.formInstance;
         let Fields = formInstance.Fields;
-        let data = skeleformGatherData(formContext, Fields);
         let schema = formContext.schema;
         let method;
         let options = {};
 
         // add replicas fields to Field object
+        _.each(formInstance.replicaSets, function(replicaSet) {
+            for (instance of replicaSet.instances) {
+                Fields = Fields.concat(instance.Fields);
+            }
+        });
 
+        let data = skeleformGatherData(formContext, Fields);
 
         if (schema.__options) {
             if (schema.__options.loadingModal) {

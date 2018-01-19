@@ -57,11 +57,7 @@ Template.skeleformEditor.onCreated(function() {
 
     let schema = this.data.schema.get();
 
-    registerField(this);
     InvokeCallback(this, null, schema, 'onCreated');
-
-    
-    
 
     // now commented because very slow...
     /*this.i18n = () => {
@@ -110,6 +106,8 @@ Template.skeleformEditor.onRendered(function() {
     let toolbar = schema.toolbar;
     let imageParams = this.data.schema.image;
     this.currentLang = FlowRouter.getQueryParam('lang');
+
+    registerField(this);
 
     if ((toolbar === undefined)|| (editorToolbars[toolbar] === undefined)) toolbar = 'default';
 

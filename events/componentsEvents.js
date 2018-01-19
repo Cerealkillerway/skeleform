@@ -10,6 +10,8 @@ Skeleform.handleReplicaIndexes = function($replicaContainer, replicaFields, form
     let movedInstance = replicaInstances[oldIndex];
     let index = 1;
 
+    SkeleUtils.GlobalUtilities.logger('handling replica indexes on replica: ' + replicaName, 'skeleformField');
+
     replicaInstances.splice(oldIndex, 1);
     replicaInstances.insertAt(movedInstance, newIndex);
 
@@ -41,6 +43,8 @@ Skeleform.handleReplicaIndexes = function($replicaContainer, replicaFields, form
             }
         }
     });
+
+    console.log(formInstance);
 }
 
 

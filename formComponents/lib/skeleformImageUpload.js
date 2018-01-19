@@ -74,7 +74,6 @@ Template.skeleformImageUpload.onCreated(function() {
 
     let schema = this.data.schema.get();
 
-    registerField(this);
     InvokeCallback(this, null, schema, 'onCreated');
 
     this.isSettingValue = false;
@@ -199,6 +198,8 @@ Template.skeleformImageUpload.onRendered(function() {
     let editor = this.$('.editor');
     let schema = this.data.schema.get();
     this.currentLang = FlowRouter.getQueryParam('lang');
+
+    registerField(this);
 
     this.isActivated.set(true);
     InvokeCallback(this, null, schema, 'onRendered');

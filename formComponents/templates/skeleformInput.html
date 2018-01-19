@@ -4,7 +4,7 @@
             <i class="material-icons prefix">{{schema.icon}}</i>
         {{/if}}
 
-        {{fieldValue templateInstance}}
+        {{fieldValue}}
         {{#if (test schema.renderAs "textarea")}}
             <textarea id="{{field schema.name}}" class="materialize-textarea skeleValidate skeleGather" maxlength="{{schema.validation.max}}"></textarea>
         {{else}}

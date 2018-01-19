@@ -46,11 +46,10 @@ Template.skeleformCheckBox.onCreated(function() {
 
     let schema = this.data.schema.get();
 
-    registerField(this);
     InvokeCallback(this, null, this.data.schema, 'onCreated');
 
     // register this on form' store
-    
+
 
     this.getValue = () => {
         let value = $getFieldById(this, schema).prop('checked');
@@ -94,6 +93,8 @@ Template.skeleformCheckBox.onDestroyed(function() {
 
 Template.skeleformCheckBox.onRendered(function() {
     let schema = this.data.schema.get();
+
+    registerField(this);
 
     this.isActivated.set(true);
     InvokeCallback(this, null, schema, 'onRendered');

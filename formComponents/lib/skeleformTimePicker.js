@@ -17,13 +17,9 @@ Template.skeleformTimePicker.onCreated(function() {
 
     let schema = this.data.schema.get();
 
-    registerField(this);
     InvokeCallback(this, null, schema, 'onCreated');
 
     this.initOptions = {};
-
-    
-    
 
     this.i18n = (currentLang) => {
         this.pickerInstance.component.settings.clear = TAPi18n.__('pickadateButtons_labels').split(' ')[1];
@@ -67,6 +63,8 @@ Template.skeleformTimePicker.onRendered(function() {
     let data = this.data.item;
     let schema = this.data.schema.get();
     this.setCounter = 0;
+
+    registerField(this);
 
     // activates validation on set
     this.initOptions = {

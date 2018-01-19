@@ -43,7 +43,6 @@ Template.skeleformInput.onCreated(function() {
 
     let schema = this.data.schema.get();
 
-    registerField(this);
     InvokeCallback(this, null, schema, 'onCreated');
 
     this.getValue = () => {
@@ -100,15 +99,21 @@ Template.skeleformInput.onCreated(function() {
         }
     };
 });
+
+
 Template.skeleformInput.onDestroyed(function() {
     let Fields = this.data.formInstance.Fields;
 
     Fields.removeAt(Fields.indexOf(this));
 });
+
+
 Template.skeleformInput.onRendered(function() {
     let self = this;
     let schema = self.data.schema.get();
     let id = schema.name;
+
+    registerField(this);
 
     // handle formats
     switch (schema.formatAs) {

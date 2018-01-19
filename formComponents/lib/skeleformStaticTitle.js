@@ -20,5 +20,8 @@ Template.skeleformStaticTitle.helpers({
 
 Template.skeleformStaticTitle.onCreated(function() {
     this.isActivated = new ReactiveVar(true);
+});
+
+Template.skeleformStaticTitle.onRendered(function() {
     registerField(this);
 });

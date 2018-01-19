@@ -52,6 +52,33 @@
 </template>
 
 
+<template name="skeleformReplicaSetWrapper">
+    <div class="skeleformReplicaSet {{formatClasses data.schema.classes}}">
+        {{#each (handleReplicaSets this)}}
+            {{> skeleformReplicaSet this}}
+        {{/each}}
+    </div>
+</template>
+
+
+<template name="skeleformReplicaSet">
+    <div class="row skeleformReplicaFrame {{formatClasses this.context.data.schema.groupClasses}}" id="{{this.context.data.schema.id}}">
+
+        {{#if this.context.data.schema.size}}
+            {{!-- skeleformGroups with user defined size --}}
+            <div class="col {{this.context.data.schema.size}} {{formatClasses this.context.data.schema.classes}}">
+                {{> skeleformBody this}}
+            </div>
+        {{else}}
+            {{!-- skeleformGroups without user defined size --}}
+            {{> skeleformBody this}}
+        {{/if}}
+
+        {{> Template.dynamic template=this.context.data.replicaSet.template data=this.context.data}}
+    </div>
+</template>
+
+
 <template name="skeleformField">
     {{#if (test data.groupLevel 0)}}
         {{!-- fields natively at level 0 (not grouped) --}}
@@ -62,32 +89,6 @@
         {{!-- fields grouped --}}
         {{> Template.dynamic template=template data=(createDataForField data)}}
     {{/if}}
-</template>
-
-
-<template name="skeleformReplicaSetWrapper">
-    <div class="skeleformReplicaSet {{formatClasses data.schema.classes}}">
-        {{#each (handleReplicaSets this)}}
-            {{> skeleformReplicaSet this}}
-        {{/each}}
-    </div>
-</template>
-
-<template name="skeleformReplicaSet">
-    <div class="row skeleformReplicaFrame {{formatClasses this.instance.data.schema.groupClasses}}" id="{{this.instance.data.schema.id}}">
-        
-        {{#if this.instance.data.schema.size}}
-            {{!-- skeleformGroups with user defined size --}}
-            <div class="col {{this.instance.data.schema.size}} {{formatClasses this.instance.data.schema.classes}}">
-                {{> skeleformBody this}}
-            </div>
-        {{else}}
-            {{!-- skeleformGroups without user defined size --}}
-            {{> skeleformBody this}}
-        {{/if}}
-
-        {{> Template.dynamic template=this.instance.data.replicaSet.template data=this.instance.data}}
-    </div>
 </template>
 
 

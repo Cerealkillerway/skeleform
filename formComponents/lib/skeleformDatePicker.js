@@ -18,13 +18,9 @@ Template.skeleformDatePicker.onCreated(function() {
 
     let schema = this.data.schema.get();
 
-    registerField(this);
     InvokeCallback(this, null, schema, 'onCreated');
 
     this.initOptions = {};
-
-    
-    
 
     this.i18n = () => {
         let pickerInstance = this.pickerInstance;
@@ -77,6 +73,8 @@ Template.skeleformDatePicker.onRendered(function() {
     let data = this.data.item;
     let schema = this.data.schema.get();
     let $element = $getFieldById(this, schema);
+
+    registerField(this);
 
     // activates validation on set
     this.initOptions = {
