@@ -51,7 +51,7 @@ Skeleform.handleReplicaIndexes = function($replicaContainer, replicaFields, form
 Template.skeleformReplicaSetWrapper.onRendered(function() {
     let data = this.data.data;
 
-    if (data.replicaSet.sortable) {
+    /*if (data.replicaSet.sortable) {
         let $replicaContainer = this.$('.skeleformReplicaSet');
         let items = $replicaContainer[0];
         let replicaName = data.replicaSet.name;
@@ -64,7 +64,7 @@ Template.skeleformReplicaSetWrapper.onRendered(function() {
                 Skeleform.handleReplicaIndexes($replicaContainer, data.schema.fields, data.formInstance, replicaName, event);
             }
         });
-    }
+    }*/
 });
 
 
@@ -114,12 +114,7 @@ Template.skeleformDefaultReplicaBtns.events({
         let replicaSetData = formInstance.replicaSets[data.replicaSet.name];
         let replicaFields = data.schema;
 
-        replicaSetData.instances.push({
-            replicaItem: {},
-            replicaIndex: 6,
-            //context: context,
-            Fields: []
-        });
+        formInstance.data.item['it---' + data.replicaSet.name].push([]);
     },
 
     'click .skeleReplicaBtnRemove': function(event, instance) {

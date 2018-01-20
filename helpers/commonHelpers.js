@@ -1,40 +1,3 @@
-// standard function to get a field's value form the current data object;
-// it is defined here as a global function so that special field types can override "fieldValue" helper
-// but still call this function if needed and then perform any special handling that is required
-SkeleformStandardFieldValue = function(data, schema, instance) {
-    if (data === undefined) return;
-
-    let name = schema.name;
-
-    if (instance.data.replicaSet) {
-        let replicaItem = instance.data.replicaItem;
-
-        if (!replicaItem) {
-            return;
-        }
-
-        return replicaItem[name];
-    }
-    else {
-        if (schema.i18n === undefined) {
-            data = SkeleUtils.GlobalUtilities.getPropertyFromString(FlowRouter.getParam('itemLang') + '---' + name, data)
-
-            if (data === undefined) return '';
-        }
-        else {
-            data = SkeleUtils.GlobalUtilities.getPropertyFromString(name, data);
-        }
-    }
-
-    // set active class on label to avoid overlapping
-    if (schema.output === 'input') {
-        $('#' + schema.name).next('label').addClass('active');
-    }
-
-    return data;
-};
-
-
 // invoke a specific callback for a field
 InvokeCallback = function(instance, value, schema, type) {
     if (schema.callbacks) {
@@ -96,7 +59,7 @@ setFieldValue = function(instance, data, schema) {
         // register dependency from current language; used to fire custom i18n callback
         // for fields that requires special i18n treatment...
         let currentLang = TAPi18n.getLanguage();
-        let formRendered = instance.data.formInstance.formRendered.get();
+        let formRendered = instance.data.formContext.formRendered.get();
 
         // object used to ensure that each callback is executed only once per computation
         if (!instance.callbacksCalled) {
@@ -113,7 +76,7 @@ setFieldValue = function(instance, data, schema) {
         let isActivated = instance.isActivated.get();
 
         if (isActivated === true) {
-            if (!instance.data.formInstance.data.skeleSubsReady.get()) {
+            if (!instance.data.formContext.skeleSubsReady.get()) {
                 return false;
             }
 
@@ -134,6 +97,43 @@ setFieldValue = function(instance, data, schema) {
             }
         }
     //});
+};
+
+
+// standard function to get a field's value form the current data object;
+// it is defined here as a global function so that special field types can override "fieldValue" helper
+// but still call this function if needed and then perform any special handling that is required
+SkeleformStandardFieldValue = function(data, schema, instance) {
+    if (data === undefined) return;
+
+    let name = schema.name;
+
+    if (instance.data.replicaSet) {
+        let replicaItem = instance.data.replicaItem;
+
+        if (!replicaItem) {
+            return;
+        }
+
+        return replicaItem[name];
+    }
+    else {
+        if (schema.i18n === undefined) {
+            data = SkeleUtils.GlobalUtilities.getPropertyFromString(FlowRouter.getParam('itemLang') + '---' + name, data)
+
+            if (data === undefined) return '';
+        }
+        else {
+            data = SkeleUtils.GlobalUtilities.getPropertyFromString(name, data);
+        }
+    }
+
+    // set active class on label to avoid overlapping
+    if (schema.output === 'input') {
+        $('#' + schema.name).next('label').addClass('active');
+    }
+
+    return data;
 };
 
 
@@ -214,14 +214,14 @@ skeleformGeneralHelpers = {
         }
     },
     schema: function() {
-        return Template.instance().data.schema.get();
+        return Template.instance().data.fieldSchema.get();
     },
     field: function(name) {
         return createFieldId(Template.instance(), name);
     },
     required: function() {
         let instance = Template.instance();
-        let validationOptions = this.schema.get().validation;
+        let validationOptions = this.fieldSchema.get().validation;
 
         /*if (instance.data.schema.output === 'input') {
             instance.forcedReloads.get();
@@ -243,7 +243,7 @@ skeleformGeneralHelpers = {
         let instance = Template.instance();
         let data = instance.data;
 
-        setFieldValue(instance, data.formInstance.data.item, data.schema.get());
+        setFieldValue(instance, data.formContext.item, data.fieldSchema.get());
     },
     formatClasses: function(classes) {
         if (!classes) {

@@ -6,11 +6,21 @@ Template.skeleform.helpers({
             formContext: Template.instance().data
         };
     },
-    generalContext: function() {
-        let data = Template.instance().data;
+    isDataReady: function(context) {
+        if (context.skeleSubsReady.get() === false) {
+            return false;
+        }
+        return true;
+    },
+    formContext: function(context) {
+        let instance = Template.instance();
 
-        data.formInstance = Template.instance();
-        return data;
+        context.formRendered = instance.formRendered;
+        context.skeleDebug = instance.skeleDebug;
+        context.formContext = context;
+        context.fieldSchema = context.schema;
+
+        return context;
     }
 });
 
@@ -18,103 +28,43 @@ Template.skeleform.helpers({
 // skeleform body helpers
 Template.skeleformBody.helpers({
     fields: function(context) {
-        let fields;
+        let fields = context.fieldSchema.fields
+        let currentFields = [];
 
-        if (context.context) {
-            fields = context.context.data.schema.fields;
-
-            if (context.context.data.replicaSet) {
-                fields.forEach(function(field) {
-                    field.replicaSet = context.context.data.replicaSet;
-                });
+        function createFieldContext(fieldSchema) {
+            return {
+                formContext: context.formContext,
+                fieldSchema: fieldSchema,
+                template: fieldSchema.output ? 'skeleform' + fieldSchema.output.capitalize() : null,
+                skeleformGroupLevel: context.skeleformGroupLevel || 0
             }
         }
-        else {
-            fields = context.schema.fields;
-        }
 
-        return fields;
+        // create array of fields to display
+        fields.forEach(function(fieldSchema) {
+            if (fieldSchema.output !== 'none') {
+                switch (fieldSchema.showOnly) {
+                    case 'create':
+                    if (!formData) {
+                        currentFields.push(createFieldContext(fieldSchema));
+                    }
+                    break;
+
+                    case 'update':
+                    if (formData) {
+                        currentFields.push(createFieldContext(fieldSchema));
+                    }
+                    break;
+
+                    default:
+                    currentFields.push(createFieldContext(fieldSchema));
+                }
+            }
+        });
+
+        return currentFields;
     },
 
-    isFieldInCurrentForm: function(fieldSchema) {
-        let context;
-        let templateInstance = Template.instance();
-
-        if (templateInstance.data.context) {
-            context = templateInstance.data.context;
-        }
-        else {
-            context = Template.instance();
-        }
-
-        let formInstance = context.data.formInstance;
-        let formData = context.data.item;
-        let data;
-
-        // skip fields that have not to be displayed in form
-        if (fieldSchema.output === 'none') {
-            return false;
-        }
-
-        switch (fieldSchema.showOnly) {
-            case 'create':
-            if (formData) {
-                return false;
-            }
-            break;
-
-            case 'update':
-            if (!formData) {
-                return false;
-            }
-            break;
-        }
-
-        data = {
-            formInstance: formInstance,
-            schema: fieldSchema,
-            item: formData,
-            groupLevel: context.data.groupLevel || 0
-        };
-
-        // data.groupLevel will contain the level of group nesting of the field
-        if (fieldSchema.skeleformGroup) {
-            data.groupLevel = data.groupLevel + 1;
-        }
-
-        // replica set template
-        let replicaSetOptions = fieldSchema.replicaSet;
-
-        if (replicaSetOptions) {
-            console.log('ISFIELDINCURRENTFORM HELPER: ISFIELDINCURRENTFORM HELPER: ISFIELDINCURRENTFORM HELPER: ISFIELDINCURRENTFORM HELPER: ISFIELDINCURRENTFORM HELPER:');
-            data.replicaSet = replicaSetOptions;
-            data.replicaItem = templateInstance.data.replicaItem;
-            data.replicaIndex = templateInstance.data.replicaIndex;
-
-            let replicaSetData = formInstance.replicaSets[replicaSetOptions.name];
-
-            // if template for replica set buttons add/remove is not supplied, use the default one
-            if (!data.replicaSet.template) {
-                data.replicaSet.template = 'skeleformDefaultReplicaBtns';
-            }
-
-            // initialize replicaSet object if not already defined
-            if (!replicaSetData) {
-                formInstance.replicaSets[replicaSetOptions.name] = {
-                    copies: 0,
-                    index: 0,
-                    instances: [],
-                    options: replicaSetOptions
-                };
-            }
-
-        }
-
-        return {
-            template: fieldSchema.output ? 'skeleform' + fieldSchema.output.capitalize() : null,
-            data: data
-        };
-    },
 
     formatClasses: function(classes) {
         if (Array.isArray(classes)) {
@@ -125,11 +75,20 @@ Template.skeleformBody.helpers({
 });
 
 
-Template.skeleformField.helpers({
-    createDataForField: function(data) {
-        data.schema = new ReactiveVar(data.schema);
+Template.skeleformGroupWrapper.helpers({
+    createFieldContext: function(context) {
+        context.skeleformGroupLevel++;
 
-        return data;
+        return context
+    }
+});
+
+
+Template.skeleformField.helpers({
+    createDataForField: function(context) {
+        context.fieldSchema = new ReactiveVar(context.fieldSchema);
+
+        return context;
     }
 })
 

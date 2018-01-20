@@ -1,5 +1,4 @@
 let debugType = 'skeleform';
-let skeleformInstance;
 
 // get configuration from skeletor or from the app
 configuration = Skeletor.configuration;
@@ -16,7 +15,7 @@ function translateErrorDetail(detail) {
 }
 
 registerField = function(instance) {
-    let formInstance = instance.data.formInstance;
+    /*let formInstance = instance.data.formInstance;
 
     // if the field is not part of a replica set, register it on formInstance.Fields
     if (!instance.data.replicaSet) {
@@ -64,7 +63,7 @@ registerField = function(instance) {
             console.log('FORM INSTANCE: %o', formInstance);
             console.log('=================================================');
         });
-    }
+    }*/
 };
 
 
@@ -385,17 +384,13 @@ Skeleform.utils.skeleformGatherData = skeleformGatherData;
 // Skeleform
 Template.skeleform.onCreated(function() {
     this.formRendered = new ReactiveVar(false);
-    this.debug = new ReactiveVar(false);
-    this.replicasReady = new ReactiveVar(false);
-
-    this.Fields = [];
-    this.replicaSets = {};
+    this.skeleDebug = new ReactiveVar(false);
 });
 Template.skeleform.onRendered(function() {
-    skeleformInstance = this;
-    this.formRendered.set(true);
     let data = this.data;
     let schema = data.schema;
+
+    this.formRendered.set(true);
 
     if (schema.__autoScrollTop !== false) {
         SkeleUtils.GlobalUtilities.scrollTo(0, configuration.animations.onRendered);
@@ -450,7 +445,7 @@ Template.skeleform.onRendered(function() {
         if (this.data.skeleSubsReady.get()) {
             // fire onRendered callback if it's defined
             if (schema.formCallbacks && schema.formCallbacks.onRendered) {
-                schema.formCallbacks.onRendered(this.data.item, skeleformInstance);
+                schema.formCallbacks.onRendered(this.data.item, this);
             }
         }
     });

@@ -41,7 +41,7 @@ handleGettedValue = function(value, schema) {
 Template.skeleformInput.onCreated(function() {
     this.isActivated = new ReactiveVar(false);
 
-    let schema = this.data.schema.get();
+    let schema = this.data.fieldSchema.get();
 
     InvokeCallback(this, null, schema, 'onCreated');
 
@@ -61,9 +61,9 @@ Template.skeleformInput.onCreated(function() {
         return handleGettedValue(value, schema);
     };
     this.isValid = () => {
-        let formInstance = this.data.formInstance;
+        let formContext = this.data.formContext;
         let value = this.getValue();
-        let validationResult = Skeleform.validate.checkOptions(value, schema, formInstance.data.schema, formInstance.data.item, this);
+        let validationResult = Skeleform.validate.checkOptions(value, schema, formContext.schema, formContext.item, this);
 
         if (schema.validation && schema.validation.unique === 'autoset') {
             let uniqueReasonIndex = validationResult.reasons.indexOf('unique');
@@ -110,10 +110,9 @@ Template.skeleformInput.onDestroyed(function() {
 
 Template.skeleformInput.onRendered(function() {
     let self = this;
-    let schema = self.data.schema.get();
+    let schema = self.data.fieldSchema.get();
     let id = schema.name;
 
-    SkeleUtils.GlobalUtilities.logger('Calling again registerField', 'skeleWarning');
     registerField(this);
 
     // handle formats

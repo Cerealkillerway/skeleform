@@ -110,7 +110,7 @@ Template.skeleformSelect.helpers({
     },
     isMultiple: function() {
         const instance = Template.instance();
-        let schema = instance.data.schema.get();
+        let schema = instance.data.fieldSchema.get();
 
         if (schema.multi) {
             return 'multiple';
@@ -136,7 +136,7 @@ Template.skeleformSelect.helpers({
 Template.skeleformSelect.onCreated(function() {
     this.isActivated = new ReactiveVar(false);
 
-    let schema = this.data.schema.get();
+    let schema = this.data.fieldSchema.get();
 
     InvokeCallback(this, null, schema, 'onCreated');
 
@@ -147,13 +147,12 @@ Template.skeleformSelect.onCreated(function() {
         $getFieldById(this, schema).material_select();
     };
     this.getValue = () => {
-        //SkeleUtils.GlobalUtilities.logger('select validation', 'skeleformFieldValidation');
         return $getFieldById(this, schema).val();
     };
     this.isValid = () => {
-        var formInstance = this.data.formInstance;
+        let formContext = this.data.formContext;
 
-        return Skeleform.validate.checkOptions(this.getValue(), schema, formInstance.data.schema, formInstance.data.item);
+        return Skeleform.validate.checkOptions(this.getValue(), schema, formContext.schema, formContext.item);
     };
     this.setValue = (value) => {
         if (!value) {
@@ -195,7 +194,7 @@ Template.skeleformSelect.onCreated(function() {
 });
 
 Template.skeleformSelect.onRendered(function() {
-    let schema = this.data.schema.get();
+    let schema = this.data.fieldSchema.get();
 
     registerField(this);
 

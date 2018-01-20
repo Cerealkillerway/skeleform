@@ -5,58 +5,47 @@
             {{> gearLoading}}
         {{/if}}
 
-        <!-- toolbar -->
-        {{#unless schema.__toolbar.containerId}}
-            {{#with toolbarContext}}
-                {{> skeleformToolbar this}}
-            {{/with}}
-        {{/unless}}
+        {{#if isDataReady this}}
+            <!-- toolbar -->
+            {{#unless schema.__toolbar.containerId}}
+                {{#with toolbarContext}}
+                    {{> skeleformToolbar this}}
+                {{/with}}
+            {{/unless}}
 
-        <!-- form fields -->
-        <div class="skeleformFields">
-            {{#with generalContext}}
-                {{> skeleformBody this}}
-            {{/with}}
-        </div>
+            <!-- form fields -->
+            <div class="skeleformFields">
+                {{> skeleformBody (formContext this)}}
+            </div>
+        {{/if}}
     </div>
 </template>
 
 <template name="skeleformBody">
     {{#each (fields this)}}
-        {{#with isFieldInCurrentForm this}}
-            {{#if data.schema.skeleformGroup}}
-                {{!-- handle not last level skeleform groups --}}
-
-                {{#if data.schema.replicaSet}}
-                    {{!-- handle replica sets of skeleform groups --}}
-                    {{> skeleformReplicaSetWrapper data=data}}
-
-                {{else}}
-                    <div class="row {{formatClasses data.schema.classes}}" id="{{data.schema.id}}">
-                        {{#if data.schema.size}}
-                            {{!-- skeleformGroups with user defined size --}}
-                            <div class="col {{data.schema.size}} {{formatClasses data.schema.classes}}">
-                                {{> skeleformBody data}}
-                            </div>
-                        {{else}}
-                            {{!-- skeleformGroups without user defined size --}}
-                            {{> skeleformBody data}}
-                        {{/if}}
-                    </div>
-                {{/if}}
+        {{#if fieldSchema.replicaSet}}
+            {{> skeleformReplicaSetWrapper this}}
+        {{else}}
+            {{#if fieldSchema.skeleformGroup}}
+                {{> skeleformGroupWrapper this}}
             {{else}}
                 {{> skeleformField this}}
             {{/if}}
-        {{/with}}
+        {{/if}}
     {{/each}}
 </template>
 
 
 <template name="skeleformReplicaSetWrapper">
     <div class="skeleformReplicaSet {{formatClasses data.schema.classes}}">
-        {{#each (handleReplicaSets this)}}
-            {{> skeleformReplicaSet this}}
-        {{/each}}
+        REPLICASET <br />
+    </div>
+</template>
+
+
+<template name="skeleformGroupWrapper">
+    <div class="row">
+        {{> skeleformBody (createFieldContext this)}}
     </div>
 </template>
 
@@ -80,14 +69,12 @@
 
 
 <template name="skeleformField">
-    {{#if (test data.groupLevel 0)}}
-        {{!-- fields natively at level 0 (not grouped) --}}
+    {{#if (skeleformTest this.skeleformGroupLevel 0)}}
         <div class="row">
-            {{> Template.dynamic template=template data=(createDataForField data)}}
+            {{> Template.dynamic template=template data=(createDataForField this)}}
         </div>
     {{else}}
-        {{!-- fields grouped --}}
-        {{> Template.dynamic template=template data=(createDataForField data)}}
+        {{> Template.dynamic template=template data=(createDataForField this)}}
     {{/if}}
 </template>
 
