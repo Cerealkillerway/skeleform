@@ -113,6 +113,7 @@ Template.skeleformInput.onRendered(function() {
     let schema = self.data.schema.get();
     let id = schema.name;
 
+    SkeleUtils.GlobalUtilities.logger('Calling again registerField', 'skeleWarning');
     registerField(this);
 
     // handle formats

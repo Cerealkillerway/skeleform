@@ -184,10 +184,6 @@ Template.skeleformSelect.onCreated(function() {
             }
         }
 
-        console.log('+++++++++++++++++++++++++++++++++++++++++++++');
-        console.log(this.firstNode);
-        console.log(value);
-        console.log('+++++++++++++++++++++++++++++++++++++++++++++');
         // here cannot test value !== this.getValue() since the actual value for the field in the current document
         // can be the first value (default preselected) for the field;
         if (value !== undefined) {

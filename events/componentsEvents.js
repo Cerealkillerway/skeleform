@@ -44,7 +44,7 @@ Skeleform.handleReplicaIndexes = function($replicaContainer, replicaFields, form
         }
     });
 
-    console.log(formInstance);
+    console.log('formInstance: %o', formInstance);
 }
 
 
@@ -114,7 +114,12 @@ Template.skeleformDefaultReplicaBtns.events({
         let replicaSetData = formInstance.replicaSets[data.replicaSet.name];
         let replicaFields = data.schema;
 
-        Skeleform.addReplicaSetInstance(instance, replicaSetData, replicaFields);
+        replicaSetData.instances.push({
+            replicaItem: {},
+            replicaIndex: 6,
+            //context: context,
+            Fields: []
+        });
     },
 
     'click .skeleReplicaBtnRemove': function(event, instance) {

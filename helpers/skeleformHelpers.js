@@ -86,6 +86,7 @@ Template.skeleformBody.helpers({
         let replicaSetOptions = fieldSchema.replicaSet;
 
         if (replicaSetOptions) {
+            console.log('ISFIELDINCURRENTFORM HELPER: ISFIELDINCURRENTFORM HELPER: ISFIELDINCURRENTFORM HELPER: ISFIELDINCURRENTFORM HELPER: ISFIELDINCURRENTFORM HELPER:');
             data.replicaSet = replicaSetOptions;
             data.replicaItem = templateInstance.data.replicaItem;
             data.replicaIndex = templateInstance.data.replicaIndex;

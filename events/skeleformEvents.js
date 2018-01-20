@@ -25,7 +25,7 @@ registerField = function(instance) {
     }
     // otherwise register it on formInstance.replicaSets[replicaName].instances[index].Fields
     else {
-        console.log('creating a new autorun cycle');
+        console.log('creating a new autorun cycle (register field)');
         instance.autorun(() => {
             // must wait for replicaSet object to be initialized; skeleformReplicaSetWrapper.handleReplicaSets helper
             // sets formRendered to true once replica objects init is done;
@@ -36,7 +36,7 @@ registerField = function(instance) {
                 return;
             }
 
-            /*let $replicaContainer = $(instance.firstNode).closest('.skeleformReplicaSet');
+            let $replicaContainer = $(instance.firstNode).closest('.skeleformReplicaSet');
             let $replicas = $replicaContainer.find('.skeleformReplicaFrame');
             let $currentReplica = $(instance.firstNode).closest('.skeleformReplicaFrame')
             let index = $replicas.index($currentReplica);
@@ -51,20 +51,15 @@ registerField = function(instance) {
             let registeredReplicaInstance = formInstance.replicaSets[replicaName].instances[index];
 
             registeredReplicaInstance.replicaIndex = index + 1;
-
-            console.log('current replica index: ' + instance.data.replicaIndex);
-            console.log('setting replica index to: ' + registeredReplicaInstance.replicaIndex);
-
             instance.data.replicaIndex = registeredReplicaInstance.replicaIndex;
             instance.data.replicaItem = registeredReplicaInstance.replicaItem;
 
+            console.log('current replica index: ' + instance.data.replicaIndex);
+            console.log('setting replica index to: ' + registeredReplicaInstance.replicaIndex);
             console.log('instance: %o', instance);
-            console.log('now instance replicaIndex should be: ' + instance.data.replicaIndex);*/
+            console.log('now instance replicaIndex should be: ' + instance.data.replicaIndex);
 
-            //registeredReplicaInstance.Fields.push(instance);
-            let replicaName = instance.data.replicaSet.name;
-            let index = instance.data.replicaIndex - 1;
-            formInstance.replicaSets[replicaName].instances[index].Fields.push(instance);
+            registeredReplicaInstance.Fields.push(instance);
 
             console.log('FORM INSTANCE: %o', formInstance);
             console.log('=================================================');
