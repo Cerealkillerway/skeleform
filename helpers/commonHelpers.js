@@ -54,7 +54,7 @@ $getShadowFieldId = function(instance, schema) {
 // standard function to set the value on a field;
 // it waits for any custom initialization on the field, and reactively watch lang changes
 // and fires appropriate i18n method on the field is special handling for i18n is required
-setFieldValue = function(instance, data, schema) {
+setFieldValue = function(instance, item, fieldSchema) {
     //instance.view.autorun(function() {
         // register dependency from current language; used to fire custom i18n callback
         // for fields that requires special i18n treatment...
@@ -80,8 +80,7 @@ setFieldValue = function(instance, data, schema) {
                 return false;
             }
 
-            let value = SkeleformStandardFieldValue(data, schema, instance);
-
+            let value = SkeleformStandardFieldValue(item, fieldSchema, instance);
 
             //SkeleUtils.GlobalUtilities.logger(schema.name + '-value: ' + value, 'skeleformCommon');
             //SkeleUtils.GlobalUtilities.logger(schema.name + '-getValue(): ' + instance.getValue(), 'skeleformCommon');
@@ -103,37 +102,38 @@ setFieldValue = function(instance, data, schema) {
 // standard function to get a field's value form the current data object;
 // it is defined here as a global function so that special field types can override "fieldValue" helper
 // but still call this function if needed and then perform any special handling that is required
-SkeleformStandardFieldValue = function(data, schema, instance) {
-    if (data === undefined) return;
+SkeleformStandardFieldValue = function(item, fieldSchema, instance) {
+    console.log(item);
+    console.log(fieldSchema);
+    console.log(instance);
+    console.log('---------------------------');
+    
+    if (item === undefined) return;
 
-    let name = schema.name;
+    let name = fieldSchema.name;
+    let fieldData;
 
-    if (instance.data.replicaSet) {
-        let replicaItem = instance.data.replicaItem;
-
-        if (!replicaItem) {
-            return;
-        }
-
-        return replicaItem[name];
+    if (fieldSchema.i18n === undefined) {
+        fieldData = SkeleUtils.GlobalUtilities.getPropertyFromString(FlowRouter.getParam('itemLang') + '---' + name, item)
     }
     else {
-        if (schema.i18n === undefined) {
-            data = SkeleUtils.GlobalUtilities.getPropertyFromString(FlowRouter.getParam('itemLang') + '---' + name, data)
-
-            if (data === undefined) return '';
-        }
-        else {
-            data = SkeleUtils.GlobalUtilities.getPropertyFromString(name, data);
-        }
+        fieldData = SkeleUtils.GlobalUtilities.getPropertyFromString(name, item);
     }
 
     // set active class on label to avoid overlapping
-    if (schema.output === 'input') {
-        $('#' + schema.name).next('label').addClass('active');
+    if (fieldSchema.output === 'input') {
+        $('#' + fieldSchema.name).next('label').addClass('active');
     }
 
-    return data;
+    if (fieldData === undefined) {
+        return '';
+    }
+
+    /*console.log(name);
+    console.log(fieldData);
+    console.log('------------------');*/
+
+    return fieldData;
 };
 
 
@@ -189,6 +189,22 @@ createPath = function(path, data) {
     return result;
 };
 
+
+skeleformStyleHelpers = {
+    formatClasses: function(classes) {
+        if (!classes) {
+            return '';
+        }
+
+        if (Array.isArray(classes)) {
+            return classes ? classes.join(' ') : '';
+        }
+
+        return classes;
+    }
+}
+
+
 //helpers used by form elements
 skeleformGeneralHelpers = {
     label: function(name, options) {
@@ -213,12 +229,15 @@ skeleformGeneralHelpers = {
             return TAPi18n.__(name + '_lbl');
         }
     },
+
     schema: function() {
         return Template.instance().data.fieldSchema.get();
     },
+
     field: function(name) {
         return createFieldId(Template.instance(), name);
     },
+
     required: function() {
         let instance = Template.instance();
         let validationOptions = this.fieldSchema.get().validation;
@@ -229,10 +248,12 @@ skeleformGeneralHelpers = {
         if ((validationOptions && validationOptions.min !== undefined) || validationOptions && validationOptions.type === 'date') return ' *';
         return '';
     },
+
     fieldStyle: function(context) {
         if (context.icon || context.unit) return 'float: left;';
         return '';
     },
+
     fieldSize: function(size) {
         if (!size) return 's12 m6';
         return size;
@@ -245,17 +266,8 @@ skeleformGeneralHelpers = {
 
         setFieldValue(instance, data.formContext.item, data.fieldSchema.get());
     },
-    formatClasses: function(classes) {
-        if (!classes) {
-            return '';
-        }
 
-        if (Array.isArray(classes)) {
-            return classes ? classes.join(' ') : '';
-        }
-
-        return classes;
-    }
+    formatClasses: skeleformStyleHelpers.formatClasses
 };
 
 

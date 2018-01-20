@@ -49,33 +49,33 @@ Skeleform.handleReplicaIndexes = function($replicaContainer, replicaFields, form
 
 
 Template.skeleformReplicaSetWrapper.onRendered(function() {
-    let data = this.data.data;
+    let data = this.data;
+    let replicaOptions = data.fieldSchema.replicaSet;
 
-    /*if (data.replicaSet.sortable) {
+    if (replicaOptions.sortable) {
         let $replicaContainer = this.$('.skeleformReplicaSet');
         let items = $replicaContainer[0];
-        let replicaName = data.replicaSet.name;
         let sortable = Sortable.create(items, {
             animation: 150,
             draggable: '.skeleformReplicaFrame',
             filter: '.skeleValidate',
             preventOnFilter: false,
             onEnd: function(event) {
-                Skeleform.handleReplicaIndexes($replicaContainer, data.schema.fields, data.formInstance, replicaName, event);
+                console.log(event);
             }
         });
-    }*/
+    }
 });
 
 
 Template.skeleformReplicaSet.onRendered(function() {
-    this.autorun(() => {
+    /*this.autorun(() => {
         if (this.view.isRendered) {
             let $indexContainer = $(this.find('.replica_index'));
 
             $indexContainer.html(this.data.replicaIndex);
         }
-    })
+    })*/
 });
 
 

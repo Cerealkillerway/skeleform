@@ -15,55 +15,9 @@ function translateErrorDetail(detail) {
 }
 
 registerField = function(instance) {
-    /*let formInstance = instance.data.formInstance;
+    let formContext = instance.data.formContext;
 
-    // if the field is not part of a replica set, register it on formInstance.Fields
-    if (!instance.data.replicaSet) {
-        //instance.replicaIndex = instance.data.formInstance.replicaSets[instance.data.replicaSet.name].index;
-        formInstance.Fields.push(instance);
-    }
-    // otherwise register it on formInstance.replicaSets[replicaName].instances[index].Fields
-    else {
-        console.log('creating a new autorun cycle (register field)');
-        instance.autorun(() => {
-            // must wait for replicaSet object to be initialized; skeleformReplicaSetWrapper.handleReplicaSets helper
-            // sets formRendered to true once replica objects init is done;
-            let replicasReady = formInstance.replicasReady.get();
-            let subsReady = formInstance.data.skeleSubsReady.get();
-
-            if (!replicasReady || !subsReady) {
-                return;
-            }
-
-            let $replicaContainer = $(instance.firstNode).closest('.skeleformReplicaSet');
-            let $replicas = $replicaContainer.find('.skeleformReplicaFrame');
-            let $currentReplica = $(instance.firstNode).closest('.skeleformReplicaFrame')
-            let index = $replicas.index($currentReplica);
-            let logger = false;
-
-            console.log(instance.firstNode);
-            console.log(instance.view.isRendered);
-            console.log('replica container; %o', $replicaContainer[0]);
-            console.log('current calculated index from DOM: ' + index);
-
-            let replicaName = instance.data.replicaSet.name;
-            let registeredReplicaInstance = formInstance.replicaSets[replicaName].instances[index];
-
-            registeredReplicaInstance.replicaIndex = index + 1;
-            instance.data.replicaIndex = registeredReplicaInstance.replicaIndex;
-            instance.data.replicaItem = registeredReplicaInstance.replicaItem;
-
-            console.log('current replica index: ' + instance.data.replicaIndex);
-            console.log('setting replica index to: ' + registeredReplicaInstance.replicaIndex);
-            console.log('instance: %o', instance);
-            console.log('now instance replicaIndex should be: ' + instance.data.replicaIndex);
-
-            registeredReplicaInstance.Fields.push(instance);
-
-            console.log('FORM INSTANCE: %o', formInstance);
-            console.log('=================================================');
-        });
-    }*/
+    formContext.fields.push(instance);
 };
 
 
@@ -113,13 +67,13 @@ setInvalid = function(id, schema, result) {
 
 
 // validation loop for entire form against fields' values
-skeleformValidateForm = function(data, Fields) {
+skeleformValidateForm = function(data, fields) {
     let valid = true;
     let currentLang = FlowRouter.getParam('itemLang');
 
     try {
-        Fields.forEach(function(field) {
-            let fieldSchema = field.data.schema.get();
+        fields.forEach(function(field) {
+            let fieldSchema = field.data.fieldSchema.get();
             let $field = $getFieldById(field, fieldSchema);
 
             if ($field.hasClass('skeleValidate')) {
@@ -133,7 +87,7 @@ skeleformValidateForm = function(data, Fields) {
     }
     catch(error) {
         valid = false;
-        let schema = error.field.data.schema.get();
+        let schema = error.field.data.fieldSchema.get();
         let id = schema.name.replace('.', '\\.');
         let offsetCorrection = 80;
 
@@ -299,14 +253,14 @@ skeleformHandleResult = function(error, result, type, data, paths) {
 
 // GATHERING
 // gather data from form's fields
-skeleformGatherData = function(formContext, Fields) {
-    let formItem = formContext.item;
+skeleformGatherData = function(formContext, fields) {
+    let item = formContext.item;
     let lang = FlowRouter.getParam('itemLang');
     let data = {};
     let replicasToClean = [];
 
-    Fields.forEach(function(field) {
-        let fieldSchema = field.data.schema.get();
+    fields.forEach(function(field) {
+        let fieldSchema = field.data.fieldSchema.get();
         let $field = $getFieldById(field, fieldSchema);
         //console.log($field);
         let fieldName;
@@ -330,7 +284,7 @@ skeleformGatherData = function(formContext, Fields) {
                 console.log('******************************');*/
 
             }
-            let currentValue = formItem ? formItem[fieldName] : undefined;
+            let currentValue = item ? item[fieldName] : undefined;
 
             // force gathering of replica sets always
             if (field.data.replicaSet) {
@@ -445,7 +399,7 @@ Template.skeleform.onRendered(function() {
         if (this.data.skeleSubsReady.get()) {
             // fire onRendered callback if it's defined
             if (schema.formCallbacks && schema.formCallbacks.onRendered) {
-                schema.formCallbacks.onRendered(this.data.item, this);
+                schema.formCallbacks.onRendered(item, this);
             }
         }
     });
@@ -563,21 +517,12 @@ Template.skeleformCreateButtons.events({
 Template.skeleformUpdateButtons.events({
     'click .skeleformUpdate': function(event, template) {
         let formContext = template.data.formContext;
-        let formInstance = formContext.formInstance;
-        let Fields = formInstance.Fields;
+        let fields = formContext.fields;
         let documentId = formContext.item._id;
         let schema = formContext.schema;
         let method;
         let options = {};
-
-        // add replicas fields to Field object
-        _.each(formInstance.replicaSets, function(replicaSet) {
-            for (instance of replicaSet.instances) {
-                Fields = Fields.concat(instance.Fields);
-            }
-        });
-
-        let data = skeleformGatherData(formContext, Fields);
+        let data = skeleformGatherData(formContext, fields);
 
         if (schema.__options) {
             if (schema.__options.loadingModal) {
@@ -598,7 +543,7 @@ Template.skeleformUpdateButtons.events({
             data = schema.formCallbacks.beforeSave(template.data, data);
         }
 
-        if (skeleformValidateForm(data, Fields)) {
+        if (skeleformValidateForm(data, fields)) {
             if (options.useModal) {
                 $('#gearLoadingModal').openModal();
             }

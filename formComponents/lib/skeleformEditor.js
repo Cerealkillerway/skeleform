@@ -42,20 +42,14 @@ editorToolbars = {
 
 // Helpers
 Template.skeleformEditor.helpers(skeleformGeneralHelpers);
-Template.skeleformEditor.helpers({
-    fieldEditor: function(data, schema) {
-        const instance = Template.instance();
-
-        setFieldValue(instance, data, schema);
-    }
-});
 
 
 // Events
 Template.skeleformEditor.onCreated(function() {
+    registerField(this);
     this.isActivated = new ReactiveVar(false);
 
-    let schema = this.data.schema.get();
+    let schema = this.data.fieldSchema.get();
 
     InvokeCallback(this, null, schema, 'onCreated');
 
@@ -79,9 +73,9 @@ Template.skeleformEditor.onCreated(function() {
     };
     this.isValid = () => {
         //SkeleUtils.GlobalUtilities.logger('editor validation', 'skeleformFieldValidation');
-        let formInstance = this.data.formInstance;
+        let formContext = this.data.formContext;
 
-        return Skeleform.validate.checkOptions(this.getValue(), schema, formInstance.data.schema, formInstance.data.item);
+        return Skeleform.validate.checkOptions(this.getValue(), schema, formContext.schema, formContext.item);
     };
     this.setValue = (value) => {
         // if setting a real value, fire onChange callback
@@ -96,18 +90,16 @@ Template.skeleformEditor.onCreated(function() {
     };
 });
 Template.skeleformEditor.onDestroyed(function() {
-    let Fields = this.data.formInstance.Fields;
+    let fields = this.data.formContext.fields;
 
-    Fields.removeAt(Fields.indexOf(this));
+    fields.removeAt(fields.indexOf(this));
 });
 Template.skeleformEditor.onRendered(function() {
     let editor = this.$('.editor');
-    let schema = this.data.schema.get();
+    let schema = this.data.fieldSchema.get();
     let toolbar = schema.toolbar;
-    let imageParams = this.data.schema.image;
+    let imageParams = schema.image;
     this.currentLang = FlowRouter.getQueryParam('lang');
-
-    registerField(this);
 
     if ((toolbar === undefined)|| (editorToolbars[toolbar] === undefined)) toolbar = 'default';
 
@@ -118,7 +110,7 @@ Template.skeleformEditor.onRendered(function() {
         otherStaticBarClass: 'skeleStaticBar',
         height: schema.editorHeight || 400,
         minHeight: schema.editorMinHeight || 100,
-        posIndex: this.data.schema.name,
+        posIndex: schema.name,
         callbacks: {
             onInit: () => {
                 //place validate class on the correct element newly created by materialnote

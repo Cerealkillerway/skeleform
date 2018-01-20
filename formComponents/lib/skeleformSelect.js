@@ -134,6 +134,7 @@ Template.skeleformSelect.helpers({
 
 // Events
 Template.skeleformSelect.onCreated(function() {
+    registerField(this);
     this.isActivated = new ReactiveVar(false);
 
     let schema = this.data.fieldSchema.get();
@@ -196,8 +197,6 @@ Template.skeleformSelect.onCreated(function() {
 Template.skeleformSelect.onRendered(function() {
     let schema = this.data.fieldSchema.get();
 
-    registerField(this);
-
     // start plugin
     let $field = $getFieldById(this, schema);
     let $options = $field.children('option');
@@ -228,9 +227,9 @@ Template.skeleformSelect.onRendered(function() {
 });
 
 Template.skeleformSelect.onDestroyed(function() {
-    let Fields = this.data.formInstance.Fields;
+    let fields = this.data.formContext.fields;
 
-    Fields.removeAt(Fields.indexOf(this));
+    fields.removeAt(fields.indexOf(this));
 });
 
 Template.skeleformSelect.events({
@@ -240,7 +239,7 @@ Template.skeleformSelect.events({
     'change select': function(event, instance) {
         // perform validation and callback invocation on change
         let value = instance.getValue();
-        let schema = instance.data.schema.get();
+        let schema = instance.data.fieldSchema.get();
 
         instance.isValid();
 

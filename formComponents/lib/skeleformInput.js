@@ -39,6 +39,7 @@ handleGettedValue = function(value, schema) {
 
 // Events
 Template.skeleformInput.onCreated(function() {
+    registerField(this);
     this.isActivated = new ReactiveVar(false);
 
     let schema = this.data.fieldSchema.get();
@@ -102,9 +103,9 @@ Template.skeleformInput.onCreated(function() {
 
 
 Template.skeleformInput.onDestroyed(function() {
-    let Fields = this.data.formInstance.Fields;
+    let fields = this.data.formContext.fields;
 
-    Fields.removeAt(Fields.indexOf(this));
+    fields.removeAt(fields.indexOf(this));
 });
 
 
@@ -112,8 +113,6 @@ Template.skeleformInput.onRendered(function() {
     let self = this;
     let schema = self.data.fieldSchema.get();
     let id = schema.name;
-
-    registerField(this);
 
     // handle formats
     switch (schema.formatAs) {
@@ -168,7 +167,7 @@ Template.skeleformInput.events({
     'keyup .skeleValidate, keyup .shadowField': function(event, instance) {
         // perform validation and callback invocation on change
         let value = instance.getValue();
-        let schema = instance.data.schema.get();
+        let schema = instance.data.fieldSchema.get();
         let result = instance.isValid();
         let id = $(event.target).attr('id');
 

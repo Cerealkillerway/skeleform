@@ -19,6 +19,7 @@ Template.skeleform.helpers({
         context.skeleDebug = instance.skeleDebug;
         context.formContext = context;
         context.fieldSchema = context.schema;
+        context.fields = [];
 
         return context;
     }
@@ -30,14 +31,21 @@ Template.skeleformBody.helpers({
     fields: function(context) {
         let fields = context.fieldSchema.fields
         let currentFields = [];
+        let item = context.item;
 
         function createFieldContext(fieldSchema) {
-            return {
+            let fieldContext = {
                 formContext: context.formContext,
                 fieldSchema: fieldSchema,
                 template: fieldSchema.output ? 'skeleform' + fieldSchema.output.capitalize() : null,
                 skeleformGroupLevel: context.skeleformGroupLevel || 0
             }
+
+            if (context.replicaIndex) {
+                fieldContext.replicaIndex = context.replicaIndex;
+            }
+
+            return fieldContext;
         }
 
         // create array of fields to display
@@ -45,13 +53,13 @@ Template.skeleformBody.helpers({
             if (fieldSchema.output !== 'none') {
                 switch (fieldSchema.showOnly) {
                     case 'create':
-                    if (!formData) {
+                    if (!item) {
                         currentFields.push(createFieldContext(fieldSchema));
                     }
                     break;
 
                     case 'update':
-                    if (formData) {
+                    if (item) {
                         currentFields.push(createFieldContext(fieldSchema));
                     }
                     break;
@@ -65,13 +73,7 @@ Template.skeleformBody.helpers({
         return currentFields;
     },
 
-
-    formatClasses: function(classes) {
-        if (Array.isArray(classes)) {
-            return classes.join(' ');
-        }
-        return classes;
-    }
+    formatClasses: skeleformStyleHelpers.formatClasses
 });
 
 
@@ -81,6 +83,47 @@ Template.skeleformGroupWrapper.helpers({
 
         return context
     }
+});
+
+
+Template.skeleformReplicaSetWrapper.helpers({
+    createReplicaContext: function(context) {
+        let replicaOptions = context.fieldSchema.replicaSet;
+        let item = context.formContext.item;
+        let replicaName = replicaOptions.name
+        let replicas = [];
+        let replicaItem;
+        let replicaIndex = 0;
+
+        if (replicaOptions.i18n === undefined) {
+            replicaName = FlowRouter.getParam('itemLang') + '---' + replicaName;
+        }
+
+        replicaItem = item[replicaName];
+
+        function insertReplicaItem() {
+            let replicaContext = {};
+
+            _.extend(replicaContext, context);
+            replicaContext.replicaIndex = replicaIndex;
+            replicas.push(replicaContext);
+
+            replicaIndex++;
+        }
+
+        for (item of replicaItem) {
+            insertReplicaItem();
+        }
+
+        // add missing copies to reach minimum required
+        while (replicas.length < replicaOptions.minCopies) {
+            insertReplicaItem();
+        }
+
+        return replicas;
+    },
+
+    formatClasses: skeleformStyleHelpers.formatClasses
 });
 
 

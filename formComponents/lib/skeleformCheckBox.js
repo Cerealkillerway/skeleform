@@ -6,14 +6,9 @@
 // Helpers
 Template.skeleformCheckBox.helpers(skeleformGeneralHelpers);
 Template.skeleformCheckBox.helpers({
-    fieldValue: function(data, schema) {
-        const instance = Template.instance();
-
-        setFieldValue(instance, data, schema);
-    },
     isCheckBox: function() {
         const instance = Template.instance();
-        let schema = instance.data.schema.get();
+        let schema = instance.data.fieldSchema.get();
 
         if (!schema.renderAs || schema.renderAs === 'checkbox') {
             return true;
@@ -22,7 +17,7 @@ Template.skeleformCheckBox.helpers({
     },
     switchLabel: function(type) {
         const instance = Template.instance();
-        let schema = instance.data.schema.get();
+        let schema = instance.data.fieldSchema.get();
 
         if (type === 'off') {
             if (schema.labels && schema.labels.off) {
@@ -42,14 +37,12 @@ Template.skeleformCheckBox.helpers({
 
 // Events
 Template.skeleformCheckBox.onCreated(function() {
+    registerField(this);
     this.isActivated = new ReactiveVar(false);
 
-    let schema = this.data.schema.get();
+    let schema = this.data.fieldSchema.get();
 
-    InvokeCallback(this, null, this.data.schema, 'onCreated');
-
-    // register this on form' store
-
+    InvokeCallback(this, null, schema, 'onCreated');
 
     this.getValue = () => {
         let value = $getFieldById(this, schema).prop('checked');
@@ -86,22 +79,20 @@ Template.skeleformCheckBox.onCreated(function() {
     };
 });
 Template.skeleformCheckBox.onDestroyed(function() {
-    let Fields = this.data.formInstance.Fields;
+    let fields = this.data.formContext.fields;
 
-    Fields.removeAt(Fields.indexOf(this));
+    fields.removeAt(fields.indexOf(this));
 });
 
 Template.skeleformCheckBox.onRendered(function() {
-    let schema = this.data.schema.get();
-
-    registerField(this);
+    let schema = this.data.fieldSchema.get();
 
     this.isActivated.set(true);
     InvokeCallback(this, null, schema, 'onRendered');
 
     // on checkboxes it is necessary to fire onChange on load since for "false" value, the "setValue()" never happens
     // because when creating new document, the relative item's field is undefined
-    if (this.data.formInstance.data.skeleSubsReady.get()) {
+    if (this.data.formContext.skeleSubsReady.get()) {
         if (this.getValue() === false) {
             InvokeCallback(this, this.getValue(), schema, 'onChange');
         }
@@ -113,10 +104,10 @@ Template.skeleformCheckBox.events({
     'change .skeleValidate': function(event, instance) {
         // perform validation and callback invocation on change
         let value = instance.getValue();
-        let schema = instance.data.schema;
+        let schema = instance.data.fieldSchema.get();
 
         instance.isValid();
 
-        InvokeCallback(instance, value, schema.get(), 'onChange');
+        InvokeCallback(instance, value, schema, 'onChange');
     },
 });

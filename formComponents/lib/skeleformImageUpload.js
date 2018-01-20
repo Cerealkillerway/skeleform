@@ -70,9 +70,10 @@ Template.skeleformImageUpload.helpers({
 
 // Events
 Template.skeleformImageUpload.onCreated(function() {
+    registerField(this);
     this.isActivated = new ReactiveVar(false);
 
-    let schema = this.data.schema.get();
+    let schema = this.data.fieldSchema.get();
 
     InvokeCallback(this, null, schema, 'onCreated');
 
@@ -98,9 +99,9 @@ Template.skeleformImageUpload.onCreated(function() {
         return images;
     };
     this.isValid = () => {
-        let formInstance = this.data.formInstance;
+        let formContext = this.data.formContext;
 
-        return Skeleform.validate.checkOptions(this.getValue(), schema, formInstance.data.schema, formInstance.data.item, this);
+        return Skeleform.validate.checkOptions(this.getValue(), schema, formContext.schema, formContext.item, this);
     };
     this.setValue = (value) => {
         if (!value || this.isSettingValue) {
@@ -190,16 +191,14 @@ Template.skeleformImageUpload.onCreated(function() {
     };
 });
 Template.skeleformImageUpload.onDestroyed(function() {
-    let Fields = this.data.formInstance.Fields;
+    let fields = this.data.formContext.fields;
 
-    Fields.removeAt(Fields.indexOf(this));
+    fields.removeAt(fields.indexOf(this));
 });
 Template.skeleformImageUpload.onRendered(function() {
     let editor = this.$('.editor');
-    let schema = this.data.schema.get();
+    let schema = this.data.fieldSchema.get();
     this.currentLang = FlowRouter.getQueryParam('lang');
-
-    registerField(this);
 
     this.isActivated.set(true);
     InvokeCallback(this, null, schema, 'onRendered');
@@ -208,7 +207,7 @@ Template.skeleformImageUpload.onRendered(function() {
 Template.skeleformImageUpload.events = {
     'change .skeleImageUploader': function(event, instance) {
         let $canvasContainer = instance.$('.skeleCanvasContainer');
-        let schema = instance.data.schema.get();
+        let schema = instance.data.fieldSchema.get();
         let images = event.target.files;
 
         if (images.length === 0) {

@@ -13,16 +13,14 @@ Template.skeleformClockPicker.helpers({
 });
 
 Template.skeleformClockPicker.onCreated(function() {
+    registerField(this);
     this.isActivated = new ReactiveVar(false);
 
-    let schema = this.data.schema.get();
+    let schema = this.data.fieldSchema.get();
 
     InvokeCallback(this, null, schema, 'onCreated');
 
     this.initOptions = {};
-
-
-
 
     this.i18n = (currentLang) => {
         let $element = $getFieldById(this, schema);
@@ -36,9 +34,9 @@ Template.skeleformClockPicker.onCreated(function() {
     };
     this.isValid = () => {
         //SkeleUtils.GlobalUtilities.logger('clockpicker validation', 'skeleformFieldValidation');
-        let formInstance = this.data.formInstance;
+        let formContext = this.data.formContext;
 
-        return Skeleform.validate.checkOptions(this.getValue(), schema, formInstance.data.schema, formInstance.data.item);
+        return Skeleform.validate.checkOptions(this.getValue(), schema, formContext.schema, formContext.item);
     };
     this.setValue = (value) => {
         let initOptions = this.initOptions;
@@ -56,17 +54,15 @@ Template.skeleformClockPicker.onCreated(function() {
     };
 });
 Template.skeleformClockPicker.onDestroyed(function() {
-    let Fields = this.data.formInstance.Fields;
+    let fields = this.data.formContext.fields;
 
-    Fields.removeAt(Fields.indexOf(this));
+    fields.removeAt(fields.indexOf(this));
 });
 
 Template.skeleformClockPicker.onRendered(function() {
     let data = this.data.item;
-    let schema = this.data.schema.get();
+    let schema = this.data.fieldSchema.get();
     let options = schema.pickerOptions;
-
-    registerField(this);
 
     // activates validation on set
     this.initOptions = {

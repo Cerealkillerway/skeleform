@@ -1,23 +1,21 @@
 <template name="skeleform">
     <div class="skeleform">
-        <!-- form loading modal -->
-        {{#if schema.__options.loadingModal}}
-            {{> gearLoading}}
-        {{/if}}
+        <!-- toolbar -->
+        {{#unless schema.__toolbar.containerId}}
+            {{#with toolbarContext}}
+                {{> skeleformToolbar this}}
+            {{/with}}
+        {{/unless}}
 
-        {{#if isDataReady this}}
-            <!-- toolbar -->
-            {{#unless schema.__toolbar.containerId}}
-                {{#with toolbarContext}}
-                    {{> skeleformToolbar this}}
-                {{/with}}
-            {{/unless}}
-
-            <!-- form fields -->
-            <div class="skeleformFields">
+        <!-- form fields -->
+        <div class="skeleformFields">
+            {{#if isDataReady this}}
                 {{> skeleformBody (formContext this)}}
-            </div>
-        {{/if}}
+            {{else}}
+                <!-- form loading modal -->
+                {{> gearContent this.schema}}
+            {{/if}}
+        </div>
     </div>
 </template>
 
@@ -37,8 +35,17 @@
 
 
 <template name="skeleformReplicaSetWrapper">
-    <div class="skeleformReplicaSet {{formatClasses data.schema.classes}}">
-        REPLICASET <br />
+    <div class="skeleformReplicaSet {{formatClasses this.fieldSchema.classes}}">
+        {{#each (createReplicaContext this)}}
+            <div class="skeleformReplicaFrame {{formatClasses this.fieldSchema.groupClasses}}">
+                {{#if this.fieldSchema.replicaSet.indexes}}
+                    <div class="replica_index">
+                        {{this.replicaIndex}}
+                    </div>
+                {{/if}}
+                {{> skeleformBody this}}
+            </div>
+        {{/each}}
     </div>
 </template>
 
