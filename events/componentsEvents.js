@@ -2,80 +2,46 @@ import Sortable from 'sortablejs';
 
 
 // Calculate positional indexes for replicaFrames
-Skeleform.handleReplicaIndexes = function($replicaContainer, replicaFields, formInstance, replicaName, event) {
+Skeleform.handleReplicaIndexes = function(instance, context, event) {
     let newIndex = event.newIndex;
     let oldIndex = event.oldIndex;
-    let replicaData = formInstance.replicaSets[replicaName]
-    let replicaInstances = replicaData.instances;
-    let movedInstance = replicaInstances[oldIndex];
-    let index = 1;
+    let item = context.formContext.item;
+    let replicaOptions = context.fieldSchema.replicaSet;
+    let replicaName = replicaOptions.name;
+    let $replicaContainer = $(instance.firstNode).closest('.skeleformReplicaSet');
+    let $replicas = $replicaContainer.find('.skeleformReplicaFrame');
 
-    SkeleUtils.GlobalUtilities.logger('handling replica indexes on replica: ' + replicaName, 'skeleformField');
+    SkeleUtils.GlobalUtilities.logger('Replica indexes handler: [' + replicaName + '] moved replica #' + oldIndex + ' to #' + newIndex, 'skelePlugin');
 
-    replicaInstances.splice(oldIndex, 1);
-    replicaInstances.insertAt(movedInstance, newIndex);
+    for (replica of $replicas) {
+        let $replica = $(replica);
+        let index = $replicas.index($replica);
 
-    for (replicaInstance of replicaInstances) {
-        replicaInstance.replicaIndex = index;
-
-        for (field of replicaInstance.Fields) {
-            field.data.replicaIndex = index;
-        }
-
-        index++;
+        $replica.find('.skeleformReplicaIndex').text(index + 1);
     }
-
-    $.each($replicaContainer.find('.skeleformReplicaFrame'), function(index, frame) {
-        let currentIndex = index + 1 ;
-        let $frame = $(frame);
-        let $indexContainer = $frame.find('.replica_index');
-        let oldIndex = $indexContainer.text()
-
-        $indexContainer.html(currentIndex);
-
-        if (oldIndex.length > 0) {
-            for (const replicaField of replicaFields) {
-                let name = replicaField.name;
-                let oldName = name + '-' + oldIndex;
-                let newName = name + '-' + currentIndex;
-
-                $frame.find('#' + oldName).attr('id', newName);
-            }
-        }
-    });
-
-    console.log('formInstance: %o', formInstance);
 }
 
 
 Template.skeleformReplicaSetWrapper.onRendered(function() {
-    let data = this.data;
+    let instance = this;
+    let data = instance.data;
     let replicaOptions = data.fieldSchema.replicaSet;
 
     if (replicaOptions.sortable) {
         let $replicaContainer = this.$('.skeleformReplicaSet');
         let items = $replicaContainer[0];
-        let sortable = Sortable.create(items, {
+        data.formContext.plugins.sortables[replicaOptions.name] = Sortable.create(items, {
             animation: 150,
             draggable: '.skeleformReplicaFrame',
             filter: '.skeleValidate',
             preventOnFilter: false,
+            scroll: true,
+            handle: '.skeleformReplicaHandle',
             onEnd: function(event) {
-                console.log(event);
+                Skeleform.handleReplicaIndexes(instance, data, event);
             }
         });
     }
-});
-
-
-Template.skeleformReplicaSet.onRendered(function() {
-    /*this.autorun(() => {
-        if (this.view.isRendered) {
-            let $indexContainer = $(this.find('.replica_index'));
-
-            $indexContainer.html(this.data.replicaIndex);
-        }
-    })*/
 });
 
 

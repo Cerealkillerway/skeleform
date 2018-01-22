@@ -34,7 +34,7 @@ function createFieldId(instance, name, isSelecting) {
         name = name.replace('.', '\\.');
     }
 
-    if (replicaIndex) {
+    if (replicaIndex !== undefined) {
         return name + '-' + replicaIndex;
     }
 
@@ -55,7 +55,7 @@ $getShadowFieldId = function(instance, schema) {
 // it waits for any custom initialization on the field, and reactively watch lang changes
 // and fires appropriate i18n method on the field is special handling for i18n is required
 setFieldValue = function(instance, item, fieldSchema) {
-    //instance.view.autorun(function() {
+    instance.view.autorun(function() {
         // register dependency from current language; used to fire custom i18n callback
         // for fields that requires special i18n treatment...
         let currentLang = TAPi18n.getLanguage();
@@ -95,7 +95,7 @@ setFieldValue = function(instance, item, fieldSchema) {
                 instance.i18n(currentLang);
             }
         }
-    //});
+    });
 };
 
 
@@ -103,21 +103,42 @@ setFieldValue = function(instance, item, fieldSchema) {
 // it is defined here as a global function so that special field types can override "fieldValue" helper
 // but still call this function if needed and then perform any special handling that is required
 SkeleformStandardFieldValue = function(item, fieldSchema, instance) {
-    console.log(item);
-    console.log(fieldSchema);
-    console.log(instance);
-    console.log('---------------------------');
-    
-    if (item === undefined) return;
+    if (item === undefined) {
+        return;
+    }
 
     let name = fieldSchema.name;
     let fieldData;
+    let data = instance.data;
 
-    if (fieldSchema.i18n === undefined) {
-        fieldData = SkeleUtils.GlobalUtilities.getPropertyFromString(FlowRouter.getParam('itemLang') + '---' + name, item)
+    if (data.replicaIndex !== undefined) {
+        let replicaOptions = data.replicaOptions;
+        let replicaName = replicaOptions.name;
+
+        let $replicaContainer = $(instance.firstNode).closest('.skeleformReplicaSet');
+        let $replicas = $replicaContainer.find('.skeleformReplicaFrame');
+        let $currentReplica = $(instance.firstNode).closest('.skeleformReplicaFrame')
+        let index = $replicas.index($currentReplica);
+
+        if (replicaOptions.i18n === undefined || replicaOptions.i18n === true)  {
+            replicaName = FlowRouter.getParam('itemLang') + '---' + replicaName;
+        }
+
+        let replicaItem = item[replicaName];
+
+        if (replicaItem === undefined) {
+            return;
+        }
+
+        fieldData = SkeleUtils.GlobalUtilities.getPropertyFromString(name, replicaItem[index]);
     }
     else {
-        fieldData = SkeleUtils.GlobalUtilities.getPropertyFromString(name, item);
+        if (fieldSchema.i18n === undefined || fieldSchema.i18n === true) {
+            fieldData = SkeleUtils.GlobalUtilities.getPropertyFromString(FlowRouter.getParam('itemLang') + '---' + name, item)
+        }
+        else {
+            fieldData = SkeleUtils.GlobalUtilities.getPropertyFromString(name, item);
+        }
     }
 
     // set active class on label to avoid overlapping

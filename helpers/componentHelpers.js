@@ -67,6 +67,3 @@ Template.skeleformReplicaSetWrapper.helpers({
         return initReplicaSet();
     }
 });
-
-
-Template.skeleformReplicaSet.helpers(skeleformGeneralHelpers);

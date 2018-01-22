@@ -22,7 +22,7 @@
 <template name="skeleformBody">
     {{#each (fields this)}}
         {{#if fieldSchema.replicaSet}}
-            {{> skeleformReplicaSetWrapper this}}
+            {{> Template.dynamic template=fieldSchema.replicaSet.wrapperTemplate data=this}}
         {{else}}
             {{#if fieldSchema.skeleformGroup}}
                 {{> skeleformGroupWrapper this}}
@@ -38,9 +38,13 @@
     <div class="skeleformReplicaSet {{formatClasses this.fieldSchema.classes}}">
         {{#each (createReplicaContext this)}}
             <div class="skeleformReplicaFrame {{formatClasses this.fieldSchema.groupClasses}}">
+                <div class="skeleformReplicaHandle valign-wrapper">
+                    <i class="material-icons">more_horiz</i>
+                </div>
+
                 {{#if this.fieldSchema.replicaSet.indexes}}
-                    <div class="replica_index">
-                        {{this.replicaIndex}}
+                    <div class="skeleformReplicaIndex">
+                        {{humanReadableIndex @index}}
                     </div>
                 {{/if}}
                 {{> skeleformBody this}}
@@ -53,24 +57,6 @@
 <template name="skeleformGroupWrapper">
     <div class="row">
         {{> skeleformBody (createFieldContext this)}}
-    </div>
-</template>
-
-
-<template name="skeleformReplicaSet">
-    <div class="row skeleformReplicaFrame {{formatClasses this.context.data.schema.groupClasses}}" id="{{this.context.data.schema.id}}">
-
-        {{#if this.context.data.schema.size}}
-            {{!-- skeleformGroups with user defined size --}}
-            <div class="col {{this.context.data.schema.size}} {{formatClasses this.context.data.schema.classes}}">
-                {{> skeleformBody this}}
-            </div>
-        {{else}}
-            {{!-- skeleformGroups without user defined size --}}
-            {{> skeleformBody this}}
-        {{/if}}
-
-        {{> Template.dynamic template=this.context.data.replicaSet.template data=this.context.data}}
     </div>
 </template>
 

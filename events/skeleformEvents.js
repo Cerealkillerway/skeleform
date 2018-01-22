@@ -260,22 +260,15 @@ skeleformGatherData = function(formContext, fields) {
     let replicasToClean = [];
 
     fields.forEach(function(field) {
-        let fieldSchema = field.data.fieldSchema.get();
+        let fieldData = field.data;
+        let fieldSchema = fieldData.fieldSchema.get();
         let $field = $getFieldById(field, fieldSchema);
-        //console.log($field);
-        let fieldName;
-
-        if (field.data.replicaSet) {
-            fieldName = field.data.replicaSet.name;
-        }
-        else {
-            fieldName = fieldSchema.name;
-        }
+        let fieldName = fieldSchema.name;;
 
         if ($field.hasClass('skeleGather')) {
             let fieldValue = field.getValue();
 
-            if (fieldSchema.i18n === undefined) {
+            if (fieldSchema.i18n === undefined && field.data.replicaIndex === undefined) {
                 fieldName = lang + '---' + fieldName;
 
                 /*console.log(fieldSchema.name);
@@ -284,37 +277,48 @@ skeleformGatherData = function(formContext, fields) {
                 console.log('******************************');*/
 
             }
-            let currentValue = item ? item[fieldName] : undefined;
+            let currentValue
 
             // force gathering of replica sets always
-            if (field.data.replicaSet) {
+            if (fieldData.replicaIndex) {
                 currentValue = undefined;
+            }
+            else {
+                currentValue = item ? item[fieldName] : undefined;
             }
 
             if ((currentValue === undefined) || fieldValue !== currentValue) {
                 // in case of replicaset, update the relative field in the array or create a new one if needed
-                if (field.data.replicaSet) {
+                if (fieldData.replicaIndex !== undefined) {
+                    //let index = fieldData.replicaIndex;
+                    let replicaOptions = fieldData.replicaOptions;
+                    let replicaName = replicaOptions.name;
+
                     let $replicaContainer = $(field.firstNode).closest('.skeleformReplicaSet');
                     let $replicas = $replicaContainer.find('.skeleformReplicaFrame');
                     let $currentReplica = $(field.firstNode).closest('.skeleformReplicaFrame')
                     let index = $replicas.index($currentReplica);
 
-                    if (data[fieldName] === undefined) {
-                        data[fieldName] = [];
+                    if (replicaOptions.i18n === undefined) {
+                        replicaName = lang + '---' + replicaName;
                     }
 
-                    if (data[fieldName][index]) {
-                        data[fieldName][index][fieldSchema.name] = fieldValue;
+                    if (data[replicaName] === undefined) {
+                        data[replicaName] = [];
+                    }
+
+                    if (data[replicaName][index]) {
+                        data[replicaName][index][fieldName] = fieldValue;
                     }
                     else {
-                        while (data[fieldName].length < index) {
-                            data[fieldName].push({});
+                        while (data[replicaName].length < index) {
+                            data[replicaName].push({});
                         }
 
                         let replicaObject = {};
 
-                        replicaObject[fieldSchema.name] = fieldValue;
-                        data[fieldName].push(replicaObject);
+                        replicaObject[fieldName] = fieldValue;
+                        data[replicaName].push(replicaObject);
                     }
                 }
                 else {
@@ -338,6 +342,10 @@ Skeleform.utils.skeleformGatherData = skeleformGatherData;
 // Skeleform
 Template.skeleform.onCreated(function() {
     this.formRendered = new ReactiveVar(false);
+    this.plugins = {
+        sortables: {}
+    };
+    this.fields = [];
     this.skeleDebug = new ReactiveVar(false);
 });
 Template.skeleform.onRendered(function() {
@@ -461,19 +469,11 @@ Template.skeleformCreateButtons.events({
     'click .skeleformCreate': function(event, template) {
         let formContext = template.data.formContext;
         let formInstance = formContext.formInstance;
-        let Fields = formInstance.Fields;
+        let fields = formInstance.fields;
         let schema = formContext.schema;
         let method;
         let options = {};
-
-        // add replicas fields to Field object
-        _.each(formInstance.replicaSets, function(replicaSet) {
-            for (instance of replicaSet.instances) {
-                Fields = Fields.concat(instance.Fields);
-            }
-        });
-
-        let data = skeleformGatherData(formContext, Fields);
+        let data = skeleformGatherData(formContext, fields);
 
         if (schema.__options) {
             if (schema.__options.loadingModal) {
@@ -494,7 +494,7 @@ Template.skeleformCreateButtons.events({
             data = schema.formCallbacks.beforeSave(template.data, data);
         }
 
-        if (skeleformValidateForm(data, Fields)) {
+        if (skeleformValidateForm(data, fields)) {
             if (options.useModal) {
                 $('#gearLoadingModal').openModal();
             }

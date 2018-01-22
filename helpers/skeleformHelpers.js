@@ -14,14 +14,16 @@ Template.skeleform.helpers({
     },
     formContext: function(context) {
         let instance = Template.instance();
+        let dataContext = {};
 
-        context.formRendered = instance.formRendered;
-        context.skeleDebug = instance.skeleDebug;
-        context.formContext = context;
-        context.fieldSchema = context.schema;
-        context.fields = [];
+        dataContext.formContext = context;
+        dataContext.fieldSchema = context.schema;
+        dataContext.formContext.fields = instance.fields;
+        dataContext.formContext.formRendered = instance.formRendered;
+        dataContext.formContext.skeleDebug = instance.skeleDebug;
+        dataContext.formContext.plugins = instance.plugins;
 
-        return context;
+        return dataContext;
     }
 });
 
@@ -34,6 +36,12 @@ Template.skeleformBody.helpers({
         let item = context.item;
 
         function createFieldContext(fieldSchema) {
+            if (fieldSchema.replicaSet) {
+                if (fieldSchema.replicaSet.wrapperTemplate === undefined) {
+                    fieldSchema.replicaSet.wrapperTemplate = 'skeleformReplicaSetWrapper';
+                }
+            }
+
             let fieldContext = {
                 formContext: context.formContext,
                 fieldSchema: fieldSchema,
@@ -41,8 +49,9 @@ Template.skeleformBody.helpers({
                 skeleformGroupLevel: context.skeleformGroupLevel || 0
             }
 
-            if (context.replicaIndex) {
+            if (context.replicaIndex !== undefined) {
                 fieldContext.replicaIndex = context.replicaIndex;
+                fieldContext.replicaOptions = context.replicaOptions;
             }
 
             return fieldContext;
@@ -95,29 +104,34 @@ Template.skeleformReplicaSetWrapper.helpers({
         let replicaItem;
         let replicaIndex = 0;
 
-        if (replicaOptions.i18n === undefined) {
-            replicaName = FlowRouter.getParam('itemLang') + '---' + replicaName;
-        }
+        if (item) {
+            if (replicaOptions.i18n === undefined || replicaOptions.i18n === true) {
+                replicaName = FlowRouter.getParam('itemLang') + '---' + replicaName;
+            }
 
-        replicaItem = item[replicaName];
+            replicaItem = item[replicaName];
 
-        function insertReplicaItem() {
-            let replicaContext = {};
+            if (replicaItem) {
+                function insertReplicaItem() {
+                    let replicaContext = {};
 
-            _.extend(replicaContext, context);
-            replicaContext.replicaIndex = replicaIndex;
-            replicas.push(replicaContext);
+                    _.extend(replicaContext, context);
+                    replicaContext.replicaIndex = replicaIndex;
+                    replicaContext.replicaOptions = replicaOptions;
+                    replicas.push(replicaContext);
 
-            replicaIndex++;
-        }
+                    replicaIndex++;
+                }
 
-        for (item of replicaItem) {
-            insertReplicaItem();
-        }
+                for (item of replicaItem) {
+                    insertReplicaItem();
+                }
 
-        // add missing copies to reach minimum required
-        while (replicas.length < replicaOptions.minCopies) {
-            insertReplicaItem();
+                // add missing copies to reach minimum required
+                while (replicas.length < replicaOptions.minCopies) {
+                    insertReplicaItem();
+                }
+            }
         }
 
         return replicas;

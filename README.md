@@ -73,7 +73,7 @@ If you have any problem using it, please have a look to the "troubleshooting" se
 - - **minCopies**: *[number] (optional)* the minimum number of copies of the replica set allowed (default *1*);
 - - **maxCopies**: *[number] (optional)* the maximum number of copies of the replica set allowed (default *infinite*);
 - - **initCopies**: *[number] (optional)* the number of copies of the replica set to include in the form during the first render (default *1*);
-- - **indexes**: *[boolean] (optional)* if set to true will update a DOM element with class `replica_index` within each replica with its current positional order; this is useful if you want to show the positional order of each set in the replica set; the DOM element with class `replica_index` is added automatically;
+- - **indexes**: *[boolean] (optional)* if set to true will update a DOM element with class `skeleformReplicaIndex` within each replica with its current positional order; this is useful if you want to show the positional order of each set in the replica set; the DOM element with class `skeleformReplicaIndex` is added automatically;
 - - **sortable**: *[boolean] (optional)* makes the replica set sortable;
 
 #### 2.2 Field specific options:
