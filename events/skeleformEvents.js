@@ -372,6 +372,19 @@ Template.skeleform.onRendered(function() {
         this.toolbarInstance = Blaze.renderWithData(Template[toolbar.template], toolbarContext, $('#' + toolbar.containerId)[0]);
     }
 
+    // append print area if needed
+    if (toolbar.printFunctions) {
+        let printOptions = toolbar.printFunctions;
+        let printAreaMarkup = $('<div>', {class: 'skeleformPrintArea'});
+
+        if (printOptions.printPreviewContainer) {
+            $(printOptions.printPreviewContainer).append(printAreaMarkup);
+        }
+        else {
+            this.$('.skeleform').append(printAreaMarkup);
+        }
+    }
+
     if (schema.__autoFocusFirst !== false) {
         let $skeleFields = this.$('.skeleGather');
 
@@ -560,6 +573,67 @@ Template.skeleformUpdateButtons.events({
                 skeleformHandleResult(error, result, 'update', data, schema.__paths);
             });
         }
+    }
+});
+
+
+// skeleform print functions
+Template.skeleformPrintFunctions.events({
+    'click .skeleformPrintPreview': function(event, template) {
+        let formContext = template.data.formContext;
+        let schema = formContext.schema;
+        let printOptions = schema.__toolbar.printFunctions;
+        let $printPreviewContainer;
+        let content = {};
+        let data = skeleformGatherData(formContext, formContext.fields);
+
+        let pageOptions = {
+            width: 210,
+            height: 297,
+            marginTop: 20,
+            marginBottom: 30,
+            marginLeft: 20,
+            marginRight: 20
+        }
+
+        function addPage($container, pageNumber, pageOptions, content) {
+            $container.append('<h3 class="skeleformPrintPageTitle">' + TAPi18n.__("page_lbl") + ' ' + (pageNumber) + ' / <span class="skeleformTotalPagesCounter">...</span></h3>');
+            let $page = $('<div>', {
+                class: 'skeleformPrintPage',
+                css: {
+                    padding: pageOptions.marginTop + 'mm ' + pageOptions.marginRight + 'mm ' + pageOptions.marginBottom + 'mm ' + pageOptions.marginLeft + 'mm',
+                    width: pageOptions.width + 'mm',
+                    height: pageOptions.height + 'mm'
+                }
+            });
+
+            $container.append($page);
+
+            _.each(content, function(value, key) {
+                let htmlContent = $('<div>', {
+                    text: value
+                });
+
+                $page.append(htmlContent);
+            });
+        }
+
+        if (printOptions.printPreviewContainer) {
+            $printPreviewContainer = $(printOptions.printPreviewContainer).find('.skeleformPrintArea');
+        }
+        else {
+            $printPreviewContainer = $(template.firstNode).closest('.skeleform').find('.skeleformPrintArea');
+        }
+        $printPreviewContainer.empty();
+
+        content = _.extend(content, formContext.item, data);
+        addPage($printPreviewContainer, 1, pageOptions, content);
+
+
+        // scroll to print preview
+        $('html, body').animate({
+            scrollTop: ($printPreviewContainer.offset().top - 120)
+        }, 500);
     }
 });
 

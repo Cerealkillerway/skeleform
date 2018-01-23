@@ -186,6 +186,8 @@
     }
 }
 
+
+// test page styles
 .skelePanelTest {
     .container {
         div {
@@ -196,5 +198,17 @@
             max-width: 300px;
             cursor: pointer;
         }
+    }
+}
+
+
+// print functions
+.skeleformPrintArea {
+    text-align: center;
+
+    .skeleformPrintPage {
+        border: solid 2px $firstPanelColor;
+        margin-left: auto;
+        margin-right: auto;
     }
 }
