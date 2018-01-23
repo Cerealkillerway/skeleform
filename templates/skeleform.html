@@ -35,21 +35,30 @@
 
 
 <template name="skeleformReplicaSetWrapper">
-    <div class="skeleformReplicaSet {{formatClasses this.fieldSchema.classes}}">
+    <div class="skeleformReplicaSet {{formatClasses this.fieldSchema.replicaSet.setClasses}}">
         {{#each (createReplicaContext this)}}
-            <div class="skeleformReplicaFrame {{formatClasses this.fieldSchema.groupClasses}}">
-                <div class="skeleformReplicaHandle valign-wrapper">
-                    <i class="material-icons">more_horiz</i>
-                </div>
-
-                {{#if this.fieldSchema.replicaSet.indexes}}
-                    <div class="skeleformReplicaIndex">
-                        {{humanReadableIndex @index}}
-                    </div>
-                {{/if}}
-                {{> skeleformBody this}}
-            </div>
+            {{> skeleformReplicaFrame this}}
         {{/each}}
+    </div>
+</template>
+
+
+<template name="skeleformReplicaFrame">
+    <div class="skeleformReplicaFrame {{formatClasses this.fieldSchema.replicaSet.frameClasses}}">
+        <div class="replicaFrameBody">
+            <div class="skeleformReplicaHandle valign-wrapper">
+                <i class="material-icons">more_horiz</i>
+            </div>
+
+            {{#if this.fieldSchema.replicaSet.indexes}}
+                <div class="skeleformReplicaIndex">
+                    {{humanReadableIndex this.replicaIndex}}
+                </div>
+            {{/if}}
+            {{> skeleformBody this}}
+
+            {{> skeleformDefaultReplicaBtns this}}
+        </div>
     </div>
 </template>
 
@@ -96,9 +105,15 @@
                 <i class="material-icons small left">add_circle</i>
                 <span>{{_ "create_btn"}}</span>
             </div>
-            {{#if formContext.schema.__toolbar.extrasCreate}}
-                {{> Template.dynamic template=formContext.schema.__toolbar.extrasCreate}}
+
+            {{#if formContext.schema.__toolbar.printFunctions}}
+                {{> skeleformPrintFunctions this}}
             {{/if}}
+
+            {{#if formContext.schema.__toolbar.extrasCreate}}
+                {{> Template.dynamic template=formContext.schema.__toolbar.extrasCreate data=this}}
+            {{/if}}
+
             <a href="{{makeUndoPath formContext.schema.__paths.undoPath}}?lang={{currentLang}}{{isPaginated formContext.schemaName}}" class="waves-effect waves-light btn firstColor">
                 <i class="material-icons small left">undo</i>
                 <span>{{_ "cancel_btn"}}</span>
@@ -118,9 +133,15 @@
                 <i class="material-icons small left">beenhere</i>
                 <span>{{_ "update_btn"}}</span>
             </div>
-            {{#if formContext.schema.__toolbar.extrasUpdate}}
-                {{> Template.dynamic template=formContext.schema.__toolbar.extrasUpdate}}
+
+            {{#if formContext.schema.__toolbar.printFunctions}}
+                {{> skeleformPrintFunctions this}}
             {{/if}}
+
+            {{#if formContext.schema.__toolbar.extrasUpdate}}
+                {{> Template.dynamic template=formContext.schema.__toolbar.extrasUpdate data=this}}
+            {{/if}}
+
             <a href="{{makeUndoPath formContext.schema.__paths.undoPath}}{{isPaginated formContext.schemaName}}" class="waves-effect waves-light btn firstColor">
                 <i class="material-icons small left">undo</i>
                 <span>{{_ "cancel_btn"}}</span>
@@ -131,6 +152,15 @@
                 {{> skeleformLangBar}}
             {{/if}}
         </div>
+    </div>
+</template>
+
+
+<!-- print functions for skeleform -->
+<template name="skeleformPrintFunctions">
+    <div class="waves-effect waves-light btn fourthColor skeleformPrint">
+        <i class="material-icons small left">print</i>
+        <span>{{_ "print_btn"}}</span>
     </div>
 </template>
 

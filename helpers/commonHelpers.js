@@ -126,7 +126,7 @@ SkeleformStandardFieldValue = function(item, fieldSchema, instance) {
 
         let replicaItem = item[replicaName];
 
-        if (replicaItem === undefined) {
+        if (replicaItem === undefined || replicaItem[index] === undefined || data.replicaIndex > replicaItem.length) {
             return;
         }
 

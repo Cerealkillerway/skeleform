@@ -133,6 +133,57 @@
     .skeleReplicaBtnMoveUp {
         margin-left: 25px;
     }
+
+    .skeleformReplicaSet {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        .skeleformReplicaFrame {
+            flex: 1 0 calc(50% - 50px);
+            max-width: calc(50% - 50px);
+
+            .replicaFrameBody {
+                position: relative;
+                background-color: darken($firstBackgroundColor, 11%);
+                padding: 25px 0 0 0;
+                margin-bottom: 32px;
+                margin: 20px;
+
+                .skeleformReplicaIndex {
+                    position: absolute;
+                    top: 0;
+                    left: 0 !important;
+                    background-color: darken($firstPanelColor, 15%);
+                    color: $secondPanelColorText;
+                    font-size: 22px;
+                    text-align: center;
+                    padding-top: 8px;
+                    width: 55px !important;
+                    height: 55px;
+                }
+
+                .skeleformReplicaHandle {
+                    height: 30px;
+                    background-color: darken($firstBackgroundColor, 39%);
+                    color: darken($firstBackgroundColor, 11%);
+                    position: relative;
+                    top: 0;
+                    cursor: move;
+                    text-align: center;
+
+                    i {
+                        margin-left: auto;
+                        margin-right: auto;
+                    }
+                }
+
+                .skeleformReplicaBtnsWrapper {
+                    padding-bottom: 20px;
+                }
+            }
+        }
+    }
 }
 
 .skelePanelTest {

@@ -468,8 +468,7 @@ Template.skeleform.onDestroyed(function() {
 Template.skeleformCreateButtons.events({
     'click .skeleformCreate': function(event, template) {
         let formContext = template.data.formContext;
-        let formInstance = formContext.formInstance;
-        let fields = formInstance.fields;
+        let fields = formContext.fields;
         let schema = formContext.schema;
         let method;
         let options = {};

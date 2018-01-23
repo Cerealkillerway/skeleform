@@ -75,6 +75,8 @@ If you have any problem using it, please have a look to the "troubleshooting" se
 - - **initCopies**: *[number] (optional)* the number of copies of the replica set to include in the form during the first render (default *1*);
 - - **indexes**: *[boolean] (optional)* if set to true will update a DOM element with class `skeleformReplicaIndex` within each replica with its current positional order; this is useful if you want to show the positional order of each set in the replica set; the DOM element with class `skeleformReplicaIndex` is added automatically;
 - - **sortable**: *[boolean] (optional)* makes the replica set sortable;
+- - **setClasses**: *[array of strings] (optional)* array of classes to use on the replica set's container div;
+- - **frameClasses**: *[array of strings] (optional)* array of classes to use on each replica item;
 
 #### 2.2 Field specific options:
 
