@@ -22,6 +22,8 @@ If you have any problem using it, please have a look to the "troubleshooting" se
 - - **containerId**: *[string] (optional/available only if "template"option is used)* id of DOM element to place the toolbar in;
 - - **extrasCreate**: *[string] (optional)* template for extra buttons to be added to standard create toolbar;
 - - **extrasUpdate**: *[string] (optional)* template for extra buttons to be added to standard update toolbar;
+- **printFunctions**: *[object] (optional)* if defined *skeleform* will enable print functionalities for forms created from the current schema;
+- - **printPreviewContainer**: *[string] (optional)* a string representing a jquery selector of the element where to append the skeleform's print area; if omitted the print area is appended directly below the form itself;
 - **__autoScrollTop**: *[boolean] (optional)* by default every skeleform instance auto scrolls to `offset = 0` inside `onRendered`; set this property to false to disable this behavior;
 - **__autoFocusFirst**: *[boolean] (optional)* by default every skeleform instance auto focus on the first input element inside `onRendered`; set this property to false to disable this behavior;
 - **__paths**: *[object] (optional)* dictionary of paths to be used in different situations:
