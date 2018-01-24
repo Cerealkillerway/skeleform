@@ -145,7 +145,7 @@
 
             .replicaFrameBody {
                 position: relative;
-                background-color: darken($firstBackgroundColor, 11%);
+                background-color: darken($panelBackgroundColor, 11%);
                 padding: 25px 0 0 0;
                 margin-bottom: 32px;
                 margin: 20px;
@@ -165,8 +165,8 @@
 
                 .skeleformReplicaHandle {
                     height: 30px;
-                    background-color: darken($firstBackgroundColor, 39%);
-                    color: darken($firstBackgroundColor, 11%);
+                    background-color: darken($panelBackgroundColor, 39%);
+                    color: darken($panelBackgroundColor, 11%);
                     position: relative;
                     top: 0;
                     cursor: move;
