@@ -361,27 +361,29 @@ Template.skeleform.onRendered(function() {
     // set toolbar in container if needed
     let toolbar = schema.__toolbar;
 
-    if (toolbar && toolbar.containerId) {
-        /*if (data.Fields === undefined) {
-            data.Fields = this.Fields;
-        }*/
-        let toolbarContext = {
-            Fields: this.Fields,
-            formContext: this.data
-        };
-        this.toolbarInstance = Blaze.renderWithData(Template[toolbar.template], toolbarContext, $('#' + toolbar.containerId)[0]);
-    }
-
-    // append print area if needed
-    if (toolbar.printFunctions) {
-        let printOptions = toolbar.printFunctions;
-        let printAreaMarkup = $('<div>', {class: 'skeleformPrintArea'});
-
-        if (printOptions.printPreviewContainer) {
-            $(printOptions.printPreviewContainer).append(printAreaMarkup);
+    if (toolbar) {
+        if (toolbar.containerId) {
+            /*if (data.Fields === undefined) {
+                data.Fields = this.Fields;
+            }*/
+            let toolbarContext = {
+                Fields: this.Fields,
+                formContext: this.data
+            };
+            this.toolbarInstance = Blaze.renderWithData(Template[toolbar.template], toolbarContext, $('#' + toolbar.containerId)[0]);
         }
-        else {
-            this.$('.skeleform').append(printAreaMarkup);
+
+        // append print area if needed
+        if (toolbar.printFunctions) {
+            let printOptions = toolbar.printFunctions;
+            let printAreaMarkup = $('<div>', {class: 'skeleformPrintArea'});
+
+            if (printOptions.printPreviewContainer) {
+                $(printOptions.printPreviewContainer).append(printAreaMarkup);
+            }
+            else {
+                this.$('.skeleform').append(printAreaMarkup);
+            }
         }
     }
 
@@ -586,6 +588,7 @@ Template.skeleformPrintFunctions.events({
         let $printPreviewContainer;
         let content = {};
         let data = skeleformGatherData(formContext, formContext.fields);
+        let htmlContent;
 
         let pageOptions = {
             width: 210,
@@ -608,14 +611,7 @@ Template.skeleformPrintFunctions.events({
             });
 
             $container.append($page);
-
-            _.each(content, function(value, key) {
-                let htmlContent = $('<div>', {
-                    text: value
-                });
-
-                $page.append(htmlContent);
-            });
+            $page.append(htmlContent);
         }
 
         if (printOptions.printPreviewContainer) {
@@ -627,7 +623,27 @@ Template.skeleformPrintFunctions.events({
         $printPreviewContainer.empty();
 
         content = _.extend(content, formContext.item, data);
-        addPage($printPreviewContainer, 1, pageOptions, content);
+
+        if (printOptions.transformDataForPrint) {
+            content = printOptions.transformDataForPrint(content);
+        }
+
+        // if defined, call the custom function to generate the HTML to insert
+        if (printOptions.generatePrintHTML) {
+            htmlContent = printOptions.generatePrintHTML(content);
+        }
+        // otherwise just create a new <div> for each data value
+        else {
+            htmlContent = [];
+
+            _.each(content, function(value, key) {
+                htmlContent.push($('<div>', {
+                    text: value
+                }));
+            });
+        }
+
+        addPage($printPreviewContainer, 1, pageOptions, htmlContent);
 
 
         // scroll to print preview
