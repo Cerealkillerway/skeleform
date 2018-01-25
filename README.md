@@ -237,7 +237,7 @@ In this example we will update the value of `username` field from within the `us
         }
     }
 
-#### 5.2 UPDATE FIELD SCHEMAS
+#### 5.2 UPDATE FIELD SCHEMAS [REMOVED]
 
 Sometimes you need to alter some field(s) schema(s) at runtime;
 you can always access all field(s) properties starting from a `fieldInstance` and update any of them; it's all reactive;

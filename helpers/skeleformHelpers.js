@@ -6,12 +6,6 @@ Template.skeleform.helpers({
             formContext: Template.instance().data
         };
     },
-    isDataReady: function(context) {
-        if (context.skeleSubsReady.get() === false) {
-            return false;
-        }
-        return true;
-    },
     formContext: function(context) {
         let instance = Template.instance();
         let dataContext = {};
