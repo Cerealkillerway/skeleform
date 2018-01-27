@@ -8,29 +8,29 @@ Template.skeleformClockPicker.helpers({
     fieldClock: function(data, schema) {
         const instance = Template.instance();
 
-        setFieldValue(instance, data, schema);
+        Skeleform.utils.setFieldValue(instance, data, schema);
     }
 });
 
 Template.skeleformClockPicker.onCreated(function() {
-    registerField(this);
+    Skeleform.utils.registerField(this);
     this.isActivated = new ReactiveVar(false);
 
     let schema = this.data.fieldSchema.get();
 
-    InvokeCallback(this, null, schema, 'onCreated');
+    Skeleform.utils.InvokeCallback(this, null, schema, 'onCreated');
 
     this.initOptions = {};
 
     this.i18n = (currentLang) => {
-        let $element = $getFieldById(this, schema);
+        let $element = Skeleform.utils.$getFieldById(this, schema);
 
         this.initOptions.donetext = TAPi18n.__('pickadateButtons_labels').split(' ')[2];
         $element.clockpicker('remove');
         $element.clockpicker(this.initOptions);
     };
     this.getValue = () => {
-        return moment($getFieldById(this, schema).val(), this.initOptions.format).format(this.initOptions.formatSubmit);
+        return moment(Skeleform.utils.$getFieldById(this, schema).val(), this.initOptions.format).format(this.initOptions.formatSubmit);
     };
     this.isValid = () => {
         //SkeleUtils.GlobalUtilities.logger('clockpicker validation', 'skeleformFieldValidation');
@@ -46,11 +46,11 @@ Template.skeleformClockPicker.onCreated(function() {
 
         // fire onChange callback
         if (value !== undefined && value !== this.getValue()) {
-            InvokeCallback(this, value, schema, 'onChange');
+            Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
         }
 
         value = moment(value, initOptions.formatSubmit).format(initOptions.format);
-        $getFieldById(this, this.data.schema).val(value);
+        Skeleform.utils.$getFieldById(this, this.data.schema).val(value);
     };
 });
 Template.skeleformClockPicker.onDestroyed(function() {
@@ -71,7 +71,7 @@ Template.skeleformClockPicker.onRendered(function() {
             let value = this.getValue();
 
             this.isValid();
-            InvokeCallback(this, value, schema, 'onChange');
+            Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
         }
     };
 
@@ -142,7 +142,7 @@ Template.skeleformClockPicker.onRendered(function() {
         }
     }
 
-    $getFieldById(this, this.data.schema).clockpicker(this.initOptions);
+    Skeleform.utils.$getFieldById(this, this.data.schema).clockpicker(this.initOptions);
     this.isActivated.set(true);
-    InvokeCallback(this, null, schema, 'onRendered');
+    Skeleform.utils.InvokeCallback(this, null, schema, 'onRendered');
 });

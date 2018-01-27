@@ -1,0 +1,30 @@
+<!-- update toolbar -->
+<template name ="skeleformUpdateButtons">
+    <div class="skeleStaticBar">
+        <div class="skeleformToolbar">
+            <div class="waves-effect waves-light btn secondColor skeleformUpdate">
+                <i class="material-icons small left">beenhere</i>
+                <span>{{_ "update_btn"}}</span>
+            </div>
+
+            {{#if formContext.schema.__toolbar.printFunctions}}
+                {{> skeleformPrintFunctions this}}
+            {{/if}}
+
+            {{#if formContext.schema.__toolbar.extrasUpdate}}
+                {{> Template.dynamic template=formContext.schema.__toolbar.extrasUpdate data=this}}
+            {{/if}}
+
+            <a href="{{makeUndoPath formContext.schema.__paths.undoPath}}{{isPaginated formContext.schemaName}}" class="waves-effect waves-light btn firstColor">
+                <i class="material-icons small left">undo</i>
+                <span>{{_ "cancel_btn"}}</span>
+            </a>
+
+            {{> skeleformStaticAddons}}
+
+            {{#if isTranslatable}}
+                {{> skeleformLangBar}}
+            {{/if}}
+        </div>
+    </div>
+</template>

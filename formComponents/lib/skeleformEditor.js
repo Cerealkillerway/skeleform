@@ -46,12 +46,12 @@ Template.skeleformEditor.helpers(skeleformGeneralHelpers);
 
 // Events
 Template.skeleformEditor.onCreated(function() {
-    registerField(this);
+    Skeleform.utils.registerField(this);
     this.isActivated = new ReactiveVar(false);
 
     let schema = this.data.fieldSchema.get();
 
-    InvokeCallback(this, null, schema, 'onCreated');
+    Skeleform.utils.InvokeCallback(this, null, schema, 'onCreated');
 
     // now commented because very slow...
     /*this.i18n = () => {
@@ -69,7 +69,7 @@ Template.skeleformEditor.onCreated(function() {
     };*/
 
     this.getValue = () => {
-        return $getFieldById(this, schema).materialnote('code').trim();
+        return Skeleform.utils.$getFieldById(this, schema).materialnote('code').trim();
     };
     this.isValid = () => {
         //SkeleUtils.GlobalUtilities.logger('editor validation', 'skeleformFieldValidation');
@@ -80,13 +80,13 @@ Template.skeleformEditor.onCreated(function() {
     this.setValue = (value) => {
         // if setting a real value, fire onChange callback
         if (value !== undefined && value !== this.getValue()) {
-            InvokeCallback(this, value, schema, 'onChange');
+            Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
         }
 
         if (value === undefined) {
             value = '';
         }
-        $getFieldById(this, schema).materialnote('code', value);
+        Skeleform.utils.$getFieldById(this, schema).materialnote('code', value);
     };
 });
 Template.skeleformEditor.onDestroyed(function() {
@@ -124,13 +124,13 @@ Template.skeleformEditor.onRendered(function() {
                 let id = schema.name;
 
                 if (!result.valid) {
-                    setInvalid(id, schema, result);
+                    Skeleform.validate.setInvalid(id, schema, result);
                 }
                 else {
-                    Skeleform.utils.skeleformSuccessStatus(id, schema);
+                    Skeleform.validate.skeleformSuccessStatus(id, schema);
                 }
 
-                InvokeCallback(this, value, schema, 'onChange');
+                Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
             }
         }/*,
         onImageUpload: function(files) {
@@ -188,5 +188,5 @@ Template.skeleformEditor.onRendered(function() {
     $(editor).materialnote(this.options);
 
     this.isActivated.set(true);
-    InvokeCallback(this, null, schema, 'onRendered');
+    Skeleform.utils.InvokeCallback(this, null, schema, 'onRendered');
 });

@@ -1,0 +1,34 @@
+<!-- loads default or custom toolbar on top of skeleform -->
+<template name="skeleformToolbar">
+    <div class="skeleskeleStaticBarPlaceholder"></div>
+    {{#if schema.__toolbar.template}}
+        {{> Template.dynamic template=schema.__toolbar.template data=this}}
+    {{else}}
+        {{#if formContext.item}}
+            {{> skeleformUpdateButtons this}}
+        {{else}}
+            {{> skeleformCreateButtons this}}
+        {{/if}}
+    {{/if}}
+</template>
+
+
+<!-- content lang bar -->
+<template name="skeleformLangBar">
+    <div class="skeleformLangs right">
+        {{#each langs}}
+            <div class="langFlag {{isActive this}}" data-lang="{{this}}">
+                <img src="/images/icons/lang/{{this}}.jpg">
+            </div>
+        {{/each}}
+    </div>
+</template>
+
+
+<!-- functions to add to the static toolbar -->
+<template name="skeleformStaticAddons">
+    <span class="staticAddons right">
+        <i class="material-icons medium firstHoverColor pointer toTop">expand_less</i>
+        <i class="material-icons medium firstHoverColor pointer toBottom">expand_more</i>
+    </span>
+</template>

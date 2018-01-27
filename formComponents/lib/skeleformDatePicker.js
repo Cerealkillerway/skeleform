@@ -9,17 +9,17 @@ Template.skeleformDatePicker.helpers({
     fieldDate: function(data, schema) {
         const instance = Template.instance();
 
-        setFieldValue(instance, data, schema);
+        Skeleform.utils.setFieldValue(instance, data, schema);
     }
 });
 
 Template.skeleformDatePicker.onCreated(function() {
-    registerField(this);
+    Skeleform.utils.registerField(this);
     this.isActivated = new ReactiveVar(false);
 
     let schema = this.data.fieldSchema.get();
 
-    InvokeCallback(this, null, schema, 'onCreated');
+    Skeleform.utils.InvokeCallback(this, null, schema, 'onCreated');
 
     this.initOptions = {};
 
@@ -41,8 +41,8 @@ Template.skeleformDatePicker.onCreated(function() {
 
         //pickerInstance.render();
         // set again the value to translate also in the input box
-        //pickerInstance.set('select', SkeleformStandardFieldValue(this.data.item, this.data.schema), {format: this.initOptions.formatSubmit});
-        this.setValue(SkeleformStandardFieldValue(this.data.item, schema, this));
+        //pickerInstance.set('select', Skeleform.utils.SkeleformStandardFieldValue(this.data.item, this.data.schema), {format: this.initOptions.formatSubmit});
+        this.setValue(Skeleform.utils.SkeleformStandardFieldValue(this.data.item, schema, this));
     };
     this.getValue = () => {
         let value = this.pickerInstance.get('select', this.initOptions.formatSubmit);
@@ -58,7 +58,7 @@ Template.skeleformDatePicker.onCreated(function() {
     this.setValue = (value) => {
         // if setting a real value, fire onChange callback
         if (value !== undefined && value !== this.getValue()) {
-            InvokeCallback(this, value, schema, 'onChange');
+            Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
         }
 
         this.pickerInstance.set('select', value, {format: this.initOptions.formatSubmit});
@@ -73,7 +73,7 @@ Template.skeleformDatePicker.onDestroyed(function() {
 Template.skeleformDatePicker.onRendered(function() {
     let data = this.data.item;
     let schema = this.data.fieldSchema.get();
-    let $element = $getFieldById(this, schema);
+    let $element = Skeleform.utils.$getFieldById(this, schema);
 
     // activates validation on set
     this.initOptions = {
@@ -101,13 +101,13 @@ Template.skeleformDatePicker.onRendered(function() {
                 let id = schema.name.replace('.', '\\.');
 
                 if (!result.valid) {
-                    setInvalid(id, schema, result);
+                    Skeleform.validate.setInvalid(id, schema, result);
                 }
                 else {
-                    Skeleform.utils.skeleformSuccessStatus(id, schema);
+                    Skeleform.validate.skeleformSuccessStatus(id, schema);
                 }
 
-                InvokeCallback(this, value, schema, 'onChange');
+                Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
             }
 
             // workaround for "closeOnSelect" option ignored by materializeCSS
@@ -125,13 +125,13 @@ Template.skeleformDatePicker.onRendered(function() {
             console.log(value);
 
             if (!result.valid) {
-                setInvalid(id, schema, result);
+                Skeleform.validate.setInvalid(id, schema, result);
             }
             else {
-                Skeleform.utils.skeleformSuccessStatus(id, schema);
+                Skeleform.validate.skeleformSuccessStatus(id, schema);
             }
 
-            InvokeCallback(this, value, schema, 'onChange');*/
+            Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');*/
         }
     };
 
@@ -198,7 +198,7 @@ Template.skeleformDatePicker.onRendered(function() {
     $element.pickadate(this.initOptions);
     this.pickerInstance = $element.pickadate('picker');
     this.isActivated.set(true);
-    InvokeCallback(this, null, schema, 'onRendered');
+    Skeleform.utils.InvokeCallback(this, null, schema, 'onRendered');
 });
 
 /*Template.skeleformDatePicker.events = {
@@ -212,12 +212,12 @@ Template.skeleformDatePicker.onRendered(function() {
         console.log(value);
 
         if (!result.valid) {
-            setInvalid(id, schema, result);
+            Skeleform.validate.setInvalid(id, schema, result);
         }
         else {
-            Skeleform.utils.skeleformSuccessStatus(id, schema);
+            Skeleform.validate.skeleformSuccessStatus(id, schema);
         }
 
-        InvokeCallback(instance, value, schema, 'onChange');
+        Skeleform.utils.InvokeCallback(instance, value, schema, 'onChange');
     }
 };*/

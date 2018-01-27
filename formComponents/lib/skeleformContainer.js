@@ -4,5 +4,5 @@
 Template.skeleformContainer.helpers(skeleformGeneralHelpers);
 
 Template.skeleformContainer.onCreated(function() {
-    registerField(this);
+    Skeleform.utils.registerField(this);
 });

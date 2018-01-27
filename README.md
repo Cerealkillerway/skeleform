@@ -210,7 +210,7 @@ Every field in *Skeleform* must implement this methods:
 - **isValid()**: *[function] (mandatory)* must perform validation on the field's value; it is called by skeleform before gathering values to be saved in the db; normally this is done by calling `Skeleform.validate.checkOptions()` from this method;
 - **setValue(value)**: *[function] (mandatory)* receives the current unformatted field value; must format it to be displayed (if required) and set it on the proper *DOM* element of the field;
 
-Inside these methods (and everywhere in the field's code) calling `$getFieldById(templateInstance, schema)` is the preferred way to get the jQuery object wrapping the DOM of the main field's input element.
+Inside these methods (and everywhere in the field's code) calling `Skeleform.utils.$getFieldById(templateInstance, schema)` is the preferred way to get the jQuery object wrapping the DOM of the main field's input element.
 
 
 ### 5 TIPS ABOUT THE CALLBACKS
@@ -269,18 +269,18 @@ The *SkeleUtils* package, that is part of the *Skeletor* project (as *Skeleform*
 
 It is also possible to call some *Skeleform*'s functions if needed:
 
-#### `Skeletor.Skeleform.utils.skeleformResetStatus(fieldName)`  
+#### `Skeletor.Skeleform.validate.skeleformResetStatus(fieldName)`  
 resets validation classes on the field;  
 **parameters**
 - *fieldName*: [string] the name of the field to be resetted; (accessible from the *fieldInstance* at `fieldInstance.data.schema.name`);  
 
-#### `Skeletor.Skeleform.utils.skeleformSuccessStatus(fieldName, fieldSchema)`  
+#### `Skeletor.Skeleform.validate.skeleformSuccessStatus(fieldName, fieldSchema)`  
 sets valid class on the field (eventually resets its invalid state);  
 **parameters**
 - *fieldName*: [string] the name of the field to be resetted; (accessible from the *fieldInstance* at `fieldInstance.data.schema.name`);
 - *schema*: [object] the field's schema (accessible from the *fieldInstance* at `fieldInstance.data.schema`);
 
-#### `Skeletor.Skeleform.utils.skeleformErrorStatus(name, errorString, schema)`  
+#### `Skeletor.Skeleform.validate.skeleformErrorStatus(name, errorString, schema)`  
 sets invalid class on the field and shows error (eventually resets its valid state);  
 **parameters**
 - *fieldName*: [string] the name of the field to be resetted; (accessible from the *fieldInstance* at `fieldInstance.data.schema.name`);

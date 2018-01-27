@@ -134,21 +134,21 @@ Template.skeleformSelect.helpers({
 
 // Events
 Template.skeleformSelect.onCreated(function() {
-    registerField(this);
+    Skeleform.utils.registerField(this);
     this.isActivated = new ReactiveVar(false);
 
     let schema = this.data.fieldSchema.get();
 
-    InvokeCallback(this, null, schema, 'onCreated');
+    Skeleform.utils.InvokeCallback(this, null, schema, 'onCreated');
 
     // register this on form' store
 
 
     this.i18n = () => {
-        $getFieldById(this, schema).material_select();
+        Skeleform.utils.$getFieldById(this, schema).material_select();
     };
     this.getValue = () => {
-        return $getFieldById(this, schema).val();
+        return Skeleform.utils.$getFieldById(this, schema).val();
     };
     this.isValid = () => {
         let formContext = this.data.formContext;
@@ -161,7 +161,7 @@ Template.skeleformSelect.onCreated(function() {
         }
 
         let name = schema.name;
-        let $field = $getFieldById(this, schema);
+        let $field = Skeleform.utils.$getFieldById(this, schema);
 
         for (const option of $field.children()) {
             let optionValue = $(option).val();
@@ -187,7 +187,7 @@ Template.skeleformSelect.onCreated(function() {
         // here cannot test value !== this.getValue() since the actual value for the field in the current document
         // can be the first value (default preselected) for the field;
         if (value !== undefined) {
-            InvokeCallback(this, value, schema, 'onChange');
+            Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
         }
 
         return '';
@@ -198,27 +198,27 @@ Template.skeleformSelect.onRendered(function() {
     let schema = this.data.fieldSchema.get();
 
     // start plugin
-    let $field = $getFieldById(this, schema);
+    let $field = Skeleform.utils.$getFieldById(this, schema);
     let $options = $field.children('option');
 
     $field.material_select();
     this.isActivated.set(true);
 
-    InvokeCallback(this, null, schema, 'onRendered');
+    Skeleform.utils.InvokeCallback(this, null, schema, 'onRendered');
 
     // DISABLED - was causing infinite loop
     // start plugin and fire onChange callback when DOM is changed
     /*let observer = new MutationObserver((mutations) => {
         let value = this.getValue();
 
-        $field = $getFieldById(this, schema);
+        $field = Skeleform.utils.$getFieldById(this, schema);
         // DISABLED the following instruction was causing the infinite loop
         //$field.material_select();
 
 
-        InvokeCallback(this, value, schema, 'onChange');
+        Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
     });
-    observer.observe($getFieldById(this, schema)[0], {
+    observer.observe(Skeleform.utils.$getFieldById(this, schema)[0], {
         attributes: true,
         childList: true,
         characterData: true,
@@ -234,7 +234,7 @@ Template.skeleformSelect.onDestroyed(function() {
 
 Template.skeleformSelect.events({
     'blur select': function(event, instance) {
-        Skeleform.utils.skeleformSuccessStatus('#' + instance.data.schema.get().name);
+        Skeleform.validate.skeleformSuccessStatus('#' + instance.data.schema.get().name);
     },
     'change select': function(event, instance) {
         // perform validation and callback invocation on change
@@ -243,6 +243,6 @@ Template.skeleformSelect.events({
 
         instance.isValid();
 
-        InvokeCallback(instance, value, schema, 'onChange');
+        Skeleform.utils.InvokeCallback(instance, value, schema, 'onChange');
     }
 });

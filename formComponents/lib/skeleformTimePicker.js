@@ -8,17 +8,17 @@ Template.skeleformTimePicker.helpers({
     fieldTime: function(data, schema) {
         const instance = Template.instance();
 
-        setFieldValue(instance, data, schema);
+        Skeleform.utils.setFieldValue(instance, data, schema);
     }
 });
 
 Template.skeleformTimePicker.onCreated(function() {
-    registerField(this);
+    Skeleform.utils.registerField(this);
     this.isActivated = new ReactiveVar(false);
 
     let schema = this.data.fieldSchema.get();
 
-    InvokeCallback(this, null, schema, 'onCreated');
+    Skeleform.utils.InvokeCallback(this, null, schema, 'onCreated');
 
     this.initOptions = {};
 
@@ -44,7 +44,7 @@ Template.skeleformTimePicker.onCreated(function() {
 
         // fire onChange callback
         if (value !== undefined && value !== this.getValue()) {
-            InvokeCallback(this, value, schema, 'onChange');
+            Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
         }
 
         // reactively set the value on the timepicker
@@ -75,7 +75,7 @@ Template.skeleformTimePicker.onRendered(function() {
 
             // workaround to avoid multiple callback invocation on startup
             if (this.setCounter > 0) {
-                InvokeCallback(this, value, schema, 'onChange');
+                Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
             }
             this.setCounter++;
 
@@ -147,10 +147,10 @@ Template.skeleformTimePicker.onRendered(function() {
         }
     }
 
-    let $field = $getFieldById(this, schema);
+    let $field = Skeleform.utils.$getFieldById(this, schema);
 
     $field.pickatime(this.initOptions);
     this.pickerInstance = $field.pickatime('picker');
     this.isActivated.set(true);
-    InvokeCallback(this, null, schema, 'onRendered');
+    Skeleform.utils.InvokeCallback(this, null, schema, 'onRendered');
 });

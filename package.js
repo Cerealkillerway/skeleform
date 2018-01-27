@@ -41,8 +41,12 @@ Package.onUse(function(api) {
     // templates
     api.addFiles([
         'templates/skeleform.html',
-        'templates/components/skeleformDefaultReplicaBtns.html',
+        'templates/skeleformToolbars.html',
+        'templates/components/skeleformReplicaSet.html',
         'templates/test/skelePanelTest.html',
+        'templates/toolbars/createButtons.html',
+        'templates/toolbars/updateButtons.html',
+        'templates/toolbars/printFunctions.html',
         'formComponents/templates/skeleformDatePicker.html',
         'formComponents/templates/skeleformEditor.html',
         'formComponents/templates/ckMaterialNotePlugins.html',
@@ -61,16 +65,26 @@ Package.onUse(function(api) {
     api.addFiles([
         'lib/editEvents.js',
         'lib/autoNumeric.js',
+        'lib/utils.js',
         //'lib/materialize.clockpicker.js',
         //'lib/timepickersConflictResolver.js',
         //'lib/picker.time.js',
         //'lib/jquery.multi-select.js',
+
+        'events/skeleformEvents.js',
+        'events/toolbarsEvents.js',
+        'events/toolbars/createButtonsEvents.js',
+        'events/toolbars/updateButtonsEvents.js',
+        'events/toolbars/printFunctionsEvents.js',
+        'events/components/replicaSetEvents.js',
+        'events/testEvents.js',
+
         'helpers/commonHelpers.js',
         'helpers/skeleformHelpers.js',
-        'helpers/componentHelpers.js',
-        'events/skeleformEvents.js',
-        'events/componentsEvents.js',
-        'events/testEvents.js'
+        'helpers/components/replicaSetHelpers.js',
+        'helpers/skeleformToolbarsHelpers.js',
+        'helpers/toolbars/createButtonsHelpers.js',
+        'helpers/toolbars/updateButtonsHelpers.js'
     ],
     ['client']);
 

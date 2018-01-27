@@ -23,5 +23,5 @@ Template.skeleformStaticTitle.onCreated(function() {
 });
 
 Template.skeleformStaticTitle.onCreated(function() {
-    registerField(this);
+    Skeleform.utils.registerField(this);
 });

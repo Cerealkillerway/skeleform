@@ -89,103 +89,10 @@ Template.skeleformGroupWrapper.helpers({
 });
 
 
-Template.skeleformReplicaSetWrapper.helpers({
-    createReplicaContext: function(context) {
-        let replicaOptions = context.fieldSchema.replicaSet;
-        let formContext = context.formContext;
-        let item = formContext.item;
-        let replicaName = replicaOptions.name
-        let replicas = [];
-        let replicaItem;
-        let replicaIndex = 0;
-
-        if (formContext.formRendered.get() === true) {
-            function insertReplicaItem() {
-                let replicaContext = {};
-
-                _.extend(replicaContext, context);
-                replicaContext.replicaIndex = replicaIndex;
-                replicaContext.replicaOptions = replicaOptions;
-                replicas.push(replicaContext);
-
-                replicaIndex++;
-            }
-
-            if (item) {
-                if (replicaOptions.i18n === undefined || replicaOptions.i18n === true) {
-                    replicaName = FlowRouter.getParam('itemLang') + '---' + replicaName;
-                }
-
-                replicaItem = item[replicaName];
-
-                if (replicaItem) {
-                    for (item of replicaItem) {
-
-                        insertReplicaItem();
-                    }
-                }
-            }
-            // add missing copies to reach minimum required
-            while (replicas.length < replicaOptions.minCopies) {
-                insertReplicaItem();
-            }
-        }
-
-        return replicas;
-    },
-
-    formatClasses: skeleformStyleHelpers.formatClasses
-});
-
-
-Template.skeleformReplicaFrame.helpers({
-    formatClasses: skeleformStyleHelpers.formatClasses
-});
-
-
 Template.skeleformField.helpers({
     createDataForField: function(context) {
         context.fieldSchema = new ReactiveVar(context.fieldSchema);
 
         return context;
-    }
-})
-
-
-// update buttons (toolbar)
-Template.skeleformUpdateButtons.helpers({
-    isTranslatable: function() {
-        if (FlowRouter.getParam('itemLang')) {
-            return true;
-        }
-        return false;
-    }
-});
-
-
-// Toolbars
-Template.skeleformCreateButtons.helpers(toolbarsHelpers);
-Template.skeleformUpdateButtons.helpers(toolbarsHelpers);
-
-
-// SkeleformLangBar
-Template.skeleformLangBar.helpers({
-    langs: function() {
-        let result = [];
-
-        if (Skeletor.configuration) {
-            _.each(Skeletor.configuration.langEnable, function(value, key) {
-                if (value) {
-                    result.push(key);
-                }
-            });
-
-            return result;
-        }
-    },
-    isActive: function(buttonLang) {
-        if (FlowRouter.getParam('itemLang') === buttonLang) {
-            return 'active';
-        }
     }
 });

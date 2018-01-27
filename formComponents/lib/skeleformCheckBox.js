@@ -37,15 +37,15 @@ Template.skeleformCheckBox.helpers({
 
 // Events
 Template.skeleformCheckBox.onCreated(function() {
-    registerField(this);
+    Skeleform.utils.registerField(this);
     this.isActivated = new ReactiveVar(false);
 
     let schema = this.data.fieldSchema.get();
 
-    InvokeCallback(this, null, schema, 'onCreated');
+    Skeleform.utils.InvokeCallback(this, null, schema, 'onCreated');
 
     this.getValue = () => {
-        let value = $getFieldById(this, schema).prop('checked');
+        let value = Skeleform.utils.$getFieldById(this, schema).prop('checked');
 
         return value;
     };
@@ -72,10 +72,10 @@ Template.skeleformCheckBox.onCreated(function() {
     this.setValue = (value) => {
         // if setting a real value, fire onChange callback
         if (value !== undefined && value !== this.getValue()) {
-            InvokeCallback(this, value, schema, 'onChange');
+            Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
         }
 
-        $getFieldById(this, schema).prop('checked', value);
+        Skeleform.utils.$getFieldById(this, schema).prop('checked', value);
     };
 });
 Template.skeleformCheckBox.onDestroyed(function() {
@@ -88,13 +88,13 @@ Template.skeleformCheckBox.onRendered(function() {
     let schema = this.data.fieldSchema.get();
 
     this.isActivated.set(true);
-    InvokeCallback(this, null, schema, 'onRendered');
+    Skeleform.utils.InvokeCallback(this, null, schema, 'onRendered');
 
     // on checkboxes it is necessary to fire onChange on load since for "false" value, the "setValue()" never happens
     // because when creating new document, the relative item's field is undefined
     if (this.data.formContext.skeleSubsReady.get()) {
         if (this.getValue() === false) {
-            InvokeCallback(this, this.getValue(), schema, 'onChange');
+            Skeleform.utils.InvokeCallback(this, this.getValue(), schema, 'onChange');
         }
     }
 });
@@ -108,6 +108,6 @@ Template.skeleformCheckBox.events({
 
         instance.isValid();
 
-        InvokeCallback(instance, value, schema, 'onChange');
+        Skeleform.utils.InvokeCallback(instance, value, schema, 'onChange');
     },
 });

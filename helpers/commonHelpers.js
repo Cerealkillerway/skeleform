@@ -1,216 +1,3 @@
-// invoke a specific callback for a field
-InvokeCallback = function(instance, value, schema, type) {
-    if (schema.callbacks) {
-        switch (type) {
-            case 'onCreated':
-            // if defined, perform the callback
-            if (schema.callbacks.onCreated) {
-                schema.callbacks.onCreated(instance);
-            }
-            break;
-
-            case 'onRendered':
-            // if defined, perform the callback
-            if (schema.callbacks.onRendered) {
-                schema.callbacks.onRendered(instance);
-            }
-            break;
-
-            case 'onChange':
-            // if defined, perform the callback
-            if (schema.callbacks.onChange) {
-                schema.callbacks.onChange(value, instance);
-            }
-            break;
-        }
-    }
-};
-
-
-function createFieldId(instance, name, isSelecting) {
-    let replicaIndex = instance.data.replicaIndex;
-
-    if (isSelecting) {
-        name = name.replace('.', '\\.');
-    }
-
-    if (replicaIndex !== undefined) {
-        return name + '-' + replicaIndex;
-    }
-
-    return name;
-}
-
-
-// get the field's object
-$getFieldById = function(instance, schema) {
-    return instance.$('#' + createFieldId(instance, schema.name, true));
-};
-// get the field' shadow object
-$getShadowFieldId = function(instance, schema) {
-    return instance.$('#' + schema.name.replace('.', '\\.') + 'ShadowConfirm');
-};
-
-// standard function to set the value on a field;
-// it waits for any custom initialization on the field, and reactively watch lang changes
-// and fires appropriate i18n method on the field is special handling for i18n is required
-setFieldValue = function(instance, item, fieldSchema) {
-    instance.view.autorun(function() {
-        // register dependency from current language; used to fire custom i18n callback
-        // for fields that requires special i18n treatment...
-        let currentLang = TAPi18n.getLanguage();
-        let formRendered = instance.data.formContext.formRendered.get();
-
-        // object used to ensure that each callback is executed only once per computation
-        if (!instance.callbacksCalled) {
-            instance.callbacksCalled = {
-                onChange: false,
-            };
-        }
-        // variable used to ensure that validation is executed only once per computation
-        if (instance.isValidated === undefined) {
-            instance.isValidated = false;
-        }
-
-        // avoid setting the value if the view is not fully rendered yet
-        let isActivated = instance.isActivated.get();
-
-        if (isActivated === true) {
-            if (!instance.data.formContext.skeleSubsReady.get()) {
-                return false;
-            }
-
-            let value = SkeleformStandardFieldValue(item, fieldSchema, instance);
-
-            //SkeleUtils.GlobalUtilities.logger(schema.name + '-value: ' + value, 'skeleformCommon');
-            //SkeleUtils.GlobalUtilities.logger(schema.name + '-getValue(): ' + instance.getValue(), 'skeleformCommon');
-            //SkeleUtils.GlobalUtilities.logger('------------------', 'skeleformCommon');
-
-            instance.setValue(value);
-            instance.isValid();
-            instance.isValidated = true;
-
-            // call custom i18n if necessary
-            if (instance.i18n) {
-                instance.i18n(currentLang);
-            }
-        }
-    });
-};
-
-
-// standard function to get a field's value form the current data object;
-// it is defined here as a global function so that special field types can override "fieldValue" helper
-// but still call this function if needed and then perform any special handling that is required
-SkeleformStandardFieldValue = function(item, fieldSchema, instance) {
-    if (item === undefined) {
-        return;
-    }
-
-    let name = fieldSchema.name;
-    let fieldData;
-    let data = instance.data;
-
-    if (data.replicaIndex !== undefined) {
-        let replicaOptions = data.replicaOptions;
-        let replicaName = replicaOptions.name;
-
-        let $replicaContainer = $(instance.firstNode).closest('.skeleformReplicaSet');
-        let $replicas = $replicaContainer.find('.skeleformReplicaFrame');
-        let $currentReplica = $(instance.firstNode).closest('.skeleformReplicaFrame')
-        let index = $replicas.index($currentReplica);
-
-        if (replicaOptions.i18n === undefined || replicaOptions.i18n === true)  {
-            replicaName = FlowRouter.getParam('itemLang') + '---' + replicaName;
-        }
-
-        let replicaItem = item[replicaName];
-
-        if (replicaItem === undefined || replicaItem[index] === undefined || data.replicaIndex > replicaItem.length) {
-            return;
-        }
-
-        fieldData = SkeleUtils.GlobalUtilities.getPropertyFromString(name, replicaItem[index]);
-    }
-    else {
-        if (fieldSchema.i18n === undefined || fieldSchema.i18n === true) {
-            fieldData = SkeleUtils.GlobalUtilities.getPropertyFromString(FlowRouter.getParam('itemLang') + '---' + name, item)
-        }
-        else {
-            fieldData = SkeleUtils.GlobalUtilities.getPropertyFromString(name, item);
-        }
-    }
-
-    // set active class on label to avoid overlapping
-    if (fieldSchema.output === 'input') {
-        $('#' + fieldSchema.name).next('label').addClass('active');
-    }
-
-    if (fieldData === undefined) {
-        return '';
-    }
-
-    /*console.log(name);
-    console.log(fieldData);
-    console.log('------------------');*/
-
-    return fieldData;
-};
-
-
-// create paths for redirect after form actions
-createPath = function(path, data) {
-    let result = {
-        params: {},
-        queryParams: {}
-    };
-    let value;
-
-    function handleParam(param, type, value) {
-        switch (param) {
-            case 'itemLang':
-            case 'sLang':
-            if (value === 'auto') {
-                result[type][param] = FlowRouter.getParam('itemLang');
-            }
-            else  {
-                result[type][param] = value;
-            }
-            break;
-
-            default:
-            if (value === 'this') {
-                if (data[param]) {
-                    result[type][param] = data[param];
-                }
-                else {
-                    result[type][param] = data[FlowRouter.getParam('itemLang') + '---' + param];
-                }
-            }
-            else {
-                result[type][param] = value;
-            }
-        }
-    }
-
-    _.keys(path[1]).forEach(function(param) {
-        value = path[1][param];
-
-        handleParam(param, 'params', value);
-    });
-
-    if (path[2]) {
-        _.keys(path[2]).forEach(function(queryParam) {
-            value = path[2][queryParam];
-
-            handleParam(queryParam, 'queryParams', value);
-        });
-    }
-
-    return result;
-};
-
-
 skeleformStyleHelpers = {
     formatClasses: function(classes) {
         if (!classes) {
@@ -256,7 +43,7 @@ skeleformGeneralHelpers = {
     },
 
     field: function(name) {
-        return createFieldId(Template.instance(), name);
+        return Skeleform.utils.createFieldId(Template.instance(), name);
     },
 
     required: function() {
@@ -285,7 +72,7 @@ skeleformGeneralHelpers = {
         let instance = Template.instance();
         let data = instance.data;
 
-        setFieldValue(instance, data.formContext.item, data.fieldSchema.get());
+        Skeleform.utils.setFieldValue(instance, data.formContext.item, data.fieldSchema.get());
     },
 
     formatClasses: skeleformStyleHelpers.formatClasses
@@ -294,7 +81,7 @@ skeleformGeneralHelpers = {
 
 toolbarsHelpers = {
     makeUndoPath: function(path) {
-        let params = createPath(path);
+        let params = Skeleform.utils.createPath(path);
         return FlowRouter.path(path[0], params.params, {lang: TAPi18n.getLanguage()});
     }
 };

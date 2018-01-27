@@ -39,24 +39,24 @@ handleGettedValue = function(value, schema) {
 
 // Events
 Template.skeleformInput.onCreated(function() {
-    registerField(this);
+    Skeleform.utils.registerField(this);
     this.isActivated = new ReactiveVar(false);
 
     let schema = this.data.fieldSchema.get();
 
-    InvokeCallback(this, null, schema, 'onCreated');
+    Skeleform.utils.InvokeCallback(this, null, schema, 'onCreated');
 
     this.getValue = () => {
         let value;
 
         if (schema.shadowConfirm) {
             value = {
-                standard: $getFieldById(this, schema).val(),
+                standard: Skeleform.utils.$getFieldById(this, schema).val(),
                 shadow: $getShadowFieldId(this, schema).val()
             };
         }
         else {
-            value = $getFieldById(this, schema).val();
+            value = Skeleform.utils.$getFieldById(this, schema).val();
         }
 
         return handleGettedValue(value, schema);
@@ -83,13 +83,13 @@ Template.skeleformInput.onCreated(function() {
         return validationResult;
     };
     this.setValue = (value) => {
-        let $field = $getFieldById(this, schema);
+        let $field = Skeleform.utils.$getFieldById(this, schema);
 
         $field.val(value);
 
         // if setting a real value, fire onChange callback
         if (value !== undefined && value !== this.getValue()) {
-            InvokeCallback(this, value, schema, 'onChange');
+            Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
         }
 
         // when setting a value, trigger autoresize if it's a textarea
@@ -117,7 +117,7 @@ Template.skeleformInput.onRendered(function() {
     // handle formats
     switch (schema.formatAs) {
         case 'currency':
-            $getFieldById(self, schema).autoNumeric('init', {
+            Skeleform.utils.$getFieldById(self, schema).autoNumeric('init', {
                 aSep: ' ',
                 aDec: ',',
                 altDec: '.',
@@ -127,13 +127,13 @@ Template.skeleformInput.onRendered(function() {
                 wEmpty: 'zero'
             });
 
-            $getFieldById(self, schema).click(function() {
+            Skeleform.utils.$getFieldById(self, schema).click(function() {
                 $(this).select();
             });
             break;
 
         case 'float':
-            $getFieldById(self, schema).autoNumeric('init', {
+            Skeleform.utils.$getFieldById(self, schema).autoNumeric('init', {
                 aSep: ' ',
                 aDec: ',',
                 altDec: '.',
@@ -143,7 +143,7 @@ Template.skeleformInput.onRendered(function() {
             break;
 
         case 'integer':
-            $getFieldById(self, schema).autoNumeric('init', {
+            Skeleform.utils.$getFieldById(self, schema).autoNumeric('init', {
                 mDec: '0',
                 vMax: '99',
                 wEmpty: 'zero'
@@ -156,11 +156,11 @@ Template.skeleformInput.onRendered(function() {
 
     // if necessary enable character counter
     if (schema.charCounter) {
-        $getFieldById(self, schema).characterCounter();
+        Skeleform.utils.$getFieldById(self, schema).characterCounter();
     }
 
     self.isActivated.set(true);
-    InvokeCallback(this, null, schema, 'onRendered');
+    Skeleform.utils.InvokeCallback(this, null, schema, 'onRendered');
 });
 
 Template.skeleformInput.events({
@@ -172,10 +172,10 @@ Template.skeleformInput.events({
         let id = $(event.target).attr('id');
 
         if (!result.valid) {
-            setInvalid(id, schema, result);
+            Skeleform.validate.setInvalid(id, schema, result);
         }
         else {
-            Skeleform.utils.skeleformSuccessStatus(id, schema);
+            Skeleform.validate.skeleformSuccessStatus(id, schema);
         }
 
         //autoRange option
@@ -183,6 +183,6 @@ Template.skeleformInput.events({
             $(event.target).select();
         }
 
-        InvokeCallback(instance, value, schema, 'onChange');
+        Skeleform.utils.InvokeCallback(instance, value, schema, 'onChange');
     }
 });

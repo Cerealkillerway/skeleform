@@ -70,12 +70,12 @@ Template.skeleformImageUpload.helpers({
 
 // Events
 Template.skeleformImageUpload.onCreated(function() {
-    registerField(this);
+    Skeleform.utils.registerField(this);
     this.isActivated = new ReactiveVar(false);
 
     let schema = this.data.fieldSchema.get();
 
-    InvokeCallback(this, null, schema, 'onCreated');
+    Skeleform.utils.InvokeCallback(this, null, schema, 'onCreated');
 
     this.isSettingValue = false;
 
@@ -201,7 +201,7 @@ Template.skeleformImageUpload.onRendered(function() {
     this.currentLang = FlowRouter.getQueryParam('lang');
 
     this.isActivated.set(true);
-    InvokeCallback(this, null, schema, 'onRendered');
+    Skeleform.utils.InvokeCallback(this, null, schema, 'onRendered');
 });
 
 Template.skeleformImageUpload.events = {
@@ -292,13 +292,13 @@ Template.skeleformImageUpload.events = {
                             let id = schema.name.replace('.', '\\.');
 
                             if (!result.valid) {
-                                setInvalid(id, schema, result);
+                                Skeleform.validate.setInvalid(id, schema, result);
                             }
                             else {
-                                Skeleform.utils.skeleformSuccessStatus(id, schema);
+                                Skeleform.validate.skeleformSuccessStatus(id, schema);
                             }
 
-                            InvokeCallback(instance, value, schema, 'onChange');
+                            Skeleform.utils.InvokeCallback(instance, value, schema, 'onChange');
                         }
                     };
                 };
