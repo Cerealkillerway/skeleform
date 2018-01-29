@@ -217,7 +217,8 @@ Inside these methods (and everywhere in the field's code) calling `Skeleform.uti
 
 #### 5.1 UPDATE FIELD VALUES
 
-If you want to update another field's value from within a field's callback, the best way is to update the `fieldInstance.data.formInstance.data.item` object; this will reactively update the field's value;
+If you want to update another field's value from within a field's callback, you should call the `setValue()` method on that field's instance;
+for convenience there is a function you can use to get a field's instance by name: `Skeletor.SkeleUtils.GlobalUtilities.getFieldInstance(formContext, fieldName)`; the formContext it's accessible from any fieldInstance in this way: `fieldInstance.data.formContext`;
 
 **Ex.:**
 In this example we will update the value of `username` field from within the `userId`'s `onChange` callback.
@@ -232,12 +233,12 @@ In this example we will update the value of `username` field from within the `us
 
                 // setting the value on the formInstance's item object will reactively
                 // update the value of the 'username' field
-                fieldInstance.data.formInstance.data.item.username = userDocument.username;
+                Skeletor.SkeleUtils.GlobalUtilities.getFieldInstance(fieldInstance.data.formContext, 'username').setValue(userDocument.username)
             }
         }
     }
 
-#### 5.2 UPDATE FIELD SCHEMAS [REMOVED]
+#### 5.2 UPDATE FIELD SCHEMAS
 
 Sometimes you need to alter some field(s) schema(s) at runtime;
 you can always access all field(s) properties starting from a `fieldInstance` and update any of them; it's all reactive;
@@ -245,7 +246,7 @@ you can always access all field(s) properties starting from a `fieldInstance` an
 Let' say that in the `userId.onChange` callback just seen here above you need to update the schema of the `email` field to make it required;  
 The schema of every fiels is wrapped inside a reactive var, that means that calling `set()` on it will cause the rerun of every function that uses 'get()' from it; in other words setting a new value on a field' schema will re-render it;
 
-The *SkeleUtils* package, that is part of the *Skeletor* project (as *Skeleform* is) has an handy function to retrieve a fieldInstance starting from the formInstance (accessible from within any fieldInstance at `fieldInstance.data.formInstance`) called `SkeleUtils.GlobalUtilities.getFieldInstance()`; *SkeleUtils* is exported by *Skeletor* so it's accessible from within your app by calling `Skeletor.Skeleutils`; so our example would be:
+As seen above, the *SkeleUtils* package, that is part of the *Skeletor* project (as *Skeleform* is) has an handy function to retrieve a fieldInstance starting from the formContext (accessible from within any fieldInstance at `fieldInstance.data.formContext`) called `SkeleUtils.GlobalUtilities.getFieldInstance()`; *SkeleUtils* is exported by *Skeletor* so it's accessible from within your app by calling `Skeletor.Skeleutils`; so our example would be:
 
     {
         name: 'userId',
@@ -253,7 +254,7 @@ The *SkeleUtils* package, that is part of the *Skeletor* project (as *Skeleform*
         i18n: false,
         callbacks: {
             onChange: function(value, fieldInstance) {
-                let emailField = Skeletor.SkeleUtils.GlobalUtilities.getFieldInstance(fieldInstance.data.formInstance, 'email');
+                let emailField = Skeletor.SkeleUtils.GlobalUtilities.getFieldInstance(fieldInstance.data.formContext, 'email');
                 let emailSchema = emailField.data.schema.get();
 
                 // make the field required reactively
@@ -289,7 +290,7 @@ sets invalid class on the field and shows error (eventually resets its valid sta
 
 ### 6 VALIDATION
 
-The method `isValid()` should perform the field's validation when required and return a *"result"* object with this form:
+The method `isValid()` defined on every field (`fieldInstance.isValid()`) should perform the field's validation when required and return a *"result"* object with this form:
 
 - **valid**: *[boolean] (mandatory)* if the field's current value is valid or not;
 - **reasons**: *[array of strings] (mandatory)* a set of strings describing the validity checks failed (should match the name of *validation types* (see *validation -> type*));
@@ -299,7 +300,7 @@ The `Skeleform.validate.checkOptions()` global function is the standard way to p
 
 ##### 6.1 CUSTOM INVALID MESSAGE
 
-If it's necessary to use a custom invalid message it is possible to add the field *"invalidMessages"* to the "result" object;
+If it's necessary to use a custom invalid message it is possible to add the field *"invalidMessages"* to the "result" object returned by `isValid()`;
 
 - **invalidMessages**: *[object] (optional)* should be a dictionary of custom i18n strings to use for each validation type;
 
@@ -315,9 +316,9 @@ It is set to use 3 default methods for the 3 basic operations:
 
 These methods, before doing the actual document creation, update or delete perform the followings:
 
- - call `SkeleUtils.GlobalUtilities.checkPermission()` to check that the current user have the right permissions to perform the operation;
- - for create or update, validate the collected data against the schema; this provide a server-side too security check on the data to be saved;
- - if required add the "tracked" object to store informations about the current action (see `__options.tracked` in the **schema options** - chapter 1);
+ - call `SkeleUtils.Permissions.checkPermissions()` to check that the current user have the right permissions to perform the operation;
+ - for create or update, validate the collected data against the schema; this provide a client and server-side security check on the data to be saved;
+ - if required add the "tracked" objects to store informations about the current action (see `__options.tracked` in the **schema options** - chapter 1);
 
 ### 8 TROUBLESHOOTING
 

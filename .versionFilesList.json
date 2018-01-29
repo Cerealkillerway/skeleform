@@ -1,0 +1,9 @@
+{
+  "name": "cerealkiller:skeleform",
+  "currentVersion": "2.18.0",
+  "versionPrefix": "v",
+  "filesList": [
+    "package.js:package",
+    "README.md"
+  ]
+}
