@@ -11,22 +11,24 @@ Package.onUse(function(api) {
     // namespace
     api.addFiles('namespace.js');
 
+    api.versionsFrom('METEOR@1.6.1');
+
     // dependencies
     api.use([
         'session',
         'jquery',
-        'fourseven:scss',
+        'fourseven:scss@4.5.4',
         'cerealkiller:materialnote@2.0.0',
-        'blaze-html-templates'
+        'blaze-html-templates@1.1.2'
     ],
     ['client']);
 
     api.use([
         'check',
         'ecmascript',
-        'underscore@1.0.0',
-        'cerealkiller:skeleutils',
-        'cerealkiller:skeletor'
+        'underscore',
+        'cerealkiller:skeleutils@2.0.0',
+        'cerealkiller:skeletor@3.0.0'
     ],
     ['client', 'server']);
 
