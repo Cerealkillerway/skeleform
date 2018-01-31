@@ -134,15 +134,13 @@ Template.skeleformSelect.helpers({
 
 // Events
 Template.skeleformSelect.onCreated(function() {
+    // register this on form' store
     Skeleform.utils.registerField(this);
     this.isActivated = new ReactiveVar(false);
 
     let schema = this.data.fieldSchema.get();
 
     Skeleform.utils.InvokeCallback(this, null, schema, 'onCreated');
-
-    // register this on form' store
-
 
     this.i18n = () => {
         Skeleform.utils.$getFieldById(this, schema).material_select();
@@ -170,7 +168,9 @@ Template.skeleformSelect.onCreated(function() {
             if (schema.multi) {
                 if (value.indexOf(optionValue) >= 0) {
                     $(option).prop('selected', true);
-                    $field.material_select();
+                }
+                else {
+                    $(option).prop('selected', false);
                 }
             }
 
@@ -178,11 +178,12 @@ Template.skeleformSelect.onCreated(function() {
             else {
                 if (value === optionValue) {
                     $(option).prop('selected', true);
-                    $field.material_select();
                     break;
                 }
             }
         }
+
+        $field.material_select();
 
         // here cannot test value !== this.getValue() since the actual value for the field in the current document
         // can be the first value (default preselected) for the field;

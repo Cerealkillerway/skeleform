@@ -1,6 +1,7 @@
 // update buttons (toolbar)
 Template.skeleformUpdateButtons.events({
     'click .skeleformUpdate': function(event, template) {
+        let configuration = Skeletor.configuration;
         let formContext = template.data.formContext;
         let fields = formContext.fields;
         let documentId = formContext.item._id;

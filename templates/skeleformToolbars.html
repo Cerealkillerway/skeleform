@@ -1,8 +1,8 @@
 <!-- loads default or custom toolbar on top of skeleform -->
 <template name="skeleformToolbar">
     <div class="skeleskeleStaticBarPlaceholder"></div>
-    {{#if schema.__toolbar.template}}
-        {{> Template.dynamic template=schema.__toolbar.template data=this}}
+    {{#if this.formContext.schema.__toolbar.template}}
+        {{> Template.dynamic template=this.formContext.schema.__toolbar.template data=this}}
     {{else}}
         {{#if formContext.item}}
             {{> skeleformUpdateButtons this}}

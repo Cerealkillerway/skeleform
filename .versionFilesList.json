@@ -1,6 +1,6 @@
 {
   "name": "cerealkiller:skeleform",
-  "currentVersion": "2.18.0",
+  "currentVersion": "2.18.1",
   "versionPrefix": "v",
   "filesList": [
     "package.js:package",

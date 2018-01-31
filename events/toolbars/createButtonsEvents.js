@@ -1,6 +1,7 @@
 // create buttons (toolbar)
 Template.skeleformCreateButtons.events({
     'click .skeleformCreate': function(event, template) {
+        let configuration = Skeletor.configuration;
         let formContext = template.data.formContext;
         let fields = formContext.fields;
         let schema = formContext.schema;

@@ -1,3 +1,6 @@
+let configuration = Skeletor.configuration;
+
+
 // skeleform language bar
 Template.skeleformLangBar.events({
     'click .langFlag': function(event, template) {
