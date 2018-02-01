@@ -34,7 +34,8 @@ Template.skeleformSelect.helpers({
                 result.push({
                     name: TAPi18n.__('none_lbl'),
                     value: '',
-                    disabled: 'disabled'
+                    disabled: 'disabled',
+                    selected: 'selected'
                 });
             }
 
@@ -69,7 +70,7 @@ Template.skeleformSelect.helpers({
                 // get the value for the option
                 schema.sourceValue.split('.').forEach(function(valueShard, index) {
                     if (valueShard.indexOf(':itemLang---') === 0) {
-                        var valueNameOnly = valueShard.substring(12, valueShard.length);
+                        let valueNameOnly = valueShard.substring(12, valueShard.length);
 
                         if (valueAttr[lang + '---' + valueNameOnly]) {
                             valueAttr = valueAttr[lang + '---' + valueNameOnly];
@@ -154,12 +155,12 @@ Template.skeleformSelect.onCreated(function() {
         return Skeleform.validate.checkOptions(this.getValue(), schema, formContext.schema, formContext.item);
     };
     this.setValue = (value) => {
-        if (!value) {
-            return '';
-        }
-
         let name = schema.name;
         let $field = Skeleform.utils.$getFieldById(this, schema);
+
+        if (value === undefined) {
+            return;
+        }
 
         for (const option of $field.children()) {
             let optionValue = $(option).val();
@@ -201,6 +202,12 @@ Template.skeleformSelect.onRendered(function() {
     // start plugin
     let $field = Skeleform.utils.$getFieldById(this, schema);
     let $options = $field.children('option');
+
+    /*if (schema.allowBlank) {
+        console.log('allowblank');
+        $field.children().first().prop('selected, true');
+        console.log($field.children().first());
+    }*/
 
     $field.material_select();
     this.isActivated.set(true);

@@ -63,10 +63,9 @@ Template.skeleformReplicaSetWrapper.helpers({
         }
 
         formInstance.replicasReady.set(true);
-        SkeleUtils.GlobalUtilities.logger('re-init replicaSet', 'skeleError');
         return initReplicaSet();
     },
-    
+
     createReplicaContext: function(context) {
         let replicaOptions = context.fieldSchema.replicaSet;
         let formContext = context.formContext;
