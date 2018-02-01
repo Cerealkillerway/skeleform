@@ -27,7 +27,7 @@ Template.skeleformBody.helpers({
     fields: function(context) {
         let fields = context.fieldSchema.fields
         let currentFields = [];
-        let item = context.item;
+        let item = context.formContext.item;
 
         function createFieldContext(fieldSchema) {
             if (fieldSchema.replicaSet) {
@@ -56,7 +56,7 @@ Template.skeleformBody.helpers({
             if (fieldSchema.output !== 'none') {
                 switch (fieldSchema.showOnly) {
                     case 'create':
-                    if (!item) {
+                    if (item === undefined) {
                         currentFields.push(createFieldContext(fieldSchema));
                     }
                     break;
@@ -85,7 +85,11 @@ Template.skeleformGroupWrapper.helpers({
         context.skeleformGroupLevel++;
 
         return context
-    }
+    },
+
+    formatClasses: skeleformStyleHelpers.formatClasses,
+
+    setId: skeleformStyleHelpers.setId
 });
 
 

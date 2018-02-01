@@ -9,6 +9,11 @@ skeleformStyleHelpers = {
         }
 
         return classes;
+    },
+    setId: function(id) {
+        if (id !== undefined) {
+            return id;
+        }
     }
 }
 

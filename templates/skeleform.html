@@ -36,7 +36,7 @@
 
 
 <template name="skeleformGroupWrapper">
-    <div class="row">
+    <div class="row {{formatClasses this.fieldSchema.classes}}" id="{{setId this.fieldSchema.id}}">
         {{> skeleformBody (createFieldContext this)}}
     </div>
 </template>

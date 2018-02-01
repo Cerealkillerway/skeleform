@@ -5,13 +5,7 @@
 // pickaday api documentation: http://amsul.ca/pickadate.js/api/
 
 Template.skeleformDatePicker.helpers(skeleformGeneralHelpers);
-Template.skeleformDatePicker.helpers({
-    fieldDate: function(data, schema) {
-        const instance = Template.instance();
 
-        Skeleform.utils.setFieldValue(instance, data, schema);
-    }
-});
 
 Template.skeleformDatePicker.onCreated(function() {
     Skeleform.utils.registerField(this);
@@ -42,7 +36,7 @@ Template.skeleformDatePicker.onCreated(function() {
         //pickerInstance.render();
         // set again the value to translate also in the input box
         //pickerInstance.set('select', Skeleform.utils.SkeleformStandardFieldValue(this.data.item, this.data.schema), {format: this.initOptions.formatSubmit});
-        this.setValue(Skeleform.utils.SkeleformStandardFieldValue(this.data.item, schema, this));
+        this.setValue(Skeleform.utils.SkeleformStandardFieldValue(this.data.formContext.item, schema, this));
     };
     this.getValue = () => {
         let value = this.pickerInstance.get('select', this.initOptions.formatSubmit);
