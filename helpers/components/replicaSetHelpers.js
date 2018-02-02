@@ -107,6 +107,14 @@ Template.skeleformReplicaSetWrapper.helpers({
             }
         }
 
+        console.log('creating replicas');
+
+        // here should not rely on items
+        // replica instances should be based on an indipendent array (like formContext.replicas);
+        // if item is defined, item and formContext.replicas should be merged
+
+        formContext.replicas[replicaName] = replicas;
+
         return replicas;
     },
 

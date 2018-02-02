@@ -15,10 +15,20 @@ Skeleform.handleReplicaIndexes = function(instance, context) {
 }
 
 
+Template.skeleformReplicaSetWrapper.onCreated(function() {
+    let formContext = this.data.formContext;
+
+    if (!formContext.replicas) {
+        formContext.replicas = {};
+    }
+});
+
+
 Template.skeleformReplicaSetWrapper.onRendered(function() {
     let instance = this;
     let data = instance.data;
     let replicaOptions = data.fieldSchema.replicaSet;
+    let formContext = data.formContext;
 
     if (replicaOptions.sortable) {
         let $replicaContainer = this.$('.skeleformReplicaSet');
@@ -39,7 +49,7 @@ Template.skeleformReplicaSetWrapper.onRendered(function() {
             sortableOptions = _.extend(sortableOptions, replicaOptions.sortable);
         }
 
-        data.formContext.plugins.sortables[replicaOptions.name] = Sortable.create(items, sortableOptions);
+        formContext.plugins.sortables[replicaOptions.name] = Sortable.create(items, sortableOptions);
     }
 });
 
@@ -53,7 +63,7 @@ Template.skeleformDefaultReplicaBtns.events({
         let insertionIndex = $replicaContainer.find('.skeleformReplicaFrame').index($currentReplicaFrame) + 1;
         let formContext = data.formContext;
         let replicaOptions = data.replicaOptions;
-        let replicaName = data.replicaOptions.name;
+        let replicaName = replicaOptions.name;
 
         formContext.formRendered.set(false);
 
@@ -61,7 +71,11 @@ Template.skeleformDefaultReplicaBtns.events({
             replicaName = FlowRouter.getParam('itemLang') + '---' + replicaName;
         }
 
-        formContext.item[replicaName].insertAt({}, insertionIndex);
+        if (formContext.item) {
+            formContext.item[replicaName].insertAt({}, insertionIndex);
+        }
+
+        formContext.replicas[replicaOptions.name].insertAt({}, insertionIndex);
         formContext.formRendered.set(true);
     },
 
