@@ -8,14 +8,19 @@ Template.skeleform.helpers({
     },
     formContext: function(context) {
         let instance = Template.instance();
-        let dataContext = {};
 
-        dataContext.formContext = context;
-        dataContext.fieldSchema = context.schema;
-        dataContext.formContext.fields = instance.fields;
-        dataContext.formContext.formRendered = instance.formRendered;
-        dataContext.formContext.skeleDebug = instance.skeleDebug;
-        dataContext.formContext.plugins = instance.plugins;
+        context.fields = instance.fields;
+        context.formRendered = instance.formRendered;
+        context.skeleDebug = instance.skeleDebug;
+        context.plugins = instance.plugins;
+        context.replicaVars = instance.replicaVars;
+        context.replicas = instance.replicas;
+        context.autoSaves = instance.autoSaves;
+
+        let dataContext = {
+            formContext: context,
+            fieldSchema: context.schema
+        };
 
         return dataContext;
     }

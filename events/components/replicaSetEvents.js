@@ -16,11 +16,16 @@ Skeleform.handleReplicaIndexes = function(instance, context) {
 
 
 Template.skeleformReplicaSetWrapper.onCreated(function() {
-    let formContext = this.data.formContext;
+    let data = this.data;
+    let formContext = data.formContext;
+    let replicaOptions = data.fieldSchema.replicaSet;
+    let replicaName = replicaOptions.name;
 
-    if (!formContext.replicas) {
-        formContext.replicas = {};
+    if (replicaOptions.i18n === undefined || replicaOptions.i18n === true) {
+        replicaName = FlowRouter.getParam('itemLang') + '---' + replicaName;
     }
+
+    formContext.replicaVars[replicaName] = new ReactiveVar(false);
 });
 
 
@@ -29,6 +34,11 @@ Template.skeleformReplicaSetWrapper.onRendered(function() {
     let data = instance.data;
     let replicaOptions = data.fieldSchema.replicaSet;
     let formContext = data.formContext;
+    let replicaName = replicaOptions.name;
+
+    if (replicaOptions.i18n === undefined || replicaOptions.i18n === true) {
+        replicaName = FlowRouter.getParam('itemLang') + '---' + replicaName;
+    }
 
     if (replicaOptions.sortable) {
         let $replicaContainer = this.$('.skeleformReplicaSet');
@@ -49,7 +59,7 @@ Template.skeleformReplicaSetWrapper.onRendered(function() {
             sortableOptions = _.extend(sortableOptions, replicaOptions.sortable);
         }
 
-        formContext.plugins.sortables[replicaOptions.name] = Sortable.create(items, sortableOptions);
+        formContext.plugins.sortables[replicaName] = Sortable.create(items, sortableOptions);
     }
 });
 
@@ -64,19 +74,27 @@ Template.skeleformDefaultReplicaBtns.events({
         let formContext = data.formContext;
         let replicaOptions = data.replicaOptions;
         let replicaName = replicaOptions.name;
-
-        formContext.formRendered.set(false);
+        let newReplicaItem = {
+            formContext: formContext,
+            replicaOptions: replicaOptions,
+            fieldSchema: data.fieldSchema
+        }
 
         if (replicaOptions.i18n === undefined || replicaOptions.i18n === true) {
             replicaName = FlowRouter.getParam('itemLang') + '---' + replicaName;
         }
 
+        formContext.replicaVars[replicaName].set(false);
+
         if (formContext.item) {
-            formContext.item[replicaName].insertAt({}, insertionIndex);
+            formContext.item[replicaName].insertAt(newReplicaItem, insertionIndex);
         }
 
-        formContext.replicas[replicaOptions.name].insertAt({}, insertionIndex);
-        formContext.formRendered.set(true);
+        formContext.replicas[replicaName].insertAt(newReplicaItem, insertionIndex);
+        formContext.replicaVars[replicaName].set(true);
+
+        // save form status
+        Skeleform.utils.autoSaveFormData(formContext, formContext.fields);
     },
 
     'click .skeleReplicaBtnRemove': function(event, instance) {
@@ -88,13 +106,20 @@ Template.skeleformDefaultReplicaBtns.events({
         let replicaOptions = data.replicaOptions;
         let replicaName = data.replicaOptions.name;
 
-        formContext.formRendered.set(false);
-
         if (replicaOptions.i18n === undefined || replicaOptions.i18n === true) {
             replicaName = FlowRouter.getParam('itemLang') + '---' + replicaName;
         }
 
-        formContext.item[replicaName].removeAt(deletionIndex);
-        formContext.formRendered.set(true);
+        formContext.replicaVars[replicaName].set(false);
+
+        if (formContext.item) {
+            formContext.item[replicaName].removeAt(deletionIndex);
+        }
+
+        formContext.replicas[replicaName].removeAt(deletionIndex);
+        formContext.replicaVars[replicaName].set(true);
+
+        // save form status
+        Skeleform.utils.autoSaveFormData(formContext, formContext.fields);
     }
 });

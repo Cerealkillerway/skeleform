@@ -11,7 +11,7 @@ Template.skeleformReplicaSetWrapper.helpers({
         let replicaData = formInstance.replicaSets[replicaName];
         let index = 0;
 
-        // here formRendered reactive var is used to make Skeleform.utils.registerField wait for replicaSet object
+        // here replicasReady reactive var is used to make Skeleform.utils.registerField wait for replicaSet object
         // to be initialized
         formInstance.replicasReady.set(false);
 
@@ -75,6 +75,10 @@ Template.skeleformReplicaSetWrapper.helpers({
         let replicaItem;
         let replicaIndex = 0;
 
+        if (replicaOptions.i18n === undefined || replicaOptions.i18n === true) {
+            replicaName = FlowRouter.getParam('itemLang') + '---' + replicaName;
+        }
+
         if (formContext.formRendered.get() === true) {
             function insertReplicaItem() {
                 let replicaContext = {};
@@ -88,10 +92,6 @@ Template.skeleformReplicaSetWrapper.helpers({
             }
 
             if (item) {
-                if (replicaOptions.i18n === undefined || replicaOptions.i18n === true) {
-                    replicaName = FlowRouter.getParam('itemLang') + '---' + replicaName;
-                }
-
                 replicaItem = item[replicaName];
 
                 if (replicaItem) {
@@ -107,14 +107,22 @@ Template.skeleformReplicaSetWrapper.helpers({
             }
         }
 
-        console.log('creating replicas');
+
+        if (formContext.replicaVars[replicaName].get() === true) {
+            replicaIndex = 0
+
+            for (replica of formContext.replicas[replicaName]) {
+                replica.replicaIndex = replicaIndex;
+                replicaIndex++;
+            }
+            return formContext.replicas[replicaName];
+        }
 
         // here should not rely on items
         // replica instances should be based on an indipendent array (like formContext.replicas);
-        // if item is defined, item and formContext.replicas should be merged
+        // if item is defined, item and formContext.replicas should be
 
         formContext.replicas[replicaName] = replicas;
-
         return replicas;
     },
 
