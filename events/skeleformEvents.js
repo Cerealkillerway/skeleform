@@ -12,6 +12,7 @@ Template.skeleform.onCreated(function() {
     this.replicaVars = {};
     this.replicas = {};
     this.autoSaves = [];
+    this.isRestoringData = false;
 });
 
 
@@ -126,10 +127,6 @@ Template.skeleform.onRendered(function() {
             }
         }
     });
-
-    Meteor.setTimeout(() => {
-        Skeleform.utils.autoSaveFormData(this.data, this.data.fields);
-    }, 5000);
 });
 
 

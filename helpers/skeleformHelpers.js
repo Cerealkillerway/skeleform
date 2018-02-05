@@ -16,6 +16,7 @@ Template.skeleform.helpers({
         context.replicaVars = instance.replicaVars;
         context.replicas = instance.replicas;
         context.autoSaves = instance.autoSaves;
+        context.isRestoringData = instance.isRestoringData;
 
         let dataContext = {
             formContext: context,

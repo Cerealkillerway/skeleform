@@ -1,11 +1,6 @@
 // skeleform print functions
 Template.skeleformPrintFunctions.events({
     'click .skeleformPrintPreview': function(event, template) {
-        Skeleform.utils.restoreSavedData(template.data.formContext);
-
-
-        return;
-
         let formContext = template.data.formContext;
         let schema = formContext.schema;
         let printOptions = schema.__toolbar.printFunctions;

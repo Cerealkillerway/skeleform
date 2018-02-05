@@ -84,6 +84,9 @@ Template.skeleformDefaultReplicaBtns.events({
             replicaName = FlowRouter.getParam('itemLang') + '---' + replicaName;
         }
 
+        // save form status
+        Skeleform.utils.autoSaveFormData(formContext, formContext.fields);
+
         formContext.replicaVars[replicaName].set(false);
 
         if (formContext.item) {
@@ -91,10 +94,10 @@ Template.skeleformDefaultReplicaBtns.events({
         }
 
         formContext.replicas[replicaName].insertAt(newReplicaItem, insertionIndex);
+        // add new element also on the already taken snapshot (the tracker will re-set the form values using it)
+        formContext.autoSaves[formContext.autoSaves.length - 1][replicaName].insertAt(newReplicaItem, insertionIndex);
         formContext.replicaVars[replicaName].set(true);
-
-        // save form status
-        Skeleform.utils.autoSaveFormData(formContext, formContext.fields);
+        formContext.isRestoringData = true;
     },
 
     'click .skeleReplicaBtnRemove': function(event, instance) {
@@ -110,6 +113,9 @@ Template.skeleformDefaultReplicaBtns.events({
             replicaName = FlowRouter.getParam('itemLang') + '---' + replicaName;
         }
 
+        // save form status
+        Skeleform.utils.autoSaveFormData(formContext, formContext.fields);
+
         formContext.replicaVars[replicaName].set(false);
 
         if (formContext.item) {
@@ -117,9 +123,9 @@ Template.skeleformDefaultReplicaBtns.events({
         }
 
         formContext.replicas[replicaName].removeAt(deletionIndex);
+        // add new element also on the already taken snapshot (the tracker will re-set the form values using it)
+        formContext.autoSaves[formContext.autoSaves.length - 1][replicaName].removeAt(deletionIndex);
         formContext.replicaVars[replicaName].set(true);
-
-        // save form status
-        Skeleform.utils.autoSaveFormData(formContext, formContext.fields);
+        formContext.isRestoringData = true;
     }
 });

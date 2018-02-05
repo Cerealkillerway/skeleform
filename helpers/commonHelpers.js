@@ -55,10 +55,9 @@ skeleformGeneralHelpers = {
         let instance = Template.instance();
         let validationOptions = this.fieldSchema.get().validation;
 
-        /*if (instance.data.schema.output === 'input') {
-            instance.forcedReloads.get();
-        }*/
-        if ((validationOptions && validationOptions.min !== undefined) || validationOptions && validationOptions.type === 'date') return ' *';
+        if ((validationOptions && validationOptions.min !== undefined) || validationOptions && validationOptions.type === 'date') {
+            return ' *';
+        }
         return '';
     },
 
@@ -76,8 +75,15 @@ skeleformGeneralHelpers = {
         // sets the value on the field, used by most field types
         let instance = Template.instance();
         let data = instance.data;
+        let formContext = data.formContext;
+        let itemToRestore = formContext.item
 
-        Skeleform.utils.setFieldValue(instance, data.formContext.item, data.fieldSchema.get());
+        if (data.formContext.isRestoringData === true) {
+            //return;
+            itemToRestore = formContext.autoSaves[formContext.autoSaves.length - 1];
+        }
+
+        Skeleform.utils.setFieldValue(instance, itemToRestore, data.fieldSchema.get());
     },
 
     formatClasses: skeleformStyleHelpers.formatClasses

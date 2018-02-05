@@ -115,6 +115,8 @@ Template.skeleformReplicaSetWrapper.helpers({
                 replica.replicaIndex = replicaIndex;
                 replicaIndex++;
             }
+
+            formContext.replicaVars[replicaName].set(false);
             return formContext.replicas[replicaName];
         }
 
