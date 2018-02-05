@@ -87,10 +87,7 @@ Template.skeleformInput.onCreated(function() {
 
         $field.val(value);
 
-        // if setting a real value, fire onChange callback
-        if (value !== undefined && value !== this.getValue()) {
-            Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
-        }
+        Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
 
         // when setting a value, trigger autoresize if it's a textarea
         // as documented on materialize's docs:

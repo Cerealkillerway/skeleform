@@ -159,7 +159,8 @@ Template.skeleformSelect.onCreated(function() {
         let $field = Skeleform.utils.$getFieldById(this, schema);
 
         if (value === undefined) {
-            return;
+            $field.children().prop('selected', false);
+            $field.material_select();
         }
 
         for (const option of $field.children()) {
@@ -181,6 +182,9 @@ Template.skeleformSelect.onCreated(function() {
                     $(option).prop('selected', true);
                     break;
                 }
+                else {
+                    $(option).prop('selected', false);
+                }
             }
         }
 
@@ -188,11 +192,9 @@ Template.skeleformSelect.onCreated(function() {
 
         // here cannot test value !== this.getValue() since the actual value for the field in the current document
         // can be the first value (default preselected) for the field;
-        if (value !== undefined) {
-            Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
-        }
+        Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
 
-        return '';
+        return;
     };
 });
 

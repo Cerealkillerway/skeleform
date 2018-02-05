@@ -50,12 +50,8 @@ Template.skeleformDatePicker.onCreated(function() {
         return Skeleform.validate.checkOptions(this.getValue(), schema, formContext.schema, formContext.item);
     };
     this.setValue = (value) => {
-        // if setting a real value, fire onChange callback
-        if (value !== undefined && value !== this.getValue()) {
-            Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
-        }
-
         this.pickerInstance.set('select', value, {format: this.initOptions.formatSubmit});
+        Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
     };
 });
 Template.skeleformDatePicker.onDestroyed(function() {

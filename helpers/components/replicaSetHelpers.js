@@ -117,7 +117,6 @@ Template.skeleformReplicaSetWrapper.helpers({
             }
 
             formContext.replicaVars[replicaName].set(false);
-            console.log(formContext.replicas[replicaName]);
             return formContext.replicas[replicaName];
         }
 

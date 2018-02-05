@@ -42,16 +42,12 @@ Template.skeleformTimePicker.onCreated(function() {
 
         if (!value) return;
 
-        // fire onChange callback
-        if (value !== undefined && value !== this.getValue()) {
-            Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
-        }
-
         // reactively set the value on the timepicker
         if (pickerInstance) {
             pickerInstance.set('select', value, {format: instance.initOptions.formatSubmit});
         }
 
+        Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
     };
 });
 Template.skeleformTimePicker.onDestroyed(function() {

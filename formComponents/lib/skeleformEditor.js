@@ -78,15 +78,12 @@ Template.skeleformEditor.onCreated(function() {
         return Skeleform.validate.checkOptions(this.getValue(), schema, formContext.schema, formContext.item);
     };
     this.setValue = (value) => {
-        // if setting a real value, fire onChange callback
-        if (value !== undefined && value !== this.getValue()) {
-            Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
-        }
-
         if (value === undefined) {
             value = '';
         }
         Skeleform.utils.$getFieldById(this, schema).materialnote('code', value);
+
+        Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
     };
 });
 Template.skeleformEditor.onDestroyed(function() {

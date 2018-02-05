@@ -70,12 +70,9 @@ Template.skeleformCheckBox.onCreated(function() {
         return result;
     };
     this.setValue = (value) => {
-        // if setting a real value, fire onChange callback
-        if (value !== undefined && value !== this.getValue()) {
-            Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
-        }
-
         Skeleform.utils.$getFieldById(this, schema).prop('checked', value);
+
+        Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
     };
 });
 Template.skeleformCheckBox.onDestroyed(function() {
