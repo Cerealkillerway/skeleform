@@ -74,14 +74,18 @@ Template.skeleformDefaultReplicaBtns.events({
         let formContext = data.formContext;
         let replicaOptions = data.replicaOptions;
         let replicaName = replicaOptions.name;
-        let newReplicaItem = {
-            formContext: formContext,
-            replicaOptions: replicaOptions,
-            fieldSchema: data.fieldSchema
-        }
 
         if (replicaOptions.i18n === undefined || replicaOptions.i18n === true) {
             replicaName = FlowRouter.getParam('itemLang') + '---' + replicaName;
+        }
+
+        let sampleItem = formContext.replicas[replicaName][0];
+        let newReplicaItem = {
+            formContext: formContext,
+            replicaOptions: replicaOptions,
+            fieldSchema: data.fieldSchema,
+            skeleformGroupLevel: sampleItem.skeleformGroupLevel,
+            template: sampleItem.template
         }
 
         // save form status
