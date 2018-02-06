@@ -61,6 +61,7 @@ Template.skeleformInput.onCreated(function() {
 
         return handleGettedValue(value, schema);
     };
+
     this.isValid = () => {
         let formContext = this.data.formContext;
         let value = this.getValue();
@@ -82,12 +83,12 @@ Template.skeleformInput.onCreated(function() {
 
         return validationResult;
     };
+
     this.setValue = (value) => {
         let $field = Skeleform.utils.$getFieldById(this, schema);
 
-        $field.val(value);
-
         Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
+        $field.val(value);
 
         // when setting a value, trigger autoresize if it's a textarea
         // as documented on materialize's docs:
@@ -110,19 +111,36 @@ Template.skeleformInput.onRendered(function() {
     let self = this;
     let schema = self.data.fieldSchema.get();
     let id = schema.name;
+    let autoNumericDefaults = {
+        currency: {
+            aSep: ' ',
+            aDec: ',',
+            altDec: '.',
+            aSign: '€',
+            pSign: 's',
+            vMax: '999.99',
+            wEmpty: 'zero'
+        },
+
+        float: {
+            aSep: ' ',
+            aDec: ',',
+            altDec: '.',
+            vMax: '999.99',
+            wEmpty: 'zero'
+        },
+
+        integer: {
+            mDec: '0',
+            vMax: '99',
+            wEmpty: 'zero'
+        }
+    }
 
     // handle formats
     switch (schema.formatAs) {
         case 'currency':
-            Skeleform.utils.$getFieldById(self, schema).autoNumeric('init', {
-                aSep: ' ',
-                aDec: ',',
-                altDec: '.',
-                aSign: '€',
-                pSign: 's',
-                vMax: '999.99',
-                wEmpty: 'zero'
-            });
+            Skeleform.utils.$getFieldById(self, schema).autoNumeric('init', schema.autoNumericOptions || autoNumericDefaults.currency);
 
             Skeleform.utils.$getFieldById(self, schema).click(function() {
                 $(this).select();
@@ -130,21 +148,11 @@ Template.skeleformInput.onRendered(function() {
             break;
 
         case 'float':
-            Skeleform.utils.$getFieldById(self, schema).autoNumeric('init', {
-                aSep: ' ',
-                aDec: ',',
-                altDec: '.',
-                vMax: '999.99',
-                wEmpty: 'zero'
-            });
+            Skeleform.utils.$getFieldById(self, schema).autoNumeric('init', schema.autoNumericOptions || autoNumericDefaults.float);
             break;
 
         case 'integer':
-            Skeleform.utils.$getFieldById(self, schema).autoNumeric('init', {
-                mDec: '0',
-                vMax: '99',
-                wEmpty: 'zero'
-            });
+            Skeleform.utils.$getFieldById(self, schema).autoNumeric('init', schema.autoNumericOptions || autoNumericDefaults.integer);
             break;
 
         default:
@@ -180,6 +188,6 @@ Template.skeleformInput.events({
             $(event.target).select();
         }
 
-        Skeleform.utils.InvokeCallback(instance, value, schema, 'onChange');
+        Skeleform.utils.InvokeCallback(instance, value, schema, 'onChange', true);
     }
 });

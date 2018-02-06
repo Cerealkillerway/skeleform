@@ -106,7 +106,8 @@ Creates a container `<div>` (empty); it's useful for putting into it any runtime
 - **icon**: *[string] (optional)* materialize's icon class;
 - **renderAs**: *[string] (optional)* type of input field to render (available values: *"password", "text", "textarea"*); default to "text"; when using the *"password"* option, the field is not gathered for submit if left empty; **IMPORTANT**: when using *"password"* option don't set *"max"* validation option, since the value is hashed with sha256 (becomes longer);
 - **shadowConfirm**: *[boolean] (optional)* activates a "re-type" input field that invalidates if its value is not the same of the main field (ex.: to be used with renderAs: "password"); default to "false";
-- **formatAs**: *[string] (optional)* specific format to use for the field's data (available valuse: *"currency", "float"*); default to *"undefined"*;
+- **formatAs**: *[string] (optional)* specific format to use for the field's data (available values: *"currency", "float" , "integer"*); default to *"undefined"*;
+- **autoNumericOptions**: *[object] (optional)* dictionary of parameters for autonumeri plugin (used if "formatAs" is defined); more info: [autonumeric website](http://www.decorplanit.com/plugin/);
 - **autoRange**: *[boolean] (optional)* autoselect inner text when reached the max length defined for this field (default *false*);
 - **charCounter**: *[number] (optional)* enables the materializeCSS's character counter plugin; **IMPORTANT**: the character counter does not set the *"maxlength"* property on the input (this is done by using validation -> max);
 

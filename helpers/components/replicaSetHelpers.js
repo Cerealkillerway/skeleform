@@ -116,7 +116,13 @@ Template.skeleformReplicaSetWrapper.helpers({
                 replicaIndex++;
             }
 
-            formContext.replicaVars[replicaName].set(false);
+            Tracker.afterFlush(() => {
+                if (formContext.item) {
+                    formContext.replicaVars[replicaName].set(false);
+                }
+                formContext.isRestoringData = false;
+            });
+
             return formContext.replicas[replicaName];
         }
 

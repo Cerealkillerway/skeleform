@@ -71,12 +71,14 @@ Template.skeleformEditor.onCreated(function() {
     this.getValue = () => {
         return Skeleform.utils.$getFieldById(this, schema).materialnote('code').trim();
     };
+
     this.isValid = () => {
         //SkeleUtils.GlobalUtilities.logger('editor validation', 'skeleformFieldValidation');
         let formContext = this.data.formContext;
 
         return Skeleform.validate.checkOptions(this.getValue(), schema, formContext.schema, formContext.item);
     };
+
     this.setValue = (value) => {
         if (value === undefined) {
             value = '';
@@ -86,11 +88,15 @@ Template.skeleformEditor.onCreated(function() {
         Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
     };
 });
+
+
 Template.skeleformEditor.onDestroyed(function() {
     let fields = this.data.formContext.fields;
 
     fields.removeAt(fields.indexOf(this));
 });
+
+
 Template.skeleformEditor.onRendered(function() {
     let editor = this.$('.editor');
     let schema = this.data.fieldSchema.get();
@@ -127,7 +133,7 @@ Template.skeleformEditor.onRendered(function() {
                     Skeleform.validate.skeleformSuccessStatus(id, schema);
                 }
 
-                Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
+                Skeleform.utils.InvokeCallback(this, value, schema, 'onChange', true);
             }
         }/*,
         onImageUpload: function(files) {

@@ -102,10 +102,6 @@ Template.skeleformDefaultReplicaBtns.events({
         formContext.autoSaves[formContext.autoSaves.length - 1][replicaName].insertAt(newReplicaItem, insertionIndex);
         formContext.replicaVars[replicaName].set(true);
         formContext.isRestoringData = true;
-
-        Tracker.afterFlush(() => {
-            formContext.isRestoringData = false;
-        });
     },
 
     'click .skeleReplicaBtnRemove': function(event, instance) {

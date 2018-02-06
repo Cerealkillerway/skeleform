@@ -97,7 +97,7 @@ Template.skeleformDatePicker.onRendered(function() {
                     Skeleform.validate.skeleformSuccessStatus(id, schema);
                 }
 
-                Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
+                Skeleform.utils.InvokeCallback(this, value, schema, 'onChange', true);
             }
 
             // workaround for "closeOnSelect" option ignored by materializeCSS

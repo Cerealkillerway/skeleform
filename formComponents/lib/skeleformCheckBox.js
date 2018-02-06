@@ -91,7 +91,7 @@ Template.skeleformCheckBox.onRendered(function() {
     // because when creating new document, the relative item's field is undefined
     if (this.data.formContext.skeleSubsReady.get()) {
         if (this.getValue() === false) {
-            Skeleform.utils.InvokeCallback(this, this.getValue(), schema, 'onChange');
+            Skeleform.utils.InvokeCallback(this, false, schema, 'onChange', true);
         }
     }
 });
@@ -105,6 +105,6 @@ Template.skeleformCheckBox.events({
 
         instance.isValid();
 
-        Skeleform.utils.InvokeCallback(instance, value, schema, 'onChange');
+        Skeleform.utils.InvokeCallback(instance, value, schema, 'onChange', true);
     },
 });

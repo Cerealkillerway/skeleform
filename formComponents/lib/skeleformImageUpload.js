@@ -298,7 +298,7 @@ Template.skeleformImageUpload.events = {
                                 Skeleform.validate.skeleformSuccessStatus(id, schema);
                             }
 
-                            Skeleform.utils.InvokeCallback(instance, value, schema, 'onChange');
+                            Skeleform.utils.InvokeCallback(instance, value, schema, 'onChange', true);
                         }
                     };
                 };

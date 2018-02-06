@@ -26,16 +26,19 @@ Template.skeleformTimePicker.onCreated(function() {
         this.pickerInstance.component.settings.clear = TAPi18n.__('pickadateButtons_labels').split(' ')[1];
         this.pickerInstance.render();
     };
+
     this.getValue = () => {
         let value = this.pickerInstance.get('select', this.initOptions.formatSubmit);
 
         return value;
     };
+
     this.isValid = () => {
         let formContext = this.data.formContext;
 
         return Skeleform.validate.checkOptions(this.getValue(), schema, formContext.schema, formContext.item);
     };
+
     this.setValue = (value) => {
         const instance = Template.instance();
         let pickerInstance = instance.pickerInstance;
@@ -71,7 +74,7 @@ Template.skeleformTimePicker.onRendered(function() {
 
             // workaround to avoid multiple callback invocation on startup
             if (this.setCounter > 0) {
-                Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
+                Skeleform.utils.InvokeCallback(this, value, schema, 'onChange', true);
             }
             this.setCounter++;
 

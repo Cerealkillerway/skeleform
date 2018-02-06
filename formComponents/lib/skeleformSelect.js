@@ -160,6 +160,9 @@ Template.skeleformSelect.onCreated(function() {
 
         if (value === undefined) {
             $field.children().prop('selected', false);
+
+            $field.children().first().prop('selected', true);
+
             $field.material_select();
         }
 
@@ -168,7 +171,9 @@ Template.skeleformSelect.onCreated(function() {
 
             // if the select is multi, the value is an array
             if (schema.multi) {
-                if (value.indexOf(optionValue) >= 0) {
+                let valueToTest = [];
+
+                if (valueToTest.indexOf(optionValue) >= 0) {
                     $(option).prop('selected', true);
                 }
                 else {
@@ -253,6 +258,6 @@ Template.skeleformSelect.events({
 
         instance.isValid();
 
-        Skeleform.utils.InvokeCallback(instance, value, schema, 'onChange');
+        Skeleform.utils.InvokeCallback(instance, value, schema, 'onChange', true);
     }
 });
