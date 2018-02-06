@@ -107,7 +107,8 @@ Template.skeleformReplicaSetWrapper.helpers({
             }
         }
 
-
+        // reload replicaItems from saved array
+        // this happens when the rerun of this helper is due to adding/removing replica items
         if (formContext.replicaVars[replicaName].get() === true) {
             replicaIndex = 0
 
@@ -117,10 +118,11 @@ Template.skeleformReplicaSetWrapper.helpers({
             }
 
             Tracker.afterFlush(() => {
+                // if updating (item not undefined), reset the replicaVar to false, otherwise
+                // this helper will not get data reactively if someone else updates meanwhile the same document
                 if (formContext.item) {
                     formContext.replicaVars[replicaName].set(false);
                 }
-                formContext.isRestoringData = false;
             });
 
             return formContext.replicas[replicaName];

@@ -78,8 +78,10 @@ skeleformGeneralHelpers = {
         let formContext = data.formContext;
         let itemToRestore = formContext.item
 
+        // once added/removed a replicaSet, the form will be always in "isRestoring" state since
+        // "isRestoring" is never set to false; but if someone else edits the document, all helpers
+        // are rerun, and "isRestoring" is initialized again, so here we take the new document's values
         if (data.formContext.isRestoringData === true) {
-            //return;
             itemToRestore = formContext.autoSaves[formContext.autoSaves.length - 1];
         }
 

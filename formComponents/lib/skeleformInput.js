@@ -16,6 +16,7 @@ Template.skeleformInput.helpers({
     }
 });
 
+
 handleGettedValue = function(value, schema) {
     if (!schema.validation) {
         return value;
@@ -167,6 +168,7 @@ Template.skeleformInput.onRendered(function() {
     self.isActivated.set(true);
     Skeleform.utils.InvokeCallback(this, null, schema, 'onRendered');
 });
+
 
 Template.skeleformInput.events({
     'keyup .skeleValidate, keyup .shadowField': function(event, instance) {

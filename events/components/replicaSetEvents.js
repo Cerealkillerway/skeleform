@@ -79,6 +79,12 @@ Template.skeleformDefaultReplicaBtns.events({
             replicaName = FlowRouter.getParam('itemLang') + '---' + replicaName;
         }
 
+        if (formContext.replicas[replicaName].length >= replicaOptions.maxCopies) {
+            Materialize.toast(TAPi18n.__('maxReplicaCopies_error', replicaOptions.maxCopies), 5000, 'error');
+            SkeleUtils.GlobalUtilities.logger('Tried to add more replicaItems than maxCopies (' + replicaOptions.maxCopies + ')', 'skeleWarning');
+            return;
+        }
+
         let sampleItem = formContext.replicas[replicaName][0];
         let newReplicaItem = {
             formContext: formContext,
@@ -115,6 +121,12 @@ Template.skeleformDefaultReplicaBtns.events({
 
         if (replicaOptions.i18n === undefined || replicaOptions.i18n === true) {
             replicaName = FlowRouter.getParam('itemLang') + '---' + replicaName;
+        }
+
+        if (formContext.replicas[replicaName].length <= replicaOptions.minCopies) {
+            Materialize.toast(TAPi18n.__('minReplicaCopies_error', replicaOptions.maxCopies), 5000, 'error');
+            SkeleUtils.GlobalUtilities.logger('Tried to remove more replicaItems than minCopies (' + replicaOptions.minCopies + ')', 'skeleWarning');
+            return;
         }
 
         // save form status
