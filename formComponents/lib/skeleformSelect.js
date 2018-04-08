@@ -34,7 +34,7 @@ Template.skeleformSelect.helpers({
                 result.push({
                     name: TAPi18n.__('none_lbl'),
                     value: '',
-                    disabled: 'disabled',
+                    //disabled: 'disabled',
                     selected: 'selected'
                 });
             }
