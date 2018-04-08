@@ -136,14 +136,15 @@ Creates a container `<div>` (empty); it's useful for putting into it any runtime
 
 #### 2.2.7 select
 
-- **source**: *[array of objects / mongo cursor] (required)* data source for options; must be an array of objects used to create the options of the field;each element of the array can be:
-- - **possibility 1** *[object]* an object with these fields:
+- **source**: *[array of objects / mongo cursor / function] (required)* data source for options; must be an array of objects used to create the options of the field; the array can come from:
+- - **possibility 1** *[array of objects]* an hard-coded array of objects; each object should be in this form:
 - - - **name**: *[string] (required)* the i18n string to be used when displaying the option;
 - - - **value**: *[string/numeric/boolean] (required)* the value to be used for the option;
 - - - **icon**: *[string] (optional)* path to the icon to be used for the option;
-- - **possibility 2**: a cursor from a query on a mongo collection;
-- **sourceValue**: *[string] (required if "source" is of type 2)* the name of the documents' field to be used as value in the option; it is possible to use the segment *":itemLang---"* that will be translated into the current language prefix;
-- **sourceName**: *[string] (required if "source" is of type 2)* the name of the documents' field to be used as display name in the option; it is possible to use the segment *":itemLang---"* that will be translated into the current language prefix;
+- - **possibility 2**: *[mongo cursor]* a cursor from a query on a mongo collection;
+- - **possibility 3**: *[function]* a function returning an array of objects;
+- **sourceValue**: *[string] (required if "source" is of type 2 or 3)* the name of the documents' field to be used as value in the option; it is possible to use the segment *":itemLang---"* that will be translated into the current language prefix;
+- **sourceName**: *[string] (required if "source" is of type 2 or 3)* the name of the documents' field to be used as display name in the option; it is possible to use the segment *":itemLang---"* that will be translated into the current language prefix;
 - **sourceNameTransformation**: *[object] (optional)* can contain two methods: *transform* and *antiTransform*, explained below;
 - - **transform(value, item)**: *[function] (required if *sourceNameTransformation* is defined)* a callback executed on every source's item; it receives the current *sourceName*'s value and the current item; transforms the value to be displayed in another form;
 - -  **antiTransform()** TO IMPLEMENT...
