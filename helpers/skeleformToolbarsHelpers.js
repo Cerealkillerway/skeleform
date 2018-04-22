@@ -1,3 +1,6 @@
+import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
+
+
 // SkeleformLangBar
 Template.skeleformLangBar.helpers({
     langs: function() {

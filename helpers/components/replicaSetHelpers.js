@@ -1,3 +1,6 @@
+import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
+
+
 Template.skeleformReplicaSetWrapper.helpers(skeleformGeneralHelpers);
 Template.skeleformReplicaSetWrapper.helpers({
     handleReplicaSets: function(context) {

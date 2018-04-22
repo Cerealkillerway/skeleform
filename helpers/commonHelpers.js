@@ -1,3 +1,6 @@
+import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
+
+
 skeleformStyleHelpers = {
     formatClasses: function(classes) {
         if (!classes) {

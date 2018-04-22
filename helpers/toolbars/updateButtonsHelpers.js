@@ -1,4 +1,5 @@
 import '../commonHelpers.js';
+import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
 
 
 // update buttons (toolbar)

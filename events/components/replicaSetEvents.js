@@ -1,4 +1,5 @@
 import Sortable from 'sortablejs';
+import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
 
 
 // Calculate positional indexes for replicaFrames

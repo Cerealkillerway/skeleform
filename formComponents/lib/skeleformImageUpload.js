@@ -1,4 +1,7 @@
-// EDITOR
+import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
+
+
+// IMAGE UPLOADER
 // a textarea with a wysiwyg editor writing html code
 // it uses materialNote.js plugin from cerealkiller:materialnote package
 let defaults = {

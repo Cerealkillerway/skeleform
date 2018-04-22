@@ -1,3 +1,6 @@
+import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
+
+
 // SELECT
 // select box field
 
@@ -160,9 +163,7 @@ Template.skeleformSelect.onCreated(function() {
 
         if (value === undefined) {
             $field.children().prop('selected', false);
-
             $field.children().first().prop('selected', true);
-
             $field.material_select();
         }
 
@@ -171,9 +172,7 @@ Template.skeleformSelect.onCreated(function() {
 
             // if the select is multi, the value is an array
             if (schema.multi) {
-                let valueToTest = [];
-
-                if (valueToTest.indexOf(optionValue) >= 0) {
+                if (value && value.indexOf(optionValue) >= 0) {
                     $(option).prop('selected', true);
                 }
                 else {
