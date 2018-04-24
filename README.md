@@ -142,7 +142,7 @@ Creates a container `<div>` (empty); it's useful for putting into it any runtime
 - - - **value**: *[string/numeric/boolean] (required)* the value to be used for the option;
 - - - **icon**: *[string] (optional)* path to the icon to be used for the option;
 - - **possibility 2**: *[mongo cursor]* a cursor from a query on a mongo collection;
-- - **possibility 3**: *[function]* a function returning an array of objects;
+- - **possibility 3**: *[function]* a function returning an array of objects; it receives the fieldInstance as a parameter;
 - **sourceValue**: *[string] (required if "source" is of type 2 or 3)* the name of the documents' field to be used as value in the option; it is possible to use the segment *":itemLang---"* that will be translated into the current language prefix;
 - **sourceName**: *[string] (required if "source" is of type 2 or 3)* the name of the documents' field to be used as display name in the option; it is possible to use the segment *":itemLang---"* that will be translated into the current language prefix;
 - **sourceNameTransformation**: *[object] (optional)* can contain two methods: *transform* and *antiTransform*, explained below;
@@ -257,7 +257,7 @@ As seen above, the *SkeleUtils* package, that is part of the *Skeletor* project 
         callbacks: {
             onChange: function(value, fieldInstance) {
                 let emailField = Skeletor.SkeleUtils.GlobalUtilities.getFieldInstance(fieldInstance.data.formContext, 'email');
-                let emailSchema = emailField.data.schema.get();
+                let emailSchema = emailField.data.fieldSchema.get();
 
                 // make the field required reactively
                 emailSchema.validation = {min: 3};

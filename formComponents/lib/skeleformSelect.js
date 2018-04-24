@@ -10,6 +10,7 @@ Template.skeleformSelect.helpers({
     // create sources list for selct's options
     options: function(schema) {
         const instance = Template.instance();
+        let newSource = instance.updateSource.get();
 
         // if source field is a query result, then build the option objects using
         // defined "sourceName" and "sourceValue" fields
@@ -24,12 +25,18 @@ Template.skeleformSelect.helpers({
             }
             let source;
 
-            // check if source is a Mongo cursor, an array or a function;
-            if (Match.test(schema.source, Mongo.Cursor) || Match.test(schema.source, [Match.Any])) {
-                source = schema.source;
+            if (newSource) {
+                source = newSource;
+                //instance.updateSource.set(false);
             }
             else {
-                source = schema.source(instance);
+                // check if source is a Mongo cursor, an array or a function;
+                if (Match.test(schema.source, Mongo.Cursor) || Match.test(schema.source, [Match.Any])) {
+                    source = schema.source;
+                }
+                else {
+                    source = schema.source(instance);
+                }
             }
 
             // add blank option if needed
@@ -141,11 +148,22 @@ Template.skeleformSelect.onCreated(function() {
     // register this on form' store
     Skeleform.utils.registerField(this);
     this.isActivated = new ReactiveVar(false);
+    this.updateSource = new ReactiveVar(false);
 
     let schema = this.data.fieldSchema.get();
 
     Skeleform.utils.InvokeCallback(this, null, schema, 'onCreated');
 
+    this.setSource = (newSource) => {
+        Skeletor.SkeleUtils.GlobalUtilities.logger('new source injected', 'skeleformField');
+        this.updateSource.set(newSource);
+
+        let $field = Skeleform.utils.$getFieldById(this, schema);
+
+        Tracker.afterFlush(function() {
+            $field.material_select();
+        });
+    };
     this.i18n = () => {
         Skeleform.utils.$getFieldById(this, schema).material_select();
     };
