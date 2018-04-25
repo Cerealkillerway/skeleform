@@ -55,27 +55,37 @@ Template.skeleformSelect.helpers({
                 let defaultLang = Skeletor.configuration.lang.default;
                 let sourceName = schema.sourceName;
                 let sourceValue = schema.sourceValue;
-                let nameAttr = item;
+                let nameToDisplay = [];
                 let valueAttr = item;
                 let missingTranslation = false;
 
-                // get the displaying name for the option
-                schema.sourceName.split('.').forEach(function(nameShard, index) {
-                    if (nameShard.indexOf(':itemLang---') === 0) {
-                        let nameOnly = nameShard.substring(12, nameShard.length);
 
-                        if (nameAttr[lang + '---' + nameOnly]) {
-                            nameAttr = nameAttr[lang + '---' + nameOnly];
+                if (!Array.isArray(schema.sourceName)) {
+                    sourceName = [sourceName];
+                }
+                // get the displaying name for the option
+                for (name of sourceName) {
+                    let nameAttr = item;
+
+                    name.split('.').forEach(function(nameShard, index) {
+                        if (nameShard.indexOf(':itemLang---') === 0) {
+                            let nameOnly = nameShard.substring(12, nameShard.length);
+
+                            if (nameAttr[lang + '---' + nameOnly]) {
+                                nameAttr = nameAttr[lang + '---' + nameOnly];
+                            }
+                            else {
+                                nameAttr = nameAttr[defaultLang + '---' + nameOnly];
+                                missingTranslation = true;
+                            }
                         }
                         else {
-                            nameAttr = nameAttr[defaultLang + '---' + nameOnly];
-                            missingTranslation = true;
+                            nameAttr = nameAttr[nameShard];
                         }
-                    }
-                    else {
-                        nameAttr = nameAttr[nameShard];
-                    }
-                });
+                    });
+
+                    nameToDisplay.push(nameAttr);
+                }
 
                 // get the value for the option
                 schema.sourceValue.split('.').forEach(function(valueShard, index) {
@@ -99,15 +109,17 @@ Template.skeleformSelect.helpers({
                     value: valueAttr
                 };
 
+                nameToDisplay = nameToDisplay.join(' ');
+                
                 if (missingTranslation) {
-                    option.name = '#(' + nameAttr + ')';
+                    option.name = '#(' + nameToDisplay + ')';
                 }
                 else {
                     if (schema.sourceNameTransformation) {
-                        option.name = schema.sourceNameTransformation.transform(nameAttr, item);
+                        option.name = schema.sourceNameTransformation.transform(nameToDisplay, item);
                     }
                     else {
-                        option.name = nameAttr;
+                        option.name = nameToDisplay;
                     }
                 }
 

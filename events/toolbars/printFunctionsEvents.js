@@ -30,7 +30,7 @@ Template.skeleformPrintFunctions.events({
             });
 
             $container.append($page);
-            $page.append(htmlContent);
+            $page.append(content);
         }
 
         if (printOptions.printPreviewContainer) {
