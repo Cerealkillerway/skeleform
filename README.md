@@ -161,7 +161,7 @@ Creates a container `<div>` (empty); it's useful for putting into it any runtime
 - **pickerOptions**: *[object] (optional)* dictionary of init options to override when starting the pickadate plugin (more info at http://amsul.ca/pickadate.js/date/);
 
 
-#### 2.2.9timePicker
+#### 2.2.9 timePicker
 
 - **icon**: *[string] (optional)* materialize's icon class;
 - **pickerOptions**: *[object] (optional)* dictionary of init options to override when starting the pickatime plugin (more info at http://amsul.ca/pickadate.js/time);
@@ -263,7 +263,7 @@ As seen above, the *SkeleUtils* package, that is part of the *Skeletor* project 
                 emailSchema.validation = {min: 3};
 
                 // set the new schema (this will refresh the field)
-                emailField.data.schema.set(emailSchema);
+                emailField.data.fieldSchema.set(emailSchema);
             }
         }
     }
