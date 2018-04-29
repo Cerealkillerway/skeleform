@@ -24,7 +24,7 @@ Template.skeleformClockPicker.onCreated(function() {
     this.i18n = (currentLang) => {
         let $element = Skeleform.utils.$getFieldById(this, schema);
 
-        this.initOptions.donetext = TAPi18n.__('pickadateButtons_labels').split(' ')[2];
+        this.initOptions.donetext = i18n.get('pickadateButtons_labels').split(' ')[2];
         $element.clockpicker('remove');
         $element.clockpicker(this.initOptions);
     };

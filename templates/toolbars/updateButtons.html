@@ -4,7 +4,7 @@
         <div class="skeleformToolbar">
             <div class="waves-effect waves-light btn secondColor skeleformUpdate">
                 <i class="material-icons small left">beenhere</i>
-                <span>{{_ "update_btn"}}</span>
+                <span>{{i18n "update_btn"}}</span>
             </div>
 
             {{#if formContext.schema.__toolbar.printFunctions}}
@@ -17,7 +17,7 @@
 
             <a href="{{makeUndoPath formContext.schema.__paths.undoPath}}{{isPaginated formContext.schemaName}}" class="waves-effect waves-light btn firstColor">
                 <i class="material-icons small left">undo</i>
-                <span>{{_ "cancel_btn"}}</span>
+                <span>{{i18n "cancel_btn"}}</span>
             </a>
 
             {{> skeleformStaticAddons}}

@@ -20,18 +20,18 @@ Template.skeleformDatePicker.onCreated(function() {
     this.i18n = () => {
         let pickerInstance = this.pickerInstance;
 
-        pickerInstance.component.settings.monthsFull = TAPi18n.__('monthsFull_labels').split(' ');
-        pickerInstance.component.settings.monthsShort = TAPi18n.__('monthsShort_labels').split(' ');
-        pickerInstance.component.settings.weekdaysFull = TAPi18n.__('weekDaysFull_labels').split(' ');
-        pickerInstance.component.settings.weekdaysShort = TAPi18n.__('weekDaysShort_labels').split(' ');
-        pickerInstance.component.settings.weekdaysLetter = TAPi18n.__('weekDaysSingle_labels').split(' ');
-        pickerInstance.component.settings.today = TAPi18n.__('pickadateButtons_labels').split(' ')[0];
-        pickerInstance.component.settings.clear = TAPi18n.__('pickadateButtons_labels').split(' ')[1];
-        pickerInstance.component.settings.close = TAPi18n.__('pickadateButtons_labels').split(' ')[2];
-        pickerInstance.component.settings.labelMonthNext = TAPi18n.__('pickadateNav_next');
-        pickerInstance.component.settings.labelMonthPrev = TAPi18n.__('pickadateNav_prev');
-        pickerInstance.component.settings.labelMonthSelect = TAPi18n.__('monthSelect_label');
-        pickerInstance.component.settings.labelYearSelect = TAPi18n.__('yearSelect_label');
+        pickerInstance.component.settings.monthsFull = i18n.get('monthsFull_labels').split(' ');
+        pickerInstance.component.settings.monthsShort = i18n.get('monthsShort_labels').split(' ');
+        pickerInstance.component.settings.weekdaysFull = i18n.get('weekDaysFull_labels').split(' ');
+        pickerInstance.component.settings.weekdaysShort = i18n.get('weekDaysShort_labels').split(' ');
+        pickerInstance.component.settings.weekdaysLetter = i18n.get('weekDaysSingle_labels').split(' ');
+        pickerInstance.component.settings.today = i18n.get('pickadateButtons_labels').split(' ')[0];
+        pickerInstance.component.settings.clear = i18n.get('pickadateButtons_labels').split(' ')[1];
+        pickerInstance.component.settings.close = i18n.get('pickadateButtons_labels').split(' ')[2];
+        pickerInstance.component.settings.labelMonthNext = i18n.get('pickadateNav_next');
+        pickerInstance.component.settings.labelMonthPrev = i18n.get('pickadateNav_prev');
+        pickerInstance.component.settings.labelMonthSelect = i18n.get('monthSelect_label');
+        pickerInstance.component.settings.labelYearSelect = i18n.get('yearSelect_label');
 
         //pickerInstance.render();
         // set again the value to translate also in the input box
@@ -67,18 +67,18 @@ Template.skeleformDatePicker.onRendered(function() {
 
     // activates validation on set
     this.initOptions = {
-        monthsFull: TAPi18n.__("monthsFull_labels").split(' '),
-        monthsShort: TAPi18n.__('monthsShort_labels').split(' '),
-        weekdaysFull: TAPi18n.__('weekDaysFull_labels').split(' '),
-        weekdaysShort: TAPi18n.__('weekDaysShort_labels').split(' '),
-        weekdaysLetter: TAPi18n.__('weekDaysSingle_labels').split(' '),
-        today: TAPi18n.__('pickadateButtons_labels').split(' ')[0],
-        clear: TAPi18n.__('pickadateButtons_labels').split(' ')[1],
-        close: TAPi18n.__('pickadateButtons_labels').split(' ')[2],
-        labelMonthNext: TAPi18n.__('pickadateNav_next'),
-        labelMonthPrev: TAPi18n.__('pickadateNav_prev'),
-        labelMonthSelect: TAPi18n.__('monthSelect_label'),
-        labelYearSelect: TAPi18n.__('yearSelect_label'),
+        monthsFull: i18n.get("monthsFull_labels").split(' '),
+        monthsShort: i18n.get('monthsShort_labels').split(' '),
+        weekdaysFull: i18n.get('weekDaysFull_labels').split(' '),
+        weekdaysShort: i18n.get('weekDaysShort_labels').split(' '),
+        weekdaysLetter: i18n.get('weekDaysSingle_labels').split(' '),
+        today: i18n.get('pickadateButtons_labels').split(' ')[0],
+        clear: i18n.get('pickadateButtons_labels').split(' ')[1],
+        close: i18n.get('pickadateButtons_labels').split(' ')[2],
+        labelMonthNext: i18n.get('pickadateNav_next'),
+        labelMonthPrev: i18n.get('pickadateNav_prev'),
+        labelMonthSelect: i18n.get('monthSelect_label'),
+        labelYearSelect: i18n.get('yearSelect_label'),
 
         onSet: (context) => {
             // perform validation and callback invocation on change

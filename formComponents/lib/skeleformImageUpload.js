@@ -31,7 +31,7 @@ Template.skeleformImageUpload.helpers({
         }
         name = name.join('');
 
-        return TAPi18n.__(name + '_lbl');
+        return i18n.get(name + '_lbl');
     },
 
     isMultiple: function(schema) {
@@ -221,7 +221,7 @@ Template.skeleformImageUpload.events = {
 
         _.each(images, function(image, index) {
             if (!image.type.match('image.*')) {
-                Materialize.toast(TAPi18n.__('invalidImage_error'), 5000, 'error');
+                Materialize.toast(i18n.get('invalidImage_error'), 5000, 'error');
                 SkeleUtils.GlobalUtilities.logger('skipping image ' + index + ': invalid type', 'skeleformField');
             }
             else {

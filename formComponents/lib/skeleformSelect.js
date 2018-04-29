@@ -19,7 +19,7 @@ Template.skeleformSelect.helpers({
 
             if (schema.blankValue) {
                 result.push({
-                    name: TAPi18n.__('none_lbl'),
+                    name: i18n.get('none_lbl'),
                     value: schema.blankValue
                 });
             }
@@ -42,7 +42,7 @@ Template.skeleformSelect.helpers({
             // add blank option if needed
             if (schema.allowBlank) {
                 result.push({
-                    name: TAPi18n.__('none_lbl'),
+                    name: i18n.get('none_lbl'),
                     value: '',
                     //disabled: 'disabled',
                     selected: 'selected'
@@ -110,7 +110,7 @@ Template.skeleformSelect.helpers({
                 };
 
                 nameToDisplay = nameToDisplay.join(' ');
-                
+
                 if (missingTranslation) {
                     option.name = '#(' + nameToDisplay + ')';
                 }

@@ -1,6 +1,6 @@
 Package.describe({
     name: 'cerealkiller:skeleform',
-    version: '2.18.1',
+    version: '3.5.2',
     summary: 'form from schema creator',
     // URL to the Git repository containing the source code for this package.
     git: '',
@@ -28,8 +28,8 @@ Package.onUse(function(api) {
         'check',
         'ecmascript',
         'underscore',
-        'cerealkiller:skeleutils@2.0.0',
-        'cerealkiller:skeletor@3.0.0'
+        'cerealkiller:skeleutils',
+        'cerealkiller:skeletor'
     ],
     ['client', 'server']);
 
