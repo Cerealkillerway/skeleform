@@ -27,7 +27,6 @@ Template.skeleformSelect.helpers({
 
             if (newSource) {
                 source = newSource;
-                //instance.updateSource.set(false);
             }
             else {
                 // check if source is a Mongo cursor, an array or a function;
@@ -63,6 +62,7 @@ Template.skeleformSelect.helpers({
                 if (!Array.isArray(schema.sourceName)) {
                     sourceName = [sourceName];
                 }
+
                 // get the displaying name for the option
                 for (name of sourceName) {
                     let nameAttr = item;
