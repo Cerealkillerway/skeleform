@@ -1,3 +1,6 @@
+import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
+
+
 // update buttons (toolbar)
 Template.skeleformUpdateButtons.events({
     'click .skeleformUpdate': function(event, template) {
@@ -39,7 +42,7 @@ Template.skeleformUpdateButtons.events({
             SkeleUtils.GlobalUtilities.logger('documentId: ' + documentId, 'skeleform');
             SkeleUtils.GlobalUtilities.logger('schema name: ' + formContext.schemaName, 'skeleform');
 
-            Meteor.call(method, documentId, data, formContext.schemaName, function(error, result) {
+            Meteor.call(method, documentId, data, formContext.schemaName, FlowRouter.getParam('itemLang'), function(error, result) {
                 if (options.useModal) {
                     $('#gearLoadingModal').closeModal();
                 }
