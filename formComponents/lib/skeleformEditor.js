@@ -3,7 +3,6 @@ import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
 
 // EDITOR
 // a textarea with a wysiwyg editor writing html code
-// it uses materialNote.js plugin from cerealkiller:materialnote package
 
 // Settings
 editorToolbars = {
@@ -56,23 +55,11 @@ Template.skeleformEditor.onCreated(function() {
 
     Skeleform.utils.InvokeCallback(this, null, schema, 'onCreated');
 
-    // now commented because very slow...
-    /*this.i18n = () => {
-        if (FlowRouter.getQueryParam('lang') === this.currentLang) {
-            return;
-        }
-
-        this.currentLang = FlowRouter.getQueryParam('lang');
-        let editor = this.$('.editor');
-
-        this.options.lang = SkeleUtils.GlobalUtilities.doubleLangCode(FlowRouter.getQueryParam('lang'));
-
-        $(editor).materialnote('destroy');
-        $(editor).materialnote(this.options);
-    };*/
 
     this.getValue = () => {
-        return Skeleform.utils.$getFieldById(this, schema).materialnote('code').trim();
+        let $field = Skeleform.utils.$getFieldById(this, schema);
+
+        return $field.html();
     };
 
     this.isValid = () => {
@@ -83,10 +70,9 @@ Template.skeleformEditor.onCreated(function() {
     };
 
     this.setValue = (value) => {
-        if (value === undefined) {
-            value = '';
-        }
-        Skeleform.utils.$getFieldById(this, schema).materialnote('code', value);
+        let $field = Skeleform.utils.$getFieldById(this, schema);
+
+        $field.html(value);
 
         Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
     };
@@ -101,98 +87,19 @@ Template.skeleformEditor.onDestroyed(function() {
 
 
 Template.skeleformEditor.onRendered(function() {
-    let editor = this.$('.editor');
     let schema = this.data.fieldSchema.get();
-    let toolbar = schema.toolbar;
-    let imageParams = schema.image;
-    this.currentLang = FlowRouter.getQueryParam('lang');
-
-    if ((toolbar === undefined)|| (editorToolbars[toolbar] === undefined)) toolbar = 'default';
-
-    this.options = {
-        lang: SkeleUtils.GlobalUtilities.doubleLangCode(this.currentLang),
-        toolbar: editorToolbars[toolbar],
-        followingToolbar: true,
-        otherStaticBarClass: 'skeleStaticBar',
-        height: schema.editorHeight || 400,
-        minHeight: schema.editorMinHeight || 100,
-        posIndex: schema.name,
-        callbacks: {
-            onInit: () => {
-                //place validate class on the correct element newly created by materialnote
-                editor.removeClass('validate');
-                this.$('.note-editor').addClass('validate');
-            },
-            onKeyup: (event) => {
-                // perform validation and callback invocation on change
-                let value = this.getValue();
-                let result = this.isValid();
-                let id = schema.name;
-
-                if (!result.valid) {
-                    Skeleform.validate.setInvalid(id, schema, result);
-                }
-                else {
-                    Skeleform.validate.skeleformSuccessStatus(id, schema);
-                }
-
-                Skeleform.utils.InvokeCallback(this, value, schema, 'onChange', true);
-            }
-        }/*,
-        onImageUpload: function(files) {
-            var filesArray = [];
-            //transform object provided by materialnote into array of files
-            filesArray = objectToArray(files);
-            filesArray.pop();
-
-            //read as dataUrl
-            filesArray.forEach(function(file, index) {
-                var reader = new FileReader();
-
-                reader.onloadend = function() {
-                    var tempImg = new Image();
-
-                    tempImg.src = reader.result;
-                    tempImg.onload = function() {
-
-                        var MAX_WIDTH = imageParams.width;
-                        var MAX_HEIGHT = imageParams.height;
-                        var tempW = tempImg.width;
-                        var tempH = tempImg.height;
-
-                        if (tempW > tempH) {
-                            if (tempW > MAX_WIDTH) {
-                               tempH *= MAX_WIDTH / tempW;
-                               tempW = MAX_WIDTH;
-                            }
-                        }
-                        else {
-                            if (tempH > MAX_HEIGHT) {
-                               tempW *= MAX_HEIGHT / tempH;
-                               tempH = MAX_HEIGHT;
-                            }
-                        }
-                        var canvas = document.createElement('canvas');
-                        canvas.width = tempW;
-                        canvas.height = tempH;
-
-                        var ctx = canvas.getContext("2d");
-                        ctx.drawImage(this, 0, 0, tempW, tempH);
-
-                        var dataUrl = canvas.toDataURL("image/jpeg", imageParams.quality);
-                        var imgNode = $('<img />');
-                            imgNode.attr('src', dataUrl);
-                            imgNode.attr('title', getFileName(file.name));
-                        $(editor).materialnote('insertNode', imgNode[0]);
-                    };
-                };
-                reader.readAsDataURL(file);
-            });
-        }*/
-    }
-
-    $(editor).materialnote(this.options);
 
     this.isActivated.set(true);
     Skeleform.utils.InvokeCallback(this, null, schema, 'onRendered');
 });
+
+
+Template.skeleformEditor.events({
+    'mousedown .skeleEditorBtn': function(event, template) {
+        event.preventDefault();
+    },
+
+    'click .skeleEditorBtn': function(event, template) {
+        document.execCommand($(event.target).data('command'), false, '');
+    }
+})
