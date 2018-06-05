@@ -3,19 +3,22 @@
 
         <div class="skeleEditorToolbar">
             <div class="skeleEditorBtn" data-command="bold">
-                <i class="material-icons">format_bold</i>
+                <i class="skeleEditorIcon material-icons">format_bold</i>
             </div>
             <div class="skeleEditorBtn" data-command="underline">
-                <i class="material-icons">format_underline</i>
+                <i class="skeleEditorIcon material-icons">format_underline</i>
             </div>
             <div class="skeleEditorBtn" data-command="italic">
-                <i class="material-icons">format_italic</i>
+                <i class="skeleEditorIcon material-icons">format_italic</i>
+            </div>
+            <div class="skeleEditorBtn" data-command="editorBackground">
+                <i class="skeleEditorIcon material-icons">opacity</i>
             </div>
         </div>
 
         {{fieldValue}}
-        <label for="{{field schema.name}}" class="active">{{label schema.name}}{{required}}</label>
-        <div id="{{field schema.name}}" class="editor skeleValidate skeleGather" contenteditable="true" spellcheck="false">
+        <label for="{{field schema.name}}" class="active skeleEditorLabel">{{label schema.name}}{{required}}</label>
+        <div id="{{field schema.name}}" class="skeleEditor skeleValidate skeleGather" contenteditable="true" spellcheck="false">
 
         </div>
 

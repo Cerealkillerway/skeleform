@@ -18,7 +18,6 @@ Package.onUse(function(api) {
         'session',
         'jquery',
         'fourseven:scss@4.5.4',
-        'cerealkiller:materialnote@2.0.0',
         'blaze-html-templates@1.1.2',
         'tap:i18n@1.8.2'
     ],

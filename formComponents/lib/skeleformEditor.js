@@ -89,17 +89,51 @@ Template.skeleformEditor.onDestroyed(function() {
 Template.skeleformEditor.onRendered(function() {
     let schema = this.data.fieldSchema.get();
 
+    Tracker.afterFlush(() => {
+        if (this.data.formContext.skeleSubsReady.get()) {
+            if (this.$('.skeleEditor').children().length = 0) {
+                SkeleUtils.GlobalUtilities.logger('cannot find content in current editor', 'skelePlugin');
+                return false;
+            }
+
+            // auto adjust background color;
+            let $editor = this.$('.skeleEditor');
+            let editorBackground = $editor.css('backgroundColor');
+            let contentColor = $editor.children().first().css('color');
+            let delta;
+
+            editorBackground = SkeleUtils.GlobalUtilities.colorConversion(editorBackground, 'rgb', 'rgb');
+            contentColor = SkeleUtils.GlobalUtilities.colorConversion(contentColor, 'rgb', 'rgb');
+            delta = SkeleUtils.GlobalUtilities.colorDifference(editorBackground, contentColor);
+
+            if (delta < 20) {
+                $editor.addClass('altColor');
+            }
+        }
+    });
+
+
     this.isActivated.set(true);
     Skeleform.utils.InvokeCallback(this, null, schema, 'onRendered');
 });
 
 
 Template.skeleformEditor.events({
-    'mousedown .skeleEditorBtn': function(event, template) {
+    'mousedown .skeleEditorIcon': function(event, template) {
         event.preventDefault();
-    },
+        let $target = $(event.target);
+        let command;
 
-    'click .skeleEditorBtn': function(event, template) {
-        document.execCommand($(event.target).data('command'), false, '');
+        command = $target.parent('.skeleEditorBtn').data('command');
+
+        switch (command) {
+            case 'editorBackground':
+                template.$('.skeleEditor').toggleClass('altColor');
+                break;
+
+
+            default:
+                document.execCommand(command, false, '');
+        }
     }
 })
