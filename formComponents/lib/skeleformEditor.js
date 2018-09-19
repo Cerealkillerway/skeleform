@@ -4,43 +4,6 @@ import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
 // EDITOR
 // a textarea with a wysiwyg editor writing html code
 
-// Settings
-editorToolbars = {
-    default: [
-        ['style', ['bold', 'italic', 'underline', 'clear']],
-        ['fonts', ['fontsize']],
-        ['color', ['color']],
-        ['para', ['ul', 'ol', 'paragraph']],
-        ['height', ['height']],
-        ['misc', ['link', 'picture', 'codeview', 'fullscreen']]
-    ],
-    minimal: [
-        ['style', ['bold', 'italic', 'underline', 'clear']],
-        ['color', ['color']]
-    ],
-    full: [
-        ['style', ['bold', 'italic', 'underline', 'clear']],
-        ['font', ['fontname', 'color', 'strikethrough', 'superscript', 'subscript']],
-        ['fontsize', ['fontsize']],
-        ['para', ['ul', 'ol', 'paragraph', 'paragraphAlignLeft', 'paragraphAlignRight', 'paragraphAlignCenter', 'paragraphAlignFull', 'paragraphOutdent', 'paragraphIndent']],
-        ['height', ['height']],
-        ['materialize', ['materializeCard']],
-        ['insert', ['picture', 'link', 'video', 'table', 'hr']],
-        ['misc', ['fullscreen', 'codeview', 'undo', 'redo', 'help']]
-    ],
-    //special for debug
-    debug: [
-        ['style', ['bold', 'italic', 'underline', 'clear']],
-        ['font', ['fontname', 'color', 'strikethrough', 'superscript', 'subscript']],
-        ['fontsize', ['fontsize']],
-        ['para', ['ul', 'ol', 'paragraph', 'paragraphAlignLeft', 'paragraphAlignRight', 'paragraphAlignCenter', 'paragraphAlignFull', 'paragraphOutdent', 'paragraphIndent']],
-        ['height', ['height']],
-        ['materialize', ['materializeCard']],
-        ['insert', ['picture', 'link', 'video', 'table', 'hr']],
-        ['misc', ['fullscreen', 'codeview', 'undo', 'redo', 'help']]
-    ]
-};
-
 
 // Helpers
 Template.skeleformEditor.helpers(skeleformGeneralHelpers);
@@ -122,9 +85,11 @@ Template.skeleformEditor.events({
     'mousedown .skeleEditorIcon': function(event, template) {
         event.preventDefault();
         let $target = $(event.target);
+        let $btn = $target.parent('.skeleEditorBtn');
         let command;
 
-        command = $target.parent('.skeleEditorBtn').data('command');
+        command = $btn.data('command');
+        $btn.addClass('active');
 
         switch (command) {
             case 'editorBackground':
@@ -135,5 +100,57 @@ Template.skeleformEditor.events({
             default:
                 document.execCommand(command, false, '');
         }
+    },
+
+
+    'keydown/click .skeleEditor': function(event, template) {
+        let sel;
+        let containerNode;
+        let end = false;
+
+        template.$('.skeleEditorBtn').removeClass('active');
+
+        if (window.getSelection) {
+            sel = window.getSelection();
+
+            if (sel.rangeCount > 0) {
+                containerNode = sel.getRangeAt(0).commonAncestorContainer;
+            }
+        }
+        else if ((sel = document.selection) && sel.type != "Control" ) {
+            containerNode = sel.createRange().parentElement();
+        }
+
+        console.log('---------------------');
+
+        while (containerNode && !end) {
+            if (containerNode.nodeType == 1) {
+                if (containerNode.className.indexOf('skeleEditor') >= 0) {
+                    end = true;
+                }
+                else {
+                    console.log(containerNode.tagName);
+                    switch (containerNode.tagName) {
+                        case 'B':
+                            template.$('.skeleEditorBold').addClass('active');
+                            break;
+
+                        case 'U':
+                            template.$('.skeleEditorUnderline').addClass('active');
+                            break;
+
+                        case 'I':
+                            template.$('.skeleEditorItalic').addClass('active');
+                            break;
+                    }
+                }
+            }
+            containerNode = containerNode.parentNode;
+        }
+    },
+
+
+    'blur .skeleEditor': function(event, template) {
+        template.$('skeleEditorBtn').removeClass('active');
     }
 })
