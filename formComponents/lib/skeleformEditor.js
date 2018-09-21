@@ -138,6 +138,7 @@ Template.skeleformEditor.events({
     },
 
 
+
     // handle button descriptions
     'mouseenter .skeleEditorIcon': function(event, template) {
         let label = $(event.target).parent('.skeleEditorBtn').data('label') + '_lbl'
