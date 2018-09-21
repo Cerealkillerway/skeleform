@@ -1,18 +1,52 @@
 <template name="skeleformEditor">
     <div class="input-field col {{fieldSize schema.size}} {{schema.style}}">
 
-        <div class="skeleEditorToolbar">
-            <div class="skeleEditorBtn skeleEditorBold" data-command="bold">
-                <i class="skeleEditorIcon material-icons">format_bold</i>
+        <div class="skeleEditorToolbarWrapper">
+            <div class="skeleEditorToolbar skeleEditorOptions">
+                <div class="skeleEditorBtn skeleEditorBackgroundColor" data-command="editorBackground" data-label="editorBackgroundStyle">
+                    <i class="skeleEditorIcon material-icons">opacity</i>
+                </div>
             </div>
-            <div class="skeleEditorBtn skeleEditorUnderline" data-command="underline">
-                <i class="skeleEditorIcon material-icons">format_underline</i>
+
+            <div class="skeleEditorToolbar skeleEditorFontStyles">
+                <div class="skeleEditorBtn skeleEditorBold" data-command="bold" data-label="boldStyle">
+                    <i class="skeleEditorIcon material-icons">format_bold</i>
+                </div>
+                <div class="skeleEditorBtn skeleEditorUnderline" data-command="underline" data-label="underlineStyle">
+                    <i class="skeleEditorIcon material-icons">format_underline</i>
+                </div>
+                <div class="skeleEditorBtn skeleEditorItalic" data-command="italic" data-label="italicStyle">
+                    <i class="skeleEditorIcon material-icons">format_italic</i>
+                </div>
             </div>
-            <div class="skeleEditorBtn skeleEditorItalic" data-command="italic">
-                <i class="skeleEditorIcon material-icons">format_italic</i>
+
+            <div class="skeleEditorToolbar skeleEditorFontSizes">
+                <div class="input-field">
+                    <select>
+                        <option value="" disabled selected>{{i18n "fontHeight_lbl"}}</option>
+                        <option value="8">8</option>
+                        <option value="10">10</option>
+                        <option value="12">12</option>
+                        <option value="14">14</option>
+                        <option value="16">16</option>
+                        <option value="18">18</option>
+                        <option value="20">20</option>
+                        <option value="22">22</option>
+                        <option value="24">24</option>
+                        <option value="26">26</option>
+                        <option value="28">28</option>
+                        <option value="30">30</option>
+                        <option value="32">32</option>
+                        <option value="48">48</option>
+                        <option value="56">56</option>
+                        <option value="60">60</option>
+                    </select>
+                </div>
             </div>
-            <div class="skeleEditorBtn skeleEditorBackgroundColor" data-command="editorBackground">
-                <i class="skeleEditorIcon material-icons">opacity</i>
+
+
+            <div class="skeleEditorToolbarDescriptionWrapper">
+                <div class="skeleEditorToolbarDescription"></div>
             </div>
         </div>
 

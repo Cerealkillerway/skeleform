@@ -50,7 +50,31 @@ Template.skeleformEditor.onDestroyed(function() {
 
 
 Template.skeleformEditor.onRendered(function() {
-    let schema = this.data.fieldSchema.get();
+    let instance = this;
+    let schema = instance.data.fieldSchema.get();
+    let staticOffset;
+
+    // handle staticOffset
+    if (schema.staticOffset) {
+        staticOffset = schema.staticOffset + 'px';
+    }
+    else {
+        // if offset is not specified on the schema check if skeleform' static bar is present
+        if ($('.skeleStaticBar').length > 0) {
+            staticOffset = '60px';
+        }
+    }
+    if (staticOffset) {
+        instance.$('.skeleEditorToolbarWrapper').css({top: staticOffset});
+    }
+
+    // handle height and minHeight
+    if (schema.height) {
+        instance.$('.skeleEditor').css({height: schema.height + 'px'});
+    }
+    if (schema.minHeight) {
+        instance.$('.skeleEditor').css({minHeight: schema.minHeight + 'px'});
+    }
 
     Tracker.afterFlush(() => {
         if (this.data.formContext.skeleSubsReady.get()) {
@@ -75,6 +99,8 @@ Template.skeleformEditor.onRendered(function() {
         }
     });
 
+    // initialize selects
+    this.$('select').material_select();
 
     this.isActivated.set(true);
     Skeleform.utils.InvokeCallback(this, null, schema, 'onRendered');
@@ -82,6 +108,7 @@ Template.skeleformEditor.onRendered(function() {
 
 
 Template.skeleformEditor.events({
+    // handle button commands execution
     'mousedown .skeleEditorIcon': function(event, template) {
         event.preventDefault();
         let $target = $(event.target);
@@ -103,7 +130,37 @@ Template.skeleformEditor.events({
     },
 
 
-    'keydown/click .skeleEditor': function(event, template) {
+    'mousedown .select-wrapper li': function(event, template) {
+        document.execCommand('formatblock', false, 'span')
+
+        let listId = window.getSelection().focusNode.parentNode;
+        $(listId).addClass("fontSize");
+    },
+
+
+    // handle button descriptions
+    'mouseenter .skeleEditorIcon': function(event, template) {
+        let label = $(event.target).parent('.skeleEditorBtn').data('label') + '_lbl'
+        let $commandDescription = template.$('.skeleEditorToolbarDescription');
+
+        label = i18n.get(label);
+
+        $commandDescription.html(label);
+        $commandDescription.stop(true, false).animate({opacity: 1}, 300);
+    },
+
+
+    'mouseleave .skeleEditorIcon': function(event, template) {
+        let $commandDescription = template.$('.skeleEditorToolbarDescription');
+
+        $commandDescription.stop(true, false).animate({opacity: 0}, 300, function() {
+            $commandDescription.html('');
+        });
+    },
+
+
+    // handle buttons highlightning
+    'keyup/click .skeleEditor': function(event, template) {
         let sel;
         let containerNode;
         let end = false;
@@ -121,15 +178,12 @@ Template.skeleformEditor.events({
             containerNode = sel.createRange().parentElement();
         }
 
-        console.log('---------------------');
-
         while (containerNode && !end) {
             if (containerNode.nodeType == 1) {
                 if (containerNode.className.indexOf('skeleEditor') >= 0) {
                     end = true;
                 }
                 else {
-                    console.log(containerNode.tagName);
                     switch (containerNode.tagName) {
                         case 'B':
                             template.$('.skeleEditorBold').addClass('active');

@@ -122,6 +122,7 @@ Creates a container `<div>` (empty); it's useful for putting into it any runtime
 
 #### 2.2.6 editor
 
+- **staticOffset**: *[integer]* (optional) specifies the offset (in pixels) for the static bar function of the editor; useful if the current view already has another static and the editor's bar need to stack after it;
 - **toolbar**: *[string] (optional)* specifies the toolbar to use (available values: *"minimal", "default", "full"*);
 - **height**: *[integer] (optional)* the pre-setted editor's height in pixels (default 400);
 - **minHeight**: *[integer] (optional)* the pre-setted editor's minimum height in pixels (default 100);

@@ -111,7 +111,7 @@ Template.skeleform.onRendered(function() {
                     let $placeholder = this.$('.skeleskeleStaticBarPlaceholder');
 
                     if ($(document).scrollTop() >= barOffset) {
-                        let height = $('.skeleStaticBar').height();
+                        let height = $('.skeleStaticBar').outerHeight();
 
                         if (height > $placeholder.height()) {
                             $placeholder.height(height);

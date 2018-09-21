@@ -19,7 +19,7 @@ Package.onUse(function(api) {
         'jquery',
         'fourseven:scss@4.5.4',
         'blaze-html-templates@1.1.2',
-        'tap:i18n@1.8.2'
+        'ostrio:i18n@3.1.0'
     ],
     ['client']);
 
