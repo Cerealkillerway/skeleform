@@ -15,7 +15,7 @@
                 {{> Template.dynamic template=formContext.schema.__toolbar.extrasUpdate data=this}}
             {{/if}}
 
-            <a href="{{makeUndoPath formContext.schema.__paths.undoPath}}{{skelelistIsPaginated formContext.schemaName}}" class="waves-effect waves-light btn firstColor">
+            <a href="{{makeUndoPath formContext.schema.__paths.undoPath}}" class="waves-effect waves-light btn firstColor">
                 <i class="material-icons small left">undo</i>
                 <span>{{i18n "cancel_btn"}}</span>
             </a>
