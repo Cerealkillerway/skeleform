@@ -8,7 +8,7 @@
         {{#if (skeleformTest schema.renderAs "textarea")}}
             <textarea id="{{field schema.name}}" class="materialize-textarea skeleValidate skeleGather" maxlength="{{schema.validation.max}}"></textarea>
         {{else}}
-            <input type="{{inputType schema.renderAs}}" maxlength="{{schema.validation.max}}" class="skeleValidate skeleGather" id="{{field schema.name}}" autocomplete="off" style="{{fieldStyle schema}}" length={{schema.charCounter}}>
+            <input type="{{inputType schema.renderAs}}" maxlength="{{schema.validation.max}}" class="skeleValidate skeleGather" id="{{field schema.name}}" autocomplete="off" style="{{fieldStyle schema}}" data-length={{schema.charCounter}}>
         {{/if}}
         <label for="{{field schema.name}}" class="active">{{label schema.name}}{{required}}</label>
 

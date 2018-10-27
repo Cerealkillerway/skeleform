@@ -162,6 +162,8 @@ Template.skeleformInput.onRendered(function() {
 
     // if necessary enable character counter
     if (schema.charCounter) {
+        console.log('enable char counter');
+        console.log(Skeleform.utils.$getFieldById(self, schema));
         Skeleform.utils.$getFieldById(self, schema).characterCounter();
     }
 
