@@ -115,10 +115,12 @@ Creates a container `<div>` (empty); it's useful for putting into it any runtime
     - **showOnFocus**: *[boolean] (optional)* decides if the suggestion list should be opened also when the input gets the focus, while normally it's shown only when the user types in (default false);
     - **data**: *[array of objects/function] (required)* data source for the autocomplete plugin; it can be an array of objects or a function that returns an array of objects (in this case the function is re-executed every time the input's value is changed by the user);
       each object in the array can have the following properties:
-      - **name**: *[string] (required)* the name displayed in the suggestions list;
-      - **value**: *[string] (optional)* the value that will be used to fill the input when user selects the suggestion; if no value is provided, `name` will be used instead;
-      - **icon**: *[string] (optional)* a google material design icon's name to display next of the suggestion's text;
-      - **image**: *[string] (optional)* path to an image that will be displayed before the suggestion's text (should be square);
+
+        - **name**: *[string] (required)* the name displayed in the suggestions list;
+
+        - **value**: *[string] (optional)* the value that will be used to fill the input when user selects the suggestion; if no value is provided, `name` will be used instead;
+        - **icon**: *[string] (optional)* a google material design icon's name to display next of the suggestion's text;
+        - **image**: *[string] (optional)* path to an image that will be displayed before the suggestion's text (should be square);
 
 
 #### 2.2.5 checkBox
