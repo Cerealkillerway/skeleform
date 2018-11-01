@@ -18,14 +18,10 @@ If you have any problem using it, please have a look to the "troubleshooting" se
 
 - **__collection**: *[string] (required)* name of collection that is manipulated by this form;
 - **__toolbar**: *[object] (optional)*
-
     - **template**: *[string] (optional)* name of alternative template to use as a toolbar; it receives the skeleform's data context as data context;
-
-  - **containerId**: *[string] (optional/available only if "template"option is used)* id of DOM element to place the toolbar in;
-
-  - **extrasCreate**: *[string] (optional)* template for extra buttons to be added to standard create toolbar;
-
-  - **extrasUpdate**: *[string] (optional)* template for extra buttons to be added to standard update toolbar;
+    - **containerId**: *[string] (optional/available only if "template"option is used)* id of DOM element to place the toolbar in;
+    - **extrasCreate**: *[string] (optional)* template for extra buttons to be added to standard create toolbar;
+    - **extrasUpdate**: *[string] (optional)* template for extra buttons to be added to standard update toolbar;
 - **printFunctions**: *[object] (optional)* if defined *skeleform* will enable print functionalities for forms created from the current schema;
 - - **printPreviewContainer**: *[string] (optional)* a string representing a jquery selector of the element where to append the skeleform's print area; if omitted the print area is appended directly below the form itself;
 - **__autoScrollTop**: *[boolean] (optional)* by default every skeleform instance auto scrolls to `offset = 0` inside `onRendered`; set this property to false to disable this behavior;
@@ -73,26 +69,16 @@ If you have any problem using it, please have a look to the "troubleshooting" se
 - **showOnly**: *[string ('create'/'update')] (optional)* defines if the field should be rendered only on creation or only on update; **IMPORTANT**: this option can be set also on a *skeleformGroup* object and will take effect on all fields of the group;
 - **replicaSet**: *[object] (optional)* defines the group as a replica set; that means that the field(s) will be replicable by the user who will be able to add or remove copies of this field(s);
   *Important:* this option doesn't work on a single field, but only on a skeleformGroup; if you need a single replicable field, you should define it inside a skeleformGroup.
-
-  - **name**: *[string] (mandatory)* the name for the replica set; must be unique in the form;
-
-  - **i18n**: *[boolean] (optional)* specify that the field will be prefixed with *"<:currentLang>---"*; this identifies the field as internationalized; by default the option is enabled; you should use this option only if you want to set it to false; (default *true*);
-
-  - **template**: *[string] (optional)* the name of the template to be used for replica actions; by default it's "skeleformDefaultReplicaBtns", a built-in template that will render a "+" and "-" buttons, that will make possible for the user to add or remove copies of the replica set;
-
-  - **minCopies**: *[number] (optional)* the minimum number of copies of the replica set allowed (default *1*);
-
-  - **maxCopies**: *[number] (optional)* the maximum number of copies of the replica set allowed (default *infinite*);
-
-  - **initCopies**: *[number] (optional)* the number of copies of the replica set to include in the form during the first render (default *1*);
-
-  - **indexes**: *[boolean] (optional)* if set to true will update a DOM element with class `skeleformReplicaIndex` within each replica with its current positional order; this is useful if you want to show the positional order of each set in the replica set; the DOM element with class `skeleformReplicaIndex` is added automatically;
-
-  - **sortable**: *[boolean] (optional)* makes the replica set sortable;
-
-  - **setClasses**: *[array of strings] (optional)* array of classes to use on the replica set's container div;
-
-  - **frameClasses**: *[array of strings] (optional)* array of classes to use on each replica item;
+- - **name**: *[string] (mandatory)* the name for the replica set; must be unique in the form;
+- - **i18n**: *[boolean] (optional)* specify that the field will be prefixed with *"<:currentLang>---"*; this identifies the field as internationalized; by default the option is enabled; you should use this option only if you want to set it to false; (default *true*);
+- - **template**: *[string] (optional)* the name of the template to be used for replica actions; by default it's "skeleformDefaultReplicaBtns", a built-in template that will render a "+" and "-" buttons, that will make possible for the user to add or remove copies of the replica set;
+- - **minCopies**: *[number] (optional)* the minimum number of copies of the replica set allowed (default *1*);
+- - **maxCopies**: *[number] (optional)* the maximum number of copies of the replica set allowed (default *infinite*);
+- - **initCopies**: *[number] (optional)* the number of copies of the replica set to include in the form during the first render (default *1*);
+- - **indexes**: *[boolean] (optional)* if set to true will update a DOM element with class `skeleformReplicaIndex` within each replica with its current positional order; this is useful if you want to show the positional order of each set in the replica set; the DOM element with class `skeleformReplicaIndex` is added automatically;
+- - **sortable**: *[boolean] (optional)* makes the replica set sortable;
+- - **setClasses**: *[array of strings] (optional)* array of classes to use on the replica set's container div;
+- - **frameClasses**: *[array of strings] (optional)* array of classes to use on each replica item;
 
 #### 2.2 Field specific options:
 
@@ -126,7 +112,6 @@ Creates a container `<div>` (empty); it's useful for putting into it any runtime
 - **charCounter**: *[number] (optional)* enables the materializeCSS's character counter plugin; **IMPORTANT**: the character counter does not set the *"maxlength"* property on the input (this is done by using validation -> max);
 - **autocomplete**: *[object] (optional)* dictionary of options for the autocomplete plugin;
 - - **maxHeight**: *[string] (optional)* a css value for maxHeight property of the suggstions' container (default `301px`);
-  -
 - - **data**: *[array of objects/function] (required)* data source for the autocomplete plugin; it can be an array of objects or a function that returns an array of objects (in this case the function is re-executed every time the input's value is changed by the user);
   each object in the array can have the following properties:
 - - - **name**: *[string] (required)* the name displayed in the suggestions list;
@@ -254,7 +239,7 @@ In this example we will update the value of `username` field from within the `us
         callbacks: {
             onChange: function(value, fieldInstance) {
                 let userDocument = Skeletor.Data.Users.findOne({_id: value});
-
+    
                 // setting the value on the formInstance's item object will reactively
                 // update the value of the 'username' field
                 Skeletor.SkeleUtils.GlobalUtilities.getFieldInstance(fieldInstance.data.formContext, 'username').setValue(userDocument.username)
@@ -280,10 +265,10 @@ As seen above, the *SkeleUtils* package, that is part of the *Skeletor* project 
             onChange: function(value, fieldInstance) {
                 let emailField = Skeletor.SkeleUtils.GlobalUtilities.getFieldInstance(fieldInstance.data.formContext, 'email');
                 let emailSchema = emailField.data.fieldSchema.get();
-
+    
                 // make the field required reactively
                 emailSchema.validation = {min: 3};
-
+    
                 // set the new schema (this will refresh the field)
                 emailField.data.fieldSchema.set(emailSchema);
             }
