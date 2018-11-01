@@ -6,6 +6,55 @@ import { Random } from 'meteor/random'
 // it integrates autonumeric.js plugin to manage "formatAs" options
 // see http://www.decorplanit.com/plugin/ for more details
 
+
+// function to handle autocomplete initialization
+function initializeAutocomplete(fieldInstance, isUpdating) {
+    let schema = fieldInstance.data.fieldSchema.get();
+
+    if (!schema.autocomplete) {
+        return false;
+    }
+
+    let $field = Skeleform.utils.$getFieldById(fieldInstance, schema);
+    let data;
+
+    if (_.isFunction(schema.autocomplete.data)) {
+        data = schema.autocomplete.data(fieldInstance.getValue());
+    }
+    else {
+        if (isUpdating) {
+            return false;
+        }
+        else {
+            data = schema.autocomplete.data;
+        }
+    }
+
+    let $container = fieldInstance.$('.autocompleteContainer').find('.collection');
+
+    $container.empty();
+
+    for (suggestion of data) {
+        let $suggestion = $('<li />', {
+            class: 'collection-item autocompleteSuggestion'
+        });
+
+        $suggestion.text(suggestion.name);
+
+        if (suggestion.value) {
+            $suggestion.data('value', suggestion.value);
+        }
+
+        $container.append($suggestion);
+    }
+}
+
+// function to close suggestion list
+function hideAutocomplete(fieldInstance) {
+    fieldInstance.$('.autocompleteContainer').slideUp(200);
+}
+
+
 // Helpers
 Template.skeleformInput.helpers(skeleformGeneralHelpers);
 Template.skeleformInput.helpers({
@@ -103,8 +152,13 @@ Template.skeleformInput.onCreated(function() {
 
 Template.skeleformInput.onDestroyed(function() {
     let fields = this.data.formContext.fields;
+    let schema = self.data.fieldSchema.get();
 
     fields.removeAt(fields.indexOf(this));
+
+    if (schema.autocomplete) {
+        $('body').off('click', hideAutocomplete(this));
+    }
 });
 
 
@@ -112,6 +166,7 @@ Template.skeleformInput.onRendered(function() {
     let self = this;
     let schema = self.data.fieldSchema.get();
     let id = schema.name;
+    let $field = Skeleform.utils.$getFieldById(self, schema);
     let autoNumericDefaults = {
         currency: {
             aSep: ' ',
@@ -141,19 +196,19 @@ Template.skeleformInput.onRendered(function() {
     // handle formats
     switch (schema.formatAs) {
         case 'currency':
-            Skeleform.utils.$getFieldById(self, schema).autoNumeric('init', schema.autoNumericOptions || autoNumericDefaults.currency);
+            $field.autoNumeric('init', schema.autoNumericOptions || autoNumericDefaults.currency);
 
-            Skeleform.utils.$getFieldById(self, schema).click(function() {
+            $field.click(function() {
                 $(this).select();
             });
             break;
 
         case 'float':
-            Skeleform.utils.$getFieldById(self, schema).autoNumeric('init', schema.autoNumericOptions || autoNumericDefaults.float);
+            $field.autoNumeric('init', schema.autoNumericOptions || autoNumericDefaults.float);
             break;
 
         case 'integer':
-            Skeleform.utils.$getFieldById(self, schema).autoNumeric('init', schema.autoNumericOptions || autoNumericDefaults.integer);
+            $field.autoNumeric('init', schema.autoNumericOptions || autoNumericDefaults.integer);
             break;
 
         default:
@@ -162,9 +217,20 @@ Template.skeleformInput.onRendered(function() {
 
     // if necessary enable character counter
     if (schema.charCounter) {
-        console.log('enable char counter');
-        console.log(Skeleform.utils.$getFieldById(self, schema));
-        Skeleform.utils.$getFieldById(self, schema).characterCounter();
+        $field.characterCounter();
+    }
+
+    // if necessary handle autocomplete plugin
+    initializeAutocomplete(self);
+    if (schema.autocomplete && schema.autocomplete.maxHeight) {
+        self.$('.autocompleteContainer').find('.collection').css({maxHeight: schema.autocomplete.maxHeight});
+    }
+
+    // attach handler to close suggestion list when clicking outside
+    if (schema.autocomplete) {
+        $('body').on('click', () => {
+            hideAutocomplete(self);
+        });
     }
 
     self.isActivated.set(true);
@@ -192,6 +258,20 @@ Template.skeleformInput.events({
             $(event.target).select();
         }
 
+        // if necessary handle autocomplete update
+        initializeAutocomplete(instance, true);
+
+        instance.$('.autocompleteContainer').slideDown(200);
+
         Skeleform.utils.InvokeCallback(instance, value, schema, 'onChange', true);
+    },
+
+    'click .autocompleteSuggestion': function(event, instance) {
+        event.stopPropagation();
+        let $target = $(event.target);
+        let value = $target.data('value') || $target.html();
+
+        instance.setValue(value);
+        instance.$('.autocompleteContainer').slideUp(200);
     }
 });

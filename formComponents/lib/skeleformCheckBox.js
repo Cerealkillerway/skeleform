@@ -70,9 +70,8 @@ Template.skeleformCheckBox.onCreated(function() {
         return result;
     };
     this.setValue = (value) => {
-        Skeleform.utils.$getFieldById(this, schema).prop('checked', value);
-
         Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
+        Skeleform.utils.$getFieldById(this, schema).prop('checked', value);
     };
 });
 Template.skeleformCheckBox.onDestroyed(function() {
@@ -104,7 +103,6 @@ Template.skeleformCheckBox.events({
         let schema = instance.data.fieldSchema.get();
 
         instance.isValid();
-
         Skeleform.utils.InvokeCallback(instance, value, schema, 'onChange', true);
     },
 });

@@ -129,6 +129,12 @@ Template.skeleformSelect.helpers({
             return result;
         }
 
+        for (source of schema.source) {
+            let currentLang = i18n.currentLocale.get();
+
+            source.name = i18n.get(currentLang, source.label);
+        }
+
         return schema.source;
     },
     isMultiple: function() {
@@ -222,7 +228,9 @@ Template.skeleformSelect.onCreated(function() {
             }
         }
 
-        $field.material_select();
+        Tracker.afterFlush(function() {
+            $field.material_select();
+        });
 
         // here cannot test value !== this.getValue() since the actual value for the field in the current document
         // can be the first value (default preselected) for the field;

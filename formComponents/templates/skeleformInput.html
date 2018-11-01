@@ -10,6 +10,11 @@
         {{else}}
             <input type="{{inputType schema.renderAs}}" maxlength="{{schema.validation.max}}" class="skeleValidate skeleGather" id="{{field schema.name}}" autocomplete="off" style="{{fieldStyle schema}}" data-length={{schema.charCounter}}>
         {{/if}}
+        {{#if schema.autocomplete}}
+            <div class="autocompleteContainer">
+                <ul class="collection"></ul>
+            </div>
+        {{/if}}
         <label for="{{field schema.name}}" class="active">{{label schema.name}}{{required}}</label>
 
         <p class="skeleformFieldAlert"></p>

@@ -181,6 +181,46 @@
 
 
 // fields
+.autocompleteContainer {
+    display: none;
+    position: absolute;
+    width: 100%;
+    top: 50px;
+    z-index: 1000;
+
+    .collection {
+        max-height: 301px;
+        overflow: auto;
+        border: solid 2px $thirdPanelColor;
+
+        &::-webkit-scrollbar {
+            width: 17px;
+        }
+        &::-webkit-scrollbar-track {
+            background-color: $thirdPanelColor;
+        }
+        &::-webkit-scrollbar-thumb {
+            background-color: lighten($thirdPanelColor, 20%);
+        }
+        &::-webkit-scrollbar-thumb:hover {
+            background-color: lighten($thirdPanelColor, 30%);
+        }
+        &::-webkit-scrollbar-button {
+            display: none !important;
+        }
+
+        .autocompleteSuggestion {
+            cursor: pointer;
+            background-color: $firstBackgroundColor;
+            color: $firstTextColor;
+
+            &:hover {
+                background-color: $secondPanelColor;
+                color: $secondPanelColorText;
+            }
+        }
+    }
+}
 
 
 // test page styles
