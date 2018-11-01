@@ -8,7 +8,7 @@ import { Random } from 'meteor/random'
 
 
 // function to handle autocomplete initialization
-function initializeAutocomplete(fieldInstance, isUpdating) {
+function initializeAutocomplete(fieldInstance, showSuggestions) {
     let schema = fieldInstance.data.fieldSchema.get();
 
     if (!schema.autocomplete) {
@@ -44,8 +44,35 @@ function initializeAutocomplete(fieldInstance, isUpdating) {
         if (suggestion.value) {
             $suggestion.data('value', suggestion.value);
         }
+        if (suggestion.icon) {
+            let $secondaryContent = $('<span />', {
+                class: 'secondary-content'
+            });
+            let $icon = $('<i />', {
+                class: 'material-icons'
+            });
+
+            $icon.text(suggestion.icon);
+            $secondaryContent.append($icon);
+            $suggestion.append($secondaryContent);
+        }
+
+        if (suggestion.image) {
+            $suggestion.addClass('avatar');
+
+            let $image = $('<img />', {
+                class: 'circle',
+                src: suggestion.image
+            });
+
+            $suggestion.prepend($image);
+        }
 
         $container.append($suggestion);
+    }
+
+    if (showSuggestions) {
+        fieldInstance.$('.autocompleteContainer').slideDown(200);
     }
 }
 
@@ -155,10 +182,6 @@ Template.skeleformInput.onDestroyed(function() {
     let schema = self.data.fieldSchema.get();
 
     fields.removeAt(fields.indexOf(this));
-
-    if (schema.autocomplete) {
-        $('body').off('click', hideAutocomplete(this));
-    }
 });
 
 
@@ -226,13 +249,6 @@ Template.skeleformInput.onRendered(function() {
         self.$('.autocompleteContainer').find('.collection').css({maxHeight: schema.autocomplete.maxHeight});
     }
 
-    // attach handler to close suggestion list when clicking outside
-    if (schema.autocomplete) {
-        $('body').on('click', () => {
-            hideAutocomplete(self);
-        });
-    }
-
     self.isActivated.set(true);
     Skeleform.utils.InvokeCallback(this, null, schema, 'onRendered');
 });
@@ -261,17 +277,38 @@ Template.skeleformInput.events({
         // if necessary handle autocomplete update
         initializeAutocomplete(instance, true);
 
-        instance.$('.autocompleteContainer').slideDown(200);
-
         Skeleform.utils.InvokeCallback(instance, value, schema, 'onChange', true);
     },
 
     'click .autocompleteSuggestion': function(event, instance) {
         event.stopPropagation();
-        let $target = $(event.target);
-        let value = $target.data('value') || $target.html();
+        let $target = $(event.currentTarget);
+        let value = $target.data('value');
+
+        if (!value) {
+            if ($target.find('img').length > 0) {
+                value = $target.contents().get(1).nodeValue
+            }
+            else {
+                value = $target.contents().get(0).nodeValue
+            }
+        }
 
         instance.setValue(value);
         instance.$('.autocompleteContainer').slideUp(200);
+    },
+
+    'focus input, focus textarea': function(event, instance) {
+        let schema = instance.data.fieldSchema.get();
+
+        if (schema.autocomplete && schema.autocomplete.showOnFocus) {
+            initializeAutocomplete(instance, true);
+        }
+    },
+
+    'blur input, blur textarea': function(event, instance) {
+        setTimeout(() => {
+            instance.$('.autocompleteContainer').slideUp(200);
+        }, 300);
     }
 });

@@ -23,26 +23,26 @@ If you have any problem using it, please have a look to the "troubleshooting" se
     - **extrasCreate**: *[string] (optional)* template for extra buttons to be added to standard create toolbar;
     - **extrasUpdate**: *[string] (optional)* template for extra buttons to be added to standard update toolbar;
 - **printFunctions**: *[object] (optional)* if defined *skeleform* will enable print functionalities for forms created from the current schema;
-- - **printPreviewContainer**: *[string] (optional)* a string representing a jquery selector of the element where to append the skeleform's print area; if omitted the print area is appended directly below the form itself;
+    - **printPreviewContainer**: *[string] (optional)* a string representing a jquery selector of the element where to append the skeleform's print area; if omitted the print area is appended directly below the form itself;
 - **__autoScrollTop**: *[boolean] (optional)* by default every skeleform instance auto scrolls to `offset = 0` inside `onRendered`; set this property to false to disable this behavior;
 - **__autoFocusFirst**: *[boolean] (optional)* by default every skeleform instance auto focus on the first input element inside `onRendered`; set this property to false to disable this behavior;
 - **__paths**: *[object] (optional)* dictionary of paths to be used in different situations:
-- - **undoPath**: *[string, object] (required)* specify the path to be used for cancel button; the string is the path definition (can contain ":" params), and the object is the params dictionary (NOT optional, pass empty object if no params are needed); the string 'this' used as a value in params object means that the value must be taken from skeleform's gathered data object. For itemLang param, the value 'auto' means that it is taken from the current route's URL;
-- - **redirectOnCreate**: *[string, object] (optional)* specify the path to be used as a redirect after a succesful create; the string is the path definition (can contain ":" params), and the object is the params dictionary (NOT optional, pass empty object if no params are needed); the string 'this' used as a value in params object means that the value must be taken from skeleform's gathered data object. For itemLang param, the value 'auto' means that it is taken from the current route's URL; (default behaviour: clean the form and be ready for a new document);
-- - **redirectOnUpdate** : *[string, Object] (optional)* specify the path to be used as a redirect after a succesful update; the string is the path definition (can contain ":" params), and the object is the params dictionary (NOT optional, pass empty object if no params are needed); the string 'this' used as a value in params object means that the value must be taken from skeleform's gathered data object. For itemLang param, the value 'auto' means that it is taken from the current route's URL; (default behaviour: stay on the same page);
+    - **undoPath**: *[string, object] (required)* specify the path to be used for cancel button; the string is the path definition (can contain ":" params), and the object is the params dictionary (NOT optional, pass empty object if no params are needed); the string 'this' used as a value in params object means that the value must be taken from skeleform's gathered data object. For itemLang param, the value 'auto' means that it is taken from the current route's URL;
+    - **redirectOnCreate**: *[string, object] (optional)* specify the path to be used as a redirect after a succesful create; the string is the path definition (can contain ":" params), and the object is the params dictionary (NOT optional, pass empty object if no params are needed); the string 'this' used as a value in params object means that the value must be taken from skeleform's gathered data object. For itemLang param, the value 'auto' means that it is taken from the current route's URL; (default behaviour: clean the form and be ready for a new document);
+    - **redirectOnUpdate** : *[string, Object] (optional)* specify the path to be used as a redirect after a succesful update; the string is the path definition (can contain ":" params), and the object is the params dictionary (NOT optional, pass empty object if no params are needed); the string 'this' used as a value in params object means that the value must be taken from skeleform's gathered data object. For itemLang param, the value 'auto' means that it is taken from the current route's URL; (default behaviour: stay on the same page);
 - **__options**:
-- - **loadingModal** *[boolean] (optional)*: if true use a loading modal while performing skeleform operations; default to false;
-- - **tracked**: *[boolean] (optional)* if true save to each document data about user and timestamp of creation and last update; default to false;
+    - **loadingModal** *[boolean] (optional)*: if true use a loading modal while performing skeleform operations; default to false;
+    - **tracked**: *[boolean] (optional)* if true save to each document data about user and timestamp of creation and last update; default to false;
 - **__methods**: *[object] (optional)* a dictionary of custom methods that skeleform and skelelist will use to create, update, delete documents on this schema; (default to standard skeleform methods)
-- - **create**: *[string] (optional)* nane of custom method to be called for new documents creation (default to `skeleCreateDocument`);
-- - **update**: *[string] (optional)* name of custom method to be called when updating a document (default to `skeleUpdateDocument`);
-- - **delete**: *[string] (optional)* name of custom method to be called for deleting documents (default to `skeleDeleteDocument`);
+    - **create**: *[string] (optional)* nane of custom method to be called for new documents creation (default to `skeleCreateDocument`);
+    - **update**: *[string] (optional)* name of custom method to be called when updating a document (default to `skeleUpdateDocument`);
+    - **delete**: *[string] (optional)* name of custom method to be called for deleting documents (default to `skeleDeleteDocument`);
 - **__listView**: *[object] (optional)* skelelist options; see the **Skelelist package**'s *readme* for details;
 - **fields**: *[Array of Objects] (mandatory)* each object in this array represents a field that can have the following properties:
 - **formCallbacks**: *[object] (optional)* dictionary of callbacks executed on the form;
-- - **onRendered(currentDocument, formInstance)**: *[function] (optional)* callback fired when the form is rendered; it receives the currentDocument (if any) and the form instance as arguments;
-- - **beforeSave(formDataContext, gatheredValue)**: *[function] (optional)* callback executed just before saving (before creating and before updating) the form; it receives the form's data context and the values of all form's field gathered by Skeleform;
-- - **onClose(currentDocument, formInstance)**: *[function] (optional)* callback fired when the form is destroyed: it receives the currentDocument (if any) and the form instance as arguments;
+    - **onRendered(currentDocument, formInstance)**: *[function] (optional)* callback fired when the form is rendered; it receives the currentDocument (if any) and the form instance as arguments;
+    - **beforeSave(formDataContext, gatheredValue)**: *[function] (optional)* callback executed just before saving (before creating and before updating) the form; it receives the form's data context and the values of all form's field gathered by Skeleform;
+    - **onClose(currentDocument, formInstance)**: *[function] (optional)* callback fired when the form is destroyed: it receives the currentDocument (if any) and the form instance as arguments;
 
 ### 2 SCHEMA FIELDS OPTIONS
 
@@ -54,31 +54,31 @@ If you have any problem using it, please have a look to the "troubleshooting" se
 - **i18n**: *[boolean] (optional)* specify that the field will be prefixed with *"<:currentLang>---"*; this identifies the field as internationalized; by default the option is enabled; you should use this option only if you want to set it to false; (default *true*);
 - **size**: *[string] (optional)* materialize's grid system classes; default to *"s12 m6"*;
 - **callbacks**: *[object] (optional)* dictionary of callbacks;
-- - **onChange(value, fieldInstance)**: *[function] (optional)* a callback to be performed when the value of the field changes; it receives the field's value and the field's instance as parameters;
-- - **onCreated(fieldInstance)**: a callback fired when the field is created; it receives the field's instance as parameter;
-- - **onRendered(fieldInstance)**: a callback fired when the field has finished rendering; it receives the field's instance as parameter;
+    - **onChange(value, fieldInstance)**: *[function] (optional)* a callback to be performed when the value of the field changes; it receives the field's value and the field's instance as parameters;
+    - **onCreated(fieldInstance)**: a callback fired when the field is created; it receives the field's instance as parameter;
+    - **onRendered(fieldInstance)**: a callback fired when the field has finished rendering; it receives the field's instance as parameter;
 - **validation**: *[object]* set the validation rules:
-- - **type**: *[string] (optional)* validation match (available values: *"string", "number", "email", "url", "date", "time"*); **IMPORTANT**: *"date"* and *"time"* are validated against the plugin's *"formatSubmit"*;
-- - **min**: *[number] (optional)* minimun length; if the value returned by the field is an object, this parameter is referred to the number of its properties; setting min to 1 on a boolean field (ex. checkbox) is interpreted as "field required"; any other value is ignored for those kind of fields;
-- - **max**: *[number] (optional)* maximum length; if the value returned by the field is an object, this parameter is referred to the number of its properties; on input fields this will automatically set the "maxLength" property on the html `<input>` tag;
-- - **unique**: *[boolean / string] (optional)* specifies that field's value should be unique; can be true/false or 'autoset', that means that if unicity validation fails, a random id is appended to the field's value to make it unique; **Important**: the 'autoset' option is available only for *input* fields;
-- - **ignoreCaseForUnicity**: *[boolean] (optional)* if set to *true* the unicity check will be case insensitive; default *false*;
-- - **collectionForUnicityCheck**: *[string] (optional)* the collection where to perform unicity check for the field; if omitted, the unicity check is performed against schema's *__collection*;
-- - **showErrorOn**: *[string / array of strings]* the name (or array of names) of another field where to show errors relative of this field; this is useful if the current field is hidden and generated starting from other fields values (for example a hidden url-slug parameter generated dasherizing the field "name"; setting this to "name" will show validation errors for the url-slug field, that is invisible, on the "name" field, that is visible);
+    - **type**: *[string] (optional)* validation match (available values: *"string", "number", "email", "url", "date", "time"*); **IMPORTANT**: *"date"* and *"time"* are validated against the plugin's *"formatSubmit"*;
+    - **min**: *[number] (optional)* minimun length; if the value returned by the field is an object, this parameter is referred to the number of its properties; setting min to 1 on a boolean field (ex. checkbox) is interpreted as "field required"; any other value is ignored for those kind of fields;
+    - **max**: *[number] (optional)* maximum length; if the value returned by the field is an object, this parameter is referred to the number of its properties; on input fields this will automatically set the "maxLength" property on the html `<input>` tag;
+    - **unique**: *[boolean / string] (optional)* specifies that field's value should be unique; can be true/false or 'autoset', that means that if unicity validation fails, a random id is appended to the field's value to make it unique; **Important**: the 'autoset' option is available only for *input* fields;
+    - **ignoreCaseForUnicity**: *[boolean] (optional)* if set to *true* the unicity check will be case insensitive; default *false*;
+    - **collectionForUnicityCheck**: *[string] (optional)* the collection where to perform unicity check for the field; if omitted, the unicity check is performed against schema's *__collection*;
+    - **showErrorOn**: *[string / array of strings]* the name (or array of names) of another field where to show errors relative of this field; this is useful if the current field is hidden and generated starting from other fields values (for example a hidden url-slug parameter generated dasherizing the field "name"; setting this to "name" will show validation errors for the url-slug field, that is invisible, on the "name" field, that is visible);
 - **style**: *[string] (optional)* wrapper css class for custom styling of the field;
 - **showOnly**: *[string ('create'/'update')] (optional)* defines if the field should be rendered only on creation or only on update; **IMPORTANT**: this option can be set also on a *skeleformGroup* object and will take effect on all fields of the group;
 - **replicaSet**: *[object] (optional)* defines the group as a replica set; that means that the field(s) will be replicable by the user who will be able to add or remove copies of this field(s);
   *Important:* this option doesn't work on a single field, but only on a skeleformGroup; if you need a single replicable field, you should define it inside a skeleformGroup.
-- - **name**: *[string] (mandatory)* the name for the replica set; must be unique in the form;
-- - **i18n**: *[boolean] (optional)* specify that the field will be prefixed with *"<:currentLang>---"*; this identifies the field as internationalized; by default the option is enabled; you should use this option only if you want to set it to false; (default *true*);
-- - **template**: *[string] (optional)* the name of the template to be used for replica actions; by default it's "skeleformDefaultReplicaBtns", a built-in template that will render a "+" and "-" buttons, that will make possible for the user to add or remove copies of the replica set;
-- - **minCopies**: *[number] (optional)* the minimum number of copies of the replica set allowed (default *1*);
-- - **maxCopies**: *[number] (optional)* the maximum number of copies of the replica set allowed (default *infinite*);
-- - **initCopies**: *[number] (optional)* the number of copies of the replica set to include in the form during the first render (default *1*);
-- - **indexes**: *[boolean] (optional)* if set to true will update a DOM element with class `skeleformReplicaIndex` within each replica with its current positional order; this is useful if you want to show the positional order of each set in the replica set; the DOM element with class `skeleformReplicaIndex` is added automatically;
-- - **sortable**: *[boolean] (optional)* makes the replica set sortable;
-- - **setClasses**: *[array of strings] (optional)* array of classes to use on the replica set's container div;
-- - **frameClasses**: *[array of strings] (optional)* array of classes to use on each replica item;
+  - **name**: *[string] (mandatory)* the name for the replica set; must be unique in the form;
+  - **i18n**: *[boolean] (optional)* specify that the field will be prefixed with *"<:currentLang>---"*; this identifies the field as internationalized; by default the option is enabled; you should use this option only if you want to set it to false; (default *true*);
+  - **template**: *[string] (optional)* the name of the template to be used for replica actions; by default it's "skeleformDefaultReplicaBtns", a built-in template that will render a "+" and "-" buttons, that will make possible for the user to add or remove copies of the replica set;
+  - **minCopies**: *[number] (optional)* the minimum number of copies of the replica set allowed (default *1*);
+  - **maxCopies**: *[number] (optional)* the maximum number of copies of the replica set allowed (default *infinite*);
+  - **initCopies**: *[number] (optional)* the number of copies of the replica set to include in the form during the first render (default *1*);
+  - **indexes**: *[boolean] (optional)* if set to true will update a DOM element with class `skeleformReplicaIndex` within each replica with its current positional order; this is useful if you want to show the positional order of each set in the replica set; the DOM element with class `skeleformReplicaIndex` is added automatically;
+  - **sortable**: *[boolean] (optional)* makes the replica set sortable;
+  - **setClasses**: *[array of strings] (optional)* array of classes to use on the replica set's container div;
+  - **frameClasses**: *[array of strings] (optional)* array of classes to use on each replica item;
 
 #### 2.2 Field specific options:
 
@@ -111,19 +111,22 @@ Creates a container `<div>` (empty); it's useful for putting into it any runtime
 - **autoRange**: *[boolean] (optional)* autoselect inner text when reached the max length defined for this field (default *false*);
 - **charCounter**: *[number] (optional)* enables the materializeCSS's character counter plugin; **IMPORTANT**: the character counter does not set the *"maxlength"* property on the input (this is done by using validation -> max);
 - **autocomplete**: *[object] (optional)* dictionary of options for the autocomplete plugin;
-- - **maxHeight**: *[string] (optional)* a css value for maxHeight property of the suggstions' container (default `301px`);
-- - **data**: *[array of objects/function] (required)* data source for the autocomplete plugin; it can be an array of objects or a function that returns an array of objects (in this case the function is re-executed every time the input's value is changed by the user);
-  each object in the array can have the following properties:
-- - - **name**: *[string] (required)* the name displayed in the suggestions list;
-- - - **value**: *[string] (optional)* the value that will be used to fill the input when user selects the suggestion; if no value is provided, `name` will be used instead;
+    - **maxHeight**: *[string] (optional)* a css value for maxHeight property of the suggstions' container (default `301px`);
+    - **showOnFocus**: *[boolean] (optional)* decides if the suggestion list should be opened also when the input gets the focus, while normally it's shown only when the user types in (default false);
+    - **data**: *[array of objects/function] (required)* data source for the autocomplete plugin; it can be an array of objects or a function that returns an array of objects (in this case the function is re-executed every time the input's value is changed by the user);
+      each object in the array can have the following properties:
+      - **name**: *[string] (required)* the name displayed in the suggestions list;
+      - **value**: *[string] (optional)* the value that will be used to fill the input when user selects the suggestion; if no value is provided, `name` will be used instead;
+      - **icon**: *[string] (optional)* a google material design icon's name to display next of the suggestion's text;
+      - **image**: *[string] (optional)* path to an image that will be displayed before the suggestion's text (should be square);
 
 
 #### 2.2.5 checkBox
 
 - **renderAs**: *[string] (optional)* type of boolean selector to display (available values: *"checkbox", "switch"*); default to *"checkbox"*;
 - **labels**: *[object] (optional)* to be used with *renderAs: "switch"*; can contain 2 (optionals) keys (*"on", "off"*) containing the two strings to be used as i18n strings for the respectives switch states; if it's not provided, the default *"yes_lbl"* and *"no_lbl"* are used;
-- - **on**: *[string] (optional)* i18n string for switch *"on"* state (default *"yes_lbl"*; note that *"_lbl"* is appended automatically);
-- - **off**: *[string] (optional)* i18n string for switch *"off"* state (default *"no_lbl"*; note that *"_lbl"* is appended automatically);
+    - **on**: *[string] (optional)* i18n string for switch *"on"* state (default *"yes_lbl"*; note that *"_lbl"* is appended automatically);
+    - **off**: *[string] (optional)* i18n string for switch *"off"* state (default *"no_lbl"*; note that *"_lbl"* is appended automatically);
 
 
 #### 2.2.6 editor
@@ -133,28 +136,28 @@ Creates a container `<div>` (empty); it's useful for putting into it any runtime
 - **height**: *[integer] (optional)* the pre-setted editor's height in pixels (default 400);
 - **minHeight**: *[integer] (optional)* the pre-setted editor's minimum height in pixels (default 100);
 - **image**: *[object] (optional)* an object that defines parameters to be used while inserting images:
-- - **quality**: *[float 0 ~ 1] (optional)* the quality of jpeg created;
-- - **width**: *[integer] (optional)* with of the image created;
-- - **height**: *[integer] (optional)* height of the image created;
+    - **quality**: *[float 0 ~ 1] (optional)* the quality of jpeg created;
+    - **width**: *[integer] (optional)* with of the image created;
+    - **height**: *[integer] (optional)* height of the image created;
 - **video**: *[object] (optional)* an object that defines parameters to be used while embeeding videos:
-- - **width**: *[integer] (optional)* width of the video frame;
-- - **height**: *[integer] (optional)* height of the video frame;
+    - **width**: *[integer] (optional)* width of the video frame;
+    - **height**: *[integer] (optional)* height of the video frame;
 
 
 #### 2.2.7 select
 
 - **source**: *[array of objects / mongo cursor / function] (required)* data source for options; must be an array of objects used to create the options of the field; the array can come from:
-- - **possibility 1** *[array of objects]* an hard-coded array of objects; each object should be in this form:
-- - - **label**: *[string] (required)* the i18n string to be used when displaying the option;
-- - - **value**: *[string/numeric/boolean] (required)* the value to be used for the option;
-- - - **icon**: *[string] (optional)* path to the icon to be used for the option;
-- - **possibility 2**: *[mongo cursor]* a cursor from a query on a mongo collection;
-- - **possibility 3**: *[function]* a function returning an array of objects; it receives the fieldInstance as a parameter;
+    - **possibility 1** *[array of objects]* an hard-coded array of objects; each object should be in this form:
+        - **label**: *[string] (required)* the i18n string to be used when displaying the option;
+        - **value**: *[string/numeric/boolean] (required)* the value to be used for the option;
+        - **icon**: *[string] (optional)* path to the icon to be used for the option;
+    - **possibility 2**: *[mongo cursor]* a cursor from a query on a mongo collection;
+    - **possibility 3**: *[function]* a function returning an array of objects; it receives the fieldInstance as a parameter;
 - **sourceValue**: *[string] (required if "source" is of type 2 or 3)* the name of the documents' field to be used as value in the option; it is possible to use the segment *":itemLang---"* that will be translated into the current language prefix;
 - **sourceName**: *[string] (required if "source" is of type 2 or 3)* the name of the documents' field to be used as display name in the option; it is possible to use the segment *":itemLang---"* that will be translated into the current language prefix;
 - **sourceNameTransformation**: *[object] (optional)* can contain two methods: *transform* and *antiTransform*, explained below;
-- - **transform(value, item)**: *[function] (required if *sourceNameTransformation* is defined)* a callback executed on every source's item; it receives the current *sourceName*'s value and the current item; transforms the value to be displayed in another form;
-- -  **antiTransform()** TO IMPLEMENT...
+    - **transform(value, item)**: *[function] (required if *sourceNameTransformation* is defined)* a callback executed on every source's item; it receives the current *sourceName*'s value and the current item; transforms the value to be displayed in another form;
+    - **antiTransform()** TO IMPLEMENT...
 - **icons**: *[boolean] (optional)* used to assign *"icons"* class for icons on options dropdown; **IMPORTANT**: it is required to be *true* if source is of type *1* and "icon" is setted on its elements;
 - **allowBlank**: *[boolean] (optional)* allow select none (default undefined option is created automatically);
 - **multi**: *[boolean] (optional)* defines the select as a *"multiple select"*; default to *false*;
@@ -189,12 +192,12 @@ This type of field automatically tests that the selected file(s) matches an imag
 - **placeholder**: *[string] (optional)* a i18n string to be used as placeholder in the input field;
 - **multiple**: *[boolean] (optional)* enable the file chooser to select multiple files at once (default false);
 - **thumbnail**: *[object] (optional)* dictionary of options for the thumbnail(s) to be created for selected images;
-- - **width**: *[number] (optional)* the width in pixels for the image thumbnail (default to 200);
-- - **height**: *[number] (optional)* the height in pixels for the image thumbnail (default to 200);
+    - **width**: *[number] (optional)* the width in pixels for the image thumbnail (default to 200);
+    - **height**: *[number] (optional)* the height in pixels for the image thumbnail (default to 200);
 - **image**: *[object] (optional)* dictionary of options for the image(s) to be uploaded;
-- - **maxWidth**: *[number] (optional)* max width in pixels for the image to be uploaded (default to 1000);
-- - **maxHeight**: *[number] (optional)* max height in pixels for the image to be uploaded (default to 1000);
-- - **quality**: *[number 0~1] (optional)* the quality used for dataUrl conversion of the image (default 1);
+    - **maxWidth**: *[number] (optional)* max width in pixels for the image to be uploaded (default to 1000);
+    - **maxHeight**: *[number] (optional)* max height in pixels for the image to be uploaded (default to 1000);
+    - **quality**: *[number 0~1] (optional)* the quality used for dataUrl conversion of the image (default 1);
 
 
 #### 3 SKELEFORMGROUP (DISPLAYING INLINE)
@@ -214,8 +217,8 @@ Every field in *Skeleform* must implement this methods:
 
 - **i18n(currentLang)**: *[function] (optional)* special handling required for i18n on the field; it receives the *"currentLang"* as a parameter;
 - **getValue()**: *[function] (mandatory)* must return the value of the field (formatted and ready to be saved in the db); if the field has *"shadowConfirm"* set to *true*, this method must return an object with two keys:
-- - **standard**: *[any] (required)* the normal field's value;
-- - **shadow**: the shadow-field's value;
+    - **standard**: *[any] (required)* the normal field's value;
+    - **shadow**: the shadow-field's value;
 - **isValid()**: *[function] (mandatory)* must perform validation on the field's value; it is called by skeleform before gathering values to be saved in the db; normally this is done by calling `Skeleform.validate.checkOptions()` from this method;
 - **setValue(value)**: *[function] (mandatory)* receives the current unformatted field value; must format it to be displayed (if required) and set it on the proper *DOM* element of the field;
 
