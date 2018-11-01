@@ -17,6 +17,10 @@
         {{/if}}
         <label for="{{field schema.name}}" class="active">{{label schema.name}}{{required}}</label>
 
+        {{#if (skeleformTest schema.autocomplete schema.autocomplete.multiple "and")}}
+            <div class="autocompleteSelected hide"></div>
+        {{/if}}
+
         <p class="skeleformFieldAlert"></p>
     </div>
     <!-- shadow confirm field -->

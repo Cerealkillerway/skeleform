@@ -179,7 +179,6 @@ Template.skeleformInput.onCreated(function() {
 
 Template.skeleformInput.onDestroyed(function() {
     let fields = this.data.formContext.fields;
-    let schema = self.data.fieldSchema.get();
 
     fields.removeAt(fields.indexOf(this));
 });
@@ -284,18 +283,60 @@ Template.skeleformInput.events({
         event.stopPropagation();
         let $target = $(event.currentTarget);
         let value = $target.data('value');
+        let schema = instance.data.fieldSchema.get();
+        let name;
 
-        if (!value) {
-            if ($target.find('img').length > 0) {
-                value = $target.contents().get(1).nodeValue
+        if ($target.find('img').length > 0) {
+            name = $target.contents().get(1).nodeValue
+        }
+        else {
+            name = $target.contents().get(0).nodeValue
+        }
+
+        // case multiple values
+        if (schema.autocomplete.multiple) {
+            let $selectedContainer = instance.$('.autocompleteSelected');
+            let $item = $('<div />', {
+                class: 'selectedSuggestion'
+            });
+            let $closeIcon = $('<i />', {
+                class: 'material-icons deleteSuggestion'
+            });
+
+            $item.text(name);
+            $item.attr('data-value', value);
+            $closeIcon.text('close');
+            $item.append($closeIcon);
+
+            $selectedContainer.append($item);
+
+            if ($selectedContainer.hasClass('hide')) {
+                $selectedContainer.removeClass('hide');
+            }
+
+        }
+        // case single value
+        else {
+            if (value) {
+                instance.setValue(value);
             }
             else {
-                value = $target.contents().get(0).nodeValue
+                instance.setValue(name);
             }
         }
 
-        instance.setValue(value);
         instance.$('.autocompleteContainer').slideUp(200);
+    },
+
+    'click .deleteSuggestion': function(event, instance) {
+        let $target = $(event.currentTarget);
+        let $selectedContainer = instance.$('.autocompleteSelected');
+
+        $target.parent('.selectedSuggestion').remove();
+
+        if ($selectedContainer.children().length === 0) {
+            $selectedContainer.addClass('hide');
+        }
     },
 
     'focus input, focus textarea': function(event, instance) {

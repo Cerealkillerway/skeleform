@@ -223,6 +223,33 @@
     }
 }
 
+.autocompleteSelected {
+    border: solid 2px $thirdPanelColor;
+
+    .selectedSuggestion {
+        padding: 7px 22px;
+
+        &:hover {
+            color: $secondPanelColorText;
+            background-color: $secondPanelColor;
+
+            .material-icons {
+                color: $secondPanelColorText;
+            }
+        }
+
+        &:not(:last-of-type) {
+            border-bottom: solid 1px lighten($thirdPanelColor, 35%);
+        }
+
+        .material-icons {
+            float: right;
+            cursor: pointer;
+            color: $secondPanelColor
+        }
+    }
+}
+
 
 // test page styles
 .skelePanelTest {

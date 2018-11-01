@@ -3,9 +3,9 @@ import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
 
 // update buttons (toolbar)
 Template.skeleformUpdateButtons.events({
-    'click .skeleformUpdate': function(event, template) {
+    'click .skeleformUpdate': function(event, instance) {
         let configuration = Skeletor.configuration;
-        let formContext = template.data.formContext;
+        let formContext = instance.data.formContext;
         let fields = formContext.fields;
         let documentId = formContext.item._id;
         let schema = formContext.schema;
@@ -29,7 +29,7 @@ Template.skeleformUpdateButtons.events({
 
         // if necessary launch form callbacks!
         if (schema.formCallbacks && schema.formCallbacks.beforeSave) {
-            data = schema.formCallbacks.beforeSave(template.data, data);
+            data = schema.formCallbacks.beforeSave(instance.data, data);
         }
 
         if (Skeleform.validate.skeleformValidateForm(data, fields)) {
@@ -47,7 +47,7 @@ Template.skeleformUpdateButtons.events({
                     $('#gearLoadingModal').closeModal();
                 }
 
-                Skeleform.utils.skeleformHandleResult(error, result, 'update', data, schema.__paths);
+                Skeleform.utils.skeleformHandleResult(error, result, 'update', data, schema, formContext.item);
             });
         }
     }

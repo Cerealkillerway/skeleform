@@ -146,15 +146,15 @@ Template.skeleformSelect.helpers({
         }
         return '';
     },
-    icon: function(option) {
-        if (option.icon) {
-            return option.icon;
+    image: function(option) {
+        if (option.image) {
+            return option.image;
         }
         return '';
     },
-    iconClasses: function(option) {
-        if (option.iconClasses) {
-            return option.iconClasses.join(' ');
+    imageClasses: function(option) {
+        if (option.imageClasses) {
+            return option.imageClasses.join(' ');
         }
         return '';
     }

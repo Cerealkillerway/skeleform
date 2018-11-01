@@ -152,7 +152,8 @@ Creates a container `<div>` (empty); it's useful for putting into it any runtime
     - **possibility 1** *[array of objects]* an hard-coded array of objects; each object should be in this form:
         - **label**: *[string] (required)* the i18n string to be used when displaying the option;
         - **value**: *[string/numeric/boolean] (required)* the value to be used for the option;
-        - **icon**: *[string] (optional)* path to the icon to be used for the option;
+        - **image**: *[string] (optional)* path to the image to be used for the option;
+        - **imageClasses**: *[array of strings] (optional)* a list of classes to assign to the option's image;
     - **possibility 2**: *[mongo cursor]* a cursor from a query on a mongo collection;
     - **possibility 3**: *[function]* a function returning an array of objects; it receives the fieldInstance as a parameter;
 - **sourceValue**: *[string] (required if "source" is of type 2 or 3)* the name of the documents' field to be used as value in the option; it is possible to use the segment *":itemLang---"* that will be translated into the current language prefix;
@@ -201,8 +202,7 @@ This type of field automatically tests that the selected file(s) matches an imag
     - **maxHeight**: *[number] (optional)* max height in pixels for the image to be uploaded (default to 1000);
     - **quality**: *[number 0~1] (optional)* the quality used for dataUrl conversion of the image (default 1);
 
-
-#### 3 SKELEFORMGROUP (DISPLAYING INLINE)
+### 3 SKELEFORMGROUP (DISPLAYING INLINE)
 
 By default every field is wrapped in a `<div class="row">`, but it's possible to display two or more fields in the same row by wrapping them into an object in the schema; this object must have this form:
 
