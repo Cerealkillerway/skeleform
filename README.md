@@ -5,7 +5,7 @@
     /_______  /__|_ \\___  >____/\___  >__|  \____/|__|  |__|_|  /
             \/     \/    \/          \/                        \/
 
-#### 0 INTRO
+### 0 INTRO
 
 **Skeleform** package is part of the **Skeletor** project and is not meant be used alone.
 
@@ -29,7 +29,7 @@ If you have any problem using it, please have a look to the "troubleshooting" se
 - **__paths**: *[object] (optional)* dictionary of paths to be used in different situations:
     - **undoPath**: *[string, object] (required)* specify the path to be used for cancel button; the string is the path definition (can contain ":" params), and the object is the params dictionary (NOT optional, pass empty object if no params are needed); the string 'this' used as a value in params object means that the value must be taken from skeleform's gathered data object. For itemLang param, the value 'auto' means that it is taken from the current route's URL;
     - **redirectOnCreate**: *[string, object] (optional)* specify the path to be used as a redirect after a succesful create; the string is the path definition (can contain ":" params), and the object is the params dictionary (NOT optional, pass empty object if no params are needed); the string 'this' used as a value in params object means that the value must be taken from skeleform's gathered data object. For itemLang param, the value 'auto' means that it is taken from the current route's URL; (default behaviour: clean the form and be ready for a new document);
-    - **redirectOnUpdate** : *[string, Object] (optional)* specify the path to be used as a redirect after a succesful update; the string is the path definition (can contain ":" params), and the object is the params dictionary (NOT optional, pass empty object if no params are needed); the string 'this' used as a value in params object means that the value must be taken from skeleform's gathered data object. For itemLang param, the value 'auto' means that it is taken from the current route's URL; (default behaviour: stay on the same page);
+    - **redirectOnUpdate** : *[string, Object] (optional)* specify the path to be used as a redirect after a succesful update; the string is the path definition (can contain ":" params), and the object is the params dictionary (NOT optional, pass empty object if no params are needed); the string `this` used as a value in params object means that the value must be taken from skeleform's gathered data object. For itemLang param, the value 'auto' means that it is taken from the current route's URL; (default behaviour: stay on the same page);
 - **__options**:
     - **loadingModal** *[boolean] (optional)*: if true use a loading modal while performing skeleform operations; default to false;
     - **tracked**: *[boolean] (optional)* if true save to each document data about user and timestamp of creation and last update; default to false;
@@ -117,10 +117,10 @@ Creates a container `<div>` (empty); it's useful for putting into it any runtime
       each object in the array can have the following properties:
 
         - **name**: *[string] (required)* the name displayed in the suggestions list;
-
         - **value**: *[string] (optional)* the value that will be used to fill the input when user selects the suggestion; if no value is provided, `name` will be used instead;
         - **icon**: *[string] (optional)* a google material design icon's name to display next of the suggestion's text;
         - **image**: *[string] (optional)* path to an image that will be displayed before the suggestion's text (should be square);
+      - **getName**: *[function] (optional)* if defined this function is called for every value when setting it on the field to retrieve the name to show for the selected value (if different from the value itself); the function receives the current value as parameter; if `undefined` the value is used also as name;
 
 
 #### 2.2.5 checkBox

@@ -22,12 +22,7 @@ function initializeAutocomplete(fieldInstance, showSuggestions) {
         data = schema.autocomplete.data(fieldInstance.getValue());
     }
     else {
-        if (isUpdating) {
-            return false;
-        }
-        else {
-            data = schema.autocomplete.data;
-        }
+        data = schema.autocomplete.data;
     }
 
     let $container = fieldInstance.$('.autocompleteContainer').find('.collection');
@@ -81,6 +76,28 @@ function hideAutocomplete(fieldInstance) {
     fieldInstance.$('.autocompleteContainer').slideUp(200);
 }
 
+// function to create selected placeholder for autocomplete with multiple option
+function appendSelected(instance, name, value) {
+    let $selectedContainer = instance.$('.autocompleteSelected');
+    let $item = $('<div />', {
+        class: 'selectedSuggestion'
+    });
+    let $closeIcon = $('<i />', {
+        class: 'material-icons deleteSuggestion'
+    });
+
+    $item.text(name);
+    $item.attr('data-value', value);
+    $closeIcon.text('close');
+    $item.append($closeIcon);
+
+    $selectedContainer.append($item);
+
+    if ($selectedContainer.hasClass('hide')) {
+        $selectedContainer.removeClass('hide');
+    }
+}
+
 
 // Helpers
 Template.skeleformInput.helpers(skeleformGeneralHelpers);
@@ -93,6 +110,7 @@ Template.skeleformInput.helpers({
 });
 
 
+// handle needed validation transformations
 handleGettedValue = function(value, schema) {
     if (!schema.validation) {
         return value;
@@ -126,17 +144,32 @@ Template.skeleformInput.onCreated(function() {
     this.getValue = () => {
         let value;
 
-        if (schema.shadowConfirm) {
-            value = {
-                standard: Skeleform.utils.$getFieldById(this, schema).val(),
-                shadow: $getShadowFieldId(this, schema).val()
-            };
+        if (schema.autocomplete && schema.autocomplete.multiple) {
+            let $selectedContainer = this.$('.autocompleteSelected');
+
+            value = [];
+
+            for (selected of $selectedContainer.find('.selectedSuggestion')) {
+                let $selected = $(selected);
+
+                value.push($selected.data('value'));
+            }
+
+            return value;
         }
         else {
-            value = Skeleform.utils.$getFieldById(this, schema).val();
-        }
+            if (schema.shadowConfirm) {
+                value = {
+                    standard: Skeleform.utils.$getFieldById(this, schema).val(),
+                    shadow: $getShadowFieldId(this, schema).val()
+                };
+            }
+            else {
+                value = Skeleform.utils.$getFieldById(this, schema).val();
+            }
 
-        return handleGettedValue(value, schema);
+            return handleGettedValue(value, schema);
+        }
     };
 
     this.isValid = () => {
@@ -165,7 +198,25 @@ Template.skeleformInput.onCreated(function() {
         let $field = Skeleform.utils.$getFieldById(this, schema);
 
         Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
-        $field.val(value);
+
+        if (schema.autocomplete && schema.autocomplete.multiple) {
+            this.$('.autocompleteSelected').empty();
+
+            for (selected of value) {
+                let name;
+
+                if (schema.autocomplete.getName) {
+                    name = schema.autocomplete.getName(selected);
+                }
+                else {
+                    name = selected;
+                }
+                appendSelected(this, name, selected);
+            }
+        }
+        else {
+            $field.val(value);
+        }
 
         // when setting a value, trigger autoresize if it's a textarea
         // as documented on materialize's docs:
@@ -295,25 +346,7 @@ Template.skeleformInput.events({
 
         // case multiple values
         if (schema.autocomplete.multiple) {
-            let $selectedContainer = instance.$('.autocompleteSelected');
-            let $item = $('<div />', {
-                class: 'selectedSuggestion'
-            });
-            let $closeIcon = $('<i />', {
-                class: 'material-icons deleteSuggestion'
-            });
-
-            $item.text(name);
-            $item.attr('data-value', value);
-            $closeIcon.text('close');
-            $item.append($closeIcon);
-
-            $selectedContainer.append($item);
-
-            if ($selectedContainer.hasClass('hide')) {
-                $selectedContainer.removeClass('hide');
-            }
-
+            appendSelected(instance, name, value);
         }
         // case single value
         else {

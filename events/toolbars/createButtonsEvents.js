@@ -43,7 +43,7 @@ Template.skeleformCreateButtons.events({
                 if (options.useModal) {
                     $('#gearLoadingModal').closeModal();
                 }
-                Skeleform.utils.skeleformHandleResult(error, result, 'create', data, schema);
+                Skeleform.utils.skeleformHandleResult(error, result, 'create', data, schema, formContext.item);
             });
         }
     }
