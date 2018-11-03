@@ -112,15 +112,20 @@ Creates a container `<div>` (empty); it's useful for putting into it any runtime
 - **charCounter**: *[number] (optional)* enables the materializeCSS's character counter plugin; **IMPORTANT**: the character counter does not set the *"maxlength"* property on the input (this is done by using validation -> max);
 - **autocomplete**: *[object] (optional)* dictionary of options for the autocomplete plugin;
     - **maxHeight**: *[string] (optional)* a css value for maxHeight property of the suggstions' container (default `301px`);
+
     - **showOnFocus**: *[boolean] (optional)* decides if the suggestion list should be opened also when the input gets the focus, while normally it's shown only when the user types in (default false);
+
     - **data**: *[array of objects/function] (required)* data source for the autocomplete plugin; it can be an array of objects or a function that returns an array of objects (in this case the function is re-executed every time the input's value is changed by the user);
+
+
+      it receives as parameters the current field's value, the current input box's value and the field's instance;
       each object in the array can have the following properties:
 
         - **name**: *[string] (required)* the name displayed in the suggestions list;
         - **value**: *[string] (optional)* the value that will be used to fill the input when user selects the suggestion; if no value is provided, `name` will be used instead;
         - **icon**: *[string] (optional)* a google material design icon's name to display next of the suggestion's text;
         - **image**: *[string] (optional)* path to an image that will be displayed before the suggestion's text (should be square);
-      - **getName**: *[function] (optional)* if defined this function is called for every value when setting it on the field to retrieve the name to show for the selected value (if different from the value itself); the function receives the current value as parameter; if `undefined` the value is used also as name;
+    - **getName**: *[function] (optional)* if defined this function is called for every value when setting it on the field to retrieve the name to show for the selected value (if different from the value itself); the function receives the current value as parameter; if `undefined` the value is used also as name;
 
 
 #### 2.2.5 checkBox

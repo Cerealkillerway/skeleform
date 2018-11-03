@@ -19,55 +19,71 @@ function initializeAutocomplete(fieldInstance, showSuggestions) {
     let data;
 
     if (_.isFunction(schema.autocomplete.data)) {
-        data = schema.autocomplete.data(fieldInstance.getValue());
+        data = schema.autocomplete.data(fieldInstance.getValue(), fieldInstance.getBoxValue(), fieldInstance);
     }
     else {
         data = schema.autocomplete.data;
+    }
+
+    if (!data) {
+        return false;
     }
 
     let $container = fieldInstance.$('.autocompleteContainer').find('.collection');
 
     $container.empty();
 
-    for (suggestion of data) {
-        let $suggestion = $('<li />', {
-            class: 'collection-item autocompleteSuggestion'
-        });
-
-        $suggestion.text(suggestion.name);
-
-        if (suggestion.value) {
-            $suggestion.data('value', suggestion.value);
-        }
-        if (suggestion.icon) {
-            let $secondaryContent = $('<span />', {
-                class: 'secondary-content'
-            });
-            let $icon = $('<i />', {
-                class: 'material-icons'
+    function setSuggestions(suggestionData) {
+        for (suggestion of suggestionData) {
+            let $suggestion = $('<li />', {
+                class: 'collection-item autocompleteSuggestion'
             });
 
-            $icon.text(suggestion.icon);
-            $secondaryContent.append($icon);
-            $suggestion.append($secondaryContent);
+            $suggestion.text(suggestion.name);
+
+            if (suggestion.value) {
+                $suggestion.data('value', suggestion.value);
+            }
+            if (suggestion.icon) {
+                let $secondaryContent = $('<span />', {
+                    class: 'secondary-content'
+                });
+                let $icon = $('<i />', {
+                    class: 'material-icons'
+                });
+
+                $icon.text(suggestion.icon);
+                $secondaryContent.append($icon);
+                $suggestion.append($secondaryContent);
+            }
+
+            if (suggestion.image) {
+                $suggestion.addClass('avatar');
+
+                let $image = $('<img />', {
+                    class: 'circle',
+                    src: suggestion.image
+                });
+
+                $suggestion.prepend($image);
+            }
+
+            $container.append($suggestion);
         }
 
-        if (suggestion.image) {
-            $suggestion.addClass('avatar');
-
-            let $image = $('<img />', {
-                class: 'circle',
-                src: suggestion.image
-            });
-
-            $suggestion.prepend($image);
+        if (showSuggestions) {
+            fieldInstance.$('.autocompleteContainer').slideDown(200);
         }
-
-        $container.append($suggestion);
     }
 
-    if (showSuggestions) {
-        fieldInstance.$('.autocompleteContainer').slideDown(200);
+    if (SkeleUtils.GlobalUtilities.isPromise(data)) {
+        data.then((result) => {
+            console.log(result);
+            setSuggestions(result);
+        });
+    }
+    else {
+        setSuggestions(data);
     }
 }
 
@@ -98,17 +114,20 @@ function appendSelected(instance, name, value) {
     }
 }
 
-
-// Helpers
-Template.skeleformInput.helpers(skeleformGeneralHelpers);
-Template.skeleformInput.helpers({
-    inputType: function(renderAs) {
-        if (!renderAs) return 'text';
-
-        return renderAs.toLowerCase();
+// gets the standard input value
+function getBoxValue(instance, schema) {
+    if (schema.shadowConfirm) {
+        value = {
+            standard: Skeleform.utils.$getFieldById(instance, schema).val(),
+            shadow: $getShadowFieldId(instance, schema).val()
+        };
     }
-});
+    else {
+        value = Skeleform.utils.$getFieldById(instance, schema).val();
+    }
 
+    return handleGettedValue(value, schema);
+}
 
 // handle needed validation transformations
 handleGettedValue = function(value, schema) {
@@ -130,6 +149,17 @@ handleGettedValue = function(value, schema) {
 
     return value;
 };
+
+
+// Helpers
+Template.skeleformInput.helpers(skeleformGeneralHelpers);
+Template.skeleformInput.helpers({
+    inputType: function(renderAs) {
+        if (!renderAs) return 'text';
+
+        return renderAs.toLowerCase();
+    }
+});
 
 
 // Events
@@ -158,19 +188,13 @@ Template.skeleformInput.onCreated(function() {
             return value;
         }
         else {
-            if (schema.shadowConfirm) {
-                value = {
-                    standard: Skeleform.utils.$getFieldById(this, schema).val(),
-                    shadow: $getShadowFieldId(this, schema).val()
-                };
-            }
-            else {
-                value = Skeleform.utils.$getFieldById(this, schema).val();
-            }
-
-            return handleGettedValue(value, schema);
+            return getBoxValue(this, schema);
         }
     };
+
+    this.getBoxValue = () => {
+        return getBoxValue(this, schema);
+    },
 
     this.isValid = () => {
         let formContext = this.data.formContext;
@@ -202,6 +226,9 @@ Template.skeleformInput.onCreated(function() {
         if (schema.autocomplete && schema.autocomplete.multiple) {
             this.$('.autocompleteSelected').empty();
 
+            if (!value) {
+                return false;
+            }
             for (selected of value) {
                 let name;
 
