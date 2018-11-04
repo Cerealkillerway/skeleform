@@ -187,13 +187,28 @@
     width: 100%;
     top: 50px;
     z-index: 1000;
-    padding-right: calc(2 * 0.75rem);
+    width: calc(100% - (2 * 0.75rem));
     background-color: $firstBackgroundColor;
+    max-height: 301px;
+    overflow: auto;
+    border: solid 2px $thirdPanelColor;
+
+    .skeleformAutocompleteProgress {
+        margin-top: 15px;
+        margin-bottom: 15px;
+        padding: 5px;
+        border-radius: 0;
+        background-color: $firstPanelColor !important;
+
+        .indeterminate {
+            background-color: $fourthPanelColor;
+        }
+    }
 
     .collection {
-        max-height: 301px;
-        overflow: auto;
-        border: solid 2px $thirdPanelColor;
+        margin: 0;
+        border: none;
+        border-radius: 0;
 
         &::-webkit-scrollbar {
             width: 17px;

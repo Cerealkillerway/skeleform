@@ -31,9 +31,9 @@ function initializeAutocomplete(fieldInstance, showSuggestions) {
 
     let $container = fieldInstance.$('.autocompleteContainer').find('.collection');
 
-    $container.empty();
-
     function setSuggestions(suggestionData) {
+        $container.empty();
+
         for (suggestion of suggestionData) {
             let $suggestion = $('<li />', {
                 class: 'collection-item autocompleteSuggestion'
@@ -76,10 +76,17 @@ function initializeAutocomplete(fieldInstance, showSuggestions) {
         }
     }
 
-    if (SkeleUtils.GlobalUtilities.isPromise(data)) {
-        data.then((result) => {
-            console.log(result);
-            setSuggestions(result);
+    if (data.onReadyCallback) {
+        Tracker.autorun((computation) => {
+            if (data.subscription.ready()) {
+                fieldInstance.$('.skeleformAutocompleteProgress').addClass('hide');
+                setSuggestions(data.onReadyCallback());
+                computation.stop();
+            }
+            else {
+                fieldInstance.$('.skeleformAutocompleteProgress').removeClass('hide');
+                fieldInstance.$('.autocompleteContainer').slideDown(200);
+            }
         });
     }
     else {
