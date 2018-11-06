@@ -293,7 +293,7 @@ Template.skeleformImageUpload.events = {
                             let id = schema.name.replace('.', '\\.');
 
                             if (!result.valid) {
-                                Skeleform.validate.setInvalid(id, schema, result);
+                                Skeleform.validate.setInvalid(id, schema, result, instance);
                             }
                             else {
                                 Skeleform.validate.skeleformSuccessStatus(id, schema);

@@ -8,7 +8,7 @@ Template.skeleformClockPicker.helpers({
     fieldClock: function(data, schema) {
         const instance = Template.instance();
 
-        Skeleform.utils.setFieldValue(instance, data, schema);
+        Skeleform.utils.setFieldValue(instance, data, schema, data.formContext);
     }
 });
 

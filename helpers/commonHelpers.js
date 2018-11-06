@@ -88,7 +88,7 @@ skeleformGeneralHelpers = {
             itemToRestore = formContext.autoSaves[formContext.autoSaves.length - 1];
         }
 
-        Skeleform.utils.setFieldValue(instance, itemToRestore, data.fieldSchema.get());
+        Skeleform.utils.setFieldValue(instance, itemToRestore, data.fieldSchema.get(), data.formContext);
     },
 
     formatClasses: skeleformStyleHelpers.formatClasses

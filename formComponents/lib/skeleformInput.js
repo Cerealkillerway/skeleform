@@ -347,7 +347,7 @@ Template.skeleformInput.events({
         let id = $(event.target).attr('id');
 
         if (!result.valid) {
-            Skeleform.validate.setInvalid(id, schema, result);
+            Skeleform.validate.setInvalid(id, schema, result, instance);
         }
         else {
             Skeleform.validate.skeleformSuccessStatus(id, schema);
