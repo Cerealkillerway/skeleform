@@ -47,7 +47,7 @@ Template.skeleformUpdateButtons.events({
                     $('#gearLoadingModal').closeModal();
                 }
 
-                Skeleform.utils.skeleformHandleResult(error, result, 'update', data, schema, formContext.item);
+                Skeleform.utils.skeleformHandleResult(error, result, 'update', data, schema, formContext);
             });
         }
     }

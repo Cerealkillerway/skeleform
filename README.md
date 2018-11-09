@@ -172,7 +172,8 @@ Creates a container `<div>` (empty); it's useful for putting into it any runtime
     - **transform(value, item)**: *[function] (required if *sourceNameTransformation* is defined)* a callback executed on every source's item; it receives the current *sourceName*'s value and the current item; transforms the value to be displayed in another form;
     - **antiTransform()** TO IMPLEMENT...
 - **icons**: *[boolean] (optional)* used to assign *"icons"* class for icons on options dropdown; **IMPORTANT**: it is required to be *true* if source is of type *1* and "icon" is setted on its elements;
-- **allowBlank**: *[boolean] (optional)* allow select none (default undefined option is created automatically);
+- **allowBlank**: *[boolean] (optional)* allow select none (default 'none' option is created automatically);
+- **blankValue**: *[string] (optional)* set the value to use for the default 'none' option (default: `''`, `undefined` and `null` are not allowed);
 - **multi**: *[boolean] (optional)* defines the select as a *"multiple select"*; default to *false*;
 
 **note**: if you want to dinamically add options to a select field, then you need to re-initialize the materialize's plugin by calling `material_select()` on it.

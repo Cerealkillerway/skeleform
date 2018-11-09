@@ -36,7 +36,7 @@
 
     .skeleformAlwaysActiveLabel {
         font-size: 0.8rem !important;
-        transform: translateY(-140%) !important;
+        //transform: translateY(-140%) !important;
     }
 
     /* --- icons --- */
@@ -138,16 +138,21 @@
 
             .replicaFrameBody {
                 position: relative;
-                background-color: darken($panelBackgroundColor, 11%);
-                padding: 25px 0 0 0;
+                background-color: darken($firstBackgroundColor, 3%);
+                padding: 0 5px 0 5px;
                 margin-bottom: 32px;
                 margin: 20px;
+                border: solid 2px $thirdPanelColor;
+
+                .row {
+                    margin-bottom: 0;
+                }
 
                 .skeleformReplicaIndex {
                     position: absolute;
                     top: 0;
                     left: 0 !important;
-                    background-color: darken($firstPanelColor, 15%);
+                    background-color: $thirdPanelColor;
                     color: $secondPanelColorText;
                     font-size: 22px;
                     text-align: center;
@@ -157,13 +162,16 @@
                 }
 
                 .skeleformReplicaHandle {
-                    height: 30px;
-                    background-color: darken($panelBackgroundColor, 39%);
-                    color: darken($panelBackgroundColor, 11%);
+                    height: 55px;
+                    background-color: $thirdPanelColor;
+                    color: darken($firstBackgroundColor, 11%);
                     position: relative;
+                    width: calc(100% + 10px);
                     top: 0;
+                    left: -5px;
                     cursor: move;
                     text-align: center;
+                    margin-bottom: 12px;
 
                     i {
                         margin-left: auto;

@@ -40,9 +40,15 @@ Template.skeleformSelect.helpers({
 
             // add blank option if needed
             if (schema.allowBlank) {
+                let blankValue = '';
+
+                if (schema.blankValue !== undefined) {
+                    blankValue = schema.blankValue;
+                }
+
                 result.push({
                     name: i18n.get('none_lbl'),
-                    value: '',
+                    value: blankValue,
                     //disabled: 'disabled',
                     selected: 'selected'
                 });
