@@ -1,4 +1,5 @@
-import { Random } from 'meteor/random'
+import { Random } from 'meteor/random';
+import AutoNumeric from 'autonumeric';
 
 
 // INPUT
@@ -249,6 +250,10 @@ Template.skeleformInput.onCreated(function() {
             }
         }
         else {
+            if (schema.renderAs === 'date') {
+                value = moment(value).format('YYYY-MM-DD');
+            }
+
             $field.val(value);
         }
 
@@ -276,34 +281,48 @@ Template.skeleformInput.onRendered(function() {
     let $field = Skeleform.utils.$getFieldById(self, schema);
     let autoNumericDefaults = {
         currency: {
-            aSep: ' ',
-            aDec: ',',
-            altDec: '.',
-            aSign: '€',
-            pSign: 's',
-            vMax: '999.99',
-            wEmpty: 'zero'
+            allowDecimalPadding: true,
+            caretPositonOnFocus: 'end',
+            currencySymbol: '€',
+            currencySymbolPlacement: 'p',
+            digitGroupSeparator: ' ',
+            decimalCharacter: ',',
+            decimalCharacterAlternative: '.',
+            decimalPlaces: 2,
+            decimalPlacesRawValue: 2,
+            emptyInputBehavior: 'null',
+            isCancellable: true,
+            leadingZero: 'deny'
         },
 
         float: {
-            aSep: ' ',
-            aDec: ',',
-            altDec: '.',
-            vMax: '999.99',
-            wEmpty: 'zero'
+            digitalGroupSpacing: '3',
+            decimalCharacter: ',',
+            decimalCharacterAlternative: '.',
+            digitGroupSeparator: ' ',
+            alwaysAllowDecimalCharacter: true,
+            caretPositonOnFocus: 'end',
+            isCancellable: true,
+            leadingZero: 'deny',
+            decimalPlaces: 6,
+            decimalPlacesRawValue: 6,
         },
 
         integer: {
-            mDec: '0',
-            vMax: '99',
-            wEmpty: 'zero'
+            digitalGroupSpacing: '3',
+            digitGroupSeparator: ' ',
+            caretPositonOnFocus: 'end',
+            decimalPlaces: 0,
+            decimalPlacesRawValue: 0,
+            isCancellable: true,
+            leadingZero: 'deny'
         }
     }
 
     // handle formats
     switch (schema.formatAs) {
         case 'currency':
-            $field.autoNumeric('init', schema.autoNumericOptions || autoNumericDefaults.currency);
+            new AutoNumeric($field[0], schema.autoNumericOptions || autoNumericDefaults.currency);
 
             $field.click(function() {
                 $(this).select();
@@ -311,11 +330,11 @@ Template.skeleformInput.onRendered(function() {
             break;
 
         case 'float':
-            $field.autoNumeric('init', schema.autoNumericOptions || autoNumericDefaults.float);
+            new AutoNumeric($field[0], schema.autoNumericOptions || autoNumericDefaults.float);
             break;
 
         case 'integer':
-            $field.autoNumeric('init', schema.autoNumericOptions || autoNumericDefaults.integer);
+            new AutoNumeric($field[0], schema.autoNumericOptions || autoNumericDefaults.integer);
             break;
 
         default:

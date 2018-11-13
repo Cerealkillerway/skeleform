@@ -66,7 +66,6 @@ Package.onUse(function(api) {
     // libraries
     api.addFiles([
         'lib/editEvents.js',
-        'lib/autoNumeric.js',
         'lib/utils.js',
         //'lib/materialize.clockpicker.js',
         //'lib/timepickersConflictResolver.js',
@@ -120,7 +119,8 @@ Package.onUse(function(api) {
 });
 
 Npm.depends({
-    'sortablejs': '1.7.0'
+    'sortablejs': '1.7.0',
+    'autonumeric': '4.5.1'
 });
 
 Package.onTest(function(api) {

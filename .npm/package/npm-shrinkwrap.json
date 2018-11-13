@@ -1,6 +1,11 @@
 {
   "lockfileVersion": 1,
   "dependencies": {
+    "autonumeric": {
+      "version": "4.5.1",
+      "resolved": "https://registry.npmjs.org/autonumeric/-/autonumeric-4.5.1.tgz",
+      "integrity": "sha512-NMNaidOYLP9CnDnD9oHhUeyBQXzGLrazidcE9qWHYygP86QZ6A7bsLC4PA39QzGeEdiVr597lrMvC+yGuXcsCw=="
+    },
     "sortablejs": {
       "version": "1.7.0",
       "resolved": "https://registry.npmjs.org/sortablejs/-/sortablejs-1.7.0.tgz",
