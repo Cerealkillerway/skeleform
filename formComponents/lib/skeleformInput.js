@@ -231,6 +231,10 @@ Template.skeleformInput.onCreated(function() {
 
         Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
 
+        if ((!value || value.length === 0) && schema.setDefaultValue) {
+            value = schema.setDefaultValue();
+        }
+
         if (schema.autocomplete && schema.autocomplete.multiple) {
             this.$('.autocompleteSelected').empty();
 
@@ -251,7 +255,12 @@ Template.skeleformInput.onCreated(function() {
         }
         else {
             if (schema.renderAs === 'date') {
-                value = moment(value).format('YYYY-MM-DD');
+                if (value.length > 0) {
+                    value = moment(value).format('YYYY-MM-DD');
+                }
+                else {
+                    value = null;
+                }
             }
 
             $field.val(value);

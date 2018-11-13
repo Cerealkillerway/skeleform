@@ -58,7 +58,7 @@ skeleformGeneralHelpers = {
         let instance = Template.instance();
         let validationOptions = this.fieldSchema.get().validation;
 
-        if ((validationOptions && validationOptions.min !== undefined) || validationOptions && validationOptions.type === 'date') {
+        if (validationOptions && validationOptions.min !== undefined) {
             return ' *';
         }
         return '';
