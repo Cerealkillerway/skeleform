@@ -17,6 +17,7 @@ If you have any problem using it, please have a look to the "troubleshooting" se
 ### 1 SCHEMA OPTIONS
 
 - **__collection**: *[string] (required)* name of collection that is manipulated by this form;
+- **__subManager**: *[string] (optional)* name of the subscription manager to use;
 - **__toolbar**: *[object] (optional)*
     - **template**: *[string] (optional)* name of alternative template to use as a toolbar; it receives the skeleform's data context as data context;
     - **containerId**: *[string] (optional/available only if "template"option is used)* id of DOM element to place the toolbar in;

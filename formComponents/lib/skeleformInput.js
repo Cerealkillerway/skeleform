@@ -255,7 +255,7 @@ Template.skeleformInput.onCreated(function() {
         }
         else {
             if (schema.renderAs === 'date') {
-                if (value.length > 0) {
+                if (value && value.length > 0) {
                     value = moment(value).format('YYYY-MM-DD');
                 }
                 else {
