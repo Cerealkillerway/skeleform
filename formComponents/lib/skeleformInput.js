@@ -131,7 +131,12 @@ function getBoxValue(instance, schema) {
         };
     }
     else {
-        value = Skeleform.utils.$getFieldById(instance, schema).val();
+        if (instance.autonumericInstance) {
+            value = instance.autonumericInstance.get();
+        }
+        else {
+            value = Skeleform.utils.$getFieldById(instance, schema).val();
+        }
     }
 
     return handleGettedValue(value, schema);
@@ -263,7 +268,12 @@ Template.skeleformInput.onCreated(function() {
                 }
             }
 
-            $field.val(value);
+            if (this.autonumericInstance) {
+                this.autonumericInstance.set(value);
+            }
+            else {
+                $field.val(value);
+            }
         }
 
         // when setting a value, trigger autoresize if it's a textarea
@@ -284,6 +294,8 @@ Template.skeleformInput.onDestroyed(function() {
 
 
 Template.skeleformInput.onRendered(function() {
+    this.autonumericInstance = false;
+
     let self = this;
     let schema = self.data.fieldSchema.get();
     let id = schema.name;
@@ -331,7 +343,7 @@ Template.skeleformInput.onRendered(function() {
     // handle formats
     switch (schema.formatAs) {
         case 'currency':
-            new AutoNumeric($field[0], schema.autoNumericOptions || autoNumericDefaults.currency);
+            self.autonumericInstance = new AutoNumeric($field[0], schema.autoNumericOptions || autoNumericDefaults.currency);
 
             $field.click(function() {
                 $(this).select();
@@ -339,11 +351,11 @@ Template.skeleformInput.onRendered(function() {
             break;
 
         case 'float':
-            new AutoNumeric($field[0], schema.autoNumericOptions || autoNumericDefaults.float);
+            self.autonumericInstance = new AutoNumeric($field[0], schema.autoNumericOptions || autoNumericDefaults.float);
             break;
 
         case 'integer':
-            new AutoNumeric($field[0], schema.autoNumericOptions || autoNumericDefaults.integer);
+            self.autonumericInstance = new AutoNumeric($field[0], schema.autoNumericOptions || autoNumericDefaults.integer);
             break;
 
         default:
