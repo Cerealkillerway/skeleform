@@ -23,7 +23,7 @@ Template.skeleformTimePicker.onCreated(function() {
     this.initOptions = {};
 
     this.i18n = (currentLang) => {
-        this.pickerInstance.component.settings.clear = i18n.get('pickadateButtons_labels').split(' ')[1];
+        this.pickerInstance.component.settings.clear = Skeletor.Skelelang.i18n.get('pickadateButtons_labels').split(' ')[1];
         this.pickerInstance.render();
     };
 

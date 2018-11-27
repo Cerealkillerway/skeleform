@@ -20,18 +20,18 @@ Template.skeleformDatePicker.onCreated(function() {
     this.i18n = () => {
         let pickerInstance = this.pickerInstance;
 
-        pickerInstance.component.settings.monthsFull = i18n.get('monthsFull_labels').split(' ');
-        pickerInstance.component.settings.monthsShort = i18n.get('monthsShort_labels').split(' ');
-        pickerInstance.component.settings.weekdaysFull = i18n.get('weekDaysFull_labels').split(' ');
-        pickerInstance.component.settings.weekdaysShort = i18n.get('weekDaysShort_labels').split(' ');
-        pickerInstance.component.settings.weekdaysLetter = i18n.get('weekDaysSingle_labels').split(' ');
-        pickerInstance.component.settings.today = i18n.get('pickadateButtons_labels').split(' ')[0];
-        pickerInstance.component.settings.clear = i18n.get('pickadateButtons_labels').split(' ')[1];
-        pickerInstance.component.settings.close = i18n.get('pickadateButtons_labels').split(' ')[2];
-        pickerInstance.component.settings.labelMonthNext = i18n.get('pickadateNav_next');
-        pickerInstance.component.settings.labelMonthPrev = i18n.get('pickadateNav_prev');
-        pickerInstance.component.settings.labelMonthSelect = i18n.get('monthSelect_label');
-        pickerInstance.component.settings.labelYearSelect = i18n.get('yearSelect_label');
+        pickerInstance.component.settings.monthsFull = Skeletor.Skelelang.i18n.get('monthsFull_labels').split(' ');
+        pickerInstance.component.settings.monthsShort = Skeletor.Skelelang.i18n.get('monthsShort_labels').split(' ');
+        pickerInstance.component.settings.weekdaysFull = Skeletor.Skelelang.i18n.get('weekDaysFull_labels').split(' ');
+        pickerInstance.component.settings.weekdaysShort = Skeletor.Skelelang.i18n.get('weekDaysShort_labels').split(' ');
+        pickerInstance.component.settings.weekdaysLetter = Skeletor.Skelelang.i18n.get('weekDaysSingle_labels').split(' ');
+        pickerInstance.component.settings.today = Skeletor.Skelelang.i18n.get('pickadateButtons_labels').split(' ')[0];
+        pickerInstance.component.settings.clear = Skeletor.Skelelang.i18n.get('pickadateButtons_labels').split(' ')[1];
+        pickerInstance.component.settings.close = Skeletor.Skelelang.i18n.get('pickadateButtons_labels').split(' ')[2];
+        pickerInstance.component.settings.labelMonthNext = Skeletor.Skelelang.i18n.get('pickadateNav_next');
+        pickerInstance.component.settings.labelMonthPrev = Skeletor.Skelelang.i18n.get('pickadateNav_prev');
+        pickerInstance.component.settings.labelMonthSelect = Skeletor.Skelelang.i18n.get('monthSelect_label');
+        pickerInstance.component.settings.labelYearSelect = Skeletor.Skelelang.i18n.get('yearSelect_label');
 
         //pickerInstance.render();
         // set again the value to translate also in the input box
@@ -67,18 +67,18 @@ Template.skeleformDatePicker.onRendered(function() {
 
     // activates validation on set
     this.initOptions = {
-        monthsFull: i18n.get("monthsFull_labels").split(' '),
-        monthsShort: i18n.get('monthsShort_labels').split(' '),
-        weekdaysFull: i18n.get('weekDaysFull_labels').split(' '),
-        weekdaysShort: i18n.get('weekDaysShort_labels').split(' '),
-        weekdaysLetter: i18n.get('weekDaysSingle_labels').split(' '),
-        today: i18n.get('pickadateButtons_labels').split(' ')[0],
-        clear: i18n.get('pickadateButtons_labels').split(' ')[1],
-        close: i18n.get('pickadateButtons_labels').split(' ')[2],
-        labelMonthNext: i18n.get('pickadateNav_next'),
-        labelMonthPrev: i18n.get('pickadateNav_prev'),
-        labelMonthSelect: i18n.get('monthSelect_label'),
-        labelYearSelect: i18n.get('yearSelect_label'),
+        monthsFull: Skeletor.Skelelang.i18n.get("monthsFull_labels").split(' '),
+        monthsShort: Skeletor.Skelelang.i18n.get('monthsShort_labels').split(' '),
+        weekdaysFull: Skeletor.Skelelang.i18n.get('weekDaysFull_labels').split(' '),
+        weekdaysShort: Skeletor.Skelelang.i18n.get('weekDaysShort_labels').split(' '),
+        weekdaysLetter: Skeletor.Skelelang.i18n.get('weekDaysSingle_labels').split(' '),
+        today: Skeletor.Skelelang.i18n.get('pickadateButtons_labels').split(' ')[0],
+        clear: Skeletor.Skelelang.i18n.get('pickadateButtons_labels').split(' ')[1],
+        close: Skeletor.Skelelang.i18n.get('pickadateButtons_labels').split(' ')[2],
+        labelMonthNext: Skeletor.Skelelang.i18n.get('pickadateNav_next'),
+        labelMonthPrev: Skeletor.Skelelang.i18n.get('pickadateNav_prev'),
+        labelMonthSelect: Skeletor.Skelelang.i18n.get('monthSelect_label'),
+        labelYearSelect: Skeletor.Skelelang.i18n.get('yearSelect_label'),
 
         onSet: (context) => {
             // perform validation and callback invocation on change

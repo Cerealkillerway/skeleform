@@ -33,16 +33,16 @@ skeleformGeneralHelpers = {
 
         switch(options) {
             case 'shadowConfirm':
-            return i18n.get(name + 'ShadowConfirm_lbl');
+            return Skeletor.Skelelang.i18n.get(name + 'ShadowConfirm_lbl');
 
             case 'title':
-            return i18n.get(name + '_title');
+            return Skeletor.Skelelang.i18n.get(name + '_title');
 
             case 'text':
-            return i18n.get(name + '_text');
+            return Skeletor.Skelelang.i18n.get(name + '_text');
 
             default:
-            return i18n.get(name + '_lbl');
+            return Skeletor.Skelelang.i18n.get(name + '_lbl');
         }
     },
 
@@ -98,6 +98,6 @@ skeleformGeneralHelpers = {
 toolbarsHelpers = {
     makeUndoPath: function(path) {
         let params = Skeleform.utils.createPath(path);
-        return FlowRouter.path(path[0], params.params, {lang: i18n.currentLocale.get()});
+        return FlowRouter.path(path[0], params.params, {lang: Skeletor.Skelelang.i18n.currentLocale.get()});
     }
 };

@@ -19,7 +19,7 @@ Template.skeleformPrintFunctions.events({
         }
 
         function addPage($container, pageNumber, pageOptions, content) {
-            $container.append('<h3 class="skeleformPrintPageTitle">' + i18n.get("page_lbl") + ' ' + (pageNumber) + ' / <span class="skeleformTotalPagesCounter">...</span></h3>');
+            $container.append('<h3 class="skeleformPrintPageTitle">' + Skeletor.Skelelang.i18n.get("page_lbl") + ' ' + (pageNumber) + ' / <span class="skeleformTotalPagesCounter">...</span></h3>');
             let $page = $('<div>', {
                 class: 'skeleformPrintPage',
                 css: {

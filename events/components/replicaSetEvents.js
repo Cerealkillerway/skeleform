@@ -81,7 +81,7 @@ Template.skeleformDefaultReplicaBtns.events({
         }
 
         if (formContext.replicas[replicaName].length >= replicaOptions.maxCopies) {
-            Materialize.toast(i18n.get('maxReplicaCopies_error', replicaOptions.maxCopies), 5000, 'error');
+            Materialize.toast(Skeletor.Skelelang.i18n.get('maxReplicaCopies_error', replicaOptions.maxCopies), 5000, 'error');
             SkeleUtils.GlobalUtilities.logger('Tried to add more replicaItems than maxCopies (' + replicaOptions.maxCopies + ')', 'skeleWarning');
             return;
         }
@@ -125,7 +125,7 @@ Template.skeleformDefaultReplicaBtns.events({
         }
 
         if (formContext.replicas[replicaName].length <= replicaOptions.minCopies) {
-            Materialize.toast(i18n.get('minReplicaCopies_error', replicaOptions.minCopies), 5000, 'error');
+            Materialize.toast(Skeletor.Skelelang.i18n.get('minReplicaCopies_error', replicaOptions.minCopies), 5000, 'error');
             SkeleUtils.GlobalUtilities.logger('Tried to remove more replicaItems than minCopies (' + replicaOptions.minCopies + ')', 'skeleWarning');
             return;
         }

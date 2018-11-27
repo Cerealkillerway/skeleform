@@ -29,7 +29,7 @@ Template.skeleformImageUpload.helpers({
         }
         name = name.join('');
 
-        return i18n.get(name + '_lbl');
+        return Skeletor.Skelelang.i18n.get(name + '_lbl');
     },
 
     isMultiple: function(schema) {
@@ -219,7 +219,7 @@ Template.skeleformImageUpload.events = {
 
         _.each(images, function(image, index) {
             if (!image.type.match('image.*')) {
-                Materialize.toast(i18n.get('invalidImage_error'), 5000, 'error');
+                Materialize.toast(Skeletor.Skelelang.i18n.get('invalidImage_error'), 5000, 'error');
                 SkeleUtils.GlobalUtilities.logger('skipping image ' + index + ': invalid type', 'skeleformField');
             }
             else {

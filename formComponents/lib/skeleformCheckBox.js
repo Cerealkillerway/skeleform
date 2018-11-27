@@ -21,15 +21,15 @@ Template.skeleformCheckBox.helpers({
 
         if (type === 'off') {
             if (schema.labels && schema.labels.off) {
-                return i18n.get(schema.labels.off + '_lbl');
+                return Skeletor.Skelelang.i18n.get(schema.labels.off + '_lbl');
             }
-            return i18n.get('no_lbl');
+            return Skeletor.Skelelang.i18n.get('no_lbl');
         }
         else {
             if (schema.labels && schema.labels.on) {
-                return i18n.get(schema.labels.on + '_lbl');
+                return Skeletor.Skelelang.i18n.get(schema.labels.on + '_lbl');
             }
-            return i18n.get('yes_lbl');
+            return Skeletor.Skelelang.i18n.get('yes_lbl');
         }
     }
 });

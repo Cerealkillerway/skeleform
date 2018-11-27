@@ -39,7 +39,8 @@ If you have any problem using it, please have a look to the "troubleshooting" se
     - **update**: *[string] (optional)* name of custom method to be called when updating a document (default to `skeleUpdateDocument`);
     - **delete**: *[string] (optional)* name of custom method to be called for deleting documents (default to `skeleDeleteDocument`);
 - **__listView**: *[object] (optional)* skelelist options; see the **Skelelist package**'s *readme* for details;
-- **fields**: *[Array of Objects] (mandatory)* each object in this array represents a field that can have the following properties:
+- **fields**: *[Array of Objects] (mandatory)* each object in this array represents a field that can have the properties listed in paragraph 2.1 (common options) and following (field type specific options);
+- **extraFieldsAllowed**: *[Array of Objects] (optional)* each object in this array contains name and validation rules for extra fields (computed, dynamically added...) that, if not listed here, will be rejected by validation...
 - **formCallbacks**: *[object] (optional)* dictionary of callbacks executed on the form;
     - **onRendered(currentDocument, formInstance)**: *[function] (optional)* callback fired when the form is rendered; it receives the currentDocument (if any) and the form instance as arguments;
     - **beforeSave(formDataContext, gatheredValue)**: *[function] (optional)* callback executed just before saving (before creating and before updating) the form; it receives the form's data context and the values of all form's field gathered by Skeleform;
@@ -66,6 +67,7 @@ If you have any problem using it, please have a look to the "troubleshooting" se
     - **ignoreCaseForUnicity**: *[boolean] (optional)* if set to *true* the unicity check will be case insensitive; default *false*;
     - **collectionForUnicityCheck**: *[string] (optional)* the collection where to perform unicity check for the field; if omitted, the unicity check is performed against schema's *__collection*;
     - **showErrorOn**: *[string / array of strings]* the name (or array of names) of another field where to show errors relative of this field; this is useful if the current field is hidden and generated starting from other fields values (for example a hidden url-slug parameter generated dasherizing the field "name"; setting this to "name" will show validation errors for the url-slug field, that is invisible, on the "name" field, that is visible);
+    - **showErrorFor**: *[string / array of strings]* the name (or array of names) of special error.reason(s) that needs to be displayed on this field; this will handle special errors not due to field's validation rules (for example "Email already exists." error when creating a new meteor user);
 - **style**: *[string] (optional)* wrapper css class for custom styling of the field;
 - **showOnly**: *[string ('create'/'update')] (optional)* defines if the field should be rendered only on creation or only on update; **IMPORTANT**: this option can be set also on a *skeleformGroup* object and will take effect on all fields of the group;
 - **replicaSet**: *[object] (optional)* defines the group as a replica set; that means that the field(s) will be replicable by the user who will be able to add or remove copies of this field(s);

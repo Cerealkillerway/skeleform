@@ -19,7 +19,7 @@ Template.skeleformSelect.helpers({
 
             if (schema.blankValue) {
                 result.push({
-                    name: i18n.get('none_lbl'),
+                    name: Skeletor.Skelelang.i18n.get('none_lbl'),
                     value: schema.blankValue
                 });
             }
@@ -47,7 +47,7 @@ Template.skeleformSelect.helpers({
                 }
 
                 result.push({
-                    name: i18n.get('none_lbl'),
+                    name: Skeletor.Skelelang.i18n.get('none_lbl'),
                     value: blankValue,
                     //disabled: 'disabled',
                     selected: 'selected'
@@ -136,9 +136,9 @@ Template.skeleformSelect.helpers({
         }
 
         for (source of schema.source) {
-            let currentLang = i18n.currentLocale.get();
+            let currentLang = Skeletor.Skelelang.i18n.currentLocale.get();
 
-            source.name = i18n.get(currentLang, source.label);
+            source.name = Skeletor.Skelelang.i18n.get(currentLang, source.label);
         }
 
         return schema.source;

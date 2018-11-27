@@ -144,7 +144,7 @@ Template.skeleformEditor.events({
         let label = $(event.target).parent('.skeleEditorBtn').data('label') + '_lbl'
         let $commandDescription = template.$('.skeleEditorToolbarDescription');
 
-        label = i18n.get(label);
+        label = Skeletor.Skelelang.i18n.get(label);
 
         $commandDescription.html(label);
         $commandDescription.stop(true, false).animate({opacity: 1}, 300);
