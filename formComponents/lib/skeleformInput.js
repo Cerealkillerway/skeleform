@@ -373,7 +373,7 @@ Template.skeleformInput.onRendered(function() {
         self.$('.autocompleteContainer').find('.collection').css({maxHeight: schema.autocomplete.maxHeight});
     }
 
-    self.isActivated.set(true);
+    this.isActivated.set(true);
     Skeleform.utils.InvokeCallback(this, null, schema, 'onRendered');
 });
 

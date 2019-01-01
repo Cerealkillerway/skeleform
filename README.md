@@ -158,17 +158,18 @@ Creates a container `<div>` (empty); it's useful for putting into it any runtime
     - **width**: *[integer] (optional)* width of the video frame;
     - **height**: *[integer] (optional)* height of the video frame;
 
-
 #### 2.2.7 select
 
-- **source**: *[array of objects / mongo cursor / function] (required)* data source for options; must be an array of objects used to create the options of the field; the array can come from:
-    - **possibility 1** *[array of objects]* an hard-coded array of objects; each object should be in this form:
+-   **subscription**: *[function]* this function offers the chance to subscribe to data needed by the field and not already subscribed by the parent template; must return a ready handle;
+-   **source**: *[array of objects / mongo cursor / function] (required)* data source for options; must be an array of objects used to create the options of the field; the array can come from:
+
+- - **possibility 1** *[array of objects]* an hard-coded array of objects; each object should be in this form:
         - **label**: *[string] (required)* the i18n string to be used when displaying the option;
         - **value**: *[string/numeric/boolean] (required)* the value to be used for the option;
         - **image**: *[string] (optional)* path to the image to be used for the option;
         - **imageClasses**: *[array of strings] (optional)* a list of classes to assign to the option's image;
     - **possibility 2**: *[mongo cursor]* a cursor from a query on a mongo collection;
-    - **possibility 3**: *[function]* a function returning an array of objects; it receives the fieldInstance as a parameter;
+    - **possibility 3**: *[function]* a function returning an array of objects or a mongo cursor; it receives the fieldInstance as a parameter;
 - **sourceValue**: *[string] (required if "source" is of type 2 or 3)* the name of the documents' field to be used as value in the option; it is possible to use the segment *":itemLang---"* that will be translated into the current language prefix;
 - **sourceName**: *[string] (required if "source" is of type 2 or 3)* the name of the documents' field to be used as display name in the option; it is possible to use the segment *":itemLang---"* that will be translated into the current language prefix;
 - **sourceNameTransformation**: *[object] (optional)* can contain two methods: *transform* and *antiTransform*, explained below;

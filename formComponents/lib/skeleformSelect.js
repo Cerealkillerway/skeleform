@@ -14,6 +14,11 @@ Template.skeleformSelect.helpers({
 
         // if source field is a query result, then build the option objects using
         // defined "sourceName" and "sourceValue" fields
+
+        if (schema.subscription) {
+            instance.data.formContext.skeleSubsReady.set(instance.data.formContext.skeleSubsReady && schema.subscription());
+        }
+
         if (schema.sourceValue) {
             let result = [];
 
@@ -252,12 +257,6 @@ Template.skeleformSelect.onRendered(function() {
     // start plugin
     let $field = Skeleform.utils.$getFieldById(this, schema);
     let $options = $field.children('option');
-
-    /*if (schema.allowBlank) {
-        console.log('allowblank');
-        $field.children().first().prop('selected, true');
-        console.log($field.children().first());
-    }*/
 
     $field.material_select();
     this.isActivated.set(true);
