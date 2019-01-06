@@ -16,7 +16,7 @@ Template.skeleformSelect.helpers({
         // defined "sourceName" and "sourceValue" fields
 
         if (schema.subscription) {
-            instance.data.formContext.skeleSubsReady.set(instance.data.formContext.skeleSubsReady && schema.subscription());
+            instance.data.formContext.skeleSubsReady.set(instance.data.formContext.skeleSubsReady && schema.subscription(instance));
         }
 
         if (schema.sourceValue) {

@@ -160,7 +160,7 @@ Creates a container `<div>` (empty); it's useful for putting into it any runtime
 
 #### 2.2.7 select
 
--   **subscription**: *[function]* this function offers the chance to subscribe to data needed by the field and not already subscribed by the parent template; must return a ready handle;
+-   **subscription**: *[function]* this function offers the chance to subscribe to data needed by the field and not already subscribed by the parent template; it receives the field's instance as a parameter and must return a ready handle;
 -   **source**: *[array of objects / mongo cursor / function] (required)* data source for options; must be an array of objects used to create the options of the field; the array can come from:
 
 - - **possibility 1** *[array of objects]* an hard-coded array of objects; each object should be in this form:

@@ -1,0 +1,24 @@
+<template name="skeleformList">
+    <div class="row">
+        <div class="col s12 m6">
+            <ul class="skeleformListItems collection">
+                {{#each data}}
+                    <li class="collection-item">
+                        {{#each fieldSchema.displayValues}}
+                            {{#if this.isIcon}}
+                                <i class="material-icons left">{{displayValue this ..}}</i>
+                            {{else}}
+                                {{displayValue this ..}}
+                            {{/if}}
+                        {{/each}}
+                        <span class="hide sortableValue">{{displayValue (fieldSchema.value) this}}</span>
+
+                        {{#if fieldSchema.sortable}}
+                            <i class="material-icons right pointer dragHandle">{{dragHandleIcon}}</i>
+                        {{/if}}
+                    </li>
+                {{/each}}
+            </ul>
+        </div>
+    </div>
+</template>
