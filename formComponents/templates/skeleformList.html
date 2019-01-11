@@ -1,10 +1,11 @@
 <template name="skeleformList">
     <div class="row">
         <div class="col s12 m6">
-            <ul class="skeleformListItems collection">
+            {{fieldValue}}
+            <ul id="{{field schema.name}}" class="skeleformListItems collection {{skeleClasses}}">
                 {{#each data}}
                     <li class="collection-item">
-                        {{#each fieldSchema.displayValues}}
+                        {{#each displayValues fieldSchema}}
                             {{#if this.isIcon}}
                                 <i class="material-icons left">{{displayValue this ..}}</i>
                             {{else}}

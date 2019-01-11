@@ -164,10 +164,10 @@ Creates a container `<div>` (empty); it's useful for putting into it any runtime
 -   **source**: *[array of objects / mongo cursor / function] (required)* data source for options; must be an array of objects used to create the options of the field; the array can come from:
 
 - - **possibility 1** *[array of objects]* an hard-coded array of objects; each object should be in this form:
-        - **label**: *[string] (required)* the i18n string to be used when displaying the option;
-        - **value**: *[string/numeric/boolean] (required)* the value to be used for the option;
-        - **image**: *[string] (optional)* path to the image to be used for the option;
-        - **imageClasses**: *[array of strings] (optional)* a list of classes to assign to the option's image;
+    ​    - **label**: *[string] (required)* the i18n string to be used when displaying the option;
+    ​    - **value**: *[string/numeric/boolean] (required)* the value to be used for the option;
+    ​    - **image**: *[string] (optional)* path to the image to be used for the option;
+    ​    - **imageClasses**: *[array of strings] (optional)* a list of classes to assign to the option's image;
     - **possibility 2**: *[mongo cursor]* a cursor from a query on a mongo collection;
     - **possibility 3**: *[function]* a function returning an array of objects or a mongo cursor; it receives the fieldInstance as a parameter;
 - **sourceValue**: *[string] (required if "source" is of type 2 or 3)* the name of the documents' field to be used as value in the option; it is possible to use the segment *":itemLang---"* that will be translated into the current language prefix;
@@ -216,6 +216,20 @@ This type of field automatically tests that the selected file(s) matches an imag
     - **maxWidth**: *[number] (optional)* max width in pixels for the image to be uploaded (default to 1000);
     - **maxHeight**: *[number] (optional)* max height in pixels for the image to be uploaded (default to 1000);
     - **quality**: *[number 0~1] (optional)* the quality used for dataUrl conversion of the image (default 1);
+
+#### 2.2.12 list
+
+Used to display a list of eventually sortable items;
+
+-   **subscription**: *[function]* this function offers the chance to subscribe to data needed by the field and not already subscribed by the parent template; it receives the field's instance as a parameter and must return a ready handle;
+-   **source**: *[array of objects / mongo cursor / function] (required)* data source for options; must be an array of objects used to create the options of the field;
+-   **value**: *TODO*
+-   **displayValues**: *[function] (mandatory)* a function that receives the template instance and returns an array of objects; every object can have the following properties:
+    -   **name**: *[string] (mandatory alternative to value)* the name of an attribute from the elements of `source` that will be displayed in the template;
+    -   **value**: *[string] (mandatory alternative to name)* a value to display for each element of `source`;
+    -   **isIcon**: *[boolean] (optional)* tells if the current source element's value is a material icon's name (default to false);
+-   **sortable**: *[boolean]* decides if the list is sortable;
+-   **dragHandle**: *[string] (optional)* name of a material design's icon to use as drag handle; (default to "drag_handle");
 
 ### 3 SKELEFORMGROUP (DISPLAYING INLINE)
 
