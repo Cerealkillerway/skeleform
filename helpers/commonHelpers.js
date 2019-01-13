@@ -91,7 +91,11 @@ skeleformGeneralHelpers = {
         Skeleform.utils.setFieldValue(instance, itemToRestore, data.fieldSchema.get(), data.formContext);
     },
 
-    formatClasses: skeleformStyleHelpers.formatClasses
+    formatClasses: skeleformStyleHelpers.formatClasses,
+
+    instance: function() {
+        return Template.instance();
+    }
 };
 
 

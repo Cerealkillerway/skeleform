@@ -1,22 +1,31 @@
 <template name="skeleformList">
-    <div class="row">
+    <div class="row skeleformList">
         <div class="col s12 m6">
             {{fieldValue}}
+
+            {{#if fieldSchema.header}}
+                <div class="row skeleformListHeader">
+                    {{{fieldSchema.header instance}}}
+                </div>
+            {{/if}}
+
             <ul id="{{field schema.name}}" class="skeleformListItems collection {{skeleClasses}}">
                 {{#each data}}
                     <li class="collection-item">
-                        {{#each displayValues fieldSchema}}
-                            {{#if this.isIcon}}
-                                <i class="material-icons left">{{displayValue this ..}}</i>
-                            {{else}}
-                                {{displayValue this ..}}
-                            {{/if}}
-                        {{/each}}
-                        <span class="hide sortableValue">{{displayValue (fieldSchema.value) this}}</span>
+                        <div class="row skeleformListItemRow">
+                            {{#each displayValues fieldSchema}}
+                                {{#if this.isIcon}}
+                                    <i class="material-icons left">{{{displayValue this ..}}}</i>
+                                {{else}}
+                                    {{{displayValue this ..}}}
+                                {{/if}}
+                            {{/each}}
+                            <span class="hide sortableValue">{{displayValue (fieldSchema.value) this}}</span>
 
-                        {{#if fieldSchema.sortable}}
-                            <i class="material-icons right pointer dragHandle">{{dragHandleIcon}}</i>
-                        {{/if}}
+                            {{#if fieldSchema.sortable}}
+                                <i class="material-icons right pointer dragHandle">{{dragHandleIcon}}</i>
+                            {{/if}}
+                        </div>
                     </li>
                 {{/each}}
             </ul>

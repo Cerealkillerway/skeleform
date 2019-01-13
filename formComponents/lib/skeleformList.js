@@ -34,7 +34,7 @@ Template.skeleformList.helpers({
         let formSchema = instance.data.formContext.schema;
         let fieldSchema = SkeleUtils.GlobalUtilities.fieldSchemaLookup(formSchema.fields, sourceData.name);
 
-        if (fieldSchema.i18n === false) {
+        if (!fieldSchema || fieldSchema.i18n === false) {
             value = sourceData[name];
         }
         else {
@@ -50,6 +50,10 @@ Template.skeleformList.helpers({
             else {
                 value = Skeletor.Skelelang.i18n.get('undefined_lbl')
             }
+        }
+
+        if (displaySchema.transform !== undefined) {
+            value = displaySchema.transform(value, instance);
         }
 
         return value;
