@@ -10,8 +10,8 @@
             {{/if}}
 
             <ul id="{{field schema.name}}" class="skeleformListItems collection {{skeleClasses}}">
-                {{#each data}}
-                    <li class="collection-item">
+                {{#each items}}
+                    <li class="collection-item" data-id="{{displayValue (fieldSchema.value) this}}">
                         <div class="row skeleformListItemRow">
                             {{#each displayValues fieldSchema}}
                                 {{#if this.isIcon}}
@@ -20,7 +20,6 @@
                                     {{{displayValue this ..}}}
                                 {{/if}}
                             {{/each}}
-                            <span class="hide sortableValue">{{displayValue (fieldSchema.value) this}}</span>
 
                             {{#if fieldSchema.sortable}}
                                 <i class="material-icons right pointer dragHandle">{{dragHandleIcon}}</i>

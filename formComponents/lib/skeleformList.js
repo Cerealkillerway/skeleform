@@ -3,21 +3,6 @@ import Sortable from 'sortablejs';
 
 Template.skeleformList.helpers(skeleformGeneralHelpers);
 Template.skeleformList.helpers({
-    data: function() {
-        let instance = Template.instance();
-        let fieldSchema = instance.data.fieldSchema.get();
-
-        if (fieldSchema.subscription) {
-            instance.data.formContext.skeleSubsReady.set(instance.data.formContext.skeleSubsReady && fieldSchema.subscription(instance));
-        }
-
-        if (!instance.data.formContext.skeleSubsReady.get()) {
-            return false;
-        }
-
-        return fieldSchema.source(instance);
-    },
-
     displayValues: function(fieldSchema) {
         return fieldSchema.displayValues(Template.instance());
     },
@@ -32,7 +17,16 @@ Template.skeleformList.helpers({
         }
 
         let formSchema = instance.data.formContext.schema;
-        let fieldSchema = SkeleUtils.GlobalUtilities.fieldSchemaLookup(formSchema.fields, sourceData.name);
+        let fields;
+
+        if (displaySchema.schema) {
+            fields = Skeletor.Schemas[displaySchema.schema].fields;
+        }
+        else {
+            fields = formSchema.fields;
+        }
+
+        let fieldSchema = SkeleUtils.GlobalUtilities.fieldSchemaLookup(fields, displaySchema.name);
 
         if (!fieldSchema || fieldSchema.i18n === false) {
             value = sourceData[name];
@@ -78,6 +72,12 @@ Template.skeleformList.helpers({
         }
 
         return 'skeleValidate skeleGather';
+    },
+
+    items: function() {
+        let instance = Template.instance();
+
+        return instance.items.get();
     }
 });
 
@@ -86,24 +86,46 @@ Template.skeleformList.onCreated(function() {
     Skeleform.utils.registerField(this);
     this.isActivated = new ReactiveVar(false);
 
-    let schema = this.data.fieldSchema.get();
+    let fieldSchema = this.data.fieldSchema.get();
 
-    Skeleform.utils.InvokeCallback(this, null, schema, 'onCreated');
+    Skeleform.utils.InvokeCallback(this, null, fieldSchema, 'onCreated');
+
+    this.items = new ReactiveVar([]);
+
+    this.autorun(() => {
+        if (fieldSchema.subscription) {
+            this.data.formContext.skeleSubsReady.set(this.data.formContext.skeleSubsReady && fieldSchema.subscription(this));
+        }
+
+        if (!this.data.formContext.skeleSubsReady.get()) {
+            return false;
+        }
+
+        this.items.set(fieldSchema.source(this));
+        this.isActivated.set(true);
+    });
 
     this.getValue = () => {
-        console.log(this.sortable.toArray());
-        return ['chJMicjSgHSTDAe2h'];
+        return this.sortable.toArray();
     };
 
     this.isValid = () => {
         let formContext = this.data.formContext;
 
-        return Skeleform.validate.checkOptions(this.getValue(), schema, formContext.schema, formContext.item);
+        return Skeleform.validate.checkOptions(this.getValue(), fieldSchema, formContext.schema, formContext.item);
     };
 
     this.setValue = (value) => {
-        console.log('setvalue');
-        console.log(value);
+        Tracker.afterFlush(() => {
+            let currentValue = this.getValue();
+            let difference = _.difference(currentValue, value);
+
+            value = [...value, ...difference];
+
+            if (value.length > 0) {
+                this.sortable.sort(value);
+            }
+        });
     };
 });
 
@@ -128,6 +150,6 @@ Template.skeleformList.onRendered(function() {
 
     this.sortable = Sortable.create(items, sortableOptions);
 
-    this.isActivated.set(true);
+
     Skeleform.utils.InvokeCallback(this, null, fieldSchema, 'onRendered');
 });
