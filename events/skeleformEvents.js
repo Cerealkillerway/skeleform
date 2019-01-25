@@ -117,13 +117,13 @@ Template.skeleform.onRendered(function() {
                             $placeholder.height(height);
                         }
 
-                        $('.skeleStaticBar').addClass('staticTop');
-                        $('.staticTop').children().addClass('skeleCentralBody hPadded');
+                        $('.skeleStaticBar').addClass('skeleStaticTop');
+                        $('.skeleStaticTop').children().addClass('skeleCentralBody hPadded');
                     }
                     else {
                         $placeholder.height(0);
-                        $('.staticTop').children().removeClass('skeleCentralBody hPadded');
-                        $('.skeleStaticBar').removeClass('staticTop');
+                        $('.skeleStaticTop').children().removeClass('skeleCentralBody hPadded');
+                        $('.skeleStaticBar').removeClass('skeleStaticTop');
                     }
                 });
             }

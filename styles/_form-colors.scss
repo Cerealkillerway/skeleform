@@ -1,0 +1,235 @@
+body.skelePanelBody {
+    .skeleStaticTop {
+        background-color: darken($firstPanelColor, 20%) !important;
+    }
+
+    // form elements
+    // input, checkbox and select
+    input:not([readonly]), input.datepicker, .select-wrapper input.select-dropdown {
+        border-color: $firstInputColor;
+    }
+    .select-dropdown {
+        &::-webkit-scrollbar {
+            width: 17px;
+        }
+        &::-webkit-scrollbar-track {
+            background-color: $thirdPanelColor;
+        }
+        &::-webkit-scrollbar-thumb {
+            background-color: lighten($thirdPanelColor, 20%);
+        }
+        &::-webkit-scrollbar-thumb:hover {
+            background-color: lighten($thirdPanelColor, 30%);
+        }
+        &::-webkit-scrollbar-button {
+            display: none !important;
+        }
+    }
+    input:not([readonly]) + label, input.datepicker + label, .select-wrapper + label, .input-field .prefix {
+        color: $firstInputColor;
+    }
+    input:focus:not([readonly]) + label, input.datepicker:focus + label, .select-wrapper:focus + label, .input-field .prefix.active, .note-editor + label {
+        color: $firstInputColor;
+    }
+    input:focus:not([readonly]), input.datepicker:focus, .select-wrapper:focus {
+        box-shadow: 0 1px 0 0 $firstInputColor;
+    }
+    [type="checkbox"]:checked + label:before {
+        border-right-color: $secondPanelColor;
+        border-bottom-color: $secondPanelColor;
+    }
+    li.active {
+        [type="checkbox"]:checked + label:before {
+            border-right-color: $secondPanelColorText;
+            border-bottom-color: $secondPanelColorText;
+        }
+    }
+    .file-field {
+        .btn {
+            background-color: $secondPanelColor;
+        }
+    }
+
+    // focus status
+    input[type=text]:focus:not([readonly]), input[type=password]:focus:not([readonly]), input[type=email]:focus:not([readonly]), input[type=url]:focus:not([readonly]), input[type=time]:focus:not([readonly]), input[type=date]:focus:not([readonly]), input[type=datetime-local]:focus:not([readonly]), input[type=tel]:focus:not([readonly]), input[type=number]:focus:not([readonly]), input[type=search]:focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
+        border-color: $firstFocusColor;
+        box-shadow: 0 1px 0 0 $firstFocusColor;
+    }
+    input[type=text]:focus:not([readonly]) + label, input[type=password]:focus:not([readonly]) + label, input[type=email]:focus:not([readonly]) + label, input[type=url]:focus:not([readonly]) + label, input[type=time]:focus:not([readonly]) + label, input[type=date]:focus:not([readonly]) + label, input[type=datetime-local]:focus:not([readonly]) + label, input[type=tel]:focus:not([readonly]) + label, input[type=number]:focus:not([readonly]) + label, input[type=search]:focus:not([readonly]) + label, textarea.materialize-textarea:focus:not([readonly]) + label, textarea.materialize-textarea:focus:not([readonly]) + label {
+        color: $firstFocusColor;
+    }
+
+    // switch
+    .switch label input[type=checkbox]:checked + .lever {
+        background-color: lighten($secondPanelColor, 10%);
+
+        &::after {
+            background-color: $secondPanelColor;
+        }
+    }
+
+    // select
+    .select-dropdown li.disabled, .select-dropdown li.disabled > span, .select-dropdown li.optgroup {
+        background-color: $firstPanelColor;
+        color: $firstPanelColorText !important;
+    }
+
+    // datepicker
+    .picker__day--selected, .picker__day--selected:hover, .picker--focused .picker__day--selected {
+        background-color: $fourthPanelColor !important;
+    }
+    .picker__weekday-display {
+        font-weight: 500;
+    }
+    .picker__date-display {
+        background-color: $firstPanelColor !important;
+    }
+    .picker__footer {
+        background-color: darken($firstPanelColor, 10%);
+
+        button:focus {
+            background-color: darken($firstPanelColor, 10%);
+        }
+    }
+    .picker__day.picker__day--today {
+        color: $secondPanelColor;
+        font-weight: bold;
+    }
+    .picker__table {
+        thead {
+            background-color: $firstBackgroundColor;
+            color: $firstPanelColor;
+        }
+    }
+    .picker__box {
+        background-color: $firstBackgroundColor !important;
+    }
+    .picker__header {
+        select {
+            border-color: darken($firstBackgroundColor, 20%) !important;
+        }
+    }
+    .picker__close, .picker__today {
+        color: $firstPanelColorText !important;
+    }
+    .picker__nav--prev:hover, .picker__nav--next:hover {
+        background-color:$secondPanelColor !important;
+    }
+    button.picker__clear {
+        color: $firstPanelColorText !important;
+    }
+
+    .dropdown-content li > a, .dropdown-content li > span {
+        color: $firstPanelColor !important;
+    }
+
+    .dropdown-content li:hover, .dropdown-content li.active {
+        background-color: $secondPanelColor !important;
+
+        span {
+            color: $secondPanelColorText !important;
+        }
+    }
+
+
+    // timepicker
+    .picker--time .picker__box {
+        background-color: darken($firstPanelColor, 15%) !important;
+    }
+
+    .picker__list {
+        padding-bottom: 2em;
+    }
+
+    .picker__list-item {
+        background-color: $firstPanelColor;
+        color: $firstPanelColorText;
+        border-top: solid 1px lighten($firstPanelColor, 10%);
+        border-bottom: solid 1px lighten($firstPanelColor, 10%);
+    }
+
+    .picker__list-item--selected, .picker__list-item--selected:hover, .picker--focused .picker__list-item--selected {
+        background: $secondPanelColor;
+        border-color: $secondPanelColor;
+    }
+
+    .picker__list-item:hover {
+        background-color: lighten($secondPanelColor, 15%);
+        border-color: lighten($secondPanelColor, 10%);
+        color: $firstPanelColorText;
+    }
+
+    .picker--time .picker__button--clear {
+        color: $firstPanelColorText;
+        font-size: 18px;
+
+        &::before {
+            width: 0;
+            border-top: none;
+            margin-right: 0;
+        }
+    }
+
+    .picker--time .picker__button--clear:hover, .picker--time .picker__button--clear:focus {
+        border: none;
+        background-color: darken($firstPanelColor, 20%);
+    }
+
+
+    // form validation
+    // success status
+    .input-field.valid input:not([readonly]), .input-field.valid input:focus:not([readonly]), .input-field.valid input.datepicker, .valid .canvasContainer {
+        border-color: $firstInputSuccessColor;
+    }
+    .input-field.valid input:not([readonly]) + label, .input-field.valid input.datepicker + label, .input-field.valid .prefix, .valid .note-editor + label {
+        color: $firstInputSuccessColor;
+    }
+    .input-field.valid input:focus:not([readonly]) + label, .input-field.valid input.datepicker:focus + label, .input-field.valid .prefix.active {
+        color: $firstInputSuccessColor;
+    }
+    .input-field.valid input:focus:not([readonly]), .input-field.valid input.datepicker:focus {
+        box-shadow: 0 1px 0 0 $firstInputSuccessColor;
+    }
+    .valid .colorValidation {
+        background-color: $firstInputSuccessColor;
+    }
+    .valid .note-editor {
+        border: {
+            top: none;
+            bottom: solid 3px $firstInputSuccessColor;
+            left: solid 3px $firstInputSuccessColor;
+            right: solid 3px $firstInputSuccessColor;
+        }
+    }
+
+    // error status
+    .input-field.invalid input:not([readonly]), .input-field.invalid input:focus:not([readonly]), .input-field.invalid input.datepicker, .invalid .canvasContainer {
+        border-color: $firstInputErrorColor;
+    }
+    .skeleformFieldAlert.invalid, .input-field.invalid input:not([readonly]) + label, .input-field.invalid input.datepicker + label, .input-field.invalid .prefix, .invalid .note-editor + label {
+        color: $firstInputErrorColor;
+    }
+    .input-field.invalid input:focus:not([readonly]) + label, .input-field.invalid input.datepicker:focus + label, .input-field.invalid .prefix.active {
+        color: $firstInputErrorColor;
+    }
+    .input-field.invalid input:focus:not([readonly]), .input-field.invalid input.datepicker:focus {
+        box-shadow: 0 1px 0 0 $firstInputErrorColor;
+    }
+    .invalid .colorValidation {
+        background-color: $firstInputErrorColor;
+    }
+    .invalid .note-editor {
+        border: {
+            top: none;
+            bottom: solid 3px $firstInputErrorColor;
+            left: solid 3px $firstInputErrorColor;
+            right: solid 3px $firstInputErrorColor;
+        }
+    }
+    .invalid {
+        .skeleformFieldAlert {
+            color: $firstInputErrorColor;
+        }
+    }
+
+}

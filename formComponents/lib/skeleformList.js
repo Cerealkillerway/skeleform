@@ -26,7 +26,7 @@ Template.skeleformList.helpers({
             fields = formSchema.fields;
         }
 
-        let fieldSchema = SkeleUtils.GlobalUtilities.fieldSchemaLookup(fields, displaySchema.name);
+        let fieldSchema = SkeleUtils.GlobalUtilities.fieldSchemaLookup(fields, name);
 
         if (!fieldSchema || fieldSchema.i18n === false) {
             value = sourceData[name];
@@ -85,8 +85,17 @@ Template.skeleformList.helpers({
 Template.skeleformList.onCreated(function() {
     Skeleform.utils.registerField(this);
     this.isActivated = new ReactiveVar(false);
+    this.sortablePluginActive = new ReactiveVar(false);
+    this.sourceSet = new ReactiveVar();
 
     let fieldSchema = this.data.fieldSchema.get();
+
+    if (fieldSchema.subscription !== undefined) {
+        this.sourceSet.set(false);
+    }
+    else {
+        this.sourceSet.set(true);
+    }
 
     Skeleform.utils.InvokeCallback(this, null, fieldSchema, 'onCreated');
 
@@ -102,7 +111,13 @@ Template.skeleformList.onCreated(function() {
         }
 
         this.items.set(fieldSchema.source(this));
-        this.isActivated.set(true);
+        this.sourceSet.set(true);
+    });
+
+    this.autorun(() => {
+        if (this.sortablePluginActive.get() === true && this.sourceSet.get() === true) {
+            this.isActivated.set(true);
+        }
     });
 
     this.getValue = () => {
@@ -148,8 +163,10 @@ Template.skeleformList.onRendered(function() {
 
     sortableOptions = {...defaultOptions, ...fieldSchema.sortableOptions};
 
-    this.sortable = Sortable.create(items, sortableOptions);
-
+    Meteor.setTimeout(() => {
+        this.sortable = Sortable.create(items, sortableOptions);
+        this.sortablePluginActive.set(true);
+    }, 1000);
 
     Skeleform.utils.InvokeCallback(this, null, fieldSchema, 'onRendered');
 });

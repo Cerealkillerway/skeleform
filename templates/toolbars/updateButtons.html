@@ -2,7 +2,7 @@
 <template name ="skeleformUpdateButtons">
     <div class="skeleStaticBar">
         <div class="skeleformToolbar">
-            <div class="waves-effect waves-light btn secondColor skeleformUpdate">
+            <div class="waves-effect waves-light btn confirmColor skeleformUpdate">
                 <i class="material-icons small left">beenhere</i>
                 <span>{{i18n "update_btn"}}</span>
             </div>
@@ -15,7 +15,7 @@
                 {{> Template.dynamic template=formContext.schema.__toolbar.extrasUpdate data=this}}
             {{/if}}
 
-            <a href="{{makeUndoPath formContext.schema.__paths.undoPath}}" class="waves-effect waves-light btn firstColor">
+            <a href="{{makeUndoPath formContext.schema.__paths.undoPath}}" class="waves-effect waves-light btn undoColor">
                 <i class="material-icons small left">undo</i>
                 <span>{{i18n "cancel_btn"}}</span>
             </a>

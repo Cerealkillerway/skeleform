@@ -1,8 +1,12 @@
 @import "{cerealkiller:skeletor}/styles/panel-colors";
 
+// form colors
+@import "form-colors";
+
 // clockpicker;
-//@import "clockpicker.variables";
 @import "clockpicker.primary";
+
+// file uploader
 @import "file-uploader";
 
 
@@ -85,7 +89,7 @@
         }
     }
 
-    .staticTop {
+    .skeleStaticTop {
         position: fixed;
         top: 0;
         left: 0;

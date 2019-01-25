@@ -27,7 +27,7 @@ Template.skeleformStaticAddons.events({
         else {
             let offsetCorrection = 80;
 
-            if ($('.staticTop').length === 0) {
+            if ($('.skeleStaticTop').length === 0) {
                 offsetCorrection = offsetCorrection + 66;
             }
 
