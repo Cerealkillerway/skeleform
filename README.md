@@ -223,7 +223,7 @@ Used to display a list of eventually sortable items;
 
 -   **subscription**: *[function]* this function offers the chance to subscribe to data needed by the field and not already subscribed by the parent template; it receives the field's instance as a parameter and must return a ready handle;
 -   **source**: *[array of objects / mongo cursor / function] (required)* data source for options; must be an array of objects used to create the options of the field;
--   **value**: *TODO*
+-   **value**: [function / object] (required) an object (or a function that returns an object) that represents the field to use as value for the field; that value will not be displayed but put in the `data-id` attribute of every element in the list and it's the value that will be gathered;
 -   **displayValues**: *[function] (mandatory)* a function that receives the template instance and returns an array of objects; every object can have the following properties:
     -   **name**: *[string] (mandatory alternative to value)* the name of an attribute from the elements of `source` that will be displayed in the template;
     -   **value**: *[string] (mandatory alternative to name)* a value to display for each element of `source`;

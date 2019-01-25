@@ -78,6 +78,18 @@ Template.skeleformList.helpers({
         let instance = Template.instance();
 
         return instance.items.get();
+    },
+
+    valueSchema: function() {
+        let instance = Template.instance();
+        let fieldSchema = instance.data.fieldSchema.get();
+
+        if (_.isFunction(fieldSchema.value)) {
+            return fieldSchema.value(instance);
+        }
+        else {
+            return fieldSchema.value;
+        }
     }
 });
 
@@ -86,14 +98,12 @@ Template.skeleformList.onCreated(function() {
     Skeleform.utils.registerField(this);
     this.isActivated = new ReactiveVar(false);
     this.sortablePluginActive = new ReactiveVar(false);
-    this.sourceSet = new ReactiveVar();
+    this.sourceSet = new ReactiveVar(false);
 
     let fieldSchema = this.data.fieldSchema.get();
 
-    if (fieldSchema.subscription !== undefined) {
-        this.sourceSet.set(false);
-    }
-    else {
+    // no external subscription needed
+    if (fieldSchema.subscription === undefined) {
         this.sourceSet.set(true);
     }
 
@@ -132,13 +142,15 @@ Template.skeleformList.onCreated(function() {
 
     this.setValue = (value) => {
         Tracker.afterFlush(() => {
-            let currentValue = this.getValue();
-            let difference = _.difference(currentValue, value);
+            if (value) {
+                let currentValue = this.getValue();
+                let difference = _.difference(currentValue, value);
 
-            value = [...value, ...difference];
+                value = [...value, ...difference];
 
-            if (value.length > 0) {
-                this.sortable.sort(value);
+                if (value.length > 0) {
+                    this.sortable.sort(value);
+                }
             }
         });
     };
