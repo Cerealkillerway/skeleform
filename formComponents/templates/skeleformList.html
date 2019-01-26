@@ -11,7 +11,7 @@
 
             <ul id="{{field schema.name}}" class="skeleformListItems collection {{skeleClasses}}">
                 {{#each items}}
-                    <li class="collection-item" data-id="{{displayValue valueSchema this}}">
+                    <li class="collection-item" data-id="{{valueSchema this}}">
                         <div class="row skeleformListItemRow">
                             {{#each displayValues fieldSchema}}
                                 {{#if this.isIcon}}
@@ -27,6 +27,15 @@
                         </div>
                     </li>
                 {{/each}}
+                {{#if isEmpty}}
+                    <li class="collection-item">
+                        {{#if schema.emptyLabel}}
+                            {{i18n schema.emptyLabel}}
+                        {{else}}
+                            ({{i18n "empty_lbl"}})...
+                        {{/if}}
+                    </li>
+                {{/if}}
             </ul>
         </div>
     </div>

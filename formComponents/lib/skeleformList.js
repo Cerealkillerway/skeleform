@@ -1,6 +1,53 @@
 import Sortable from 'sortablejs';
 
 
+let displayValue = function(displaySchema, sourceData) {
+    let instance = Template.instance();
+    let name = displaySchema.name;
+    let value;
+
+    if (displaySchema.value !== undefined) {
+        return displaySchema.value;
+    }
+
+    let formSchema = instance.data.formContext.schema;
+    let fields;
+
+    if (displaySchema.schema) {
+        fields = Skeletor.Schemas[displaySchema.schema].fields;
+    }
+    else {
+        fields = formSchema.fields;
+    }
+
+    let fieldSchema = SkeleUtils.GlobalUtilities.fieldSchemaLookup(fields, name);
+
+    if (!fieldSchema || fieldSchema.i18n === false) {
+        value = sourceData[name];
+    }
+    else {
+        let currentLang = Skeletor.FlowRouter.getParam('itemLang');
+
+        value = sourceData[`${currentLang}---${name}`];
+    }
+
+    if (value === '') {
+        if (displaySchema.isIcon) {
+            value = 'battery_unknown';
+        }
+        else {
+            value = Skeletor.Skelelang.i18n.get('undefined_lbl')
+        }
+    }
+
+    if (displaySchema.transform !== undefined) {
+        value = displaySchema.transform(value, instance);
+    }
+
+    return value;
+}
+
+
 Template.skeleformList.helpers(skeleformGeneralHelpers);
 Template.skeleformList.helpers({
     displayValues: function(fieldSchema) {
@@ -8,49 +55,7 @@ Template.skeleformList.helpers({
     },
 
     displayValue: function(displaySchema, sourceData) {
-        let instance = Template.instance();
-        let name = displaySchema.name;
-        let value;
-
-        if (displaySchema.value !== undefined) {
-            return displaySchema.value;
-        }
-
-        let formSchema = instance.data.formContext.schema;
-        let fields;
-
-        if (displaySchema.schema) {
-            fields = Skeletor.Schemas[displaySchema.schema].fields;
-        }
-        else {
-            fields = formSchema.fields;
-        }
-
-        let fieldSchema = SkeleUtils.GlobalUtilities.fieldSchemaLookup(fields, name);
-
-        if (!fieldSchema || fieldSchema.i18n === false) {
-            value = sourceData[name];
-        }
-        else {
-            let currentLang = Skeletor.FlowRouter.getParam('itemLang');
-
-            value = sourceData[`${currentLang}---${name}`];
-        }
-
-        if (value === '') {
-            if (displaySchema.isIcon) {
-                value = 'battery_unknown';
-            }
-            else {
-                value = Skeletor.Skelelang.i18n.get('undefined_lbl')
-            }
-        }
-
-        if (displaySchema.transform !== undefined) {
-            value = displaySchema.transform(value, instance);
-        }
-
-        return value;
+        return displayValue(displaySchema, sourceData)
     },
 
     fieldSchema: function() {
@@ -80,16 +85,30 @@ Template.skeleformList.helpers({
         return instance.items.get();
     },
 
-    valueSchema: function() {
+    valueSchema: function(sourceData) {
         let instance = Template.instance();
         let fieldSchema = instance.data.fieldSchema.get();
 
         if (_.isFunction(fieldSchema.value)) {
-            return fieldSchema.value(instance);
+            return fieldSchema.value(instance, sourceData);
         }
         else {
-            return fieldSchema.value;
+            return displayValue(fieldSchema.value, sourceData);
         }
+    },
+
+    isEmpty: function() {
+        let instance = Template.instance();
+        let items = instance.items.get();
+
+        if (Match.test(items, Mongo.Cursor)) {
+            items = items.fetch();
+        }
+
+        if (!items || items.length === 0) {
+            return true;
+        }
+        return false;
     }
 });
 

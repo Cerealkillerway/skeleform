@@ -222,14 +222,25 @@ This type of field automatically tests that the selected file(s) matches an imag
 Used to display a list of eventually sortable items;
 
 -   **subscription**: *[function]* this function offers the chance to subscribe to data needed by the field and not already subscribed by the parent template; it receives the field's instance as a parameter and must return a ready handle;
+
 -   **source**: *[array of objects / mongo cursor / function] (required)* data source for options; must be an array of objects used to create the options of the field;
--   **value**: [function / object] (required) an object (or a function that returns an object) that represents the field to use as value for the field; that value will not be displayed but put in the `data-id` attribute of every element in the list and it's the value that will be gathered;
+
+-   **value**: [function / object] (required) if an object, tells skeleform which one is the value of `source` property to use as `data-id` attribute for every source's item; this is the value that will be gathered from skeleform and saved in the db; it has the following properties:
+
+    -   **name**: *[string] (required)* the name of a filed of every item returned by `source` to be used as `data-id`;
+
+    if a function, should return the value to be used as `data-id` for each item in the list; the function receives two parameters: the `fieldInstance` and `sourceData` (the current item's source data);
+
 -   **displayValues**: *[function] (mandatory)* a function that receives the template instance and returns an array of objects; every object can have the following properties:
     -   **name**: *[string] (mandatory alternative to value)* the name of an attribute from the elements of `source` that will be displayed in the template;
     -   **value**: *[string] (mandatory alternative to name)* a value to display for each element of `source`;
     -   **isIcon**: *[boolean] (optional)* tells if the current source element's value is a material icon's name (default to false);
     -   **transform** *[function] (optional)* a function that receives the current value and the fieldInstance and returns the value to be displayed;
+
+-   **emptyLabel**: *[string] (optional)* the name of an i18n string to be displayed when the list is empty (default "empty_lbl");
+
 -   **sortable**: *[boolean]* decides if the list is sortable;
+
 -   **dragHandle**: *[string] (optional)* name of a material design's icon to use as drag handle; (default to "drag_handle");
 
 ### 3 SKELEFORMGROUP (DISPLAYING INLINE)
