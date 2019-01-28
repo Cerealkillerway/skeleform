@@ -12,12 +12,12 @@ Template.skeleformSelect.helpers({
         const instance = Template.instance();
         let newSource = instance.updateSource.get();
 
+        if (!instance.subscriptionsReady.get()) {
+            return false;
+        }
+
         // if source field is a query result, then build the option objects using
         // defined "sourceName" and "sourceValue" fields
-
-        if (schema.subscription) {
-            instance.data.formContext.skeleSubsReady.set(instance.data.formContext.skeleSubsReady && schema.subscription(instance));
-        }
 
         if (schema.sourceValue) {
             let result = [];
@@ -178,10 +178,18 @@ Template.skeleformSelect.onCreated(function() {
     Skeleform.utils.registerField(this);
     this.isActivated = new ReactiveVar(false);
     this.updateSource = new ReactiveVar(false);
+    this.subscriptionsReady = new ReactiveVar(false);
 
     let schema = this.data.fieldSchema.get();
 
     Skeleform.utils.InvokeCallback(this, null, schema, 'onCreated');
+
+    if (schema.subscription) {
+        this.subscriptionsReady.set(schema.subscription(this));
+    }
+    else {
+        this.subscriptionsReady.set(true);
+    }
 
     this.setSource = (newSource) => {
         Skeletor.SkeleUtils.GlobalUtilities.logger('new source injected', 'skeleformField');

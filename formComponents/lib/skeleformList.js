@@ -6,6 +6,11 @@ let displayValue = function(displaySchema, sourceData) {
     let name = displaySchema.name;
     let value;
 
+    //console.log(instance.subscriptionsReady.get());
+    if (!instance.subscriptionsReady.get()) {
+        return false;
+    }
+
     if (displaySchema.value !== undefined) {
         return displaySchema.value;
     }
@@ -117,6 +122,7 @@ Template.skeleformList.onCreated(function() {
     Skeleform.utils.registerField(this);
     this.isActivated = new ReactiveVar(false);
     this.sortablePluginActive = new ReactiveVar(false);
+    this.subscriptionsReady = new ReactiveVar(false);
     this.sourceSet = new ReactiveVar(false);
 
     let fieldSchema = this.data.fieldSchema.get();
@@ -130,11 +136,25 @@ Template.skeleformList.onCreated(function() {
 
     this.items = new ReactiveVar([]);
 
-    this.autorun(() => {
-        if (fieldSchema.subscription) {
-            this.data.formContext.skeleSubsReady.set(this.data.formContext.skeleSubsReady && fieldSchema.subscription(this));
-        }
+    if (fieldSchema.subscription) {
+        let subscription = fieldSchema.subscription(this);
 
+        this.subscriptionsReady.set(subscription);
+    }
+    else {
+        this.subscriptionsReady.set(true);
+    }
+
+    Meteor.setTimeout(() => {
+        this.subscriptionsReady.set(true);
+    }, 5000);
+
+    this.autorun(() => {
+        let ready = this.subscriptionsReady.get();
+        console.log(ready);
+    })
+
+    this.autorun(() => {
         if (!this.data.formContext.skeleSubsReady.get()) {
             return false;
         }

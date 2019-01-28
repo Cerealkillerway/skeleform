@@ -248,6 +248,7 @@ Template.skeleformInput.onCreated(function() {
             }
             for (selected of value) {
                 let name;
+                console.log(name);
 
                 if (schema.autocomplete.getName) {
                     name = schema.autocomplete.getName(selected);

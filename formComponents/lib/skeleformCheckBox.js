@@ -88,11 +88,14 @@ Template.skeleformCheckBox.onRendered(function() {
 
     // on checkboxes it is necessary to fire onChange on load since for "false" value, the "setValue()" never happens
     // because when creating new document, the relative item's field is undefined
-    if (this.data.formContext.skeleSubsReady.get()) {
-        if (this.getValue() === false) {
-            Skeleform.utils.InvokeCallback(this, false, schema, 'onChange', true);
+    this.autorun((computation) => {
+        if (this.data.formContext.skeleSubsReady.get()) {
+            if (this.getValue() === false) {
+                Skeleform.utils.InvokeCallback(this, false, schema, 'onChange', true);
+                computation.stop();
+            }
         }
-    }
+    });
 });
 
 
