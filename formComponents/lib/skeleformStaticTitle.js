@@ -3,7 +3,19 @@
 
 Template.skeleformStaticTitle.helpers(skeleformGeneralHelpers);
 Template.skeleformStaticTitle.helpers({
-    createTitle: function(string, tag, classes) {
+    createTitle: function(schema) {
+        let instance = Template.instance();
+        let content;
+        let tag = schema.tag;
+        let classes = schema.classes;
+
+        if (schema.content !== undefined) {
+            content = schema.content(instance);
+        }
+        else {
+            content = Skeleform.utils.createLabel(schema.name, schema.labelType);
+        }
+
         if (!tag) {
             tag = 'h3';
         }
@@ -13,7 +25,7 @@ Template.skeleformStaticTitle.helpers({
             title = title + ' class="' + classes.join(', ') + '"';
         }
 
-        title = title + '>' + string + '</' + tag +'>';
+        title = title + '>' + content + '</' + tag +'>';
         return title;
     }
 });

@@ -24,26 +24,7 @@ skeleformStyleHelpers = {
 //helpers used by form elements
 skeleformGeneralHelpers = {
     label: function(name, options) {
-        name = name.split('.');
-
-        for (i = 1; i < name.length; i++) {
-            name[i] = name[i].capitalize();
-        }
-        name = name.join('');
-
-        switch(options) {
-            case 'shadowConfirm':
-            return Skeletor.Skelelang.i18n.get(name + 'ShadowConfirm_lbl');
-
-            case 'title':
-            return Skeletor.Skelelang.i18n.get(name + '_title');
-
-            case 'text':
-            return Skeletor.Skelelang.i18n.get(name + '_text');
-
-            default:
-            return Skeletor.Skelelang.i18n.get(name + '_lbl');
-        }
+        return Skeleform.utils.createLabel(name, options);
     },
 
     schema: function() {

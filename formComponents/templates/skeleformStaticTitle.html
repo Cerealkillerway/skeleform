@@ -1,9 +1,5 @@
 <template name="skeleformStaticTitle">
     <div class="input-field col {{fieldSize schema.size}} {{schema.style}}">
-        {{#unless schema.content}}
-            <span  id="{{field schema.name}}">{{{createTitle (label schema.name schema.labelType) schema.tag schema.classes}}}</span>
-        {{else}}
-            <span  id="{{field schema.name}}">{{{createTitle (schema.content this) schema.tag schema.classes}}}</span>
-        {{/unless}}
+        <span  id="{{field schema.name}}">{{{createTitle schema}}}</span>
     </div>
 </template>
