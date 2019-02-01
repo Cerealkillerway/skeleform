@@ -61,6 +61,11 @@ skeleformGeneralHelpers = {
         let data = instance.data;
         let formContext = data.formContext;
         let itemToRestore = formContext.item
+        let fieldSchema = data.fieldSchema.get();
+
+        if (fieldSchema.subscription && instance.subscriptionsReady.get() === false) {
+            return false;
+        }
 
         // once added/removed a replicaSet, the form will be always in "isRestoring" state since
         // "isRestoring" is never set to false; but if someone else edits the document, all helpers

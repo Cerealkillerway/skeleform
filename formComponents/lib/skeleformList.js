@@ -1,12 +1,13 @@
 import Sortable from 'sortablejs';
 
 
-let displayValue = function(displaySchema, sourceData) {
-    let instance = Template.instance();
+let displayValue = function(displaySchema, sourceData, instance) {
     let name = displaySchema.name;
     let value;
 
-    //console.log(instance.subscriptionsReady.get());
+    if (!instance.data.formContext.skeleSubsReady.get()) {
+        return false;
+    }
     if (!instance.subscriptionsReady.get()) {
         return false;
     }
@@ -60,7 +61,7 @@ Template.skeleformList.helpers({
     },
 
     displayValue: function(displaySchema, sourceData) {
-        return displayValue(displaySchema, sourceData)
+        return displayValue(displaySchema, sourceData, Template.instance());
     },
 
     fieldSchema: function() {
@@ -98,7 +99,7 @@ Template.skeleformList.helpers({
             return fieldSchema.value(instance, sourceData);
         }
         else {
-            return displayValue(fieldSchema.value, sourceData);
+            return displayValue(fieldSchema.value, sourceData, Template.instance());
         }
     },
 
@@ -136,26 +137,20 @@ Template.skeleformList.onCreated(function() {
 
     this.items = new ReactiveVar([]);
 
-    if (fieldSchema.subscription) {
-        let subscription = fieldSchema.subscription(this);
-
-        this.subscriptionsReady.set(subscription);
-    }
-    else {
-        this.subscriptionsReady.set(true);
-    }
-
-    Meteor.setTimeout(() => {
-        this.subscriptionsReady.set(true);
-    }, 5000);
-
     this.autorun(() => {
-        let ready = this.subscriptionsReady.get();
-        console.log(ready);
+        if (fieldSchema.subscription) {
+            this.subscriptionsReady.set(fieldSchema.subscription(this));
+        }
+        else {
+            this.subscriptionsReady.set(true);
+        }
     })
 
     this.autorun(() => {
         if (!this.data.formContext.skeleSubsReady.get()) {
+            return false;
+        }
+        if (!this.subscriptionsReady.get()) {
             return false;
         }
 

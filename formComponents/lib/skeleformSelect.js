@@ -12,6 +12,9 @@ Template.skeleformSelect.helpers({
         const instance = Template.instance();
         let newSource = instance.updateSource.get();
 
+        if (!instance.data.formContext.skeleSubsReady.get()) {
+            return false;
+        }
         if (!instance.subscriptionsReady.get()) {
             return false;
         }
@@ -137,6 +140,11 @@ Template.skeleformSelect.helpers({
                 result.push(option);
             });
 
+            /*if (schema.name === 'subscription') {
+                console.log('1 - setting new source');
+                console.log(result);
+            }*/
+
             return result;
         }
 
@@ -179,116 +187,133 @@ Template.skeleformSelect.onCreated(function() {
     this.isActivated = new ReactiveVar(false);
     this.updateSource = new ReactiveVar(false);
     this.subscriptionsReady = new ReactiveVar(false);
+    this.sourceSet = new ReactiveVar(false);
 
-    let schema = this.data.fieldSchema.get();
+    let fieldSchema = this.data.fieldSchema.get();
 
-    Skeleform.utils.InvokeCallback(this, null, schema, 'onCreated');
-
-    if (schema.subscription) {
-        this.subscriptionsReady.set(schema.subscription(this));
-    }
-    else {
-        this.subscriptionsReady.set(true);
-    }
+    Skeleform.utils.InvokeCallback(this, null, fieldSchema, 'onCreated');
 
     this.setSource = (newSource) => {
         Skeletor.SkeleUtils.GlobalUtilities.logger('new source injected', 'skeleformField');
         this.updateSource.set(newSource);
 
-        let $field = Skeleform.utils.$getFieldById(this, schema);
+        let $field = Skeleform.utils.$getFieldById(this, fieldSchema);
 
         Tracker.afterFlush(function() {
             $field.material_select();
         });
     };
     this.i18n = () => {
-        Skeleform.utils.$getFieldById(this, schema).material_select();
+        Skeleform.utils.$getFieldById(this, fieldSchema).material_select();
     };
     this.getValue = () => {
-        return Skeleform.utils.$getFieldById(this, schema).val();
+        return Skeleform.utils.$getFieldById(this, fieldSchema).val();
     };
     this.isValid = () => {
         let formContext = this.data.formContext;
 
-        return Skeleform.validate.checkOptions(this.getValue(), schema, formContext.schema, formContext.item);
+        return Skeleform.validate.checkOptions(this.getValue(), fieldSchema, formContext.schema, formContext.item);
     };
     this.setValue = (value) => {
-        let name = schema.name;
-        let $field = Skeleform.utils.$getFieldById(this, schema);
+        Tracker.afterFlush(() => {
+            let name = fieldSchema.name;
+            let $field = Skeleform.utils.$getFieldById(this, fieldSchema);
 
-        if (value === undefined) {
-            $field.children().prop('selected', false);
-            $field.children().first().prop('selected', true);
-            $field.material_select();
-        }
+            if (!this.subscriptionsReady.get()) {
+                return false;
+            }
 
-        for (const option of $field.children()) {
-            let optionValue = $(option).val();
+            if (value === undefined) {
+                $field.children().prop('selected', false);
+                $field.children().first().prop('selected', true);
+                $field.material_select();
+            }
 
-            // if the select is multi, the value is an array
-            if (schema.multi) {
-                if (value && value.indexOf(optionValue) >= 0) {
-                    $(option).prop('selected', true);
+            /*if (name === 'subscription') {
+                console.log('2 - setting selected attribute...');
+                console.log($field.children());
+            }*/
+
+            for (const option of $field.children()) {
+                let optionValue = $(option).val();
+
+                // if the select is multi, the value is an array
+                if (fieldSchema.multi) {
+                    if (value && value.indexOf(optionValue) >= 0) {
+                        $(option).attr('selected', true);
+                    }
+                    else {
+                        $(option).attr('selected', false);
+                    }
                 }
+
+                // otherwise the value is a string
                 else {
-                    $(option).prop('selected', false);
+                    if (value === optionValue) {
+                        /*if (fieldSchema.name === 'subscription') {
+                            console.log(`2.5 - setting select for: ${optionValue}`);
+                            console.log($(option));
+                        }*/
+                        $(option).attr('selected', true);
+
+                    }
+                    else {
+                        $(option).attr('selected', false);
+                    }
                 }
             }
 
-            // otherwise the value is a string
-            else {
-                if (value === optionValue) {
-                    $(option).prop('selected', true);
-                    break;
-                }
-                else {
-                    $(option).prop('selected', false);
-                }
-            }
-        }
 
-        Tracker.afterFlush(function() {
+            /*if (name === 'subscription') {
+                console.log('3 - reinitialize plugin');
+                console.log($field.children()); //<- here $field.children() is an empty array (options are not populated yet)
+            }*/
             $field.material_select();
         });
 
         // here cannot test value !== this.getValue() since the actual value for the field in the current document
         // can be the first value (default preselected) for the field;
-        Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
+        Skeleform.utils.InvokeCallback(this, value, fieldSchema, 'onChange');
 
         return;
     };
 });
 
 Template.skeleformSelect.onRendered(function() {
-    let schema = this.data.fieldSchema.get();
+    let fieldSchema = this.data.fieldSchema.get();
 
     // start plugin
-    let $field = Skeleform.utils.$getFieldById(this, schema);
+    let $field = Skeleform.utils.$getFieldById(this, fieldSchema);
     let $options = $field.children('option');
 
-    $field.material_select();
-    this.isActivated.set(true);
+    this.autorun(() => {
+        if (fieldSchema.subscription) {
+            this.subscriptionsReady.set(fieldSchema.subscription(this));
 
-    Skeleform.utils.InvokeCallback(this, null, schema, 'onRendered');
+            let $field = Skeleform.utils.$getFieldById(this, fieldSchema);
 
-    // DISABLED - was causing infinite loop
-    // start plugin and fire onChange callback when DOM is changed
-    /*let observer = new MutationObserver((mutations) => {
-        let value = this.getValue();
+            Tracker.afterFlush(function() {
+                $field.material_select();
+            });
+        }
+        else {
+            this.subscriptionsReady.set(true);
+        }
+    })
 
-        $field = Skeleform.utils.$getFieldById(this, schema);
-        // DISABLED the following instruction was causing the infinite loop
-        //$field.material_select();
+    this.autorun(() => {
+        if (!this.data.formContext.skeleSubsReady.get()) {
+            return false;
+        }
+        if (!this.subscriptionsReady.get()) {
+            return false;
+        }
 
-
-        Skeleform.utils.InvokeCallback(this, value, schema, 'onChange');
+        $field.material_select();
+        this.isActivated.set(true);
     });
-    observer.observe(Skeleform.utils.$getFieldById(this, schema)[0], {
-        attributes: true,
-        childList: true,
-        characterData: true,
-        subtree: true
-    });*/
+
+    Skeleform.utils.InvokeCallback(this, null, fieldSchema, 'onRendered');
 });
 
 Template.skeleformSelect.onDestroyed(function() {
@@ -304,10 +329,10 @@ Template.skeleformSelect.events({
     'change select': function(event, instance) {
         // perform validation and callback invocation on change
         let value = instance.getValue();
-        let schema = instance.data.fieldSchema.get();
+        let fieldSchema = instance.data.fieldSchema.get();
 
         instance.isValid();
 
-        Skeleform.utils.InvokeCallback(instance, value, schema, 'onChange', true);
+        Skeleform.utils.InvokeCallback(instance, value, fieldSchema, 'onChange', true);
     }
 });
