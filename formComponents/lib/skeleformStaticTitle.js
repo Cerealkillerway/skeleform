@@ -10,7 +10,7 @@ Template.skeleformStaticTitle.helpers({
         let classes = fieldSchema.classes;
 
         if (!instance.subscriptionsReady.get()) {
-            return '';
+            return;
         }
 
         function createTag(string) {
@@ -29,6 +29,7 @@ Template.skeleformStaticTitle.helpers({
 
         if (fieldSchema.subscription && instance.data.formContext.skeleSubsReady.get() === true) {
             content = fieldSchema.content(instance);
+            console.log(content);
             return createTag(content);
         }
         else {
@@ -52,12 +53,14 @@ Template.skeleformStaticTitle.onCreated(function() {
     this.subscriptionsReady = new ReactiveVar(false);
     let fieldSchema = this.data.fieldSchema.get();
 
-    if (fieldSchema.subscription) {
-        this.subscriptionsReady.set(fieldSchema.subscription(this));
-    }
-    else {
-        this.subscriptionsReady.set(true);
-    }
+    this.autorun(() => {
+        if (fieldSchema.subscription) {
+            this.subscriptionsReady.set(fieldSchema.subscription(this));
+        }
+        else {
+            this.subscriptionsReady.set(true);
+        }
+    });
 });
 
 Template.skeleformStaticTitle.onCreated(function() {

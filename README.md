@@ -100,6 +100,7 @@ Creates a container `<div>` (empty); it's useful for putting into it any runtime
 
 #### 2.2.3 staticTitle
 
+- **subscription**: *[function]* this function offers the chance to subscribe to data needed by the field and not already subscribed by the parent template; it receives the field's instance as a parameter and must return a ready handle;
 - **tag**: *[string] (optional)* the tag to use to wrap the title (default `<h3>`);
 - **classes**: *[array of strings] (optional)* array of classes to use on the *tag*;
 - **labelType**: *[string] (optional)* defines the suffix used for the lookup of the label's i18n string (default *_lbl*; available values: `title` for *_title*, `text` for *text*);

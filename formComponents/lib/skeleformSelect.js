@@ -140,11 +140,6 @@ Template.skeleformSelect.helpers({
                 result.push(option);
             });
 
-            /*if (schema.name === 'subscription') {
-                console.log('1 - setting new source');
-                console.log(result);
-            }*/
-
             return result;
         }
 
@@ -229,11 +224,6 @@ Template.skeleformSelect.onCreated(function() {
                 $field.material_select();
             }
 
-            /*if (name === 'subscription') {
-                console.log('2 - setting selected attribute...');
-                console.log($field.children());
-            }*/
-
             for (const option of $field.children()) {
                 let optionValue = $(option).val();
 
@@ -250,10 +240,6 @@ Template.skeleformSelect.onCreated(function() {
                 // otherwise the value is a string
                 else {
                     if (value === optionValue) {
-                        /*if (fieldSchema.name === 'subscription') {
-                            console.log(`2.5 - setting select for: ${optionValue}`);
-                            console.log($(option));
-                        }*/
                         $(option).attr('selected', true);
 
                     }
@@ -263,11 +249,6 @@ Template.skeleformSelect.onCreated(function() {
                 }
             }
 
-
-            /*if (name === 'subscription') {
-                console.log('3 - reinitialize plugin');
-                console.log($field.children()); //<- here $field.children() is an empty array (options are not populated yet)
-            }*/
             $field.material_select();
         });
 
