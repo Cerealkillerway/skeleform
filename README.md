@@ -82,6 +82,7 @@ If you have any problem using it, please have a look to the "troubleshooting" se
   - **sortable**: *[boolean] (optional)* makes the replica set sortable;
   - **setClasses**: *[array of strings] (optional)* array of classes to use on the replica set's container div;
   - **frameClasses**: *[array of strings] (optional)* array of classes to use on each replica item;
+- **mapTO:** *[function] (optional)* used to map the field's name property to another name in the database; the function receives the `fieldInstance` as a parameter and must return a string that is the name used for the field in the database;
 
 #### 2.2 Field specific options:
 

@@ -29,7 +29,6 @@ Template.skeleformStaticTitle.helpers({
 
         if (fieldSchema.subscription && instance.data.formContext.skeleSubsReady.get() === true) {
             content = fieldSchema.content(instance);
-            console.log(content);
             return createTag(content);
         }
         else {
