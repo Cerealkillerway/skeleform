@@ -1,7 +1,8 @@
 Skeleform = {
     validate: {},
     methods: {},
-    utils: {}
+    utils: {},
+    helpers: {}
 };
 
 Skeletor.Skeleform = Skeleform;

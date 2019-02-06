@@ -1,4 +1,4 @@
 import '../commonHelpers.js';
 
 
-Template.skeleformCreateButtons.helpers(toolbarsHelpers);
+Template.skeleformCreateButtons.helpers(SkeleUtils.GlobalHelpers.toolbarsHelpers);

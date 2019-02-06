@@ -58,7 +58,8 @@ Package.onUse(function(api) {
         'formComponents/templates/skeleformTimePicker.html',
         'formComponents/templates/skeleformClockPicker.html',
         'formComponents/templates/skeleformContainer.html',
-        'formComponents/templates/skeleformList.html'
+        'formComponents/templates/skeleformList.html',
+        'formComponents/templates/skeleformChart.html'
     ],
     ['client']);
 
@@ -102,7 +103,8 @@ Package.onUse(function(api) {
         'formComponents/lib/skeleformTimePicker.js',
         'formComponents/lib/skeleformClockPicker.js',
         'formComponents/lib/skeleformContainer.js',
-        'formComponents/lib/skeleformList.js'
+        'formComponents/lib/skeleformList.js',
+        'formComponents/lib/skeleformChart.js'
     ],
     ['client']);
 
@@ -120,7 +122,8 @@ Package.onUse(function(api) {
 
 Npm.depends({
     'sortablejs': '1.7.0',
-    'autonumeric': '4.5.1'
+    'autonumeric': '4.5.1',
+    'chart.js': '2.7.3'
 });
 
 Package.onTest(function(api) {

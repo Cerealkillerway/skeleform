@@ -101,10 +101,13 @@ Creates a container `<div>` (empty); it's useful for putting into it any runtime
 
 #### 2.2.3 staticTitle
 
+Displays a non-editable string; useful to create titles, subtitles, ...
+
 - **subscription**: *[function]* this function offers the chance to subscribe to data needed by the field and not already subscribed by the parent template; it receives the field's instance as a parameter and must return a ready handle;
 - **tag**: *[string] (optional)* the tag to use to wrap the title (default `<h3>`);
 - **classes**: *[array of strings] (optional)* array of classes to use on the *tag*;
 - **labelType**: *[string] (optional)* defines the suffix used for the lookup of the label's i18n string (default *_lbl*; available values: `title` for *_title*, `text` for *text*);
+- **content**: *[function] (optional)* a function that receives the field's instance as a parameter and returns the value to be displayed for the field; if undefined the value displayed is created from `labelType` and `name` properties;
 
 #### 2.2.4 input
 
@@ -163,7 +166,7 @@ Creates a container `<div>` (empty); it's useful for putting into it any runtime
 #### 2.2.7 select
 
 -   **subscription**: *[function]* this function offers the chance to subscribe to data needed by the field and not already subscribed by the parent template; it receives the field's instance as a parameter and must return a ready handle;
--   **source**: *[array of objects / mongo cursor / function] (required)* data source for options; must be an array of objects used to create the options of the field; the array can come from:
+-   **source**: *[array of objects / mongo cursor / function] (required)* data source for options; it receives the field's instance as a parameter and must return an array of objects used to create the options of the field; the array can come from:
 
 - - **possibility 1** *[array of objects]* an hard-coded array of objects; each object should be in this form:
     ​    - **label**: *[string] (required)* the i18n string to be used when displaying the option;
@@ -221,11 +224,11 @@ This type of field automatically tests that the selected file(s) matches an imag
 
 #### 2.2.12 list
 
-Used to display a list of eventually sortable items;
+Used to display a list of eventually sortable items using [sortablejs](https://github.com/SortableJS/Sortable) plugin;
 
 -   **subscription**: *[function]* this function offers the chance to subscribe to data needed by the field and not already subscribed by the parent template; it receives the field's instance as a parameter and must return a ready handle;
 
--   **source**: *[array of objects / mongo cursor / function] (required)* data source for options; must be an array of objects used to create the options of the field;
+-   **source**: *[array of objects / mongo cursor / function] (required)* data source for options; must be an array of objects used to create the options of the field; it receives the field's instance as a parameter;
 
 -   **value**: [function / object] (required) if an object, tells skeleform which one is the value of `source` property to use as `data-id` attribute for every source's item; this is the value that will be gathered from skeleform and saved in the db; it has the following properties:
 
@@ -244,6 +247,13 @@ Used to display a list of eventually sortable items;
 -   **sortable**: *[boolean]* decides if the list is sortable;
 
 -   **dragHandle**: *[string] (optional)* name of a material design's icon to use as drag handle; (default to "drag_handle");
+
+#### 2.2.13 chart
+
+Organizes data in charts using [chartist](https://gionkunz.github.io/chartist-js/getting-started.html) plugin;
+
+-   **subscription**: *[function]* this function offers the chance to subscribe to data needed by the field and not already subscribed by the parent template; it receives the field's instance as a parameter and must return a ready handle;
+-   **source**: *[array of objects / mongo cursor / function] (required)* data source for options; must be an array of objects used to create the options of the field; it receives the field's instance as a parameter;
 
 ### 3 SKELEFORMGROUP (DISPLAYING INLINE)
 
@@ -269,6 +279,50 @@ Every field in *Skeleform* must implement this methods:
 
 Inside these methods (and everywhere in the field's code) calling `Skeleform.utils.$getFieldById(templateInstance, schema)` is the preferred way to get the jQuery object wrapping the DOM of the main field's input element.
 
+Every field must register itself by calling `Skeleform.utils.registerField(this)` inside the `onCreated` callback.
+Every field must initialize a reactive var called `isActivated` in the `onCreated` callback and set it `true` when the field finished rendering.
+So wrapping up the above, every field `onCreated` callback should look like:
+
+```javascript
+Template.myCustomFieldName.onCreated(function() {
+	Skeleform.utils.registerField(this);
+    this.isActivated = new ReactiveVar(false);
+    
+    let fieldSchema = this.data.fieldSchema.get();
+    
+    //(...)
+    this.getValue = () => {
+       //(...)
+    };
+    
+    this.isValid = () => {
+        //usual way:
+        let formContext = this.data.formContext;
+        
+        return Skeleform.validate.checkOptions(this.getValue(), fieldSchema, formContext.schema, formContext.item);
+    };
+        
+    this.setValue = (value) => {
+        //(...)
+    };
+        
+    //(...)
+});
+```
+
+The `onRendered` callback is the right place to initialize any required external plugin on the field.
+Finally, when destroyed the field must unregister from the form instance, this way:
+
+```javascript
+Template.myCustomFieldName.onDestroyed(function() {
+   let fields = this.data.formContext.fields;
+    
+   fields.removeAt(fields.indexOf(this));
+});
+```
+
+
+
 
 ### 5 TIPS ABOUT THE CALLBACKS
 
@@ -280,20 +334,22 @@ for convenience there is a function you can use to get a field's instance by nam
 **Ex.:**
 In this example we will update the value of `username` field from within the `userId`'s `onChange` callback.
 
-    {
-        name: 'userId',
-        output: 'input',
-        i18n: false,
-        callbacks: {
-            onChange: function(value, fieldInstance) {
-                let userDocument = Skeletor.Data.Users.findOne({_id: value});
-    
-                // setting the value on the formInstance's item object will reactively
-                // update the value of the 'username' field
-                Skeletor.SkeleUtils.GlobalUtilities.getFieldInstance(fieldInstance.data.formContext, 'username').setValue(userDocument.username)
-            }
+```javascript
+{
+    name: 'userId',
+    output: 'input',
+    i18n: false,
+    callbacks: {
+        onChange: function(value, fieldInstance) {
+            let userDocument = Skeletor.Data.Users.findOne({_id: value});
+
+            // setting the value on the formInstance's item object will reactively
+            // update the value of the 'username' field
+            Skeletor.SkeleUtils.GlobalUtilities.getFieldInstance(fieldInstance.data.formContext, 'username').setValue(userDocument.username)
         }
     }
+}
+```
 
 #### 5.2 UPDATE FIELD SCHEMAS
 
@@ -305,23 +361,25 @@ The schema of every fiels is wrapped inside a reactive var, that means that call
 
 As seen above, the *SkeleUtils* package, that is part of the *Skeletor* project (as *Skeleform* is) has an handy function to retrieve a fieldInstance starting from the formContext (accessible from within any fieldInstance at `fieldInstance.data.formContext`) called `SkeleUtils.GlobalUtilities.getFieldInstance()`; *SkeleUtils* is exported by *Skeletor* so it's accessible from within your app by calling `Skeletor.Skeleutils`; so our example would be:
 
-    {
-        name: 'userId',
-        output: 'input',
-        i18n: false,
-        callbacks: {
-            onChange: function(value, fieldInstance) {
-                let emailField = Skeletor.SkeleUtils.GlobalUtilities.getFieldInstance(fieldInstance.data.formContext, 'email');
-                let emailSchema = emailField.data.fieldSchema.get();
-    
-                // make the field required reactively
-                emailSchema.validation = {min: 3};
-    
-                // set the new schema (this will refresh the field)
-                emailField.data.fieldSchema.set(emailSchema);
-            }
+```javascript
+{
+    name: 'userId',
+    output: 'input',
+    i18n: false,
+    callbacks: {
+        onChange: function(value, fieldInstance) {
+            let emailField = Skeletor.SkeleUtils.GlobalUtilities.getFieldInstance(fieldInstance.data.formContext, 'email');
+            let emailSchema = emailField.data.fieldSchema.get();
+
+            // make the field required reactively
+            emailSchema.validation = {min: 3};
+
+            // set the new schema (this will refresh the field)
+            emailField.data.fieldSchema.set(emailSchema);
         }
     }
+}
+```
 
 #### 5.3 AVAILABLE SKELEFORM FUNCTIONS
 

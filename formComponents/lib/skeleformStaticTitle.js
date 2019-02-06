@@ -34,7 +34,7 @@ Template.skeleformStaticTitle.helpers({
         else {
             if (fieldSchema.content !== undefined) {
                 content = fieldSchema.content(instance);
-                return createTag(instance);
+                return createTag(content);
             }
             else {
                 content = Skeleform.utils.createLabel(fieldSchema.name, fieldSchema.labelType);

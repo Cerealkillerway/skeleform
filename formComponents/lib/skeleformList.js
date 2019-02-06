@@ -209,10 +209,8 @@ Template.skeleformList.onRendered(function() {
 
     sortableOptions = {...defaultOptions, ...fieldSchema.sortableOptions};
 
-    Meteor.setTimeout(() => {
-        this.sortable = Sortable.create(items, sortableOptions);
-        this.sortablePluginActive.set(true);
-    }, 1000);
+    this.sortable = Sortable.create(items, sortableOptions);
+    this.sortablePluginActive.set(true);
 
     Skeleform.utils.InvokeCallback(this, null, fieldSchema, 'onRendered');
 });

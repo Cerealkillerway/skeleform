@@ -83,11 +83,3 @@ skeleformGeneralHelpers = {
         return Template.instance();
     }
 };
-
-
-toolbarsHelpers = {
-    makeUndoPath: function(path) {
-        let params = Skeleform.utils.createPath(path);
-        return FlowRouter.path(path[0], params.params, {lang: Skeletor.Skelelang.i18n.currentLocale.get()});
-    }
-};
