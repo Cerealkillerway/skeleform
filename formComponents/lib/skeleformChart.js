@@ -63,6 +63,10 @@ Template.skeleformChart.onRendered(function() {
         let $field = Skeleform.utils.$getFieldById(this, fieldSchema);
         let chartData = this.items.get();
 
+        if (this.chart) {
+            this.chart.destroy();
+        }
+
         this.chart = new Chart($field[0], {
             type: fieldSchema.chartType(this),
             data: chartData,
