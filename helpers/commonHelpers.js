@@ -83,3 +83,6 @@ skeleformGeneralHelpers = {
         return Template.instance();
     }
 };
+
+
+Skeleform.helpers.skeleformGeneralHelpers = skeleformGeneralHelpers;

@@ -1,6 +1,6 @@
 <template name="skeleformList">
     <div class="row skeleformList">
-        <div class="col s12 m6">
+        <div class="col {{fieldSize schema.size}} {{schema.style}}">
             {{fieldValue}}
 
             {{#if fieldSchema.header}}

@@ -59,7 +59,8 @@ Package.onUse(function(api) {
         'formComponents/templates/skeleformClockPicker.html',
         'formComponents/templates/skeleformContainer.html',
         'formComponents/templates/skeleformList.html',
-        'formComponents/templates/skeleformChart.html'
+        'formComponents/templates/skeleformChart.html',
+        'formComponents/templates/skeleformButton.html'
     ],
     ['client']);
 
@@ -104,7 +105,8 @@ Package.onUse(function(api) {
         'formComponents/lib/skeleformClockPicker.js',
         'formComponents/lib/skeleformContainer.js',
         'formComponents/lib/skeleformList.js',
-        'formComponents/lib/skeleformChart.js'
+        'formComponents/lib/skeleformChart.js',
+        'formComponents/lib/skeleformButton.js'
     ],
     ['client']);
 

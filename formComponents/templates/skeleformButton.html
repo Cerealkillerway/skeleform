@@ -1,0 +1,30 @@
+<template name="skeleformButton">
+    <div class="col {{fieldSize schema.size}} {{schema.style}}">
+        <a id="{{field schema.name}}" class="btn waves-effect waves-light">
+            {{#if schema.icon}}
+                <i class="material-icons left">{{schema.icon}}</i>
+            {{/if}}
+            {{label schema.name "button"}}
+        </a>
+
+        <!-- confirmation modal -->
+        {{#if schema.confirmAction}}
+            <div id="{{field schema.name}}Modal" class="modal">
+                <div class="modal-content">
+                    {{{confirmModalString}}}
+                    {{{confirmModalString 'body'}}}
+                </div>
+                <div class="modal-footer">
+                    <div class="waves-effect waves-light btn confirmColor confirmModalConfirm">
+                        <i class="material-icons small left">{{confirmModalIcon 'okButton'}}</i>
+                        <span>{{confirmModalString 'okButton'}}</span>
+                    </div>
+                    <div class="waves-effect waves-light btn undoColor confirmModalUndo">
+                        <i class="material-icons small left">{{confirmModalIcon 'cancelButton'}}</i>
+                        <span>{{confirmModalString 'cancelButton'}}</span>
+                    </div>
+                </div>
+            </div>
+        {{/if}}
+    </div>
+</template>

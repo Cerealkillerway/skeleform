@@ -39,12 +39,13 @@ Template.skeleformCreateButtons.events({
             SkeleUtils.GlobalUtilities.logger('will now call method: ' + method + ' data:', 'skeleform');
             SkeleUtils.GlobalUtilities.logger(data, 'skeleform');
             SkeleUtils.GlobalUtilities.logger('schema name: ' + formContext.schemaName, 'skeleform');
-            Meteor.call(method, data, formContext.schemaName, FlowRouter.getParam('itemLang'), function(error, result) {
+
+            Meteor.call(method, data, formContext.schemaName, function(error, result) {
                 if (options.useModal) {
                     $('#gearLoadingModal').closeModal();
                 }
 
-                Skeleform.utils.skeleformHandleResult(error, result, 'create', data, schema, formContext);
+                Skeleform.utils.skeleformHandleResult(error, result, 'create', schema, formContext);
             });
         }
     }

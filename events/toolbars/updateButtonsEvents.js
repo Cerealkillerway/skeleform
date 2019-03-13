@@ -42,12 +42,13 @@ Template.skeleformUpdateButtons.events({
             SkeleUtils.GlobalUtilities.logger('documentId: ' + documentId, 'skeleform');
             SkeleUtils.GlobalUtilities.logger('schema name: ' + formContext.schemaName, 'skeleform');
 
-            Meteor.call(method, documentId, data, formContext.schemaName, FlowRouter.getParam('itemLang'), function(error, result) {
+            Meteor.call(method, documentId, data, formContext.schemaName, function(error, result) {
                 if (options.useModal) {
                     $('#gearLoadingModal').closeModal();
                 }
+                console.log(result);
 
-                Skeleform.utils.skeleformHandleResult(error, result, 'update', data, schema, formContext);
+                Skeleform.utils.skeleformHandleResult(error, result, 'update', schema, formContext);
             });
         }
     }

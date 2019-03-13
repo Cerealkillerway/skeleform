@@ -214,20 +214,6 @@ Template.skeleformInput.onCreated(function() {
         let value = this.getValue();
         let validationResult = Skeleform.validate.checkOptions(value, schema, formContext.schema, formContext.item, this);
 
-        if (schema.validation && schema.validation.unique === 'autoset') {
-            let uniqueReasonIndex = validationResult.reasons.indexOf('unique');
-
-            if (!validationResult.valid && uniqueReasonIndex >= 0) {
-                this.setValue(value + '-' + Random.id());
-
-                validationResult.reasons.removeAt(uniqueReasonIndex);
-
-                if (validationResult.reasons.length === 0) {
-                    validationResult.valid = true;
-                }
-            }
-        }
-
         return validationResult;
     };
 

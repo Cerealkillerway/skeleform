@@ -55,6 +55,7 @@ If you have any problem using it, please have a look to the "troubleshooting" se
 - **output**: *[String] (required)* form element (available valuse: *"none", "container", "staticTitle", "input", "checkBox", "editor", "select", "datePicker", "timePicker", "clockPicker"*);
 - **i18n**: *[boolean] (optional)* specify that the field will be prefixed with *"<:currentLang>---"*; this identifies the field as internationalized; by default the option is enabled; you should use this option only if you want to set it to false; (default *true*);
 - **size**: *[string] (optional)* materialize's grid system classes; default to *"s12 m6"*;
+- **style**: *[string] (optional)* wrapper css class for custom styling of the field;
 - **callbacks**: *[object] (optional)* dictionary of callbacks;
     - **onChange(value, fieldInstance)**: *[function] (optional)* a callback to be performed when the value of the field changes; it receives the field's value and the field's instance as parameters;
     - **onCreated(fieldInstance)**: a callback fired when the field is created; it receives the field's instance as parameter;
@@ -68,7 +69,6 @@ If you have any problem using it, please have a look to the "troubleshooting" se
     - **collectionForUnicityCheck**: *[string] (optional)* the collection where to perform unicity check for the field; if omitted, the unicity check is performed against schema's *__collection*;
     - **showErrorOn**: *[string / array of strings]* the name (or array of names) of another field where to show errors relative of this field; this is useful if the current field is hidden and generated starting from other fields values (for example a hidden url-slug parameter generated dasherizing the field "name"; setting this to "name" will show validation errors for the url-slug field, that is invisible, on the "name" field, that is visible);
     - **showErrorFor**: *[string / array of strings]* the name (or array of names) of special error.reason(s) that needs to be displayed on this field; this will handle special errors not due to field's validation rules (for example "Email already exists." error when creating a new meteor user);
-- **style**: *[string] (optional)* wrapper css class for custom styling of the field;
 - **showOnly**: *[string ('create'/'update')] (optional)* defines if the field should be rendered only on creation or only on update; **IMPORTANT**: this option can be set also on a *skeleformGroup* object and will take effect on all fields of the group;
 - **replicaSet**: *[object] (optional)* defines the group as a replica set; that means that the field(s) will be replicable by the user who will be able to add or remove copies of this field(s);
   *Important:* this option doesn't work on a single field, but only on a skeleformGroup; if you need a single replicable field, you should define it inside a skeleformGroup.
@@ -309,6 +309,14 @@ Template.myCustomFieldName.onCreated(function() {
     //(...)
 });
 ```
+
+`skeleformGeneralHelpers` is a dictionary of common helpers usually used by all fields; so it will probably needed by every custom field:
+
+```
+Template.myCustomFieldName.helpers(skeleformGeneralHelpers)
+```
+
+Outside from the skeleform package the general helpers are available as `Skeletor.Skeleform.helpers.skeleformGeneralHelpers`.
 
 The `onRendered` callback is the right place to initialize any required external plugin on the field.
 Finally, when destroyed the field must unregister from the form instance, this way:
