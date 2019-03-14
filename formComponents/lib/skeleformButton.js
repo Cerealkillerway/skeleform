@@ -61,6 +61,15 @@ Template.skeleformButton.onCreated(function() {
     this.isActivated = new ReactiveVar(false);
 
     let fieldSchema = this.data.fieldSchema.get();
+
+	// template methods
+	this.modalProgressShow = () => {
+		this.$('.modal').find('.progress').slideDown(200);
+	}
+
+	this.modalProgressHide = () => {
+		this.$('.modal').find('.progress').slideUp(200);
+	}
 });
 
 
@@ -95,7 +104,6 @@ Template.skeleformButton.events({
 	'click .confirmModalConfirm': function(event, instance) {
 		let fieldSchema = instance.data.fieldSchema.get();
 
-		instance.confirmModal.modal('close');
 		fieldSchema.action(instance);
 	}
 })

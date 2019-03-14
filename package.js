@@ -1,6 +1,6 @@
 Package.describe({
     name: 'cerealkiller:skeleform',
-    version: '3.5.2',
+    version: '4.0.12',
     summary: 'form from schema creator',
     // URL to the Git repository containing the source code for this package.
     git: '',
