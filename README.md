@@ -239,6 +239,7 @@ Used to display a list of eventually sortable items using [sortablejs](https://g
 -   **displayValues**: *[function] (mandatory)* a function that receives the template instance and returns an array of objects; every object can have the following properties:
     -   **name**: *[string] (mandatory alternative to value)* the name of an attribute from the elements of `source` that will be displayed in the template;
     -   **value**: *[string] (mandatory alternative to name)* a value to display for each element of `source`;
+    -   **schema**: *[string] (optional)* the name of  an external schema where to look for the field' schema; by default it uses  the current form' schema; if the *name* of the field is relative to another schema, the name of that schema must be provided here; not necessary if *value* is provided instead of *name*;
     -   **isIcon**: *[boolean] (optional)* tells if the current source element's value is a material icon's name (default to false);
     -   **transform** *[function] (optional)* a function that receives the current value and the fieldInstance and returns the value to be displayed;
 
