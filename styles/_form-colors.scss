@@ -1,6 +1,16 @@
 body.skelePanelBody {
     .skeleStaticTop {
         background-color: darken($firstPanelColor, 20%) !important;
+
+        input {
+            color: $firstPanelColorText;
+            border-bottom: none;
+
+            &:focus {
+                border-bottom: none !important;
+                box-shadow: none !important;
+            }
+        }
     }
 
     // form elements
