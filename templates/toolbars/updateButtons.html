@@ -20,6 +20,10 @@
                 <span>{{i18n "cancel_btn"}}</span>
             </a>
 
+            {{#if (skeleCheckPermissions "timeMachineUse")}}
+                {{> timeMachineFunctions}}
+            {{/if}}
+
             {{> skeleformStaticAddons}}
 
             {{#if isTranslatable}}

@@ -47,6 +47,7 @@ Package.onUse(function(api) {
         'templates/toolbars/createButtons.html',
         'templates/toolbars/updateButtons.html',
         'templates/toolbars/printFunctions.html',
+        'templates/toolbars/timeMachineFunctions.html',
         'formComponents/templates/skeleformDatePicker.html',
         'formComponents/templates/skeleformEditor.html',
         'formComponents/templates/ckMaterialNotePlugins.html',
@@ -78,6 +79,7 @@ Package.onUse(function(api) {
         'events/toolbars/createButtonsEvents.js',
         'events/toolbars/updateButtonsEvents.js',
         'events/toolbars/printFunctionsEvents.js',
+        'events/toolbars/timeMachineEvents.js',
         'events/components/replicaSetEvents.js',
         'events/testEvents.js',
 

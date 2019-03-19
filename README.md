@@ -251,10 +251,22 @@ Used to display a list of eventually sortable items using [sortablejs](https://g
 
 #### 2.2.13 chart
 
-Organizes data in charts using [chartist](https://gionkunz.github.io/chartist-js/getting-started.html) plugin;
+Organizes data in charts using [chartjs](https://www.chartjs.org/docs/latest/) plugin;
 
 -   **subscription**: *[function]* this function offers the chance to subscribe to data needed by the field and not already subscribed by the parent template; it receives the field's instance as a parameter and must return a ready handle;
 -   **source**: *[array of objects / mongo cursor / function] (required)* data source for options; must be an array of objects used to create the options of the field; it receives the field's instance as a parameter;
+-   **chartType**: *[string] (required)* name of the chart type (see chartjs docs for available options);
+-   **options**: *[object] (optional)* dictionary of options for the chart (see chartjs docs for availabel options);
+
+#### 2.2.14 button
+
+Creates a button to perform a specific task when clicked; this fields is not gathered or validated;
+
+-   **confirmAction**: *[boolean] (optional)* if true shows a modal to ask for confirmation before performing the assigned task; default to false;
+-   **confirmModal**: *[object] (optional)* dictionary of options for the confirmation modal; it can have the following properties:
+    -   **title**: *[string] (optional)* the name of an i18n string to be used as title for the modal;
+    -   **body**: *[string] (optional)* the name of an i18n string to be displayed in the body of the modal;
+-   **action**: *[function] (required)* the task the button should perform; it receives the fieldInstance as a parameter;
 
 ### 3 SKELEFORMGROUP (DISPLAYING INLINE)
 

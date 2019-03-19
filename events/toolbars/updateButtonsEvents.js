@@ -12,6 +12,7 @@ Template.skeleformUpdateButtons.events({
         let method;
         let options = {};
         let data = Skeleform.utils.skeleformGatherData(formContext, fields);
+        let item = null;
 
         if (schema.__options) {
             if (schema.__options.loadingModal) {
@@ -42,7 +43,12 @@ Template.skeleformUpdateButtons.events({
             SkeleUtils.GlobalUtilities.logger('documentId: ' + documentId, 'skeleform');
             SkeleUtils.GlobalUtilities.logger('schema name: ' + formContext.schemaName, 'skeleform');
 
-            Meteor.call(method, documentId, data, formContext.schemaName, function(error, result) {
+            // avoid to send item if it's useless
+            if (schema.__options.timeMachine === true) {
+                item = formContext.item;
+            }
+
+            Meteor.call(method, documentId, data, formContext.schemaName, item, function(error, result) {
                 if (options.useModal) {
                     $('#gearLoadingModal').closeModal();
                 }

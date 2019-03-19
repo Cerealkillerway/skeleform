@@ -1,0 +1,28 @@
+<template name="timeMachineFunctions">
+    <div class="waves-effect waves-light btn actionColor skeleformTimeMachineBtn button-collapse" data-activates="mobile-demo">
+        <i class="material-icons small left">schedule</i>
+        <span>{{i18n "timeMachine_btn"}}</span>
+    </div>
+
+    <div class="timeMachineFunctionsOverlay">
+    </div>
+    <div class="timeMachineFunctionsWrapper">
+        <h5 class="availableStatesTitle"><i class="material-icons small left">schedule</i>{{i18n "timeMachine_lbl"}}</h5>
+        <h6 class="availableStatesSubtitle">{{i18n "availableStates_lbl"}}:</h6>
+
+        <div class="availableStates"></div>
+
+        <div class="bottomToolbar">
+              <div class="squareBtn">
+                    <i class="material-icons">settings_backup_restore</i>
+              </div>
+        </div>
+        <div class="toolbarDescription">test</div>
+        <div class="timeMachineCurrentStateWrapper">
+              <div class="timeMachineCurrentStateLabel">
+                    {{i18n "currentState_lbl"}}:
+              </div>
+              <div class="timeMachineCurrentState">3</div>
+        </div>
+    </div>
+</template>
