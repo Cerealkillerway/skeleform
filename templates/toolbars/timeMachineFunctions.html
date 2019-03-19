@@ -13,16 +13,17 @@
         <div class="availableStates"></div>
 
         <div class="bottomToolbar">
-              <div class="squareBtn">
+              <div class="squareBtn resetTimeMachineStatus" data-tooltip="backToLatestStatus_tooltip">
                     <i class="material-icons">settings_backup_restore</i>
               </div>
         </div>
-        <div class="toolbarDescription">test</div>
+        <div class="toolbarDescription"></div>
+
         <div class="timeMachineCurrentStateWrapper">
               <div class="timeMachineCurrentStateLabel">
                     {{i18n "currentState_lbl"}}:
               </div>
-              <div class="timeMachineCurrentState">3</div>
+              <div class="timeMachineCurrentState">{{currentState}}</div>
         </div>
     </div>
 </template>

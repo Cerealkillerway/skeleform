@@ -1,6 +1,6 @@
 Package.describe({
     name: 'cerealkiller:skeleform',
-    version: '4.0.12',
+    version: '4.1.12',
     summary: 'form from schema creator',
     // URL to the Git repository containing the source code for this package.
     git: '',
@@ -88,7 +88,8 @@ Package.onUse(function(api) {
         'helpers/components/replicaSetHelpers.js',
         'helpers/skeleformToolbarsHelpers.js',
         'helpers/toolbars/createButtonsHelpers.js',
-        'helpers/toolbars/updateButtonsHelpers.js'
+        'helpers/toolbars/updateButtonsHelpers.js',
+        'helpers/toolbars/timeMachineHelpers.js'
     ],
     ['client']);
 
