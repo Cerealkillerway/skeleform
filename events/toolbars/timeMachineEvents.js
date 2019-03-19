@@ -37,14 +37,23 @@ Template.timeMachineFunctions.onCreated(function() {
 });
 
 
+let deleteStateBtn = `
+    <div class="deleteStateBtn">
+        <i class="material-icons">delete</i>
+    </div>
+    `;
+
+
 Template.timeMachineFunctions.onRendered(function() {
+    let formContext = this.data.formContext;
+    let instance = this;
+
     this.autorun(() => {
         if (!this.statesReady.get()) {
             return false;
         }
 
         let $availableStates = this.$('.availableStates');
-        let formContext = this.data.formContext;
         let schema = formContext.schema;
         let documentId = formContext.item._id;
         let collection = schema.__collection;
@@ -55,14 +64,44 @@ Template.timeMachineFunctions.onRendered(function() {
         $availableStates.empty();
         for (let [index, state] of item.__edits.entries()) {
             let stateDate = moment(state.__update.date, 'YYYYMMDD-hh:mm:ss').format('DD MMMM YYYY - hh:mm:ss');
-
-            $availableStates.append(`
-                <div class="availableState" data-index="${index}">
+            let $state = $(`
+                <div class="availableState" data-index="${index}" data-time="${state.__update.date}">
                     ${stateDate} <span class="stateIndex">(${index})</span>
                 </div>
             `);
+
+            if (index === 0) {
+                $state.append(deleteStateBtn);
+            }
+
+            $availableStates.append($state);
         }
     });
+
+    this.confirmModal = this.$('#timeMachineConfirmModal').modal();
+    this.actions = {
+        deleteAllStates: () => {
+            SkeleUtils.GlobalUtilities.logger('deleting all timeMachine states for this document...', 'skeleformCommon');
+            Meteor.call('skeleTimeMachineReset', formContext.item._id, formContext.schemaName, 'all', function(error, result) {
+                if (error) {
+                    Materialize.toast(Skeletor.Skelelang.i18n.get('serverError_error'), 5000, 'error');
+                }
+                instance.confirmModal.modal('close');
+            });
+        },
+
+        deleteState: (params) => {
+            let stateTime = params.stateTime;
+
+            SkeleUtils.GlobalUtilities.logger(`deleting state: ${stateTime}`, 'skeleformCommon');
+            Meteor.call('skeleTimeMachineReset', formContext.item._id, formContext.schemaName, stateTime, function(error, result) {
+                if (error) {
+                    Materialize.toast(Skeletor.Skelelang.i18n.get('serverError_error'), 5000, 'error');
+                }
+                instance.confirmModal.modal('close');
+            });
+        }
+    }
 });
 
 
@@ -94,6 +133,11 @@ Template.timeMachineFunctions.events({
 
     'click .availableState': function(event, instance) {
         let indexToRestore = $(event.target).data('index');
+
+        if (indexToRestore === undefined) {
+            return false;
+        }
+
         let formContext = instance.data.formContext;
         let edits = formContext.item.__edits;
         let selectedEdit = edits[indexToRestore];
@@ -139,10 +183,40 @@ Template.timeMachineFunctions.events({
         instance.currentState.set(latestIndex);
     },
 
-    'mouseenter .squareBtn': function(event, instance) {
-        let tooltip = $(event.currentTarget).data('tooltip');
+    'click .deleteTimeMachineStates': function(event, instance) {
+        instance.$('#timeMachineConfirmModal').find('.confirmModalConfirm').data('action', 'deleteAllStates');
+        instance.confirmModal.modal('open');
+    },
 
-        instance.$('.toolbarDescription').html(Skeletor.Skelelang.i18n.get('backToLatestStatus_tooltip'));
+    'click .deleteStateBtn': function(event, instance) {
+        let $modal = instance.$('#timeMachineConfirmModal').find('.confirmModalConfirm');
+        let stateTime = $(event.currentTarget).parent('.availableState').data('time');
+
+        $modal.data('action', 'deleteState');
+        $modal.data('actionParams', JSON.stringify({'stateTime': stateTime}));
+        instance.confirmModal.modal('open');
+    },
+
+    'click .confirmModalConfirm': function(event, instance) {
+        let $target = $(event.currentTarget);
+        let action = $target.data('action');
+        let params = $target.data('actionParams');
+
+        if (params) {
+            params = JSON.parse(params);
+        }
+
+        instance.actions[action](params);
+    },
+
+    'click .confirmModalUndo': function(event, instance) {
+        instance.confirmModal.modal('close');
+    },
+
+    'mouseenter .squareBtn': function(event, instance) {
+        let tooltip = $(event.target).data('tooltip');
+
+        instance.$('.toolbarDescription').html(Skeletor.Skelelang.i18n.get(tooltip));
     },
 
     'mouseleave .squareBtn': function(event, instance) {

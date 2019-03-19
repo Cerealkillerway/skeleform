@@ -1,5 +1,5 @@
 <template name="timeMachineFunctions">
-    <div class="waves-effect waves-light btn actionColor skeleformTimeMachineBtn button-collapse" data-activates="mobile-demo">
+    <div class="waves-effect waves-light btn actionColor skeleformTimeMachineBtn">
         <i class="material-icons small left">schedule</i>
         <span>{{i18n "timeMachine_btn"}}</span>
     </div>
@@ -16,6 +16,10 @@
               <div class="squareBtn resetTimeMachineStatus" data-tooltip="backToLatestStatus_tooltip">
                     <i class="material-icons">settings_backup_restore</i>
               </div>
+
+              <div class="squareBtn deleteTimeMachineStates" data-tooltip="deleteAllStates_tooltip">
+                    <i class="material-icons">delete</i>
+              </div>
         </div>
         <div class="toolbarDescription"></div>
 
@@ -24,6 +28,26 @@
                     {{i18n "currentState_lbl"}}:
               </div>
               <div class="timeMachineCurrentState">{{currentState}}</div>
+        </div>
+    </div>
+
+    <div id="timeMachineConfirmModal" class="modal">
+        <div class="modal-content">
+            Are you sure???
+
+            <div class="progress skeleformBtnConfirmModalProgress">
+                <div class="indeterminate"></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="waves-effect waves-light btn confirmColor confirmModalConfirm">
+                <i class="material-icons small left">done</i>
+                <span>{{i18n 'ok_btn'}}</span>
+            </div>
+            <div class="waves-effect waves-light btn undoColor confirmModalUndo">
+                <i class="material-icons small left">undo</i>
+                <span>{{i18n 'cancel_btn'}}</span>
+            </div>
         </div>
     </div>
 </template>
