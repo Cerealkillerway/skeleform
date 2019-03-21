@@ -26,7 +26,7 @@ let displayValue = function(displaySchema, sourceData, instance) {
         fields = formSchema.fields;
     }
 
-    let fieldSchema = SkeleUtils.GlobalUtilities.fieldSchemaLookup(fields, name);
+    let fieldSchema = Skeletor.SkeleUtils.GlobalUtilities.fieldSchemaLookup(fields, name);
 
     if (!fieldSchema || fieldSchema.i18n === false) {
         value = sourceData[name];

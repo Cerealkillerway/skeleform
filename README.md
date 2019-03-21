@@ -350,7 +350,7 @@ Template.myCustomFieldName.onDestroyed(function() {
 #### 5.1 UPDATE FIELD VALUES
 
 If you want to update another field's value from within a field's callback, you should call the `setValue()` method on that field's instance;
-for convenience there is a function you can use to get a field's instance by name: `Skeletor.SkeleUtils.GlobalUtilities.getFieldInstance(formContext, fieldName)`; the formContext it's accessible from any fieldInstance in this way: `fieldInstance.data.formContext`;
+for convenience there is a function you can use to get a field's instance by name: `Skeletor.Skeletor.SkeleUtils.GlobalUtilities.getFieldInstance(formContext, fieldName)`; the formContext it's accessible from any fieldInstance in this way: `fieldInstance.data.formContext`;
 
 **Ex.:**
 In this example we will update the value of `username` field from within the `userId`'s `onChange` callback.
@@ -366,7 +366,7 @@ In this example we will update the value of `username` field from within the `us
 
             // setting the value on the formInstance's item object will reactively
             // update the value of the 'username' field
-            Skeletor.SkeleUtils.GlobalUtilities.getFieldInstance(fieldInstance.data.formContext, 'username').setValue(userDocument.username)
+            Skeletor.Skeletor.SkeleUtils.GlobalUtilities.getFieldInstance(fieldInstance.data.formContext, 'username').setValue(userDocument.username)
         }
     }
 }
@@ -380,7 +380,7 @@ you can always access all field(s) properties starting from a `fieldInstance` an
 Let' say that in the `userId.onChange` callback just seen here above you need to update the schema of the `email` field to make it required;  
 The schema of every fiels is wrapped inside a reactive var, that means that calling `set()` on it will cause the rerun of every function that uses 'get()' from it; in other words setting a new value on a field' schema will re-render it;
 
-As seen above, the *SkeleUtils* package, that is part of the *Skeletor* project (as *Skeleform* is) has an handy function to retrieve a fieldInstance starting from the formContext (accessible from within any fieldInstance at `fieldInstance.data.formContext`) called `SkeleUtils.GlobalUtilities.getFieldInstance()`; *SkeleUtils* is exported by *Skeletor* so it's accessible from within your app by calling `Skeletor.Skeleutils`; so our example would be:
+As seen above, the *SkeleUtils* package, that is part of the *Skeletor* project (as *Skeleform* is) has an handy function to retrieve a fieldInstance starting from the formContext (accessible from within any fieldInstance at `fieldInstance.data.formContext`) called `Skeletor.SkeleUtils.GlobalUtilities.getFieldInstance()`; *SkeleUtils* is exported by *Skeletor* so it's accessible from within your app by calling `Skeletor.Skeleutils`; so our example would be:
 
 ```javascript
 {
@@ -389,7 +389,7 @@ As seen above, the *SkeleUtils* package, that is part of the *Skeletor* project 
     i18n: false,
     callbacks: {
         onChange: function(value, fieldInstance) {
-            let emailField = Skeletor.SkeleUtils.GlobalUtilities.getFieldInstance(fieldInstance.data.formContext, 'email');
+            let emailField = Skeletor.Skeletor.SkeleUtils.GlobalUtilities.getFieldInstance(fieldInstance.data.formContext, 'email');
             let emailSchema = emailField.data.fieldSchema.get();
 
             // make the field required reactively
@@ -452,7 +452,7 @@ It is set to use 3 default methods for the 3 basic operations:
 
 These methods, before doing the actual document creation, update or delete perform the followings:
 
- - call `SkeleUtils.Permissions.checkPermissions()` to check that the current user have the right permissions to perform the operation;
+ - call `Skeletor.SkeleUtils.Permissions.checkPermissions()` to check that the current user have the right permissions to perform the operation;
  - for create or update, validate the collected data against the schema; this provide a client and server-side security check on the data to be saved;
  - if required add the "tracked" objects to store informations about the current action (see `__options.tracked` in the **schema options** - chapter 1);
 

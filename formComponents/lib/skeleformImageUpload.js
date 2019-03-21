@@ -133,7 +133,7 @@ Template.skeleformImageUpload.onCreated(function() {
                 let tempH = tempImg.height;
 
                 // create thumbnail canvas
-                SkeleUtils.GlobalUtilities.logger('creating image thumb canvas for loaded image...', 'skeleformField');
+                Skeletor.SkeleUtils.GlobalUtilities.logger('creating image thumb canvas for loaded image...', 'skeleformField');
                 let thumbCanvas = $('<canvas/>', {class: 'skeleThumbCanvas'})[0];
 
                 $canvasContainer.append(thumbCanvas)
@@ -156,7 +156,7 @@ Template.skeleformImageUpload.onCreated(function() {
                 thumbCtx.drawImage(tempImg, widthOffset, heightOffset, thumbRif, thumbRif, 0, 0, thumbCanvas.width, thumbCanvas.height);
 
                 // create main image canvas
-                SkeleUtils.GlobalUtilities.logger('creating main image canvas for loaded image...', 'skeleformField');
+                Skeletor.SkeleUtils.GlobalUtilities.logger('creating main image canvas for loaded image...', 'skeleformField');
                 let mainCanvas = $('<canvas/>', {class: 'skeleMainCanvas'})[0];
 
                 $canvasContainer.append(mainCanvas)
@@ -220,7 +220,7 @@ Template.skeleformImageUpload.events = {
         _.each(images, function(image, index) {
             if (!image.type.match('image.*')) {
                 Materialize.toast(Skeletor.Skelelang.i18n.get('invalidImage_error'), 5000, 'error');
-                SkeleUtils.GlobalUtilities.logger('skipping image ' + index + ': invalid type', 'skeleformField');
+                Skeletor.SkeleUtils.GlobalUtilities.logger('skipping image ' + index + ': invalid type', 'skeleformField');
             }
             else {
                 let reader = new FileReader();
@@ -235,7 +235,7 @@ Template.skeleformImageUpload.events = {
 
                         // thumb calculations
                         if (schema.thumbnail) {
-                            SkeleUtils.GlobalUtilities.logger('creating image thumb canvas...', 'skeleformField');
+                            Skeletor.SkeleUtils.GlobalUtilities.logger('creating image thumb canvas...', 'skeleformField');
                             let thumbCanvas = $('<canvas/>', {class: 'skeleThumbCanvas'})[0];
 
                             $canvasContainer.append(thumbCanvas)

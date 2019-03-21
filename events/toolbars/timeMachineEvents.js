@@ -81,7 +81,7 @@ Template.timeMachineFunctions.onRendered(function() {
     this.confirmModal = this.$('#timeMachineConfirmModal').modal();
     this.actions = {
         deleteAllStates: () => {
-            SkeleUtils.GlobalUtilities.logger('deleting all timeMachine states for this document...', 'skeleformCommon');
+            Skeletor.SkeleUtils.GlobalUtilities.logger('deleting all timeMachine states for this document...', 'skeleformCommon');
             Meteor.call('skeleTimeMachineReset', formContext.item._id, formContext.schemaName, 'all', function(error, result) {
                 if (error) {
                     Materialize.toast(Skeletor.Skelelang.i18n.get('serverError_error'), 5000, 'error');
@@ -93,7 +93,7 @@ Template.timeMachineFunctions.onRendered(function() {
         deleteState: (params) => {
             let stateTime = params.stateTime;
 
-            SkeleUtils.GlobalUtilities.logger(`deleting state: ${stateTime}`, 'skeleformCommon');
+            Skeletor.SkeleUtils.GlobalUtilities.logger(`deleting state: ${stateTime}`, 'skeleformCommon');
             Meteor.call('skeleTimeMachineReset', formContext.item._id, formContext.schemaName, stateTime, function(error, result) {
                 if (error) {
                     Materialize.toast(Skeletor.Skelelang.i18n.get('serverError_error'), 5000, 'error');
@@ -109,8 +109,8 @@ Template.timeMachineFunctions.onRendered(function() {
 function restoreEdit(editToRestore, formContext) {
     _.each(editToRestore, function(fieldValue, key) {
         if (key.indexOf('__') !== 0) {
-            let fieldName = SkeleUtils.ClientServerUtilities.getFieldName(key).name;
-            let fieldInstance = SkeleUtils.GlobalUtilities.getFieldInstance(formContext, fieldName);
+            let fieldName = Skeletor.SkeleUtils.ClientServerUtilities.getFieldName(key).name;
+            let fieldInstance = Skeletor.SkeleUtils.GlobalUtilities.getFieldInstance(formContext, fieldName);
 
             if (fieldInstance) {
                 fieldInstance.setValue(fieldValue);
@@ -148,19 +148,19 @@ Template.timeMachineFunctions.events({
             return false;
         }
 
-        SkeleUtils.GlobalUtilities.logger(`starting to restore state ${indexToRestore}`, 'SkeleUtils');
+        Skeletor.SkeleUtils.GlobalUtilities.logger(`starting to restore state ${indexToRestore}`, 'SkeleUtils');
 
         if (indexToRestore > currentIndex) {
             // first restore to latest state, then go back to wanted state
             restoreEdit(formContext.item, formContext);
-            SkeleUtils.GlobalUtilities.logger('Restored to latest...', 'SkeleUtils');
+            Skeletor.SkeleUtils.GlobalUtilities.logger('Restored to latest...', 'SkeleUtils');
             currentIndex = edits.length;
             instance.currentState.set(currentIndex);
         }
 
         // go back through states until wanted state
         for (i = currentIndex - 1; i >= indexToRestore; i--) {
-            SkeleUtils.GlobalUtilities.logger(`restoring edit ${i}`, 'skeleform');
+            Skeletor.SkeleUtils.GlobalUtilities.logger(`restoring edit ${i}`, 'skeleform');
             restoreEdit(edits[i], formContext);
             instance.currentState.set(i);
         }
@@ -178,7 +178,7 @@ Template.timeMachineFunctions.events({
             return false;
         }
 
-        SkeleUtils.GlobalUtilities.logger('Restoring latest...', 'SkeleUtils');
+        Skeletor.SkeleUtils.GlobalUtilities.logger('Restoring latest...', 'SkeleUtils');
         restoreEdit(formContext.item, formContext);
         instance.currentState.set(latestIndex);
     },

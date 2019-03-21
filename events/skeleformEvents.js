@@ -25,7 +25,7 @@ Template.skeleform.onRendered(function() {
     this.formRendered.set(true);
 
     if (schema.__autoScrollTop !== false) {
-        SkeleUtils.GlobalUtilities.scrollTo(0, configuration.animations.onRendered);
+        Skeletor.SkeleUtils.GlobalUtilities.scrollTo(0, configuration.animations.onRendered);
     }
 
     // set toolbar in container if needed
@@ -105,7 +105,7 @@ Template.skeleform.onRendered(function() {
             if ($bar.length > 0) {
                 let barOffset = Math.round($bar.offset().top * 1) / 1;
 
-                SkeleUtils.GlobalUtilities.logger ('static bar calculated offset: ' + barOffset, 'skeleform');
+                Skeletor.SkeleUtils.GlobalUtilities.logger ('static bar calculated offset: ' + barOffset, 'skeleform');
 
                 $(window).on('scroll', function() {
                     let $placeholder = this.$('.skeleskeleStaticBarPlaceholder');

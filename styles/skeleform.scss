@@ -10,6 +10,9 @@
 @import "file-uploader";
 
 
+$editorBorderSize: 2px !default;
+
+
 
 .skeleformWrapper {
     margin-top: 60px;
@@ -329,6 +332,107 @@
         margin-left: auto;
         margin-right: auto;
         text-align: left;
+    }
+}
+
+
+.skeleEditorToolbarWrapper {
+    position: sticky;
+    top: 0;
+    background-color: $thirdPanelColor;
+    color: $thirdPanelColorText;
+    z-index: 9999;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    .skeleEditorToolbar {
+        display: flex;
+        flex-direction: row;
+
+        &:not(:first-of-type) {
+            margin-left: 5px;
+        }
+
+        .select-wrapper {
+            input {
+                border: none;
+                margin-bottom: 0;
+                height: 100%;
+            }
+
+            .caret {
+                color: $thirdPanelColorText;
+            }
+
+            ul.dropdown-content {
+
+                li:first-of-type.disabled {
+                    position: sticky;
+                    top: 0;
+                }
+            }
+        }
+    }
+
+    .skeleEditorBtn {
+        text-align: center;
+        height: 45px;
+        width: 45px;
+        cursor: pointer;
+
+        &.active {
+            background-color: $thirdPanelColorHover;
+        }
+
+        &:hover {
+            background-color: lighten($thirdPanelColorHover, 5%);
+        }
+
+        i {
+            line-height: 45px;
+            height: 100%;
+            width: 100%;
+        }
+    }
+}
+.skeleEditorToolbarDescriptionWrapper {
+    height: 26px;
+    background-color: lighten($firstPanelColor, 27%);
+    color: $thirdPanelColor;
+    border-left: solid $editorBorderSize $thirdPanelColor;
+    border-right: solid $editorBorderSize $thirdPanelColor;
+    flex-basis: 100%;
+
+    .skeleEditorToolbarDescription {
+        opacity: 0;
+        line-height: 15px;
+        font-size: 15px;
+        padding: 5px 15px;
+
+    }
+}
+.skeleEditorLabel {
+    top: -10px !important;
+}
+.skeleEditor {
+    height: 100%;
+    overflow: auto;
+    max-height: 500px;
+    background-color: $panelBackgroundOverlayColor;
+    padding: 12px 24px;
+    border-left: solid $editorBorderSize $thirdPanelColor;
+    border-right: solid $editorBorderSize $thirdPanelColor;
+    border-bottom: solid $editorBorderSize $thirdPanelColor;
+    margin-bottom: 24px;
+
+    &:focus {
+        outline: none;
+    }
+
+    &.altColor {
+        background-color: lighten($firstTextColor, 10%);
     }
 }
 

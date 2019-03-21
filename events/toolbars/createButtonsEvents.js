@@ -36,9 +36,9 @@ Template.skeleformCreateButtons.events({
                 $('#gearLoadingModal').openModal();
             }
 
-            SkeleUtils.GlobalUtilities.logger('will now call method: ' + method + ' data:', 'skeleform');
-            SkeleUtils.GlobalUtilities.logger(data, 'skeleform');
-            SkeleUtils.GlobalUtilities.logger('schema name: ' + formContext.schemaName, 'skeleform');
+            Skeletor.SkeleUtils.GlobalUtilities.logger('will now call method: ' + method + ' data:', 'skeleform');
+            Skeletor.SkeleUtils.GlobalUtilities.logger(data, 'skeleform');
+            Skeletor.SkeleUtils.GlobalUtilities.logger('schema name: ' + formContext.schemaName, 'skeleform');
 
             Meteor.call(method, data, formContext.schemaName, function(error, result) {
                 if (options.useModal) {

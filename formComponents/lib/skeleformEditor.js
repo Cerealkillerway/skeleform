@@ -26,7 +26,7 @@ Template.skeleformEditor.onCreated(function() {
     };
 
     this.isValid = () => {
-        //SkeleUtils.GlobalUtilities.logger('editor validation', 'skeleformFieldValidation');
+        //Skeletor.SkeleUtils.GlobalUtilities.logger('editor validation', 'skeleformFieldValidation');
         let formContext = this.data.formContext;
 
         return Skeleform.validate.checkOptions(this.getValue(), schema, formContext.schema, formContext.item);
@@ -79,7 +79,7 @@ Template.skeleformEditor.onRendered(function() {
     Tracker.afterFlush(() => {
         if (this.data.formContext.skeleSubsReady.get()) {
             if (this.$('.skeleEditor').children().length = 0) {
-                SkeleUtils.GlobalUtilities.logger('cannot find content in current editor', 'skelePlugin');
+                Skeletor.SkeleUtils.GlobalUtilities.logger('cannot find content in current editor', 'skelePlugin');
                 return false;
             }
 
@@ -89,9 +89,9 @@ Template.skeleformEditor.onRendered(function() {
             let contentColor = $editor.children().first().css('color');
             let delta;
 
-            editorBackground = SkeleUtils.GlobalUtilities.colorConversion(editorBackground, 'rgb', 'rgb');
-            contentColor = SkeleUtils.GlobalUtilities.colorConversion(contentColor, 'rgb', 'rgb');
-            delta = SkeleUtils.GlobalUtilities.colorDifference(editorBackground, contentColor);
+            editorBackground = Skeletor.SkeleUtils.GlobalUtilities.colorConversion(editorBackground, 'rgb', 'rgb');
+            contentColor = Skeletor.SkeleUtils.GlobalUtilities.colorConversion(contentColor, 'rgb', 'rgb');
+            delta = Skeletor.SkeleUtils.GlobalUtilities.colorDifference(editorBackground, contentColor);
 
             if (delta < 20) {
                 $editor.addClass('altColor');

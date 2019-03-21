@@ -16,12 +16,12 @@ Template.skeleformLangBar.events({
 // skeletor static addons
 Template.skeleformStaticAddons.events({
     'click .toTop': function(event, template) {
-        SkeleUtils.GlobalUtilities.scrollTo(0, configuration.animations.scrollTop);
+        Skeletor.SkeleUtils.GlobalUtilities.scrollTo(0, configuration.animations.scrollTop);
     },
     'click .toBottom': function(event, template) {
         // if there are no errors in the form -> scroll to page's bottom
         if ($('.invalid').length === 0) {
-            SkeleUtils.GlobalUtilities.scrollTo($('body').height(), configuration.animations.scrollBottom);
+            Skeletor.SkeleUtils.GlobalUtilities.scrollTo($('body').height(), configuration.animations.scrollBottom);
         }
         // otherwise scroll to first error
         else {
@@ -31,7 +31,7 @@ Template.skeleformStaticAddons.events({
                 offsetCorrection = offsetCorrection + 66;
             }
 
-            SkeleUtils.GlobalUtilities.scrollTo($('.invalid').first().offset().top - offsetCorrection, configuration.animations.scrollBottom);
+            Skeletor.SkeleUtils.GlobalUtilities.scrollTo($('.invalid').first().offset().top - offsetCorrection, configuration.animations.scrollBottom);
         }
     }
 });

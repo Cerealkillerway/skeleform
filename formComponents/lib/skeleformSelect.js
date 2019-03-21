@@ -189,7 +189,7 @@ Template.skeleformSelect.onCreated(function() {
     Skeleform.utils.InvokeCallback(this, null, fieldSchema, 'onCreated');
 
     this.setSource = (newSource) => {
-        Skeletor.SkeleUtils.GlobalUtilities.logger('new source injected', 'skeleformField');
+        Skeletor.Skeletor.SkeleUtils.GlobalUtilities.logger('new source injected', 'skeleformField');
         this.updateSource.set(newSource);
 
         let $field = Skeleform.utils.$getFieldById(this, fieldSchema);

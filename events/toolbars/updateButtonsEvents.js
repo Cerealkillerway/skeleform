@@ -38,10 +38,10 @@ Template.skeleformUpdateButtons.events({
                 $('#gearLoadingModal').openModal();
             }
 
-            SkeleUtils.GlobalUtilities.logger('will now call method: ' + method + ' data:', 'skeleform');
-            SkeleUtils.GlobalUtilities.logger(data, 'skeleform');
-            SkeleUtils.GlobalUtilities.logger('documentId: ' + documentId, 'skeleform');
-            SkeleUtils.GlobalUtilities.logger('schema name: ' + formContext.schemaName, 'skeleform');
+            Skeletor.SkeleUtils.GlobalUtilities.logger('will now call method: ' + method + ' data:', 'skeleform');
+            Skeletor.SkeleUtils.GlobalUtilities.logger(data, 'skeleform');
+            Skeletor.SkeleUtils.GlobalUtilities.logger('documentId: ' + documentId, 'skeleform');
+            Skeletor.SkeleUtils.GlobalUtilities.logger('schema name: ' + formContext.schemaName, 'skeleform');
 
             // avoid to send item if it's useless
             if (schema.__options.timeMachine === true) {
