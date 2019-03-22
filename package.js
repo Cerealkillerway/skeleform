@@ -9,7 +9,7 @@ Package.describe({
 
 Package.onUse(function(api) {
     // namespace
-    api.addFiles('namespace.js');
+    api.addFiles(['namespace.js'], ['client', 'server']);
 
     api.versionsFrom('METEOR@1.8.0.2');
 
@@ -41,74 +41,72 @@ Package.onUse(function(api) {
     api.addFiles([
         'templates/skeleform.html',
         'templates/skeleformToolbars.html',
-        'templates/components/skeleformReplicaSet.html',
-        'templates/test/skelePanelTest.html',
-        'templates/toolbars/createButtons.html',
-        'templates/toolbars/updateButtons.html',
-        'templates/toolbars/printFunctions.html',
-        'templates/toolbars/timeMachineFunctions.html',
-        'formComponents/templates/skeleformDatePicker.html',
-        'formComponents/templates/skeleformEditor.html',
-        'formComponents/templates/ckMaterialNotePlugins.html',
-        'formComponents/templates/skeleformImageUpload.html',
-        'formComponents/templates/skeleformInput.html',
-        'formComponents/templates/skeleformSelect.html',
-        'formComponents/templates/skeleformStaticTitle.html',
-        'formComponents/templates/skeleformCheckBox.html',
-        'formComponents/templates/skeleformTimePicker.html',
-        'formComponents/templates/skeleformClockPicker.html',
-        'formComponents/templates/skeleformContainer.html',
-        'formComponents/templates/skeleformList.html',
-        'formComponents/templates/skeleformChart.html',
-        'formComponents/templates/skeleformButton.html'
+        'templates/components/skeleform-replica-set.html',
+        'templates/test/skele-panel-test.html',
+        'templates/toolbars/create-buttons.html',
+        'templates/toolbars/update-buttons.html',
+        'templates/toolbars/print-functions.html',
+        'templates/toolbars/time-machine-functions.html',
+        'formComponents/templates/skeleform-date-picker.html',
+        'formComponents/templates/skeleform-editor.html',
+        'formComponents/templates/skeleform-image-upload.html',
+        'formComponents/templates/skeleform-input.html',
+        'formComponents/templates/skeleform-select.html',
+        'formComponents/templates/skeleform-static-title.html',
+        'formComponents/templates/skeleform-checkbox.html',
+        'formComponents/templates/skeleform-time-picker.html',
+        'formComponents/templates/skeleform-clock-picker.html',
+        'formComponents/templates/skeleform-container.html',
+        'formComponents/templates/skeleform-list.html',
+        'formComponents/templates/skeleform-chart.html',
+        'formComponents/templates/skeleform-button.html'
     ],
     ['client']);
 
     // libraries
     api.addFiles([
-        'lib/editEvents.js',
+        'lib/edit-events.js',
         'lib/utils.js',
-        //'lib/materialize.clockpicker.js',
-        //'lib/timepickersConflictResolver.js',
-        //'lib/picker.time.js',
-        //'lib/jquery.multi-select.js',
 
-        'events/skeleformEvents.js',
-        'events/toolbarsEvents.js',
-        'events/toolbars/createButtonsEvents.js',
-        'events/toolbars/updateButtonsEvents.js',
-        'events/toolbars/printFunctionsEvents.js',
-        'events/toolbars/timeMachineEvents.js',
-        'events/components/replicaSetEvents.js',
-        'events/testEvents.js',
+        'events/skeleform-events.js',
+        'events/toolbars-events.js',
+        'events/toolbars/create-buttons-events.js',
+        'events/toolbars/update-buttons-events.js',
+        'events/toolbars/print-functions-events.js',
+        'events/toolbars/time-machine-events.js',
+        'events/components/replica-set-events.js',
+        'events/test-events.js',
 
-        'helpers/commonHelpers.js',
-        'helpers/skeleformHelpers.js',
-        'helpers/components/replicaSetHelpers.js',
-        'helpers/skeleformToolbarsHelpers.js',
-        'helpers/toolbars/createButtonsHelpers.js',
-        'helpers/toolbars/updateButtonsHelpers.js',
-        'helpers/toolbars/timeMachineHelpers.js'
+        'helpers/common-helpers.js',
+        'helpers/skeleform-helpers.js',
+        'helpers/components/replica-set-helpers.js',
+        'helpers/skeleform-toolbars-helpers.js',
+        'helpers/toolbars/create-buttons-helpers.js',
+        'helpers/toolbars/update-buttons-helpers.js',
+        'helpers/toolbars/time-machine-helpers.js'
     ],
     ['client']);
 
-    api.addFiles(['lib/validate.js'], ['client', 'server']);
+    api.addFiles([
+        'lib/validate.js'
+    ],
+    ['client', 'server']);
 
     // form components
     api.addFiles([
-        'formComponents/lib/skeleformDatePicker.js',
-        'formComponents/lib/skeleformEditor.js',
-        'formComponents/lib/skeleformImageUpload.js',
-        'formComponents/lib/skeleformInput.js',
-        'formComponents/lib/skeleformSelect.js',
-        'formComponents/lib/skeleformStaticTitle.js',
-        'formComponents/lib/skeleformCheckBox.js',
-        'formComponents/lib/skeleformTimePicker.js',
-        'formComponents/lib/skeleformClockPicker.js',
-        'formComponents/lib/skeleformContainer.js',
-        'formComponents/lib/skeleformList.js',
-        'formComponents/lib/skeleformChart.js',
-        'formComponents/lib/skeleformButton.js'
+        'formComponents/lib/skeleform-date-picker.js',
+        'formComponents/lib/skeleform-editor.js',
+        'formComponents/lib/skeleform-image-upload.js',
+        'formComponents/lib/skeleform-input.js',
+        'formComponents/lib/skeleform-select.js',
+        'formComponents/lib/skeleform-static-title.js',
+        'formComponents/lib/skeleform-checkBox.js',
+        'formComponents/lib/skeleform-time-picker.js',
+        'formComponents/lib/skeleform-clock-picker.js',
+        'formComponents/lib/skeleform-container.js',
+        'formComponents/lib/skeleform-list.js',
+        'formComponents/lib/skeleform-chart.js',
+        'formComponents/lib/skeleform-button.js'
     ],
     ['client']);
 
