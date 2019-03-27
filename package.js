@@ -1,6 +1,6 @@
 Package.describe({
     name: 'cerealkiller:skeleform',
-    version: '4.1.12',
+    version: '5.0.0',
     summary: 'form from schema creator',
     // URL to the Git repository containing the source code for this package.
     git: '',
@@ -9,9 +9,14 @@ Package.describe({
 
 Package.onUse(function(api) {
     // namespace
-    api.addFiles(['namespace.js'], ['client', 'server']);
+    api.addFiles([
+        'namespace.js'
+    ],
+    ['client', 'server']);
+
 
     api.versionsFrom('METEOR@1.8.0.2');
+
 
     // dependencies
     api.use([
@@ -23,6 +28,7 @@ Package.onUse(function(api) {
     ],
     ['client']);
 
+
     api.use([
         'check',
         'ecmascript',
@@ -31,11 +37,13 @@ Package.onUse(function(api) {
     ],
     ['client', 'server']);
 
+
     // styles
     api.addFiles([
         'styles/skeleform.scss'
     ],
     ['client']);
+
 
     // templates
     api.addFiles([
@@ -63,6 +71,7 @@ Package.onUse(function(api) {
     ],
     ['client']);
 
+
     // libraries
     api.addFiles([
         'lib/edit-events.js',
@@ -87,10 +96,12 @@ Package.onUse(function(api) {
     ],
     ['client']);
 
+
     api.addFiles([
         'lib/validate.js'
     ],
     ['client', 'server']);
+
 
     // form components
     api.addFiles([
@@ -110,6 +121,7 @@ Package.onUse(function(api) {
     ],
     ['client']);
 
+
     // assets
     api.addAssets([
         'public/icons/ok.png',
@@ -122,11 +134,13 @@ Package.onUse(function(api) {
     api.export(['Skeleform']);
 });
 
+
 Npm.depends({
     'sortablejs': '1.7.0',
     'autonumeric': '4.5.1',
     'chart.js': '2.7.3'
 });
+
 
 Package.onTest(function(api) {
     api.use([

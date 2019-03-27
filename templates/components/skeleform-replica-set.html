@@ -13,7 +13,9 @@
     <div class="skeleformReplicaFrame {{formatClasses this.fieldSchema.replicaSet.frameClasses}}">
         <div class="replicaFrameBody">
             <div class="skeleformReplicaHandle valign-wrapper">
-                <i class="material-icons">more_horiz</i>
+                {{#if this.fieldSchema.replicaSet.sortable}}
+                    <i class="material-icons">more_horiz</i>
+                {{/if}}
             </div>
 
             {{#if this.fieldSchema.replicaSet.indexes}}
@@ -39,17 +41,6 @@
             <div class="waves-effect waves-light btn undoColor skeleReplicaBtnRemove">
                 <i class="material-icons small">&#xE15B;</i>
             </div>
-
-            {{!--
-            {{#if this.replicaOptions.sortable}}
-                <div class="waves-effect waves-light btn fourthColor skeleReplicaBtnMoveUp">
-                    <i class="material-icons small">&#xE5D8;</i>
-                </div>
-                <div class="waves-effect waves-light btn fourthColor skeleReplicaBtnMoveDown">
-                    <i class="material-icons small">&#xE5DB;</i>
-                </div>
-            {{/if}}
-            --}}
         </div>
     </div>
 </template>

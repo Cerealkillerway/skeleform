@@ -20,7 +20,12 @@
                 <span>{{i18n "cancel_btn"}}</span>
             </a>
 
-            {{#if (skeleCheckPermissions "timeMachineUse")}}
+            {{#if
+                (skeleformTest
+                    (skeleCheckPermissions "timeMachineUse")
+                    (formContext.schema.__options.timeMachine)
+                "and")
+            }}
                 {{> timeMachineFunctions}}
             {{/if}}
 

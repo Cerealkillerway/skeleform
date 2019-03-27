@@ -70,18 +70,6 @@ If you have any problem using it, please have a look to the "troubleshooting" se
     - **showErrorOn**: *[string / array of strings]* the name (or array of names) of another field where to show errors relative of this field; this is useful if the current field is hidden and generated starting from other fields values (for example a hidden url-slug parameter generated dasherizing the field "name"; setting this to "name" will show validation errors for the url-slug field, that is invisible, on the "name" field, that is visible);
     - **showErrorFor**: *[string / array of strings]* the name (or array of names) of special error.reason(s) that needs to be displayed on this field; this will handle special errors not due to field's validation rules (for example "Email already exists." error when creating a new meteor user);
 - **showOnly**: *[string ('create'/'update')] (optional)* defines if the field should be rendered only on creation or only on update; **IMPORTANT**: this option can be set also on a *skeleformGroup* object and will take effect on all fields of the group;
-- **replicaSet**: *[object] (optional)* defines the group as a replica set; that means that the field(s) will be replicable by the user who will be able to add or remove copies of this field(s);
-  *Important:* this option doesn't work on a single field, but only on a skeleformGroup; if you need a single replicable field, you should define it inside a skeleformGroup.
-  - **name**: *[string] (mandatory)* the name for the replica set; must be unique in the form;
-  - **i18n**: *[boolean] (optional)* specify that the field will be prefixed with *"<:currentLang>---"*; this identifies the field as internationalized; by default the option is enabled; you should use this option only if you want to set it to false; (default *true*);
-  - **template**: *[string] (optional)* the name of the template to be used for replica actions; by default it's "skeleformDefaultReplicaBtns", a built-in template that will render a "+" and "-" buttons, that will make possible for the user to add or remove copies of the replica set;
-  - **minCopies**: *[number] (optional)* the minimum number of copies of the replica set allowed (default *1*);
-  - **maxCopies**: *[number] (optional)* the maximum number of copies of the replica set allowed (default *infinite*);
-  - **initCopies**: *[number] (optional)* the number of copies of the replica set to include in the form during the first render (default *1*);
-  - **indexes**: *[boolean] (optional)* if set to true will update a DOM element with class `skeleformReplicaIndex` within each replica with its current positional order; this is useful if you want to show the positional order of each set in the replica set; the DOM element with class `skeleformReplicaIndex` is added automatically;
-  - **sortable**: *[boolean] (optional)* makes the replica set sortable;
-  - **setClasses**: *[array of strings] (optional)* array of classes to use on the replica set's container div;
-  - **frameClasses**: *[array of strings] (optional)* array of classes to use on each replica item;
 - **mapTO:** *[function] (optional)* used to map the field's name property to another name in the database; the function receives the `fieldInstance` as a parameter and must return a string that is the name used for the field in the database;
 
 #### 2.2 Field specific options:
@@ -276,6 +264,18 @@ By default every field is wrapped in a `<div class="row">`, but it's possible to
 - **size**: *[string] (optional)* materialize's grid system classes; by default the group does not create any column and inside of it each field creates its own;
 - **id**: *[string] (optional)* an optional id to assign to the skeleformGroup's `.row` wrapper div;
 - **classes**: *[array] (optional)* array of custom classes for the group's div container;
+- **replicaSet**: *[object] (optional)* defines the group as a replica set; that means that the field(s) will be replicable by the user who will be able to add or remove copies of this field(s);
+    *Important:* this option doesn't work on a single field, but only on a skeleformGroup; if you need a single replicable field, you should define it inside a skeleformGroup.
+    -   **name**: *[string] (mandatory)* the name for the replica set; must be unique in the form;
+    -   **i18n**: *[boolean] (optional)* specify that the field will be prefixed with *"<:currentLang>---"*; this identifies the field as internationalized; by default the option is enabled; you should use this option only if you want to set it to false; (default *true*);
+    -   **template**: *[string] (optional)* the name of the template to be used for replica actions; by default it's "skeleformDefaultReplicaBtns", a built-in template that will render a "+" and "-" buttons, that will make possible for the user to add or remove copies of the replica set;
+    -   **minCopies**: *[number] (optional)* the minimum number of copies of the replica set allowed (default *1*);
+    -   **maxCopies**: *[number] (optional)* the maximum number of copies of the replica set allowed (default *infinite*);
+    -   **initCopies**: *[number] (optional)* the number of copies of the replica set to include in the form during the first render (default *1*);
+    -   **indexes**: *[boolean] (optional)* if set to true will update a DOM element with class `skeleformReplicaIndex` within each replica with its current positional order; this is useful if you want to show the positional order of each set in the replica set; the DOM element with class `skeleformReplicaIndex` is added automatically;
+    -   **sortable**: *[boolean] (optional)* makes the replica set sortable;
+    -   **setClasses**: *[array of strings] (optional)* array of classes to use on the replica set's container div;
+    -   **frameClasses**: *[array of strings] (optional)* array of classes to use on each replica item;
 - **fields**: *[array] (optional)* the normal schema of the fields to be displayed in the same row;
 
 
@@ -325,7 +325,7 @@ Template.myCustomFieldName.onCreated(function() {
 
 `skeleformGeneralHelpers` is a dictionary of common helpers usually used by all fields; so it will probably needed by every custom field:
 
-```
+```javascript
 Template.myCustomFieldName.helpers(skeleformGeneralHelpers)
 ```
 
@@ -446,15 +446,11 @@ If it's necessary to use a custom invalid message it is possible to add the fiel
 Skeleforms invokes a **Meteor method** once gathered and validated the form's data to persist it on the server;  
 It is set to use 3 default methods for the 3 basic operations:
 
-- `skeleCreateDocument`: for new documents creation;
-- `skeleUpdateDocument`: for updating documents;
-- `skeleDeleteDocument`: for deleting documents;
+- `skeleCreateDocument(data, schemaName)`: for new documents creation;
+- `skeleUpdateDocument(documentId, data, schemaName, item)`: for updating documents;
+- `skeleDeleteDocument(documentId, schemaName)`: for deleting documents;
 
-These methods, before doing the actual document creation, update or delete perform the followings:
-
- - call `Skeletor.SkeleUtils.Permissions.checkPermissions()` to check that the current user have the right permissions to perform the operation;
- - for create or update, validate the collected data against the schema; this provide a client and server-side security check on the data to be saved;
- - if required add the "tracked" objects to store informations about the current action (see `__options.tracked` in the **schema options** - chapter 1);
+These methods, before doing the actual document creation, update or delete they call `Skeletor.Utilities.handleMethodRequest(data, schemaName, type)`; this function checks permissions for the requested operation, handles timeMachine and tracking informations if needed; it also performs data validation; `type` parameter is the requested operation and can be `insert / update / delete`;
 
 ### 8 TROUBLESHOOTING
 

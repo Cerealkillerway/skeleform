@@ -1,5 +1,10 @@
 Template.timeMachineFunctions.onCreated(function() {
     let formContext = this.data.formContext;
+
+    if (!formContext.item) {
+        return false;
+    }
+
     let documentId = formContext.item._id;
     let schema = formContext.schema;
     let collection = schema.__collection;
@@ -59,9 +64,13 @@ Template.timeMachineFunctions.onRendered(function() {
         let collection = schema.__collection;
         let item = Skeletor.Data[collection].findOne({_id: documentId});
 
+        $availableStates.empty();
+        if (!item.__edits) {
+            return false;
+        }
+
         this.currentState.set(item.__edits.length);
 
-        $availableStates.empty();
         for (let [index, state] of item.__edits.entries()) {
             let stateDate = moment(state.__update.date, 'YYYYMMDD-hh:mm:ss').format('DD MMMM YYYY - hh:mm:ss');
             let $state = $(`
