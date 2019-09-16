@@ -72,10 +72,11 @@ Template.timeMachineFunctions.onRendered(function() {
         this.currentState.set(item.__edits.length);
 
         for (let [index, state] of item.__edits.entries()) {
-            let stateDate = moment(state.__update.date, 'YYYYMMDD-hh:mm:ss').format('DD MMMM YYYY - hh:mm:ss');
+            let stateDate = moment(state.__update.date, 'YYYYMMDD-HH:mm:ss').format('DD MMMM YYYY - HH:mm:ss');
             let $state = $(`
                 <div class="availableState" data-index="${index}" data-time="${state.__update.date}">
-                    ${stateDate} <span class="stateIndex">(${index})</span>
+                    <div class="stateIndex">(${index})</div>
+                    <div class="stateDescription">${stateDate}</div>
                 </div>
             `);
 
@@ -132,12 +133,10 @@ function restoreEdit(editToRestore, formContext) {
 Template.timeMachineFunctions.events({
     'click .skeleformTimeMachineBtn': function(event, instance) {
         instance.$('.timeMachineFunctionsWrapper').toggleClass('active');
-        instance.$('.timeMachineFunctionsOverlay').toggleClass('active');
     },
 
     'click .timeMachineFunctionsOverlay': function(event, instance) {
         instance.$('.timeMachineFunctionsWrapper').toggleClass('active');
-        instance.$('.timeMachineFunctionsOverlay').toggleClass('active');
     },
 
     'click .availableState': function(event, instance) {
