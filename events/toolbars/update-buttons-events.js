@@ -44,7 +44,7 @@ Template.skeleformUpdateButtons.events({
             Skeletor.SkeleUtils.GlobalUtilities.logger('schema name: ' + formContext.schemaName, 'skeleform');
 
             // avoid to send item if it's useless
-            if (schema.__options.timeMachine === true) {
+            if (schema.__options.timeMachine) {
                 item = formContext.item;
             }
 
