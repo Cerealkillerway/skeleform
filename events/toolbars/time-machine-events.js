@@ -117,13 +117,38 @@ Template.timeMachineFunctions.onRendered(function() {
 
 // function to restore a specific state
 function restoreEdit(editToRestore, formContext) {
+    function restoreField(key, fieldValue, replicaIndex) {
+        let fieldName = Skeletor.SkeleUtils.ClientServerUtilities.getFieldName(key).name
+        let fieldInstance = Skeletor.SkeleUtils.GlobalUtilities.getFieldInstance(formContext, fieldName, replicaIndex)
+
+        if (fieldInstance) {
+            fieldInstance.setValue(fieldValue)
+        }
+    }
+
+    function restoreObject(itemName, itemValue, replicaIndex) {
+        _.each(itemValue, function(value, key) {
+            restoreField(key, value, replicaIndex)
+        })
+    }
+
     _.each(editToRestore, function(fieldValue, key) {
         if (key.indexOf('__') !== 0) {
-            let fieldName = Skeletor.SkeleUtils.ClientServerUtilities.getFieldName(key).name
-            let fieldInstance = Skeletor.SkeleUtils.GlobalUtilities.getFieldInstance(formContext, fieldName)
-
-            if (fieldInstance) {
-                fieldInstance.setValue(fieldValue)
+            if (Array.isArray(fieldValue)) {
+                for (const [index, element] of fieldValue.entries()) {
+                    if (typeof element === 'object') {
+                        restoreObject(key, element, index)
+                    }
+                    else {
+                        restoreObject(key, element)
+                    }
+                }
+            }
+            else if (typeof fieldValue === 'object') {
+                restoreObject(key, fieldValue)
+            }
+            else {
+                restoreField(key, fieldValue)
             }
         }
     })
