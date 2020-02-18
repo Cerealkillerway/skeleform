@@ -126,7 +126,7 @@ function restoreEdit(editToRestore, formContext) {
         }
     }
 
-    function restoreObject(itemName, itemValue, replicaIndex) {
+    function restoreObject(itemValue, replicaIndex) {
         _.each(itemValue, function(value, key) {
             restoreField(key, value, replicaIndex)
         })
@@ -137,10 +137,10 @@ function restoreEdit(editToRestore, formContext) {
             if (Array.isArray(fieldValue)) {
                 for (const [index, element] of fieldValue.entries()) {
                     if (typeof element === 'object') {
-                        restoreObject(key, element, index)
+                        restoreObject(element, index)
                     }
                     else {
-                        restoreObject(key, element)
+                        restoreObject(element)
                     }
                 }
             }
@@ -156,26 +156,25 @@ function restoreEdit(editToRestore, formContext) {
 
 
 Template.timeMachineFunctions.events({
-    'click .skeleformTimeMachineBtn': function(event, instance) {
-        instance.$('.timeMachineFunctionsWrapper').toggleClass('active')
-        instance.$('.timeMachineFunctionsOverlay').toggleClass('active')
+    'click .skeleformTimeMachineBtn'(_event, instance) {
+        instance.find('.timeMachineFunctionsWrapper').classList.toggle('active')
+        instance.find('.timeMachineFunctionsOverlay').classList.toggle('active')
     },
 
-    'click .timeMachineFunctionsOverlay': function(event, instance) {
-        instance.$('.timeMachineFunctionsWrapper').toggleClass('active')
-        instance.$('.timeMachineFunctionsOverlay').toggleClass('active')
+    'click .timeMachineFunctionsOverlay'(_event, instance) {
+        instance.find('.timeMachineFunctionsWrapper').classList.toggle('active')
+        instance.find('.timeMachineFunctionsOverlay').classList.toggle('active')
     },
 
-    'click .availableState': function(event, instance) {
+    'click .availableState'(event, instance) {
         let indexToRestore = $(event.currentTarget).data('index')
 
         if (indexToRestore === undefined) {
             return false
         }
 
-        let formContext = instance.data.formContext
-        let edits = formContext.item.__edits
-        let selectedEdit = edits[indexToRestore]
+        const formContext = instance.data.formContext
+        const edits = formContext.item.__edits
         let currentIndex = instance.currentState.get()
 
         // no need to do anything
@@ -205,7 +204,7 @@ Template.timeMachineFunctions.events({
         //instance.$('.timeMachineFunctionsOverlay').toggleClass('active')
     },
 
-    'click .resetTimeMachineStatus': function(event, instance) {
+    'click .resetTimeMachineStatus'(_event, instance) {
         let formContext = instance.data.formContext
         let latestIndex = formContext.item.__edits.length
 
@@ -215,15 +214,16 @@ Template.timeMachineFunctions.events({
 
         Skeletor.SkeleUtils.GlobalUtilities.logger('Restoring latest...', 'SkeleUtils')
         restoreEdit(formContext.item, formContext)
+        Skeleform.utils.restoreSavedData(formContext)
         instance.currentState.set(latestIndex)
     },
 
-    'click .deleteTimeMachineStates': function(event, instance) {
+    'click .deleteTimeMachineStates'(_event, instance) {
         instance.$('#timeMachineConfirmModal').find('.confirmModalConfirm').data('action', 'deleteAllStates')
         instance.confirmModal.modal('open')
     },
 
-    'click .deleteStateBtn': function(event, instance) {
+    'click .deleteStateBtn'(event, instance) {
         let $modal = instance.$('#timeMachineConfirmModal').find('.confirmModalConfirm')
         let stateTime = $(event.currentTarget).parent('.availableState').data('time')
 
@@ -232,7 +232,7 @@ Template.timeMachineFunctions.events({
         instance.confirmModal.modal('open')
     },
 
-    'click .confirmModalConfirm': function(event, instance) {
+    'click .confirmModalConfirm'(event, instance) {
         let $target = $(event.currentTarget)
         let action = $target.data('action')
         let params = $target.data('actionParams')
@@ -244,17 +244,17 @@ Template.timeMachineFunctions.events({
         instance.actions[action](params)
     },
 
-    'click .confirmModalUndo': function(event, instance) {
+    'click .confirmModalUndo'(_event, instance) {
         instance.confirmModal.modal('close')
     },
 
-    'mouseenter .squareBtn': function(event, instance) {
+    'mouseenter .squareBtn'(event, instance) {
         let tooltip = $(event.target).data('tooltip')
 
         instance.$('.toolbarDescription').html(Skeletor.Skelelang.i18n.get(tooltip))
     },
 
-    'mouseleave .squareBtn': function(event, instance) {
+    'mouseleave .squareBtn'(_event, instance) {
         instance.$('.toolbarDescription').html('')
     }
 })
